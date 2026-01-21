@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\CategoryColor;
+use App\Enums\CategoryColor;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

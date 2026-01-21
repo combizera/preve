@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\CategoryColor;
+use App\Enums\CategoryColor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Enums;
 
 enum CategoryColor: string
 {
@@ -14,12 +14,12 @@ enum CategoryColor: string
     public function label(): string
     {
         return match ($this) {
-            self::RED => 'Red',
-            self::BLUE => 'Blue',
-            self::GREEN => 'Green',
-            self::YELLOW => 'Yellow',
-            self::ORANGE => 'Orange',
-            self::PURPLE => 'Purple',
+            self::RED => 'red',
+            self::BLUE => 'blue',
+            self::GREEN => 'green',
+            self::YELLOW => 'yellow',
+            self::ORANGE => 'orange',
+            self::PURPLE => 'purple',
         };
     }
 }
