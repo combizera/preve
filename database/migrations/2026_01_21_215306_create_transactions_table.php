@@ -19,7 +19,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table
-                ->foreignIdFor(Category::class)
+                ->foreignIdFor(Category::class, 'category_id')
+                ->nullable()
                 ->constrained()
                 ->nullOnDelete();
             $table
