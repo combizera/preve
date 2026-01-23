@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import {
+    ArrowRightLeft,
+    Github,
+    Home,
+    RefreshCw,
+    Tags,
+} from 'lucide-vue-next';
 
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -20,22 +26,32 @@ import { type NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Início',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: Home,
+    },
+    {
+        title: 'Movimentações',
+        href: '#',
+        icon: ArrowRightLeft,
+    },
+    {
+        title: 'Recorrentes',
+        href: '#',
+        icon: RefreshCw,
+    },
+    {
+        title: 'Categorias',
+        href: '#',
+        icon: Tags,
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Github',
+        href: 'https://github.com/combizera/preve',
+        icon: Github,
     },
 ];
 </script>
