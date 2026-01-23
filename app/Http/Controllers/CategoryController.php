@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -16,8 +17,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $categories = Category::query()
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
         return Inertia::render('Category', [
-            'categories' => Category::all(),
+            'categories' => $categories,
         ]);
     }
 
@@ -40,9 +45,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $this->authorize('update', $category);
+
+        $category->update($request->all());
+
+        // TODO: retornar um Toast Message
+        return Inertia::render('Category');
     }
 
     /**

@@ -18,6 +18,6 @@ class UserSeeder extends Seeder
             'password' => 'admin@site.com',
         ]);
 
-        User::factory()->count(10)->create();
+        User::factory()->count(5)->create();
     }
 }
