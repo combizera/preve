@@ -99,6 +99,7 @@ defineProps<{
     </TableBody>
 
     <EditCategoryDialog
+      v-if="showEditDialog && selectedCategory"
       v-model:open="showEditDialog"
       :category="selectedCategory"
     />

@@ -21,25 +21,35 @@ import { capitalizeFirstLetter } from '@/lib/utils';
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 rounded bg-sidebar p-4">
+  <div class="flex flex-col gap-4 rounded-md bg-sidebar p-4 px-6">
     <div class="flex items-center gap-1">
       <Plus :size="18" class="text-muted-foreground" />
       <p class="text-sm text-muted-foreground">New Category</p>
     </div>
 
     <Form
-      class="flex items-center gap-2"
+      class="flex items-end gap-2"
       :action="route('categories.store')"
       method="POST"
     >
       <div class="grid gap-1">
-        <Label for="name"> Name </Label>
+        <Label for="name"> Name * </Label>
         <Input id="name" name="name" placeholder="Category Name" />
       </div>
 
       <div class="grid gap-1">
+        <!-- // TODO: Conforme o usuário for digitando o nome, preencher automaticamente o slug -->
         <Label for="slug"> Slug </Label>
         <Input id="slug" name="slug" placeholder="category-slug" />
+      </div>
+
+      <div class="grid w-[400px] gap-1">
+        <Label for="description"> Descritpion </Label>
+        <Input
+          id="description"
+          name="description"
+          placeholder="Your description"
+        />
       </div>
 
       <div class="grid gap-1">
@@ -72,6 +82,7 @@ import { capitalizeFirstLetter } from '@/lib/utils';
           </SelectTrigger>
           <SelectContent class="w-[50px]">
             <SelectGroup>
+              <SelectLabel>Icon</SelectLabel>
               <SelectItem
                 v-for="icon in availableIcons"
                 :value="icon"

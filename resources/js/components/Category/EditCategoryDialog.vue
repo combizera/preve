@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 
 import { Button } from '@/components/ui/button';
@@ -23,53 +22,28 @@ import { Category } from '@/types/models/category';
 const open = defineModel<boolean>('open', { required: true });
 
 const props = defineProps<{
-  category: Category | null;
+  category: Category;
 }>();
 
-const name = ref('');
-const slug = ref('');
-const description = ref('');
-const selectedIcon = ref<string>(availableIcons[0]);
-const selectedColor = ref<string>(availableColors[0]);
+const form = useForm({
+  name: props.category.name,
+  slug: props.category.slug,
+  description: props.category.description ?? '',
+  icon: props.category.icon,
+  color: props.category.color,
+});
 
-watch(
-  () => props.category,
-  (category) => {
-    if (category) {
-      name.value = category.name || '';
-      slug.value = category.slug || '';
-      description.value = category.description || '';
-      selectedIcon.value = category.icon || availableIcons[0];
-      selectedColor.value = category.color || availableColors[0];
-    }
-  },
-  { immediate: true }
-);
-
-const editCategory = () => {
-  const category = props.category;
-  if (!category) return;
-
-  router.put(
-    route('categories.update', category.id),
-    {
-      name: name.value,
-      slug: slug.value,
-      description: description.value,
-      icon: selectedIcon.value,
-      color: selectedColor.value,
+const updateCategory = () => {
+  form.put(route('categories.update', props.category.id), {
+    onSuccess: () => {
+      open.value = false;
     },
-    {
-      onSuccess: () => {
-        open.value = false;
-      },
-    }
-  );
+  });
 };
 </script>
 
 <template>
-  <Dialog :open="open">
+  <Dialog open>
     <form>
       <DialogContent class="sm:max-w-[500px]">
         <DialogHeader>
@@ -78,6 +52,7 @@ const editCategory = () => {
             Make changes to {{ category?.name }}. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
+
         <div class="grid grid-cols-2 gap-4">
           <div class="grid gap-3">
             <Label for="name"> Name </Label>
@@ -85,7 +60,7 @@ const editCategory = () => {
               id="name"
               name="name"
               placeholder="Category Name"
-              v-model="name"
+              v-model="form.name"
             />
           </div>
 
@@ -95,7 +70,7 @@ const editCategory = () => {
               id="slug"
               name="slug"
               placeholder="category-slug"
-              v-model="slug"
+              v-model="form.slug"
             />
           </div>
 
@@ -105,20 +80,20 @@ const editCategory = () => {
               id="description"
               name="description"
               placeholder="This is a category for..."
-              v-model="description"
+              v-model="form.description"
             />
           </div>
 
           <div class="col-span-2 grid gap-3">
             <Label>Icon</Label>
-            <div class="grid grid-cols-8 gap-2 justify-start">
+            <div class="grid grid-cols-8 justify-start gap-2">
               <label
                 v-for="icon in availableIcons"
                 :key="icon"
                 :class="
                   cn(
-                    'p-2 flex items-center justify-center rounded border border-gray-700 cursor-pointer hover:border-primary',
-                    selectedIcon === icon && 'border-primary bg-primary/10'
+                    'flex cursor-pointer items-center justify-center rounded border border-gray-700 p-2 hover:border-primary',
+                    form.icon === icon && 'border-primary bg-primary/10',
                   )
                 "
               >
@@ -126,24 +101,29 @@ const editCategory = () => {
                   type="radio"
                   name="icon"
                   :value="icon"
-                  v-model="selectedIcon"
+                  v-model="form.icon"
                   class="sr-only"
                 />
-                <component :is="getIconComponent(icon)" class="size-5 text-gray-500" />
+                <component
+                  :is="getIconComponent(icon)"
+                  class="size-5 text-gray-500"
+                />
               </label>
             </div>
           </div>
 
           <div class="col-span-2 grid gap-3">
             <Label>Color</Label>
-            <div class="flex gap-2 mt-2">
+            <div class="mt-2 flex gap-2">
               <label
                 v-for="color in availableColors"
                 :key="color"
                 :class="
                   cn(
-                    'w-12 h-6 p-1 rounded border-2 cursor-pointer',
-                    selectedColor === color ? 'border-gray-100' : 'border-gray-800'
+                    'h-6 w-12 cursor-pointer rounded border-2 p-1',
+                    form.color === color
+                      ? 'border-gray-100'
+                      : 'border-gray-800',
                   )
                 "
               >
@@ -151,19 +131,27 @@ const editCategory = () => {
                   type="radio"
                   name="color"
                   :value="color"
-                  v-model="selectedColor"
+                  v-model="form.color"
                   class="sr-only"
                 />
-                <div :class="cn('w-full h-full rounded-xs', getColorClass(color, 'bg', 500))" />
+                <div
+                  :class="
+                    cn(
+                      'h-full w-full rounded-xs',
+                      getColorClass(color, 'bg', 500),
+                    )
+                  "
+                />
               </label>
             </div>
           </div>
         </div>
+
         <DialogFooter>
           <DialogClose as-child>
             <Button variant="outline" @click="open = false"> Cancel </Button>
           </DialogClose>
-          <Button @click="editCategory" type="submit"> Save changes </Button>
+          <Button type="button" @click="updateCategory"> Save changes </Button>
         </DialogFooter>
       </DialogContent>
     </form>
