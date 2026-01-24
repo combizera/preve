@@ -16,3 +16,6 @@ indent_size = 2
 
 [compose.yaml]
 indent_size = 4
+
+[*.vue]
+indent_size = 2

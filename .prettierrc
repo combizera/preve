@@ -21,6 +21,12 @@
             "options": {
                 "tabWidth": 2
             }
+        },
+        {
+            "files": "**/*.vue",
+            "options": {
+                "tabWidth": 2
+            }
         }
     ]
 }

@@ -22,6 +22,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import categories from '@/routes/categories';
 import { type NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -42,7 +43,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Categorias',
-        href: '#',
+        href: categories.index(),
         icon: Tags,
     },
 ];

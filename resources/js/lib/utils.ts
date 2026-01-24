@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
     return typeof href === 'string' ? href : href?.url;
 }
+
+export function capitalizeFirstLetter(val : string) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
