@@ -2,9 +2,10 @@
 import { Edit, Trash } from 'lucide-vue-next';
 import { ref } from 'vue';
 
+import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteCategoryDialog from '@/components/Category/DeleteCategoryDialog.vue';
 import EditCategoryDialog from '@/components/Category/EditCategoryDialog.vue';
-import { Button } from '@/components/ui/button';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -75,25 +76,17 @@ defineProps<{
             }}
           </p>
         </TableCell>
-        <TableCell class="flex justify-end pr-0">
-          <div class="inline-flex items-end justify-center rounded p-1.5">
-            <Button
-              @click="openEditDialog(category)"
-              size="sm"
-              variant="secondary"
-              class="mr-2"
-            >
-              <Edit :size="18" />
-            </Button>
-
-            <Button
-              @click="openDeleteDialog(category)"
-              size="sm"
-              variant="destructive"
-            >
-              <Trash :size="18" />
-            </Button>
-          </div>
+        <TableCell class="text-right">
+          <ActionGroup>
+            <DropdownMenuItem @click="openEditDialog(category)">
+              <Edit class="size-4" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" @click="openDeleteDialog(category)">
+              <Trash class="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </ActionGroup>
         </TableCell>
       </TableRow>
     </TableBody>
