@@ -19,7 +19,7 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => $this->faker->uuid(),
+            'id' => $this->faker->uuid(),
             'user_id' => User::factory(),
             'category_id' => Category::factory(),
             'tag_id' => Tag::factory(),

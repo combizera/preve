@@ -4,8 +4,7 @@ import { ITag } from '@/types/models/tag';
 export type TransactionType = 'income' | 'expense';
 
 export interface ITransaction {
-    id?: number;
-    uuid?: string;
+    id?: string;
     category_id: number;
     category?: ICategory;
     tag_id: number | null;
