@@ -17,26 +17,27 @@ import {
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
 import tags from '@/routes/tags';
+import transactions from '@/routes/transactions';
 import { type NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Início',
+    title: 'Home',
     href: dashboard(),
     icon: Home,
   },
   {
-    title: 'Movimentações',
-    href: '#',
+    title: 'Transactions',
+    href: transactions.index(),
     icon: ArrowRightLeft,
   },
   {
-    title: 'Recorrentes',
+    title: 'Recurring',
     href: '#',
     icon: RefreshCw,
   },
   {
-    title: 'Categorias',
+    title: 'Categories',
     href: categories.index(),
     icon: Tags,
   },
