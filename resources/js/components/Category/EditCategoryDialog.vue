@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { route } from 'ziggy-js';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { availableColors, getColorClass } from '@/lib/category-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
+import { update } from '@/routes/categories';
 import { Category } from '@/types/models/category';
 
 const open = defineModel<boolean>('open', { required: true });
@@ -35,10 +35,10 @@ const form = useForm({
 });
 
 const updateCategory = () => {
-  form.put(route('categories.update', props.category.id), {
+  form.submit(update(props.category.id), {
     onSuccess: () => {
       open.value = false;
-    },
+    }
   });
 };
 </script>
