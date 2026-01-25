@@ -35,7 +35,7 @@ const deleteCategory = () => {
 </script>
 
 <template>
-    <AlertDialog :open="open">
+    <AlertDialog v-model:open="open">
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -45,7 +45,7 @@ const deleteCategory = () => {
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-                <AlertDialogCancel @click="open = false">
+                <AlertDialogCancel>
                     Cancel
                 </AlertDialogCancel>
                 <AlertDialogAction @click="deleteCategory" :disabled="form.processing">

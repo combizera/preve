@@ -44,7 +44,7 @@ const updateCategory = () => {
 </script>
 
 <template>
-  <Dialog open>
+  <Dialog v-model:open="open">
     <form>
       <DialogContent class="sm:max-w-[500px]">
         <DialogHeader>
@@ -155,7 +155,7 @@ const updateCategory = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline" @click="open = false"> Cancel </Button>
+            <Button variant="outline"> Cancel </Button>
           </DialogClose>
           <Button type="button" @click="updateCategory" :disabled="form.processing">
             Save changes
