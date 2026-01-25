@@ -11,9 +11,11 @@ import { dashboard } from '@/routes';
 import transactions from '@/routes/transactions';
 import type { BreadcrumbItem } from '@/types';
 import type { ICategory } from '@/types/models/category';
+import type { ITag } from '@/types/models/tag';
 
 defineProps<{
   categories: ICategory[];
+  tags: ITag[];
 }>();
 
 const showCreateDialog = ref(false);
@@ -56,6 +58,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         v-if="showCreateDialog"
         v-model:open="showCreateDialog"
         :categories="categories"
+        :tags="tags"
       />
 
       <!-- PLACEHOLDER -->
