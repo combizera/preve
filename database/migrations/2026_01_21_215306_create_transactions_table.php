@@ -30,7 +30,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->integer('amount');
             $table->string('type')->default('EXPENSE');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->text('notes')->nullable();
             $table->date('transaction_date');
             $table->timestamps();
