@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Edit, Trash } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteCategoryDialog from '@/components/Category/DeleteCategoryDialog.vue';
 import EditCategoryDialog from '@/components/Category/EditCategoryDialog.vue';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import EditButton from '@/components/ui/button/EditButton.vue';
+import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import {
   Table,
   TableBody,
@@ -78,14 +78,13 @@ defineProps<{
         </TableCell>
         <TableCell class="text-right">
           <ActionGroup>
-            <DropdownMenuItem @click="openEditDialog(category)">
-              <Edit class="size-4" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" @click="openDeleteDialog(category)">
-              <Trash class="size-4" />
-              Delete
-            </DropdownMenuItem>
+            <EditButton 
+              @click="openEditDialog(category)"
+            />
+
+            <DeleteButton 
+              @click="openDeleteDialog(category)"
+            />
           </ActionGroup>
         </TableCell>
       </TableRow>
