@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Concerns\GeneratesUniqueSlug;
-use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCategoryRequest extends FormRequest
+class CreateTagRequest extends FormRequest
 {
     use GeneratesUniqueSlug;
 
@@ -27,10 +27,8 @@ class CreateCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:categories,slug,NULL,id,user_id,' . $this->user()->id],
+            'slug' => ['required', 'string', 'max:255', 'unique:tags,slug,NULL,id,user_id,' . $this->user()->id],
             'description' => ['nullable', 'string'],
-            'color' => ['string', 'max:10'],
-            'icon' => ['string', 'max:255'],
         ];
     }
 
@@ -39,6 +37,6 @@ class CreateCategoryRequest extends FormRequest
      */
     protected function getModelClass(): string
     {
-        return Category::class;
+        return Tag::class;
     }
 }
