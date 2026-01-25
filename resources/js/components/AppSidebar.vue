@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
 import {
     ArrowRightLeft,
     Github,
@@ -63,9 +62,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
-                            <AppLogo />
-                        </Link>
+                        <AppLogo />
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
