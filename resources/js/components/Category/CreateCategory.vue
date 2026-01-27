@@ -15,14 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { availableColors, getColorClass } from '@/lib/category-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { store } from '@/routes/categories';
 
+const types = TRANSACTION_TYPE;
+
 const form = useForm({
   name: '',
   description: '',
+  type: 'expense',
   color: '',
   icon: '',
 });
@@ -41,19 +45,17 @@ const createCategory = () => {
       <p class="text-sm text-muted-foreground">New Category</p>
     </div>
 
-    <form class="flex w-full flex-wrap items-start gap-3" @submit.prevent="createCategory">
-      <div class="flex flex-col gap-2 justify-start min-w-1/4">
+    <form
+      class="flex w-full flex-wrap items-start gap-3"
+      @submit.prevent="createCategory"
+    >
+      <div class="flex min-w-1/4 flex-col justify-start gap-2">
         <Label for="name">Name</Label>
-        <Input
-          id="name"
-          name="name"
-          placeholder="Name"
-          v-model="form.name"
-        />
+        <Input id="name" name="name" placeholder="Name" v-model="form.name" />
         <InputError :message="form.errors.name" />
       </div>
 
-      <div class="flex flex-col gap-2 flex-1 justify-start min-w-1/4">
+      <div class="flex min-w-1/4 flex-1 flex-col justify-start gap-2">
         <Label for="description">Description</Label>
         <Input
           id="description"
@@ -64,13 +66,35 @@ const createCategory = () => {
         <InputError :message="form.errors.description" />
       </div>
 
-      <div class="flex flex-col gap-2 justify-start">
+      <div class="flex flex-col justify-start gap-2">
+        <Label for="type">Type</Label>
+        <Select v-model="form.type">
+          <SelectTrigger class="w-full min-w-[150px]">
+            <SelectValue placeholder="Select a type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Type</SelectLabel>
+              <SelectItem v-for="type in types" :value="type" :key="type">
+                {{ capitalizeFirstLetter(type) }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <InputError :message="form.errors.color" />
+      </div>
+
+      <div class="flex flex-col justify-start gap-2">
         <Label for="color">Color</Label>
         <Select v-model="form.color">
           <SelectTrigger class="w-full min-w-[150px]">
             <SelectValue placeholder="Select a color">
               <div v-if="form.color" class="flex items-center gap-2">
-                <div :class="cn('h-4 w-4 rounded', getColorClass(form.color, 'bg', 500))" />
+                <div
+                  :class="
+                    cn('h-4 w-4 rounded', getColorClass(form.color, 'bg', 500))
+                  "
+                />
                 <span>{{ capitalizeFirstLetter(form.color) }}</span>
               </div>
             </SelectValue>
@@ -83,7 +107,11 @@ const createCategory = () => {
                 :value="color"
                 :key="color"
               >
-                <div :class="cn('h-4 w-4 rounded', getColorClass(color, 'bg', 500))" />
+                <div
+                  :class="
+                    cn('h-4 w-4 rounded', getColorClass(color, 'bg', 500))
+                  "
+                />
                 <span>{{ capitalizeFirstLetter(color) }}</span>
               </SelectItem>
             </SelectGroup>
@@ -92,12 +120,23 @@ const createCategory = () => {
         <InputError :message="form.errors.color" />
       </div>
 
-      <div class="flex flex-col gap-2 justify-start">
+      <div class="flex flex-col justify-start gap-2">
         <Label for="icon">Icon</Label>
         <Select v-model="form.icon">
-          <SelectTrigger :class="cn('w-full min-w-[150px]', form.icon && 'pl-1')">
+          <SelectTrigger
+            :class="cn('w-full min-w-[150px]', form.icon && 'pl-1')"
+          >
             <SelectValue placeholder="Select an icon">
-              <div v-if="form.icon" :class="cn('flex items-center justify-center size-7 p-1 rounded border', getColorClass(form.color, 'bg', 950), getColorClass(form.color, 'border', 900))">
+              <div
+                v-if="form.icon"
+                :class="
+                  cn(
+                    'flex size-7 items-center justify-center rounded border p-1',
+                    getColorClass(form.color, 'bg', 950),
+                    getColorClass(form.color, 'border', 900),
+                  )
+                "
+              >
                 <component
                   :is="getIconComponent(form.icon)"
                   :class="cn('size-4', getColorClass(form.color, 'text', 300))"
@@ -113,7 +152,7 @@ const createCategory = () => {
                   v-for="icon in availableIcons"
                   :value="icon"
                   :key="icon"
-                  class="flex items-center justify-center p-2 gap-2 [&>span]:hidden"
+                  class="flex items-center justify-center gap-2 p-2 [&>span]:hidden"
                 >
                   <component
                     :is="getIconComponent(icon)"
@@ -127,7 +166,7 @@ const createCategory = () => {
         <InputError :message="form.errors.icon" />
       </div>
 
-      <div class="h-full flex items-start pt-5.5 ml-2">
+      <div class="ml-2 flex h-full items-start pt-5.5">
         <Button type="submit" :disabled="form.processing" class="h-9">
           Create
         </Button>
