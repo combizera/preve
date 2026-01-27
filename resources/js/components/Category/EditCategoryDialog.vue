@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,8 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { availableColors, getColorClass } from '@/lib/category-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
@@ -29,6 +32,7 @@ const props = defineProps<{
 const form = useForm({
   name: props.category.name,
   slug: props.category.slug,
+  type: props.category.type,
   description: props.category.description ?? '',
   icon: props.category.icon,
   color: props.category.color,
@@ -55,6 +59,22 @@ const updateCategory = () => {
         </DialogHeader>
 
         <div class="grid grid-cols-2 gap-4">
+          <!-- Type -->
+          <div class="col-span-2 grid gap-3">
+            <Label for="type"> Type </Label>
+            <ToggleGroup v-model="form.type" class="w-full">
+              <ToggleGroupItem :value="TRANSACTION_TYPE.EXPENSE" class="flex-1 gap-2">
+                <ArrowUpRight :size="16" />
+                Expense
+              </ToggleGroupItem>
+              <ToggleGroupItem :value="TRANSACTION_TYPE.INCOME" class="flex-1 gap-2">
+                <ArrowDownLeft :size="16" />
+                Income
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <InputError :message="form.errors.type" />
+          </div>
+
           <div class="grid gap-3">
             <Label for="name"> Name </Label>
             <Input

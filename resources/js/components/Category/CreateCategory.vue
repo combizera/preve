@@ -81,7 +81,7 @@ const createCategory = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <InputError :message="form.errors.color" />
+        <InputError :message="form.errors.type" />
       </div>
 
       <div class="flex flex-col justify-start gap-2">
