@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -29,16 +29,15 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { extractNumbers, formatCentsToDisplay, parseToCents } from '@/lib/currency';
 import { store } from '@/routes/transactions';
-import { ICategory } from '@/types/models/category';
-import { ITag } from '@/types/models/tag';
+import type { ICategory } from '@/types/models/category';
+import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
 
 const open = defineModel<boolean>('open', { required: true });
 
-defineProps<{
-  categories: ICategory[];
-  tags: ITag[];
-}>();
+// Inject categories and tags from parent
+const categories = inject<ICategory[]>('categories', []);
+const tags = inject<ITag[]>('tags', []);
 
 const rawAmount = ref('');
 

@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <div class="space-y-2">
     <CardTransaction
-     :transaction
+      :transaction="transaction"
       v-for="transaction in transactions"
       :key="transaction.id"
     />

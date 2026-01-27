@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -29,15 +29,18 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { extractNumbers, formatCentsToDisplay, parseToCents } from '@/lib/currency';
 import { update } from '@/routes/transactions';
-import { ICategory } from '@/types/models/category';
-import { ITag } from '@/types/models/tag';
+import type { ICategory } from '@/types/models/category';
+import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
 
 const open = defineModel<boolean>('open', { required: true });
 
-defineProps<{
-  categories: ICategory[];
+const props = defineProps<{
+  transaction: ITransaction;
 }>();
+
+const categories = inject<ICategory[]>('categories', []);
+const tags = inject<ITag[]>('tags', []);
 
 const rawAmount = ref('');
 
@@ -47,9 +50,26 @@ const form = useForm<ITransaction>({
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
-  notes: null,
-  transaction_date: new Date().toISOString().split('T')[0],
+  notes: '',
+  transaction_date: '',
 });
+
+watch(
+  () => open.value,
+  (isOpen) => {
+    if (isOpen) {
+      rawAmount.value = props.transaction.amount.toString();
+      form.category_id = props.transaction.category_id;
+      form.tag_id = props.transaction.tag_id;
+      form.amount = props.transaction.amount;
+      form.type = props.transaction.type;
+      form.description = props.transaction.description;
+      form.notes = props.transaction.notes ?? '';
+      form.transaction_date = props.transaction.transaction_date.split('T')[0];
+    }
+  },
+  { immediate: true }
+);
 
 const displayAmount = computed({
   get: () => formatCentsToDisplay(rawAmount.value),
@@ -61,7 +81,7 @@ const displayAmount = computed({
 });
 
 const updateTransaction = () => {
-  form.submit(update(), {
+  form.submit(update(props.transaction.id), {
     onSuccess: () => {
       open.value = false;
       form.reset();
@@ -201,10 +221,10 @@ const updateTransaction = () => {
           </DialogClose>
           <Button
             type="button"
-            @click="createTransaction"
+            @click="updateTransaction"
             :disabled="form.processing"
           >
-            Create Transaction
+            Edit Transaction
           </Button>
         </DialogFooter>
       </DialogContent>

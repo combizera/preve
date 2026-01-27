@@ -7,6 +7,7 @@ import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { ITransaction } from '@/types/models/transaction';
 
 defineProps<{
@@ -33,11 +34,11 @@ const openDeleteDialog = (transaction: ITransaction) => {
     class="flex flex-row items-center justify-between gap-2 rounded-md bg-sidebar p-4"
   >
     <div class="flex items-center gap-2">
-      <Checkbox class="size-5" id="transaction" />
+      <Checkbox id="transaction" />
       <div>
         <Label
           for="transaction"
-          class="text-md leading-6 font-medium text-white"
+          class="text-sm leading-6 font-medium text-muted-foreground"
         >
           {{ transaction.description }}
         </Label>
@@ -45,7 +46,7 @@ const openDeleteDialog = (transaction: ITransaction) => {
     </div>
 
     <div>
-      <span class="text-sm font-medium text-white">
+      <span class="text-sm font-medium text-muted-foreground">
         {{ transaction.amount }}
       </span>
       <ActionGroup>
@@ -56,9 +57,9 @@ const openDeleteDialog = (transaction: ITransaction) => {
     </div>
   </Card>
 
-  <!-- <EditTransactionDialog -->
-  <!--   v-if="showEditDialog && selectedTransaction" -->
-  <!--   v-model:open="showEditDialog" -->
-  <!--   :transaction="selectedTransaction" -->
-  <!-- /> -->
+  <EditTransactionDialog
+    v-if="showEditDialog && selectedTransaction"
+    v-model:open="showEditDialog"
+    :transaction="selectedTransaction"
+  />
 </template>
