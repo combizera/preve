@@ -59,7 +59,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         <Button type="button" @click="openCreateDialog"> Create </Button>
       </Heading>
 
-
       <ContainerTransactions :transactions="transactions" />
 
       <!-- CREATE -->

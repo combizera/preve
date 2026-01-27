@@ -5,6 +5,7 @@ import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
 import EditTransactionDialog from '@/components/Transaction/EditTransactionDialog.vue';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
+import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -31,8 +32,8 @@ const amountClass = computed(() =>
     'text-sm font-medium',
     props.transaction.type === 'expense'
       ? "text-foreground before:content-['-']"
-      : 'text-positive'
-  )
+      : 'text-positive',
+  ),
 );
 
 const showDeleteDialog = ref(false);
@@ -74,10 +75,10 @@ const openDeleteDialog = (transaction: ITransaction) => {
     </div>
 
     <div>
-      <span :class="amountClass">
-        R$ {{ formattedAmount }}
-      </span>
+      <span :class="amountClass"> R$ {{ formattedAmount }} </span>
       <ActionGroup>
+        <DuplicateButton @click="openEditDialog(transaction)" />
+
         <EditButton @click="openEditDialog(transaction)" />
 
         <DeleteButton @click="openDeleteDialog(transaction)" />
