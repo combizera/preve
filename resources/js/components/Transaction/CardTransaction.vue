@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
-import EditTransactionDialog from '@/components/Transaction/EditTransactionDialog.vue';
+import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
@@ -39,9 +39,11 @@ const amountClass = computed(() =>
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
 const selectedTransaction = ref<ITransaction | null>(null);
+const editMode = ref<'edit' | 'duplicate'>('edit');
 
-const openEditDialog = (transaction: ITransaction) => {
+const openEditDialog = (transaction: ITransaction, mode: 'edit' | 'duplicate' = 'edit') => {
   selectedTransaction.value = transaction;
+  editMode.value = mode;
   showEditDialog.value = true;
 };
 
@@ -77,19 +79,20 @@ const openDeleteDialog = (transaction: ITransaction) => {
     <div>
       <span :class="amountClass"> R$ {{ formattedAmount }} </span>
       <ActionGroup>
-        <DuplicateButton @click="openEditDialog(transaction)" />
+        <DuplicateButton @click="openEditDialog(transaction, 'duplicate')" />
 
-        <EditButton @click="openEditDialog(transaction)" />
+        <EditButton @click="openEditDialog(transaction, 'edit')" />
 
         <DeleteButton @click="openDeleteDialog(transaction)" />
       </ActionGroup>
     </div>
   </Card>
 
-  <EditTransactionDialog
+  <FormTransactionDialog
     v-if="showEditDialog && selectedTransaction"
     v-model:open="showEditDialog"
     :transaction="selectedTransaction"
+    :type="editMode"
   />
 
   <DeleteTransactionDialog

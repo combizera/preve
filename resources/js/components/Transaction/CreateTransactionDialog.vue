@@ -70,7 +70,7 @@ const createTransaction = () => {
 
         <FormTransaction
           :form="form"
-          :displayAmount="displayAmount"
+          v-model:displayAmount="displayAmount"
           :categories="categories"
           :tags="tags"
         />

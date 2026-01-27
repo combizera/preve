@@ -6,7 +6,11 @@
 export function formatCentsToDisplay(cents: number | string): string {
   const numericCents = typeof cents === 'string' ? parseInt(cents, 10) : cents;
 
-  if (isNaN(numericCents) || numericCents === 0) {
+  if (isNaN(numericCents)) {
+    return '';
+  }
+
+  if (numericCents === 0) {
     return '0,00';
   }
 

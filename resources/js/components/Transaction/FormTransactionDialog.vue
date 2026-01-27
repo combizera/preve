@@ -14,8 +14,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { extractNumbers, formatCentsToDisplay, parseToCents } from '@/lib/currency';
-import { update } from '@/routes/transactions';
+import {
+  extractNumbers,
+  formatCentsToDisplay,
+  parseToCents,
+} from '@/lib/currency';
+import { update, store } from '@/routes/transactions';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
@@ -24,6 +28,7 @@ const open = defineModel<boolean>('open', { required: true });
 
 const props = defineProps<{
   transaction: ITransaction;
+  type: 'edit' | 'duplicate';
 }>();
 
 const categories = inject<ICategory[]>('categories', []);
@@ -42,20 +47,24 @@ const form = useForm<ITransaction>({
 });
 
 watch(
-  () => open.value,
-  (isOpen) => {
-    if (isOpen) {
-      rawAmount.value = props.transaction.amount.toString();
-      form.category_id = props.transaction.category_id;
-      form.tag_id = props.transaction.tag_id;
-      form.amount = props.transaction.amount;
-      form.type = props.transaction.type;
-      form.description = props.transaction.description;
-      form.notes = props.transaction.notes ?? '';
-      form.transaction_date = props.transaction.transaction_date.split('T')[0];
+  [() => open.value, () => props.transaction],
+  ([isOpen, transaction]) => {
+    if (isOpen && transaction) {
+      const amount = transaction.amount ?? 0;
+      // Initialize rawAmount with the transaction amount
+      rawAmount.value = amount > 0 ? amount.toString() : '';
+      form.category_id = transaction.category_id ?? 0;
+      form.tag_id = transaction.tag_id ?? null;
+      form.amount = amount;
+      form.type = transaction.type ?? TRANSACTION_TYPE.EXPENSE;
+      form.description = transaction.description ?? '';
+      form.notes = transaction.notes ?? '';
+      form.transaction_date = transaction.transaction_date
+        ? transaction.transaction_date.split('T')[0]
+        : new Date().toISOString().split('T')[0];
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const displayAmount = computed({
@@ -67,6 +76,16 @@ const displayAmount = computed({
   },
 });
 
+const createTransaction = () => {
+  form.submit(store(), {
+    onSuccess: () => {
+      open.value = false;
+      form.reset();
+      rawAmount.value = '';
+    },
+  });
+};
+
 const updateTransaction = () => {
   form.submit(update(props.transaction.id), {
     onSuccess: () => {
@@ -76,6 +95,18 @@ const updateTransaction = () => {
     },
   });
 };
+
+const handleSubmit = () => {
+  if (props.type === 'duplicate') {
+    createTransaction();
+  } else {
+    updateTransaction();
+  }
+};
+
+const submitButtonText = computed(() => {
+  return props.type === 'duplicate' ? 'Duplicate Transaction' : 'Edit Transaction';
+});
 </script>
 
 <template>
@@ -83,15 +114,18 @@ const updateTransaction = () => {
     <form>
       <DialogContent class="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Update Transaction</DialogTitle>
+          <DialogTitle>
+            {{ type === 'duplicate' ? 'Duplicate' : 'Edit' }} Transaction
+          </DialogTitle>
           <DialogDescription>
-            Fill in the details below to update a transaction.
+            Fill in the details below to
+            {{ type === 'duplicate' ? 'Duplicate' : 'Edit' }} a transaction.
           </DialogDescription>
         </DialogHeader>
 
         <FormTransaction
           :form="form"
-          :displayAmount="displayAmount"
+          v-model:displayAmount="displayAmount"
           :categories="categories"
           :tags="tags"
         />
@@ -100,12 +134,8 @@ const updateTransaction = () => {
           <DialogClose as-child>
             <Button variant="outline"> Cancel </Button>
           </DialogClose>
-          <Button
-            type="button"
-            @click="updateTransaction"
-            :disabled="form.processing"
-          >
-            Edit Transaction
+          <Button type="button" @click="handleSubmit" :disabled="form.processing">
+            {{ submitButtonText }}
           </Button>
         </DialogFooter>
       </DialogContent>

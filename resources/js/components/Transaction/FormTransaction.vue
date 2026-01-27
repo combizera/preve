@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 import type { InertiaForm } from '@inertiajs/vue3';
-import type { WritableComputedRef } from 'vue';
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 
 import InputError from '@/components/InputError.vue';
 import { Input } from '@/components/ui/input';
@@ -23,10 +22,11 @@ import type { ITransaction } from '@/types/models/transaction';
 
 defineProps<{
   form: InertiaForm<ITransaction>;
-  displayAmount: WritableComputedRef<string>;
   categories: ICategory[];
   tags: ITag[];
 }>();
+
+const displayAmount = defineModel<string>('displayAmount', { required: true });
 </script>
 
 <template>
