@@ -18,11 +18,9 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Auth::user()->tags();
+        $tags = Auth::user()->tags()->get();
 
-        return Inertia::render('Tag', [
-            'tags' => $tags,
-        ]);
+        return Inertia::render('Tag', compact('tags'));
     }
 
     /**

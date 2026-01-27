@@ -18,11 +18,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Auth::user()->categories();
+        $categories = Auth::user()->categories()->get();
 
-        return Inertia::render('Category', [
-            'categories' => $categories,
-        ]);
+        return Inertia::render('Category', compact('categories'));
     }
 
     /**
