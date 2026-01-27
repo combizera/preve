@@ -11,7 +11,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::factory()
-            ->count(5)
+            ->count(15)
             ->recycle([User::all()])
             ->create();
     }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionType;
 use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -20,7 +22,11 @@ class CategoryController extends Controller
     {
         $categories = Auth::user()->categories()->get();
 
-        return Inertia::render('Category', compact('categories'));
+        [$expenseCategories, $incomeCategories] = $categories->partition(function (Category $category) {
+            return $category->type === TransactionType::EXPENSE;
+        });
+
+        return Inertia::render('Category', compact('expenseCategories', 'incomeCategories'));
     }
 
     /**
@@ -46,7 +52,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
         $this->authorize('update', $category);
 

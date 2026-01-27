@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\CategoryColor;
 use App\Enums\CategoryIcon;
+use App\Enums\TransactionType;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,55 +20,60 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $categories = [
+            // ======================
+            // EXPENSE CATEGORIES (5)
+            // ======================
             [
                 'name' => 'Housing',
+                'type' => TransactionType::EXPENSE,
                 'icon' => CategoryIcon::HOUSE,
                 'color' => CategoryColor::BLUE,
             ],
             [
                 'name' => 'Groceries',
+                'type' => TransactionType::EXPENSE,
                 'icon' => CategoryIcon::SHOPPING_CART,
                 'color' => CategoryColor::GREEN,
             ],
             [
                 'name' => 'Transportation',
+                'type' => TransactionType::EXPENSE,
                 'icon' => CategoryIcon::CAR,
                 'color' => CategoryColor::ORANGE,
             ],
             [
-                'name' => 'Health',
-                'icon' => CategoryIcon::HEART,
-                'color' => CategoryColor::RED,
-            ],
-            [
-                'name' => 'Coffee',
-                'icon' => CategoryIcon::COFFEE,
-                'color' => CategoryColor::YELLOW,
-            ],
-            [
                 'name' => 'Food & Dining',
+                'type' => TransactionType::EXPENSE,
                 'icon' => CategoryIcon::UTENSILS,
                 'color' => CategoryColor::PURPLE,
             ],
             [
-                'name' => 'Travel',
-                'icon' => CategoryIcon::PLANE,
-                'color' => CategoryColor::BLUE,
+                'name' => 'Entertainment',
+                'type' => TransactionType::EXPENSE,
+                'icon' => CategoryIcon::GAMEPAD_2,
+                'color' => CategoryColor::YELLOW,
             ],
+
+            // ======================
+            // INCOME CATEGORIES (3)
+            // ======================
             [
-                'name' => 'Work',
+                'name' => 'Salary',
+                'type' => TransactionType::INCOME,
                 'icon' => CategoryIcon::BRIEFCASE,
                 'color' => CategoryColor::GREEN,
             ],
             [
-                'name' => 'Entertainment',
-                'icon' => CategoryIcon::GAMEPAD_2,
-                'color' => CategoryColor::PURPLE,
+                'name' => 'Freelance',
+                'type' => TransactionType::INCOME,
+                'icon' => CategoryIcon::LAPTOP,
+                'color' => CategoryColor::BLUE,
             ],
             [
-                'name' => 'Education',
-                'icon' => CategoryIcon::BOOK,
-                'color' => CategoryColor::YELLOW,
+                'name' => 'Investments',
+                'type' => TransactionType::INCOME,
+                'icon' => CategoryIcon::SHOPPING_BAG,
+                'color' => CategoryColor::PURPLE,
             ],
         ];
 
@@ -78,6 +84,7 @@ class CategoryFactory extends Factory
             'name' => $category['name'],
             'slug' => Str::slug($category['name']),
             'description' => $this->faker->optional()->sentence(),
+            'type' => $category['type']->value,
             'color' => $category['color']->value,
             'icon' => $category['icon']->value,
         ];

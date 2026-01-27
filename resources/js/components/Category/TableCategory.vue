@@ -18,6 +18,8 @@ import {
 import { getColorClass } from '@/lib/category-colors';
 import { getIconComponent } from '@/lib/category-icons';
 import { ICategory } from '@/types/models/category';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
@@ -33,72 +35,86 @@ const openDeleteDialog = (category: ICategory) => {
   showDeleteDialog.value = true;
 };
 
-defineProps<{
+interface Props {
   categories: ICategory[];
-}>();
+  type?: 'income' | 'expense';
+}
+
+withDefaults(defineProps<Props>(), {
+  type: 'expense',
+});
 </script>
 
 <template>
-  <Table>
-    <TableCaption>Your Categories Income</TableCaption>
-    <TableHeader>
-      <TableRow>
-        <TableHead>Name</TableHead>
-        <TableHead>Description</TableHead>
-        <TableHead class="text-right">Actions</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      <TableRow v-for="category in categories" :key="category.id">
-        <TableCell class="flex items-center gap-3">
-          <div
-            :class="[
-              getColorClass(category.color, 'bg', 950),
-              'inline-flex items-center justify-center rounded p-1.5',
-            ]"
-          >
-            <component
-              :is="getIconComponent(category.icon)"
-              :size="18"
-              :class="getColorClass(category.color, 'text', 500)"
-            />
-          </div>
-          <p class="font-medium">
-            {{ category.name }}
-          </p>
-        </TableCell>
-        <TableCell>
-          <p class="text-sm text-muted-foreground">
-            {{
-              category.description && category.description.length > 25
-                ? category.description.slice(0, 25) + '...'
-                : category.description
-            }}
-          </p>
-        </TableCell>
-        <TableCell class="text-right">
-          <ActionGroup>
-            <EditButton
-              @click="openEditDialog(category)"
-            />
+  <div>
+    <div class="flex items-center gap-2">
+      <i
+        :class="
+          cn(
+            'size-4 rounded',
+            type === 'expense' ? 'bg-destructive' : 'bg-positive',
+          )
+        "
+      />
+      {{ type === 'income' ? 'Income' : 'Expense' }}
+      {{ categories.length }}
+    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Description</TableHead>
+          <TableHead class="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="category in categories" :key="category.id">
+          <TableCell class="flex items-center gap-3">
+            <div
+              :class="[
+                getColorClass(category.color, 'bg', 950),
+                'inline-flex items-center justify-center rounded p-1.5',
+              ]"
+            >
+              <component
+                :is="getIconComponent(category.icon)"
+                :size="18"
+                :class="getColorClass(category.color, 'text', 500)"
+              />
+            </div>
+            <p class="font-medium">
+              {{ category.name }}
+            </p>
+          </TableCell>
+          <TableCell>
+            <p class="text-sm text-muted-foreground">
+              {{
+                category.description && category.description.length > 25
+                  ? category.description.slice(0, 25) + '...'
+                  : category.description
+              }}
+            </p>
+          </TableCell>
+          <TableCell class="text-right">
+            <ActionGroup>
+              <EditButton @click="openEditDialog(category)" />
 
-            <DeleteButton
-              @click="openDeleteDialog(category)"
-            />
-          </ActionGroup>
-        </TableCell>
-      </TableRow>
-    </TableBody>
+              <DeleteButton @click="openDeleteDialog(category)" />
+            </ActionGroup>
+          </TableCell>
+        </TableRow>
+      </TableBody>
 
-    <EditCategoryDialog
-      v-if="showEditDialog && selectedCategory"
-      v-model:open="showEditDialog"
-      :category="selectedCategory"
-    />
+      <EditCategoryDialog
+        v-if="showEditDialog && selectedCategory"
+        v-model:open="showEditDialog"
+        :category="selectedCategory"
+      />
 
-    <DeleteCategoryDialog
-      v-model:open="showDeleteDialog"
-      :category="selectedCategory"
-    />
-  </Table>
+      <DeleteCategoryDialog
+        v-model:open="showDeleteDialog"
+        :category="selectedCategory"
+      />
+    </Table>
+  </div>
 </template>

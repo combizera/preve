@@ -28,7 +28,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->integer('amount');
-            $table->string('type')->default('EXPENSE');
+            $table->string('type')->default('expense');
             $table->text('description');
             $table->text('notes')->nullable();
             $table->date('transaction_date');

@@ -17,6 +17,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('name');
             $table->string('slug');
+            $table->string('type')->default('expense');
             $table->text('description')->nullable();
             $table->string('color');
             $table->string('icon');

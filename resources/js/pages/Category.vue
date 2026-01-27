@@ -12,7 +12,8 @@ import { type BreadcrumbItem } from '@/types';
 import type { ICategory } from '@/types/models/category';
 
 defineProps<{
-  categories: ICategory[];
+  incomeCategories: ICategory[];
+  expenseCategories: ICategory[];
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -42,14 +43,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-10">
         <!-- TABLE - CRUD -->
-        <TableCategory :categories />
-
-        <!-- PLACEHOLDER -->
-        <div
-          class="relative min-h-full flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
-        >
-          <PlaceholderPattern />
-        </div>
+        <TableCategory type="income" :categories="incomeCategories" />
+        <TableCategory :categories="expenseCategories" />
       </div>
     </div>
   </AppLayout>
