@@ -17,6 +17,90 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 final class RecurringTransactionFactory extends Factory
 {
     /**
+     * Get a list of common recurring transactions
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function commonRecurringTransactions(): array
+    {
+        return [
+            // Income
+            [
+                'description'  => 'Monthly Salary',
+                'amount'       => 5000.00,
+                'type'         => TransactionType::INCOME->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 5,
+            ],
+            [
+                'description'  => 'Freelance Work',
+                'amount'       => 2000.00,
+                'type'         => TransactionType::INCOME->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 15,
+            ],
+            [
+                'description'  => 'Rental Income',
+                'amount'       => 1500.00,
+                'type'         => TransactionType::INCOME->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 10,
+            ],
+
+            // Expenses
+            [
+                'description'  => 'Rent Payment',
+                'amount'       => 1800.00,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 10,
+            ],
+            [
+                'description'  => 'Condo Fee',
+                'amount'       => 350.00,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 15,
+            ],
+            [
+                'description'  => 'Internet Service',
+                'amount'       => 99.90,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 20,
+            ],
+            [
+                'description'  => 'Electric Bill',
+                'amount'       => 180.00,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 12,
+            ],
+            [
+                'description'  => 'Mobile Phone Plan',
+                'amount'       => 79.90,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 8,
+            ],
+            [
+                'description'  => 'Gym Membership',
+                'amount'       => 120.00,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 1,
+            ],
+            [
+                'description'  => 'Streaming Subscription',
+                'amount'       => 55.90,
+                'type'         => TransactionType::EXPENSE->value,
+                'frequency'    => FrequencyType::MONTHLY->value,
+                'day_of_month' => 25,
+            ],
+        ];
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -31,7 +115,7 @@ final class RecurringTransactionFactory extends Factory
             'description'  => $this->faker->sentence(),
             'day_of_month' => $this->faker->numberBetween(1, 28),
             'start_date'   => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
-            'end_date'     => $this->faker->optional()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
+            'end_date'     => $this->faker->optional()->dateTimeBetween('now', '+1 year'),
         ];
     }
 }

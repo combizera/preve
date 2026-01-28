@@ -17,6 +17,7 @@ final class Transaction extends Model
 
     protected $fillable = [
         'user_id',
+        'recurring_transaction_id',
         'category_id',
         'tag_id',
         'amount',
@@ -35,6 +36,11 @@ final class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function recurringTransaction(): BelongsTo
+    {
+        return $this->belongsTo(RecurringTransaction::class);
     }
 
     public function category(): BelongsTo
