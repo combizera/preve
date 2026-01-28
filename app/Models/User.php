@@ -55,6 +55,11 @@ final class User extends Authenticatable
         return $this->hasMany(Category::class);
     }
 
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
