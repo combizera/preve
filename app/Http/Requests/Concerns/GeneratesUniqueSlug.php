@@ -1,11 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Concerns;
 
 use Illuminate\Support\Str;
 
 trait GeneratesUniqueSlug
 {
+    /**
+     * Get the model class for slug uniqueness check.
+     */
+    abstract protected function getModelClass(): string;
+
     /**
      * Prepare the data for validation.
      */
@@ -48,9 +55,4 @@ trait GeneratesUniqueSlug
 
         return "{$slug}-{$count}";
     }
-
-    /**
-     * Get the model class for slug uniqueness check.
-     */
-    abstract protected function getModelClass(): string;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
@@ -10,7 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class CategoryController extends Controller
+final class CategoryController extends Controller
 {
     use AuthorizesRequests;
 

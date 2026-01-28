@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GitHooks;
 
 use CaptainHook\App\Config;
@@ -8,7 +10,7 @@ use CaptainHook\App\Hook;
 use Illuminate\Support\Arr;
 use SebastianFeldmann\Git\Repository;
 
-class PHPStan implements Hook\Action
+final class PHPStan implements Hook\Action
 {
     public function execute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {

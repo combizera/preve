@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Category;
 use App\Models\User;
 
-class CategoryPolicy
+final class CategoryPolicy
 {
     /**
      * Determine whether the user can view any models.

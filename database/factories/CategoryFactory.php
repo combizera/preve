@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\CategoryColor;
@@ -13,7 +15,7 @@ use Illuminate\Support\Str;
 /**
  * @extends Factory<Category>
  */
-class CategoryFactory extends Factory
+final class CategoryFactory extends Factory
 {
     protected $model = Category::class;
 

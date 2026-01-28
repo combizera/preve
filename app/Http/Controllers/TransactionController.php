@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
@@ -8,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class TransactionController extends Controller
+final class TransactionController extends Controller
 {
     use AuthorizesRequests;
 

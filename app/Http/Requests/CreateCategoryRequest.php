@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Http\Requests\Concerns\GeneratesUniqueSlug;
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCategoryRequest extends FormRequest
+final class CreateCategoryRequest extends FormRequest
 {
     use GeneratesUniqueSlug;
 

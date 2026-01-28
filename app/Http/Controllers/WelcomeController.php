@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-class WelcomeController extends Controller
+final class WelcomeController extends Controller
 {
     public function __invoke(Request $request)
     {

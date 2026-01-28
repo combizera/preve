@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\TransactionType;
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Category>
  */
-class TransactionFactory extends Factory
+final class TransactionFactory extends Factory
 {
     /**
      * @return array<string, mixed>
