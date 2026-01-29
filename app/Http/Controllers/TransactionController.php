@@ -7,8 +7,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 final class TransactionController extends Controller
 {
@@ -17,7 +19,7 @@ final class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $transactions = Auth::user()
             ->transactions()
@@ -34,7 +36,7 @@ final class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TransactionRequest $request)
+    public function store(TransactionRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -48,13 +50,13 @@ final class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // TODO: implement
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(TransactionRequest $request, Transaction $transaction)
+    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
     {
         $this->authorize('update', $transaction);
 
@@ -67,7 +69,7 @@ final class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Transaction $transaction): RedirectResponse
     {
         $this->authorize('delete', $transaction);
 

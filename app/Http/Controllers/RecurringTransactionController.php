@@ -7,8 +7,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 final class RecurringTransactionController extends Controller
 {
@@ -17,7 +19,7 @@ final class RecurringTransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $recurringTransactions = Auth::user()
             ->recurringTransactions()
@@ -34,7 +36,7 @@ final class RecurringTransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RecurringTransactionRequest $request)
+    public function store(RecurringTransactionRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -48,13 +50,13 @@ final class RecurringTransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // TODO: implement
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurringTransaction)
+    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurringTransaction): RedirectResponse
     {
         $this->authorize('update', $recurringTransaction);
 
@@ -67,7 +69,7 @@ final class RecurringTransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RecurringTransaction $recurringTransaction)
+    public function destroy(RecurringTransaction $recurringTransaction): RedirectResponse
     {
         $this->authorize('destroy', $recurringTransaction);
 

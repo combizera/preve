@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTagRequest;
+use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 final class TagController extends Controller
 {
@@ -18,7 +20,7 @@ final class TagController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $tags = Auth::user()->tags()->get();
 
@@ -28,7 +30,7 @@ final class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateTagRequest $request)
+    public function store(CreateTagRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -42,13 +44,13 @@ final class TagController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // TODO: implement
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tag $tag)
+    public function update(UpdateTagRequest $request, Tag $tag): RedirectResponse
     {
         $this->authorize('update', $tag);
 
@@ -61,7 +63,7 @@ final class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag): RedirectResponse
     {
         $this->authorize('delete', $tag);
 
