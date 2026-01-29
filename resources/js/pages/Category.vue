@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 
+import ContainerCategory from '@/components/Category/ContainerCategory.vue';
 import CreateCategory from '@/components/Category/CreateCategory.vue';
-import TableCategory from '@/components/Category/TableCategory.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
@@ -40,11 +40,8 @@ const breadcrumbs: BreadcrumbItem[] = [
       <!-- CREATE -->
       <CreateCategory />
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-10">
-        <!-- TABLE - CRUD -->
-        <TableCategory type="income" :categories="incomeCategories" />
-        <TableCategory :categories="expenseCategories" />
-      </div>
+      <!-- CONTAINER -->
+      <ContainerCategory :incomeCategories :expenseCategories />
     </div>
   </AppLayout>
 </template>
