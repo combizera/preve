@@ -3,15 +3,18 @@ import { ChartLine } from 'lucide-vue-next';
 import { type Component } from 'vue';
 
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface Props {
   title: string;
   description: string;
   icon?: Component;
+  color?: 'positive' | 'destructive' | 'default';
 }
 
 withDefaults(defineProps<Props>(), {
   icon: ChartLine,
+  color: 'default',
 });
 </script>
 
@@ -23,7 +26,15 @@ withDefaults(defineProps<Props>(), {
         {{ description }}
       </p>
     </div>
-    <h2 class="text-lg font-medium">
+    <h2
+      :class="
+        cn(
+          'text-lg font-medium',
+          color === 'positive' && 'text-positive',
+          color === 'destructive' && 'text-destructive',
+        )
+      "
+    >
       {{ title }}
     </h2>
   </Card>

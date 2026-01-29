@@ -73,3 +73,49 @@ export function formatActivePeriod(
 
   return `Since ${formattedStart}`;
 }
+
+/**
+ * Calculates the annual cost/income of a recurring transaction
+ * @param frequency - The frequency type (monthly or yearly)
+ * @param amount - The transaction amount in cents
+ * @returns Annual amount in cents
+ */
+export function calculateAnnualAmount(
+  frequency: FrequencyType,
+  amount: number,
+): number {
+  return frequency === 'monthly' ? amount * 12 : amount;
+}
+
+/**
+ * Calculates the monthly cost/income of a recurring transaction
+ * @param frequency - The frequency type (monthly or yearly)
+ * @param amount - The transaction amount in cents
+ * @returns Monthly amount in cents
+ */
+export function calculateMonthlyAmount(
+  frequency: FrequencyType,
+  amount: number,
+): number {
+  return frequency === 'monthly' ? amount : Math.round(amount / 12);
+}
+
+/**
+ * Calculates the total monthly amount from an array of recurring transactions
+ * @param transactions - Array of recurring transactions
+ * @returns Total monthly amount in cents
+ * @example
+ * const total = calculateTotalMonthly(incomeTransactions);
+ * // Returns sum of all monthly amounts in cents
+ */
+export function calculateTotalMonthly(
+  transactions: Array<{ frequency: FrequencyType; amount: number }>,
+): number {
+  return transactions.reduce((accumulator: number, transaction) => {
+    const monthlyAmount = calculateMonthlyAmount(
+      transaction.frequency,
+      transaction.amount,
+    );
+    return accumulator + monthlyAmount;
+  }, 0);
+}

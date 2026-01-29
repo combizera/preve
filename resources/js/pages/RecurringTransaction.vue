@@ -56,10 +56,13 @@ const breadcrumbs: BreadcrumbItem[] = [
       </Heading>
 
       <!-- RECURRING CARDS -->
-      <RecurringCards />
+      <RecurringCards
+        :incomeRecurring="incomeRecurring"
+        :expenseRecurring="expenseRecurring"
+      />
 
       <!-- CONTAINER -->
-      <div class="space-y-4 mt-10">
+      <div class="space-y-10 mt-5">
         <ContainerRecurrings
           :tags="tags"
           :categories="categories"
