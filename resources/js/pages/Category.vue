@@ -4,17 +4,18 @@ import { Head } from '@inertiajs/vue3';
 import CreateCategory from '@/components/Category/CreateCategory.vue';
 import TableCategory from '@/components/Category/TableCategory.vue';
 import Heading from '@/components/Heading.vue';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import categoryRoutes from '@/routes/categories';
 import { type BreadcrumbItem } from '@/types';
-import type { ICategory } from '@/types/models/category';
+import { type ICategory } from '@/types/models/category';
 
-defineProps<{
+interface Props {
   incomeCategories: ICategory[];
   expenseCategories: ICategory[];
-}>();
+}
+
+defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -32,9 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Category" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div
-      class="flex h-full flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4 max-w-[1500px] w-full mx-auto"
-    >
+    <div class="page-container">
       <!-- HEADING -->
       <Heading title="Category" description="Manage your categories here." />
 

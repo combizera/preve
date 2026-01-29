@@ -22,10 +22,12 @@ import type { ITag } from '@/types/models/tag';
 
 const open = defineModel<boolean>('open', { required: true });
 
-defineProps<{
+interface Props {
   categories: ICategory[];
   tags: ITag[];
-}>();
+}
+
+defineProps<Props>();
 
 const rawAmount = ref('');
 

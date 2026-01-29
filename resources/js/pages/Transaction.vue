@@ -15,11 +15,13 @@ import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
 
-const props = defineProps<{
+interface Props {
   transactions: ITransaction[];
   categories: ICategory[];
   tags: ITag[];
-}>();
+}
+
+defineProps<Props>();
 
 const showCreateDialog = ref(false);
 
@@ -43,9 +45,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Transaction" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div
-      class="mx-auto flex h-full w-full max-w-[1500px] flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4"
-    >
+    <div class="page-container">
       <!-- HEADING -->
       <Heading
         title="Transaction"

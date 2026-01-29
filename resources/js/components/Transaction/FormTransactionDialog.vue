@@ -26,10 +26,12 @@ import { ITransaction } from '@/types/models/transaction';
 
 const open = defineModel<boolean>('open', { required: true });
 
-const props = defineProps<{
+interface Props {
   transaction: ITransaction;
   type: 'edit' | 'duplicate';
-}>();
+}
+
+const props = defineProps<Props>();
 
 const categories = inject<ICategory[]>('categories', []);
 const tags = inject<ITag[]>('tags', []);

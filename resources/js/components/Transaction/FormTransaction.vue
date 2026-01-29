@@ -20,11 +20,13 @@ import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import type { ITransaction } from '@/types/models/transaction';
 
-defineProps<{
+interface Props {
   form: InertiaForm<ITransaction>;
   categories: ICategory[];
   tags: ITag[];
-}>();
+}
+
+defineProps<Props>();
 
 const displayAmount = defineModel<string>('displayAmount', { required: true });
 </script>

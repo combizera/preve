@@ -22,10 +22,12 @@ import { ITransaction } from '@/types/models/transaction';
 
 const open = defineModel<boolean>('open', { required: true });
 
-defineProps<{
+interface Props {
   categories: ICategory[];
   tags: ITag[];
-}>();
+}
+
+defineProps<Props>();
 
 const rawAmount = ref('');
 

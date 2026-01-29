@@ -13,11 +13,13 @@ import type { ICategory } from '@/types/models/category';
 import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import type { ITag } from '@/types/models/tag';
 
-const props = defineProps<{
+interface Props {
   recurringTransactions: IRecurringTransaction[];
   categories: ICategory[];
   tags: ITag[];
-}>();
+}
+
+const props = defineProps<Props>();
 
 const showCreateDialog = ref(false);
 
@@ -41,9 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Recurring" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div
-      class="mx-auto flex h-full w-full max-w-[1500px] flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4"
-    >
+    <div class="page-container">
       <!-- HEADING -->
       <Heading
         title="Recurring Transactions"

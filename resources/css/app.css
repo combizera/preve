@@ -177,3 +177,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .page-container {
+        @apply mx-auto flex h-full w-full max-w-[1500px] flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4;
+    }
+}

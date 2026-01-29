@@ -11,9 +11,11 @@ import tagRoutes from '@/routes/tags';
 import { type BreadcrumbItem } from '@/types';
 import type { ITag } from '@/types/models/tag';
 
-defineProps<{
+interface Props {
   tags: ITag[];
-}>();
+}
+
+defineProps<Props>()
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -31,9 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Tag" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div
-      class="mx-auto flex h-full w-full max-w-[1500px] flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4"
-    >
+    <div class="page-container">
       <!-- HEADING -->
       <Heading title="Tag" description="Manage your tags here." />
 
