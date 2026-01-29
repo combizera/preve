@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 final class RecurringTransactionRequest extends FormRequest
 {
@@ -33,6 +35,29 @@ final class RecurringTransactionRequest extends FormRequest
             'day_of_month' => ['required', 'integer', 'min:1', 'max:31'],
             'start_date'   => ['required', 'date'],
             'end_date'     => ['nullable', 'date', 'after:start_date'],
+        ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function after(): array
+    {
+        return [
+            function (Validator $validator) {
+                if ($validator->errors()->isNotEmpty()) {
+                    return;
+                }
+
+                $category = Category::query()->find($this->category_id);
+
+                if ($category && $category->type->value !== $this->type) {
+                    $validator->errors()->add(
+                        'category_id',
+                        "The selected category must be of type {$this->type}."
+                    );
+                }
+            },
         ];
     }
 }

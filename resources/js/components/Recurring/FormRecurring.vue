@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 
 import InputError from '@/components/InputError.vue';
@@ -27,9 +28,13 @@ interface Props {
   tags: ITag[];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const displayAmount = defineModel<string>('displayAmount', { required: true });
+
+const filteredCategories = computed(() => {
+  return props.categories.filter(category => category.type === props.form.type);
+});
 </script>
 
 <template>
@@ -93,7 +98,7 @@ const displayAmount = defineModel<string>('displayAmount', { required: true });
           <SelectGroup>
             <SelectLabel>Category</SelectLabel>
             <SelectItem
-              v-for="category in categories"
+              v-for="category in filteredCategories"
               :value="category.id"
               :key="category.id"
             >
