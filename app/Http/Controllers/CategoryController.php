@@ -29,6 +29,9 @@ final class CategoryController extends Controller
             return $category->type === TransactionType::EXPENSE;
         });
 
+        $expenseCategories = $expenseCategories->values();
+        $incomeCategories = $incomeCategories->values();
+
         return Inertia::render('Category', compact('expenseCategories', 'incomeCategories'));
     }
 
