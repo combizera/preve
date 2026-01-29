@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import type { ICategory } from '@/types/models/category';
-import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
-import type { ITag } from '@/types/models/tag';
+import { type ICategory } from '@/types/models/category';
+import { type IRecurringTransaction } from '@/types/models/recurring-transaction';
+import { type ITag } from '@/types/models/tag';
 
 interface Props {
   recurringTransactions: IRecurringTransaction[];
@@ -19,7 +19,7 @@ interface Props {
   tags: ITag[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const showCreateDialog = ref(false);
 

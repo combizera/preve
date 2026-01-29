@@ -2,7 +2,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
-import FormTransaction from '@/components/Transaction/FormTransaction.vue';
+import FormRecurring from '@/components/Recurring/FormRecurring.vue';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -14,11 +14,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { extractNumbers, formatCentsToDisplay, parseToCents } from '@/lib/currency';
+import { FREQUENCY_TYPE } from '@/enums/frequency-type';
+import {
+  extractNumbers,
+  formatCentsToDisplay,
+  parseToCents,
+} from '@/lib/currency';
 import { store } from '@/routes/recurring';
-import type { ICategory } from '@/types/models/category';
+import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
-import type { ITag } from '@/types/models/tag';
+import { type ITag } from '@/types/models/tag';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -35,10 +40,12 @@ const form = useForm<IRecurringTransaction>({
   category_id: 0,
   tag_id: null,
   amount: 0,
+  frequency: FREQUENCY_TYPE.MONTHLY,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
-  notes: null,
-  transaction_date: new Date().toISOString().split('T')[0],
+  day_of_month: new Date().getDate(),
+  start_date: new Date().toISOString().split('T')[0],
+  end_date: null,
 });
 
 const displayAmount = computed({
@@ -72,7 +79,7 @@ const createRecurring = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <FormTransaction
+        <FormRecurring
           :form="form"
           v-model:displayAmount="displayAmount"
           :categories="categories"
