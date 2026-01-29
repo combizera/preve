@@ -56,11 +56,11 @@ final class RecurringTransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurringTransaction): RedirectResponse
+    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring): RedirectResponse
     {
-        $this->authorize('update', $recurringTransaction);
+        $this->authorize('update', $recurring);
 
-        $recurringTransaction->update($request->all());
+        $recurring->update($request->all());
 
         // TODO: retornar um Toast Message
         return to_route('recurring.index');
@@ -69,11 +69,11 @@ final class RecurringTransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RecurringTransaction $recurringTransaction): RedirectResponse
+    public function destroy(RecurringTransaction $recurring): RedirectResponse
     {
-        $this->authorize('destroy', $recurringTransaction);
+        $this->authorize('delete', $recurring);
 
-        $recurringTransaction->delete();
+        $recurring->delete();
 
         // TODO: retornar um Toast Message
         return to_route('recurring.index');

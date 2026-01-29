@@ -47,7 +47,7 @@ final class TransactionRequest extends FormRequest
                     return;
                 }
 
-                $category = Category::find($this->category_id);
+                $category = Category::query()->find($this->category_id);
 
                 if ($category && $category->type->value !== $this->type) {
                     $validator->errors()->add(
