@@ -30,6 +30,7 @@ const emptyStateConfig = computed(() => ({
 
 <template>
   <div class="space-y-3">
+    <!-- TITLE -->
     <SectionTitle :title="type === 'income' ? 'Income' : 'Expense'" />
 
     <!-- Empty State -->

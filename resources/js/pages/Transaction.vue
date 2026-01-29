@@ -55,7 +55,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         <Button type="button" @click="openCreateDialog"> Create </Button>
       </Heading>
 
-      <ContainerTransactions :transactions="transactions" />
+      <ContainerTransactions
+        :transactions="transactions"
+        @create="openCreateDialog"
+      />
 
       <!-- CREATE -->
       <CreateTransactionDialog
@@ -67,7 +70,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
       <!-- PLACEHOLDER -->
       <div
-        class="relative min-h-full flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
+        class="relative mt-4 min-h-full flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
       >
         <PlaceholderPattern />
       </div>
