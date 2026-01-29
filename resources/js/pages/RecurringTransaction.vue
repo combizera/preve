@@ -68,12 +68,14 @@ const breadcrumbs: BreadcrumbItem[] = [
           :categories="categories"
           :recurringTransactions="incomeRecurring"
           type="income"
+          @create="openCreateDialog"
         />
 
         <ContainerRecurrings
           :tags="tags"
           :categories="categories"
           :recurringTransactions="expenseRecurring"
+          @create="openCreateDialog"
         />
       </div>
 
