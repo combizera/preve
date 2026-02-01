@@ -14,6 +14,7 @@ export interface IRecurringTransaction {
     frequency: FrequencyType;
     type: TransactionType;
     description: string;
+    is_active: boolean;
     day_of_month: number;
     start_date: string;
     end_date?: string | null;
