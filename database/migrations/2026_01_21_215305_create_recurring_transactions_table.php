@@ -33,6 +33,7 @@ return new class() extends Migration
             $table->string('frequency');
             $table->string('type')->default('expense');
             $table->text('description');
+            $table->boolean('is_active')->default(true);
             $table->smallInteger('day_of_month');
             $table->date('start_date');
             $table->date('end_date')->nullable();

@@ -25,6 +25,7 @@ final class RecurringTransaction extends Model
         'frequency',
         'type',
         'description',
+        'is_active',
         'day_of_month',
         'start_date',
         'end_date',
@@ -33,6 +34,7 @@ final class RecurringTransaction extends Model
     protected $casts = [
         'frequency'  => FrequencyType::class,
         'type'       => TransactionType::class,
+        'is_active'  => 'boolean',
         'start_date' => 'date',
         'end_date'   => 'date',
     ];

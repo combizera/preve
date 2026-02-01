@@ -32,6 +32,7 @@ final class RecurringTransactionRequest extends FormRequest
             'type'         => ['required', 'in:income,expense'],
             'frequency'    => ['required', 'in:monthly,yearly'],
             'description'  => ['required', 'string', 'min:3'],
+            'is_active'    => ['boolean'],
             'day_of_month' => ['required', 'integer', 'min:1', 'max:31'],
             'start_date'   => ['required', 'date'],
             'end_date'     => ['nullable', 'date', 'after:start_date'],

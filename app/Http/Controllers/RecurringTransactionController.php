@@ -76,6 +76,21 @@ final class RecurringTransactionController extends Controller
     }
 
     /**
+     * Toggle the active status of a recurring transaction.
+     */
+    public function toggle(RecurringTransaction $recurring): RedirectResponse
+    {
+        $this->authorize('update', $recurring);
+
+        $recurring->update([
+            'is_active' => !$recurring->is_active,
+        ]);
+
+        // TODO: retornar um Toast Message
+        return to_route('recurring.index');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(RecurringTransaction $recurring): RedirectResponse

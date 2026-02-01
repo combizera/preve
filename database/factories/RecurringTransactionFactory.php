@@ -113,6 +113,7 @@ final class RecurringTransactionFactory extends Factory
             'frequency'    => $this->faker->randomElement(FrequencyType::cases())->value,
             'type'         => $this->faker->randomElement(TransactionType::cases())->value,
             'description'  => $this->faker->sentence(),
+            'is_active'    => $this->faker->boolean(80),
             'day_of_month' => $this->faker->numberBetween(1, 28),
             'start_date'   => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
             'end_date'     => $this->faker->optional()->dateTimeBetween('now', '+1 year'),
