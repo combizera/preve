@@ -14,6 +14,7 @@ import EditRecurringDialog from '@/components/Recurring/EditRecurringDialog.vue'
 import { Badge } from '@/components/ui/badge';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
+import ToggleActiveButton from '@/components/ui/button/ToggleActiveButton.vue';
 import { Card } from '@/components/ui/card';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay } from '@/lib/currency';
@@ -103,7 +104,12 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
 <template>
   <Card
-    class="gap-2 overflow-hidden rounded-md bg-sidebar py-2 transition-colors"
+    :class="
+      cn(
+        'gap-2 overflow-hidden rounded-md bg-sidebar py-2 transition-colors',
+        !recurringTransaction.is_active && 'opacity-60',
+      )
+    "
   >
     <!-- Main Content - Always Visible -->
     <div
@@ -113,11 +119,20 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
       <div class="flex items-center justify-between gap-3">
         <!-- Left Section: Main Info -->
         <div class="min-w-0 flex-1">
-          <h3
-            class="truncate text-sm leading-tight font-semibold text-foreground"
-          >
-            {{ recurringTransaction.description }}
-          </h3>
+          <div class="flex items-center gap-2">
+            <h3
+              class="truncate text-sm leading-tight font-semibold text-foreground"
+            >
+              {{ recurringTransaction.description }}
+            </h3>
+            <Badge
+              v-if="!recurringTransaction.is_active"
+              variant="secondary"
+              class="text-xs px-1.5 py-0"
+            >
+              Inactive
+            </Badge>
+          </div>
           <div class="mt-1.5 flex items-center gap-2">
             <component
               :is="categoryIcon"
@@ -140,6 +155,10 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
           <span :class="amountClass">R$ {{ formattedAmount }}</span>
           <ActionGroup>
             <EditButton @click="openEditDialog(recurringTransaction)" />
+            <ToggleActiveButton
+              :id="recurringTransaction.id!"
+              :is-active="recurringTransaction.is_active"
+            />
             <DeleteButton @click="openDeleteDialog(recurringTransaction)" />
           </ActionGroup>
           <ChevronDown

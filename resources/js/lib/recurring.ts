@@ -102,20 +102,27 @@ export function calculateMonthlyAmount(
 
 /**
  * Calculates the total monthly amount from an array of recurring transactions
+ * Only includes active transactions in the calculation
  * @param transactions - Array of recurring transactions
  * @returns Total monthly amount in cents
  * @example
  * const total = calculateTotalMonthly(incomeTransactions);
- * // Returns sum of all monthly amounts in cents
+ * // Returns sum of all monthly amounts in cents for active transactions only
  */
 export function calculateTotalMonthly(
-  transactions: Array<{ frequency: FrequencyType; amount: number }>,
+  transactions: Array<{
+    frequency: FrequencyType;
+    amount: number;
+    is_active: boolean;
+  }>,
 ): number {
-  return transactions.reduce((accumulator: number, transaction) => {
-    const monthlyAmount = calculateMonthlyAmount(
-      transaction.frequency,
-      transaction.amount,
-    );
-    return accumulator + monthlyAmount;
-  }, 0);
+  return transactions
+    .filter((transaction) => transaction.is_active)
+    .reduce((accumulator: number, transaction) => {
+      const monthlyAmount = calculateMonthlyAmount(
+        transaction.frequency,
+        transaction.amount,
+      );
+      return accumulator + monthlyAmount;
+    }, 0);
 }

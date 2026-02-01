@@ -42,6 +42,7 @@ const form = useForm<IRecurringTransaction>({
   frequency: props.recurringTransaction.frequency,
   type: props.recurringTransaction.type,
   description: props.recurringTransaction.description,
+  is_active: props.recurringTransaction.is_active,
   day_of_month: props.recurringTransaction.day_of_month,
   start_date: props.recurringTransaction.start_date,
   end_date: props.recurringTransaction.end_date ?? null,

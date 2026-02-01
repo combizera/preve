@@ -43,6 +43,7 @@ const form = useForm<IRecurringTransaction>({
   frequency: FREQUENCY_TYPE.MONTHLY,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
+  is_active: true,
   day_of_month: new Date().getDate(),
   start_date: new Date().toISOString().split('T')[0],
   end_date: null,
