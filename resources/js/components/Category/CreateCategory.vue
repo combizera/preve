@@ -119,14 +119,14 @@ const createCategory = () => {
                 :class="
                   cn(
                     'flex size-7 items-center justify-center rounded border p-1',
-                    getColorClass(form.color, 'bg'),
-                    getColorClass(form.color, 'border'),
+                    form.color && getColorClass(form.color, 'bg'),
+                    form.color && getColorClass(form.color, 'border'),
                   )
                 "
               >
                 <component
                   :is="getIconComponent(form.icon)"
-                  :class="cn('size-4', getColorClass(form.color, 'text'))"
+                  :class="cn('size-4', form.color && getColorClass(form.color, 'text'))"
                 />
               </div>
             </SelectValue>
