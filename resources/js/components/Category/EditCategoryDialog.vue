@@ -104,8 +104,10 @@ const updateCategory = () => {
                 :key="icon"
                 :class="
                   cn(
-                    'flex cursor-pointer items-center justify-center rounded border border-gray-700 p-2 hover:border-primary',
-                    form.icon === icon && 'border-primary bg-primary/10',
+                    'flex cursor-pointer items-center justify-center rounded border-2 p-2',
+                    form.icon === icon && getColorClass(form.color, 'bg'),
+                    form.icon === icon ? getColorClass(form.color, 'border') : 'hover:border-muted-foreground',
+                    form.icon === icon && getColorClass(form.color, 'text'),
                   )
                 "
               >
@@ -118,7 +120,7 @@ const updateCategory = () => {
                 />
                 <component
                   :is="getIconComponent(icon)"
-                  class="size-5 text-gray-500"
+                  :class="cn('size-5', form.icon === icon ? getColorClass(form.color, 'text') : 'text-foreground')"
                 />
               </label>
             </div>
@@ -135,8 +137,8 @@ const updateCategory = () => {
                   cn(
                     'h-6 w-12 cursor-pointer rounded border-2 p-1',
                     form.color === color
-                      ? 'border-gray-100'
-                      : 'border-gray-800',
+                      ? getColorClass(color, 'border')
+                      : 'border-border hover:border-muted-foreground',
                   )
                 "
               >
@@ -147,14 +149,7 @@ const updateCategory = () => {
                   v-model="form.color"
                   class="sr-only"
                 />
-                <div
-                  :class="
-                    cn(
-                      'h-full w-full rounded-xs',
-                      getColorClass(color, 'bg', 500),
-                    )
-                  "
-                />
+                <div :class="cn('h-full w-full rounded-xs', getColorClass(color, 'bg'))" />
               </label>
             </div>
             <InputError :message="form.errors.color" />

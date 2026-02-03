@@ -46,7 +46,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <div>
     <div class="flex items-center gap-2 mb-2 px-2 w-full">
-      <i :class="cn('size-4 rounded', type === 'expense' ? 'bg-destructive' : 'bg-positive')" />
+      <i :class="cn('size-4 rounded', type === 'expense' ? getColorClass('red', 'bg') : getColorClass('green', 'bg'))" />
       <p class="text-foreground">
         {{ type === 'income' ? 'Income' : 'Expense' }}
       </p>
@@ -65,14 +65,15 @@ withDefaults(defineProps<Props>(), {
           <TableCell class="flex items-center gap-3">
             <div
               :class="[
-                getColorClass(category.color, 'bg', 950),
+                getColorClass(category.color, 'bg'),
+                getColorClass(category.color, 'border'),
                 'inline-flex items-center justify-center rounded p-1.5',
               ]"
             >
               <component
                 :is="getIconComponent(category.icon)"
                 :size="18"
-                :class="getColorClass(category.color, 'text', 500)"
+                :class="getColorClass(category.color, 'text')"
               />
             </div>
             <p class="font-medium">

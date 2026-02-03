@@ -85,11 +85,7 @@ const createCategory = () => {
           <SelectTrigger class="w-full min-w-[150px]">
             <SelectValue placeholder="Select a color">
               <div v-if="form.color" class="flex items-center gap-2">
-                <div
-                  :class="
-                    cn('h-4 w-4 rounded', getColorClass(form.color, 'bg', 500))
-                  "
-                />
+                <div :class="cn('h-4 w-4 rounded', getColorClass(form.color, 'bg'))" />
                 <span>{{ capitalizeFirstLetter(form.color) }}</span>
               </div>
             </SelectValue>
@@ -102,11 +98,7 @@ const createCategory = () => {
                 :value="color"
                 :key="color"
               >
-                <div
-                  :class="
-                    cn('h-4 w-4 rounded', getColorClass(color, 'bg', 500))
-                  "
-                />
+                <div :class="cn('h-4 w-4 rounded', getColorClass(color, 'bg'))" />
                 <span>{{ capitalizeFirstLetter(color) }}</span>
               </SelectItem>
             </SelectGroup>
@@ -127,14 +119,14 @@ const createCategory = () => {
                 :class="
                   cn(
                     'flex size-7 items-center justify-center rounded border p-1',
-                    getColorClass(form.color, 'bg', 950),
-                    getColorClass(form.color, 'border', 900),
+                    getColorClass(form.color, 'bg'),
+                    getColorClass(form.color, 'border'),
                   )
                 "
               >
                 <component
                   :is="getIconComponent(form.icon)"
-                  :class="cn('size-4', getColorClass(form.color, 'text', 300))"
+                  :class="cn('size-4', getColorClass(form.color, 'text'))"
                 />
               </div>
             </SelectValue>
@@ -151,7 +143,7 @@ const createCategory = () => {
                 >
                   <component
                     :is="getIconComponent(icon)"
-                    class="size-5 text-gray-200"
+                    class="size-5 text-foreground"
                   />
                 </SelectItem>
               </div>
