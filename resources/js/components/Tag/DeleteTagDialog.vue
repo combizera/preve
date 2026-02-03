@@ -43,7 +43,7 @@ function handleDeleteTag() {
         <AlertDialogCancel>
           Cancel
         </AlertDialogCancel>
-        <AlertDialogAction @click="handleDeleteTag" :disabled="form.processing">
+        <AlertDialogAction variant="destructive" @click="handleDeleteTag" :disabled="form.processing">
           Confirm
         </AlertDialogAction>
       </AlertDialogFooter>
