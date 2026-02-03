@@ -67,7 +67,7 @@ withDefaults(defineProps<Props>(), {
               :class="[
                 getColorClass(category.color, 'bg'),
                 getColorClass(category.color, 'border'),
-                'inline-flex items-center justify-center rounded p-1.5',
+                'border inline-flex items-center justify-center rounded p-1.5',
               ]"
             >
               <component
