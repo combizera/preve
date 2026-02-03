@@ -43,8 +43,8 @@ function handlePageChange(page: number) {
             <SelectValue :placeholder="`${pageSize}`" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem v-for="size in [10, 20, 30, 40, 50]" :key="size" :value="`${size}`">
-              {{ size }}
+            <SelectItem v-for="pageSize in [10, 20, 30, 40, 50]" :key="pageSize" :value="`${pageSize}`">
+              {{ pageSize }}
             </SelectItem>
           </SelectContent>
         </Select>
