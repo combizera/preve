@@ -24,9 +24,11 @@ const form = useForm({});
 
 const deleteRecurring = () => {
   const recurringTransaction = props.recurringTransaction;
-  if (!recurringTransaction) return;
+  if (!recurringTransaction?.id) return;
 
-  form.submit(destroy(recurringTransaction.id), {
+  const id = Number(recurringTransaction.id);
+
+  form.submit(destroy(id), {
     onSuccess: () => {
       open.value = false;
     },
@@ -46,7 +48,7 @@ const deleteRecurring = () => {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel> Cancel </AlertDialogCancel>
-        <AlertDialogAction @click="deleteRecurring" :disabled="form.processing">
+        <AlertDialogAction variant="destructive" @click="deleteRecurring" :disabled="form.processing">
           Confirm
         </AlertDialogAction>
       </AlertDialogFooter>

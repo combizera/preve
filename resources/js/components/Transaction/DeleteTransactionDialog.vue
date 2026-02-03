@@ -24,7 +24,7 @@ const form = useForm({});
 
 const deleteTransaction = () => {
   const transaction = props.transaction;
-  if (!transaction) return;
+  if (!transaction?.id) return;
 
   form.submit(destroy(transaction.id), {
     onSuccess: () => {
@@ -47,6 +47,7 @@ const deleteTransaction = () => {
       <AlertDialogFooter>
         <AlertDialogCancel> Cancel </AlertDialogCancel>
         <AlertDialogAction
+          variant="destructive"
           @click="deleteTransaction"
           :disabled="form.processing"
         >

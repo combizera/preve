@@ -48,7 +48,7 @@ const deleteCategory = () => {
                 <AlertDialogCancel>
                     Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction @click="deleteCategory" :disabled="form.processing">
+                <AlertDialogAction variant="destructive" @click="deleteCategory" :disabled="form.processing">
                     Confirm
                 </AlertDialogAction>
             </AlertDialogFooter>
