@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-test('registration screen can be rendered', function () {
+it('should be able to render registration screen', function () {
     $response = $this->get(route('register'));
 
     $response->assertOk();
 });
 
-test('new users can register', function () {
+it('should be able to register new users', function () {
     $response = $this->post(route('register.store'), [
         'name'                  => 'Test User',
         'email'                 => 'test@example.com',

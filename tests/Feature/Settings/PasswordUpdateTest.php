@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-test('password update page is displayed', function () {
+it('should be able to display password update page', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -15,7 +15,7 @@ test('password update page is displayed', function () {
     $response->assertOk();
 });
 
-test('password can be updated', function () {
+it('should be able to update password', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -34,7 +34,7 @@ test('password can be updated', function () {
     expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
 });
 
-test('correct password must be provided to update password', function () {
+it('should be able to require correct password to update password', function () {
     $user = User::factory()->create();
 
     $response = $this
