@@ -13,7 +13,7 @@ final class TagSeeder extends Seeder
     public function run(): void
     {
         Tag::factory()
-            ->count(5)
+            ->count(20)
             ->recycle([User::all()])
             ->create();
     }
