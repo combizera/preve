@@ -21,7 +21,7 @@ import { availableColors, getColorClass } from '@/lib/category-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
 import { update } from '@/routes/categories';
-import { ICategory } from '@/types/models/category';
+import { ICategory, ICategoryForm } from '@/types/models/category';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -29,7 +29,7 @@ const props = defineProps<{
   category: ICategory;
 }>();
 
-const form = useForm({
+const form = useForm<ICategoryForm>({
   name: props.category.name,
   type: props.category.type,
   description: props.category.description ?? '',
