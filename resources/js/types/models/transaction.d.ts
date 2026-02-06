@@ -5,7 +5,7 @@ import { ITag } from '@/types/models/tag';
 export type TransactionType = 'income' | 'expense';
 
 export interface ITransaction {
-    id?: number;
+    id?: string;
     recurring_transaction_id?: number;
     recurring_transaction?: IRecurringTransaction;
     category_id?: number;

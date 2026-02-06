@@ -33,11 +33,11 @@ const rawAmount = ref('');
 
 const form = useForm<ITransaction>({
   category_id: 0,
-  tag_id: null,
+  tag_id: undefined,
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
-  notes: null,
+  notes: undefined,
   transaction_date: new Date().toLocaleDateString("pt-BR"),
 });
 
@@ -64,7 +64,7 @@ const createTransaction = () => {
 <template>
   <Dialog v-model:open="open">
     <form>
-      <DialogContent class="sm:max-w-[550px]">
+      <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
           <DialogTitle>Create Transaction</DialogTitle>
           <DialogDescription>
