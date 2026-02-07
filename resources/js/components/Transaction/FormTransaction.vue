@@ -5,6 +5,12 @@ import { computed } from 'vue';
 
 import InputError from '@/components/InputError.vue';
 import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -20,6 +26,7 @@ import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import type { ITransaction } from '@/types/models/transaction';
+import { filterNumericInput } from '@/utils/numericInput';
 
 interface Props {
   form: InertiaForm<ITransaction>;
@@ -32,7 +39,9 @@ const props = defineProps<Props>();
 const displayAmount = defineModel<string>('displayAmount', { required: true });
 
 const filteredCategories = computed(() => {
-  return props.categories.filter(category => category.type === props.form.type);
+  return props.categories.filter(
+    (category) => category.type === props.form.type,
+  );
 });
 </script>
 
@@ -57,20 +66,19 @@ const filteredCategories = computed(() => {
   <div class="grid grid-cols-2 gap-4">
     <div class="grid gap-3">
       <Label for="amount"> Amount </Label>
-      <Input
-        id="amount"
-        type="text"
-        inputmode="numeric"
-        placeholder="0,00"
-        v-model="displayAmount"
-        @keypress="
-          (e: KeyboardEvent) => {
-            if (!/[0-9]/.test(e.key)) {
-              e.preventDefault();
-            }
-          }
-        "
-      />
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>R$</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput
+          id="amount"
+          type="text"
+          inputmode="numeric"
+          placeholder="0,00"
+          v-model="displayAmount"
+          @keydown="filterNumericInput"
+        />
+      </InputGroup>
       <InputError :message="form.errors.amount" />
     </div>
 
