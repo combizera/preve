@@ -3,10 +3,10 @@ import { computed } from 'vue';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/composables/useInitials';
-import type { User } from '@/types';
+import { IUser } from '@/types/models/user';
 
 interface Props {
-    user: User;
+    user: IUser;
     showEmail?: boolean;
 }
 

@@ -13,8 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { FREQUENCY_TYPE } from '@/enums/frequency-type';
+import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import {
   extractNumbers,
   formatCentsToDisplay,
@@ -24,6 +24,7 @@ import { store } from '@/routes/recurring';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
+import { formatTransactionDate } from '@/utils/formatDate';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -38,15 +39,15 @@ const rawAmount = ref('');
 
 const form = useForm<IRecurringTransaction>({
   category_id: 0,
-  tag_id: null,
+  tag_id: undefined,
   amount: 0,
   frequency: FREQUENCY_TYPE.MONTHLY,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
   is_active: true,
   day_of_month: new Date().getDate(),
-  start_date: new Date().toISOString().split('T')[0],
-  end_date: null,
+  start_date: formatTransactionDate(),
+  end_date: undefined,
 });
 
 const displayAmount = computed({
@@ -72,7 +73,7 @@ const createRecurring = () => {
 <template>
   <Dialog v-model:open="open">
     <form>
-      <DialogContent class="sm:max-w-[550px]">
+      <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
           <DialogTitle>Create Recurring Transaction</DialogTitle>
           <DialogDescription>

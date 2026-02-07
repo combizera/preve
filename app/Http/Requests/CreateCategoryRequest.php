@@ -32,8 +32,8 @@ final class CreateCategoryRequest extends FormRequest
             'slug'        => ['required', 'string', 'max:255', 'unique:categories,slug,NULL,id,user_id,' . $this->user()->id],
             'type'        => ['required', 'in:income,expense'],
             'description' => ['nullable', 'string'],
-            'color'       => ['string', 'max:10'],
-            'icon'        => ['string', 'max:255'],
+            'color'       => ['required', 'string', 'max:10'],
+            'icon'        => ['required', 'string', 'max:255'],
         ];
     }
 

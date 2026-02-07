@@ -6,16 +6,16 @@ export type TransactionType = 'income' | 'expense';
 
 export interface ITransaction {
     id?: string;
-    recurring_transaction_id?: number | null;
-    recurring_transaction?: IRecurringTransaction | null;
-    category_id: number;
+    recurring_transaction_id?: number;
+    recurring_transaction?: IRecurringTransaction;
+    category_id?: number;
     category?: ICategory;
-    tag_id: number | null;
-    tag?: ITag | null;
+    tag_id?: number;
+    tag?: ITag;
     amount: number;
     type: TransactionType;
     description: string;
-    notes: string | null;
+    notes?: string;
     transaction_date: string;
     created_at?: string;
     updated_at?: string;

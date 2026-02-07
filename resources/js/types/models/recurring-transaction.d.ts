@@ -5,11 +5,11 @@ import type { TransactionType } from '@/types/models/transaction';
 export type FrequencyType = 'monthly' | 'yearly';
 
 export interface IRecurringTransaction {
-    id?: string;
+    id?: number;
     category_id: number;
     category?: ICategory;
-    tag_id: number | null;
-    tag?: ITag | null;
+    tag_id?: number;
+    tag?: ITag;
     amount: number;
     frequency: FrequencyType;
     type: TransactionType;
@@ -17,7 +17,7 @@ export interface IRecurringTransaction {
     is_active: boolean;
     day_of_month: number;
     start_date: string;
-    end_date?: string | null;
+    end_date?: string;
     created_at?: string;
     updated_at?: string;
 }

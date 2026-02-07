@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3';
 import { Pause, Play } from 'lucide-vue-next';
 
-import { Button } from '@/components/ui/button';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { toggle } from '@/routes/recurring';
 
 interface Props {
@@ -18,11 +18,9 @@ const toggleActive = () => {
 </script>
 
 <template>
-  <Button variant="ghost" size="sm" @click="toggleActive" class="gap-1.5">
-    <Pause v-if="isActive" :size="14" />
-    <Play v-else :size="14" />
-    <span class="text-xs">
-      {{ isActive ? 'Pause' : 'Resume' }}
-    </span>
-  </Button>
+  <DropdownMenuItem @click="toggleActive">
+    <Pause v-if="isActive" :size="14" class="fill-foreground stroke-1" />
+    <Play v-else :size="14" class="fill-foreground" />
+    {{ isActive ? 'Pause' : 'Resume' }}
+  </DropdownMenuItem>
 </template>

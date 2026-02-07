@@ -11,10 +11,10 @@ import {
 import UserInfo from '@/components/UserInfo.vue';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
-import type { User } from '@/types';
+import { IUser } from '@/types/models/user';
 
 interface Props {
-    user: User;
+    user: IUser;
 }
 
 const handleLogout = () => {

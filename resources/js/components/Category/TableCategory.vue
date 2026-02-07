@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getColorClass } from '@/lib/category-colors';
+import { CategoryColor, getColorClass } from '@/lib/category-colors';
 import { getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/types/models/category';
@@ -45,12 +45,21 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <div>
-    <div class="flex items-center gap-2 mb-2 px-2 w-full">
-      <i :class="cn('size-4 rounded', type === 'expense' ? getColorClass('red', 'bg') : getColorClass('green', 'bg'))" />
+    <div class="mb-2 flex w-full items-center gap-2 px-2">
+      <i
+        :class="
+          cn(
+            'size-4 rounded',
+            type === 'expense'
+              ? getColorClass(CategoryColor.Red, 'bg')
+              : getColorClass(CategoryColor.Green, 'bg'),
+          )
+        "
+      />
       <p class="text-foreground">
         {{ type === 'income' ? 'Income' : 'Expense' }}
       </p>
-      <div class="h-px flex-1 bg-border ml-1"></div>
+      <div class="ml-1 h-px flex-1 bg-border"></div>
     </div>
     <Table>
       <TableHeader>
@@ -67,7 +76,7 @@ withDefaults(defineProps<Props>(), {
               :class="[
                 getColorClass(category.color, 'bg'),
                 getColorClass(category.color, 'border'),
-                'border inline-flex items-center justify-center rounded p-1.5',
+                'inline-flex items-center justify-center rounded border p-1.5',
               ]"
             >
               <component
