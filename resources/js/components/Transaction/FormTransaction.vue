@@ -119,7 +119,7 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> Tag (Optional) </Label>
+      <Label for="tag" class="text-muted-foreground"> Tag (optional) </Label>
       <Select v-model="form.tag_id">
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Select a tag" />
