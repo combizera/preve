@@ -124,7 +124,7 @@ const createCategory = () => {
       <div class="flex flex-col justify-start gap-2">
         <Label for="icon">Icon</Label>
         <Select v-model="form.icon">
-          <SelectTrigger :class="cn('w-full min-w-38', form.icon && 'pl-1')">
+          <SelectTrigger :class="cn('w-full min-w-37.5', form.icon && 'pl-1')">
             <SelectValue placeholder="Select an icon">
               <div
                 v-if="form.icon"
@@ -148,7 +148,7 @@ const createCategory = () => {
               </div>
             </SelectValue>
           </SelectTrigger>
-          <SelectContent class="min-w-38">
+          <SelectContent class="min-w-37.5">
             <SelectGroup>
               <SelectLabel>Icon</SelectLabel>
               <div class="grid grid-cols-4 gap-1">
