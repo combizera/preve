@@ -40,7 +40,7 @@ const rawAmount = ref('');
 
 const form = useForm<ITransaction>({
   category_id: 0,
-  tag_id: null,
+  tag_id: undefined,
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
@@ -56,7 +56,7 @@ watch(
       // Initialize rawAmount with the transaction amount
       rawAmount.value = amount > 0 ? amount.toString() : '';
       form.category_id = transaction.category_id ?? 0;
-      form.tag_id = transaction.tag_id ?? null;
+      form.tag_id = transaction.tag_id;
       form.amount = amount;
       form.type = transaction.type ?? TRANSACTION_TYPE.EXPENSE;
       form.description = transaction.description ?? '';
@@ -89,7 +89,13 @@ const createTransaction = () => {
 };
 
 const updateTransaction = () => {
-  form.submit(update(props.transaction.id), {
+  const transactionId = props.transaction.id;
+
+  if (!transactionId) {
+    return;
+  }
+
+  form.submit(update(transactionId), {
     onSuccess: () => {
       open.value = false;
       form.reset();
@@ -114,7 +120,7 @@ const submitButtonText = computed(() => {
 <template>
   <Dialog v-model:open="open">
     <form>
-      <DialogContent class="sm:max-w-[550px]">
+      <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
           <DialogTitle>
             {{ type === 'duplicate' ? 'Duplicate' : 'Edit' }} Transaction

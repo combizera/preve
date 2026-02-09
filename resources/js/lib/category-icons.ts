@@ -10,6 +10,7 @@ import {
     House,
     Laptop,
     Music,
+    PiggyBank,
     Plane,
     ShoppingBag,
     ShoppingCart,
@@ -37,6 +38,7 @@ export enum CategoryIcon {
     ShoppingBag = 'shopping-bag',
     Film = 'film',
     Laptop = 'laptop',
+    PiggyBank = 'piggy-bank',
 }
 
 /**
@@ -58,6 +60,7 @@ const iconMap: Record<string, Component> = {
     [CategoryIcon.ShoppingBag]: ShoppingBag,
     [CategoryIcon.Film]: Film,
     [CategoryIcon.Laptop]: Laptop,
+    [CategoryIcon.PiggyBank]: PiggyBank,
 };
 
 /**

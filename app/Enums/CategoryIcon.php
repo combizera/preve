@@ -21,6 +21,7 @@ enum CategoryIcon: string
     case SHOPPING_BAG = 'shopping-bag';
     case FILM = 'film';
     case LAPTOP = 'laptop';
+    case PIGGY_BANK = 'piggy-bank';
 
     public function label(): string
     {
@@ -40,6 +41,7 @@ enum CategoryIcon: string
             self::SHOPPING_BAG  => 'Shopping Bag',
             self::FILM          => 'Film',
             self::LAPTOP        => 'Laptop',
+            self::PIGGY_BANK    => 'Piggy Bank',
         };
     }
 }

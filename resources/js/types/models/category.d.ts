@@ -1,21 +1,20 @@
+import type { CategoryColor } from '@/lib/category-colors'
+import { CategoryIcon } from '@/lib/category-icons';
 import type { TransactionType } from '@/types/models/transaction';
-
-export type CategoryColor =
-    | 'red'
-    | 'blue'
-    | 'green'
-    | 'yellow'
-    | 'orange'
-    | 'purple';
 
 export interface ICategory {
     id: number;
     name: string;
     slug: string;
     type: TransactionType;
-    description: string | null;
+    description?: string;
     color: CategoryColor;
-    icon: string | null;
+    icon: CategoryIcon;
     created_at: string;
     updated_at: string;
 }
+
+export type ICategoryForm = Pick<ICategory, 'name', 'description', 'type'> & {
+    color?: CategoryColor;
+    icon?: CategoryIcon;
+};

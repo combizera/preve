@@ -21,7 +21,7 @@ import { availableColors, getColorClass } from '@/lib/category-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
 import { update } from '@/routes/categories';
-import { ICategory } from '@/types/models/category';
+import { ICategory, ICategoryForm } from '@/types/models/category';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -29,7 +29,7 @@ const props = defineProps<{
   category: ICategory;
 }>();
 
-const form = useForm({
+const form = useForm<ICategoryForm>({
   name: props.category.name,
   type: props.category.type,
   description: props.category.description ?? '',
@@ -41,7 +41,7 @@ const updateCategory = () => {
   form.submit(update(props.category.id), {
     onSuccess: () => {
       open.value = false;
-    }
+    },
   });
 };
 </script>
@@ -49,7 +49,7 @@ const updateCategory = () => {
 <template>
   <Dialog v-model:open="open">
     <form>
-      <DialogContent class="sm:max-w-[500px]">
+      <DialogContent class="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Edit Category</DialogTitle>
           <DialogDescription>
@@ -62,11 +62,17 @@ const updateCategory = () => {
           <div class="col-span-2 grid gap-3">
             <Label for="type"> Type </Label>
             <ToggleGroup v-model="form.type" class="w-full">
-              <ToggleGroupItem :value="TRANSACTION_TYPE.EXPENSE" class="flex-1 gap-2">
+              <ToggleGroupItem
+                :value="TRANSACTION_TYPE.EXPENSE"
+                class="flex-1 gap-2"
+              >
                 <ArrowUpRight :size="16" />
                 Expense
               </ToggleGroupItem>
-              <ToggleGroupItem :value="TRANSACTION_TYPE.INCOME" class="flex-1 gap-2">
+              <ToggleGroupItem
+                :value="TRANSACTION_TYPE.INCOME"
+                class="flex-1 gap-2"
+              >
                 <ArrowDownLeft :size="16" />
                 Income
               </ToggleGroupItem>
@@ -106,7 +112,9 @@ const updateCategory = () => {
                   cn(
                     'flex cursor-pointer items-center justify-center rounded border-2 p-2',
                     form.icon === icon && getColorClass(form.color, 'bg'),
-                    form.icon === icon ? getColorClass(form.color, 'border') : 'hover:border-muted-foreground',
+                    form.icon === icon
+                      ? getColorClass(form.color, 'border')
+                      : 'hover:border-muted-foreground',
                     form.icon === icon && getColorClass(form.color, 'text'),
                   )
                 "
@@ -120,7 +128,14 @@ const updateCategory = () => {
                 />
                 <component
                   :is="getIconComponent(icon)"
-                  :class="cn('size-5', form.icon === icon ? getColorClass(form.color, 'text') : 'text-foreground')"
+                  :class="
+                    cn(
+                      'size-5',
+                      form.icon === icon
+                        ? getColorClass(form.color, 'text')
+                        : 'text-foreground',
+                    )
+                  "
                 />
               </label>
             </div>
@@ -129,13 +144,13 @@ const updateCategory = () => {
 
           <div class="col-span-2 grid gap-3">
             <Label>Color</Label>
-            <div class="mt-2 flex gap-2">
+            <div class="grid grid-cols-8 gap-2">
               <label
                 v-for="color in availableColors"
                 :key="color"
                 :class="
                   cn(
-                    'h-6 w-12 cursor-pointer rounded border-2 p-1',
+                    'group h-8 w-12 cursor-pointer rounded border-2 p-1',
                     form.color === color
                       ? getColorClass(color, 'border')
                       : 'border-border hover:border-muted-foreground',
@@ -149,7 +164,14 @@ const updateCategory = () => {
                   v-model="form.color"
                   class="sr-only"
                 />
-                <div :class="cn('h-full w-full rounded-xs', getColorClass(color, 'bg'))" />
+                <div
+                  :class="
+                    cn(
+                      'h-full w-full rounded-xs group-hover:brightness-90',
+                      getColorClass(color, 'picker'),
+                    )
+                  "
+                />
               </label>
             </div>
             <InputError :message="form.errors.color" />
@@ -160,7 +182,11 @@ const updateCategory = () => {
           <DialogClose as-child>
             <Button variant="outline"> Cancel </Button>
           </DialogClose>
-          <Button type="button" @click="updateCategory" :disabled="form.processing">
+          <Button
+            type="button"
+            @click="updateCategory"
+            :disabled="form.processing"
+          >
             Save changes
           </Button>
         </DialogFooter>

@@ -137,7 +137,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
             <component
               :is="categoryIcon"
               :size="14"
-              class="flex-shrink-0 text-muted-foreground"
+              class="shrink-0 text-muted-foreground"
             />
             <span class="truncate text-xs font-medium text-muted-foreground">
               {{ recurringTransaction.category?.name }}
@@ -151,7 +151,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
         </div>
 
         <!-- Right Section: Amount & Actions -->
-        <div class="flex flex-shrink-0 items-center gap-1" @click.stop>
+        <div class="flex shrink-0 items-center gap-1" @click.stop>
           <span :class="amountClass">R$ {{ formattedAmount }}</span>
           <ActionGroup>
             <EditButton @click="openEditDialog(recurringTransaction)" />
