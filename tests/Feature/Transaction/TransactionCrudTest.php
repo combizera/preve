@@ -12,8 +12,6 @@ beforeEach(function () {
     $this->actingAs($user);
 });
 
-// TODO: garantir que o usuário só possa criar transações que sejam do mesmo tipo da categoria selecionada (ex: não permitir criar uma transação de despesa em uma categoria de receita)
-
 // CREATE
 it('should be able to create transaction', function () {
     $category = Category::factory()->create([
