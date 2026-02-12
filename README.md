@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/combizera/preve/actions/workflows/tests.yml/badge.svg)](https://github.com/combizera/preve/actions/workflows/tests.yml)
 [![Linter](https://github.com/combizera/preve/actions/workflows/lint.yml/badge.svg)](https://github.com/combizera/preve/actions/workflows/lint.yml)
-[![Coverage](.github/badges/coverage.svg)](https://github.com/combizera/preve/actions/workflows/tests.yml)
+[![Coverage](https://raw.githubusercontent.com/combizera/preve/main/.github/badges/coverage.svg)](https://github.com/combizera/preve/actions/workflows/tests.yml)
 [![PHP Version](https://img.shields.io/badge/php-8.4%20%7C%208.5-blue)](https://www.php.net/)
 [![Laravel Version](https://img.shields.io/badge/laravel-12.x-red)](https://laravel.com)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
