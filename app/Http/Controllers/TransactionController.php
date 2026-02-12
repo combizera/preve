@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Filters\TransactionFilter;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -11,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 final class TransactionController extends Controller
 {
@@ -19,18 +21,21 @@ final class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request, TransactionFilter $filters): Response
     {
         $transactions = Auth::user()
             ->transactions()
             ->with(['category', 'tag'])
+            ->filter($filters)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
 
-        return Inertia::render('Transaction', compact('transactions', 'categories', 'tags'));
+        $filters = $request->only(['search', 'type', 'category_id', 'date_start', 'date_end', 'tags']);
+
+        return Inertia::render('Transaction', compact('transactions', 'categories', 'tags', 'filters'));
     }
 
     /**
