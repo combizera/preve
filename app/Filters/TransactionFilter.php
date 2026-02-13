@@ -23,9 +23,11 @@ final class TransactionFilter extends QueryFilter
         $this->builder->where('type', $type);
     }
 
-    public function category_id(string|int $id): void
+    public function categories(array $categoryIds): void
     {
-        $this->builder->where('category_id', $id);
+        $this->builder->whereHas('category', function ($query) use ($categoryIds) {
+            $query->whereIn('categories.id', $categoryIds);
+        });
     }
 
     public function tags(array $tagIds): void

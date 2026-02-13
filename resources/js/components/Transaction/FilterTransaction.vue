@@ -20,9 +20,9 @@ const props = defineProps<Props>();
 const defaultFilters: ITransactionFilters = {
     search: '',
     type: '',
-    category_id: '',
     date_start: '',
     date_end: '',
+    categories: [],
     tags: [],
 };
 
@@ -80,9 +80,9 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
 
                             <div class="space-y-2">
                                 <Label for="category">Category</Label>
-                                <Select v-model="form.category_id">
+                                <Select v-model="form.categories" multiple>
                                     <SelectTrigger id="category" class="w-full">
-                                        <SelectValue placeholder="Select a category" />
+                                        <SelectValue placeholder="Select category(ies)" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">All categories</SelectItem>
@@ -98,7 +98,7 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                                 <Label for="tag">tag</Label>
                                 <Select v-model="form.tags" multiple>
                                     <SelectTrigger id="tag" class="w-full">
-                                        <SelectValue placeholder="Select a tag(s)" />
+                                        <SelectValue placeholder="Select tag(s)" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">All tags</SelectItem>
