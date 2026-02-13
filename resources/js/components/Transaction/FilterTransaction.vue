@@ -45,7 +45,7 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                 </Badge>
             </Button>
         </SheetTrigger>
-        <SheetContent class="flex h-full flex-col bg-background sm:max-w-lg">
+        <SheetContent class="flex h-full flex-col bg-background sm:max-w-xl">
             <SheetHeader class="border-b border-border px-6 py-4">
                 <SheetTitle>Filter Transactions</SheetTitle>
                 <SheetDescription>
@@ -62,12 +62,12 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                         </div>
                     </section>
 
-                    <section name="category-tag-filter">
-                        <div class="flex gap-4">
+                    <section name="type-category-tag-filter">
+                        <div class="grid grid-cols-3 gap-4">
                             <div class="space-y-2">
                                 <Label for="type">Type</Label>
                                 <Select v-model="form.type">
-                                    <SelectTrigger id="type">
+                                    <SelectTrigger id="type" class="w-full">
                                         <SelectValue placeholder="All types" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -81,7 +81,7 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                             <div class="space-y-2">
                                 <Label for="category">Category</Label>
                                 <Select v-model="form.category_id">
-                                    <SelectTrigger id="category">
+                                    <SelectTrigger id="category" class="w-full">
                                         <SelectValue placeholder="Select a category" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -89,6 +89,21 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                                         <SelectItem v-for="category in categories" :key="category.id"
                                             :value="String(category.id)">
                                             {{ category.name }}
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <Label for="tag">tag</Label>
+                                <Select v-model="form.tags" multiple>
+                                    <SelectTrigger id="tag" class="w-full">
+                                        <SelectValue placeholder="Select a tag(s)" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All tags</SelectItem>
+                                        <SelectItem v-for="tag in tags" :key="tag.id" :value="String(tag.id)">
+                                            {{ tag.name }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
