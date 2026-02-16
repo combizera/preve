@@ -8,7 +8,6 @@ use App\Filters\TransactionFilter;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,8 +15,6 @@ use Inertia\Response;
 
 final class TransactionController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -47,6 +44,8 @@ final class TransactionController extends Controller
 
         Auth::user()->transactions()->create($validated);
 
+        $this->toast('Transaction created successfully.');
+
         return to_route('transactions.index');
     }
 
@@ -68,7 +67,8 @@ final class TransactionController extends Controller
 
         $transaction->update($request->all());
 
-        // TODO: retornar um Toast Message
+        $this->toast('Transaction updated successfully.');
+
         return to_route('transactions.index');
     }
 
@@ -81,7 +81,8 @@ final class TransactionController extends Controller
 
         $transaction->delete();
 
-        // TODO: retornar um toast message
+        $this->toast('Transaction deleted successfully.', 'error');
+
         return to_route('transactions.index');
     }
 }

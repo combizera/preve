@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,8 +14,6 @@ use Inertia\Response;
 
 final class TagController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -37,6 +34,8 @@ final class TagController extends Controller
         $validated = $request->validated();
 
         Auth::user()->tags()->create($validated);
+
+        $this->toast('Tag created successfully.');
 
         return to_route('tags.index');
     }
@@ -59,7 +58,8 @@ final class TagController extends Controller
 
         $tag->update($request->all());
 
-        // TODO: retornar um Toast Message
+        $this->toast('Tag updated successfully.');
+
         return to_route('tags.index');
     }
 
@@ -72,7 +72,8 @@ final class TagController extends Controller
 
         $tag->delete();
 
-        // TODO: retornar um toast message
+        $this->toast('Tag deleted successfully.', 'error');
+
         return to_route('tags.index');
     }
 }

@@ -40,6 +40,8 @@ final class ProfileController extends Controller
 
         $request->user()->save();
 
+        $this->toast('Profile updated successfully.');
+
         return to_route('profile.edit');
     }
 

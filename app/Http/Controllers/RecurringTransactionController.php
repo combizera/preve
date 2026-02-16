@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Enums\TransactionType;
 use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,8 +14,6 @@ use Inertia\Response;
 
 final class RecurringTransactionController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -50,6 +47,8 @@ final class RecurringTransactionController extends Controller
 
         Auth::user()->recurringTransactions()->create($validated);
 
+        $this->toast('Recurring transaction created successfully.');
+
         return to_route('recurring.index');
     }
 
@@ -71,7 +70,8 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($request->all());
 
-        // TODO: retornar um Toast Message
+        $this->toast('Recurring transaction updated successfully.');
+
         return to_route('recurring.index');
     }
 
@@ -86,7 +86,11 @@ final class RecurringTransactionController extends Controller
             'is_active' => !$recurring->is_active,
         ]);
 
-        // TODO: retornar um Toast Message
+        $this->toast(
+            $recurring->is_active ? 'Recurring transaction activated successfully.' : 'Recurring transaction deactivated successfully.',
+            $recurring->is_active ? 'success' : 'warning',
+        );
+
         return to_route('recurring.index');
     }
 
@@ -99,7 +103,8 @@ final class RecurringTransactionController extends Controller
 
         $recurring->delete();
 
-        // TODO: retornar um Toast Message
+        $this->toast('Recurring transaction deleted successfully.', 'error');
+
         return to_route('recurring.index');
     }
 }

@@ -29,6 +29,8 @@ final class PasswordController extends Controller
             'password' => $request->password,
         ]);
 
+        $this->toast('Password updated successfully.');
+
         return back();
     }
 }

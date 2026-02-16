@@ -8,7 +8,6 @@ use App\Enums\TransactionType;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,8 +15,6 @@ use Inertia\Response;
 
 final class CategoryController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -44,6 +41,8 @@ final class CategoryController extends Controller
 
         Auth::user()->categories()->create($validated);
 
+        $this->toast('Category created successfully.');
+
         return to_route('categories.index');
     }
 
@@ -65,7 +64,8 @@ final class CategoryController extends Controller
 
         $category->update($request->all());
 
-        // TODO: retornar um Toast Message
+        $this->toast('Category updated successfully.');
+
         return to_route('categories.index');
     }
 
@@ -78,7 +78,8 @@ final class CategoryController extends Controller
 
         $category->delete();
 
-        // TODO: retornar um toast message
+        $this->toast('Category deleted successfully.', 'error');
+
         return to_route('categories.index');
     }
 }
