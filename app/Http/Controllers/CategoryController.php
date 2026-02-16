@@ -41,10 +41,7 @@ final class CategoryController extends Controller
 
         Auth::user()->categories()->create($validated);
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Category created successfully.',
-        ]);
+        $this->toast('Category created successfully.');
 
         return to_route('categories.index');
     }
@@ -67,10 +64,7 @@ final class CategoryController extends Controller
 
         $category->update($request->all());
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Category updated successfully.',
-        ]);
+        $this->toast('Category updated successfully.');
 
         return to_route('categories.index');
     }
@@ -84,10 +78,7 @@ final class CategoryController extends Controller
 
         $category->delete();
 
-        Inertia::flash([
-            'type'    => 'error',
-            'message' => 'Category deleted successfully.',
-        ]);
+        $this->toast('Category deleted successfully.', 'error');
 
         return to_route('categories.index');
     }

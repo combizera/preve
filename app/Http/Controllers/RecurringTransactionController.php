@@ -47,8 +47,9 @@ final class RecurringTransactionController extends Controller
 
         Auth::user()->recurringTransactions()->create($validated);
 
-        return to_route('recurring.index')
-            ->with('toast', 'Recurring transaction created successfully.');
+        $this->toast('Recurring transaction created successfully.');
+
+        return to_route('recurring.index');
     }
 
     /**
@@ -69,10 +70,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($request->all());
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Recurring transaction updated successfully.',
-        ]);
+        $this->toast('Recurring transaction updated successfully.');
 
         return to_route('recurring.index');
     }
@@ -88,10 +86,10 @@ final class RecurringTransactionController extends Controller
             'is_active' => !$recurring->is_active,
         ]);
 
-        Inertia::flash([
-            'type'    => 'recurring->is_active' ? 'success' : 'error',
-            'message' => $recurring->is_active ? 'Recurring transaction activated successfully.' : 'Recurring transaction deactivated successfully.',
-        ]);
+        $this->toast(
+            $recurring->is_active ? 'Recurring transaction activated successfully.' : 'Recurring transaction deactivated successfully.',
+            $recurring->is_active ? 'success' : 'warning',
+        );
 
         return to_route('recurring.index');
     }
@@ -105,10 +103,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->delete();
 
-        Inertia::flash([
-            'type'    => 'error',
-            'message' => 'Recurring transaction deleted successfully.',
-        ]);
+        $this->toast('Recurring transaction deleted successfully.', 'error');
 
         return to_route('recurring.index');
     }

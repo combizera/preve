@@ -44,10 +44,7 @@ final class TransactionController extends Controller
 
         Auth::user()->transactions()->create($validated);
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Transaction created successfully.',
-        ]);
+        $this->toast('Transaction created successfully.');
 
         return to_route('transactions.index');
     }
@@ -70,10 +67,7 @@ final class TransactionController extends Controller
 
         $transaction->update($request->all());
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Transaction updated successfully.',
-        ]);
+        $this->toast('Transaction updated successfully.');
 
         return to_route('transactions.index');
     }
@@ -87,10 +81,7 @@ final class TransactionController extends Controller
 
         $transaction->delete();
 
-        Inertia::flash([
-            'type'    => 'error',
-            'message' => 'Transaction deleted successfully.',
-        ]);
+        $this->toast('Transaction deleted successfully.', 'error');
 
         return to_route('transactions.index');
     }

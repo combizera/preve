@@ -35,10 +35,7 @@ final class TagController extends Controller
 
         Auth::user()->tags()->create($validated);
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Tag created successfully.',
-        ]);
+        $this->toast('Tag created successfully.');
 
         return to_route('tags.index');
     }
@@ -61,10 +58,7 @@ final class TagController extends Controller
 
         $tag->update($request->all());
 
-        Inertia::flash([
-            'type'    => 'success',
-            'message' => 'Tag updated successfully.',
-        ]);
+        $this->toast('Tag updated successfully.');
 
         return to_route('tags.index');
     }
@@ -78,10 +72,7 @@ final class TagController extends Controller
 
         $tag->delete();
 
-        Inertia::flash([
-            'type'    => 'error',
-            'message' => 'Tag deleted successfully.',
-        ]);
+        $this->toast('Tag deleted successfully.', 'error');
 
         return to_route('tags.index');
     }
