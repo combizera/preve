@@ -8,7 +8,6 @@ use App\Enums\TransactionType;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,8 +15,6 @@ use Inertia\Response;
 
 final class CategoryController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -44,8 +41,12 @@ final class CategoryController extends Controller
 
         Auth::user()->categories()->create($validated);
 
-        return to_route('categories.index')
-            ->with('toast', 'Category created successfully.');
+        Inertia::flash([
+            'type'    => 'success',
+            'message' => 'Category created successfully.',
+        ]);
+
+        return to_route('categories.index');
     }
 
     /**
@@ -66,8 +67,12 @@ final class CategoryController extends Controller
 
         $category->update($request->all());
 
-        return to_route('categories.index')
-            ->with('toast', 'Category updated successfully.');
+        Inertia::flash([
+            'type'    => 'success',
+            'message' => 'Category updated successfully.',
+        ]);
+
+        return to_route('categories.index');
     }
 
     /**
@@ -79,7 +84,11 @@ final class CategoryController extends Controller
 
         $category->delete();
 
-        return to_route('categories.index')
-            ->with('toast', 'Category deleted successfully.');
+        Inertia::flash([
+            'type'    => 'error',
+            'message' => 'Category deleted successfully.',
+        ]);
+
+        return to_route('categories.index');
     }
 }

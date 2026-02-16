@@ -8,7 +8,6 @@ use App\Filters\TransactionFilter;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,8 +15,6 @@ use Inertia\Response;
 
 final class TransactionController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -47,8 +44,12 @@ final class TransactionController extends Controller
 
         Auth::user()->transactions()->create($validated);
 
-        return to_route('transactions.index')
-            ->with('toast', 'Transaction created successfully.');
+        Inertia::flash([
+            'type'    => 'success',
+            'message' => 'Transaction created successfully.',
+        ]);
+
+        return to_route('transactions.index');
     }
 
     /**
@@ -69,9 +70,12 @@ final class TransactionController extends Controller
 
         $transaction->update($request->all());
 
-        // TODO: retornar um Toast Message
-        return to_route('transactions.index')
-            ->with('toast', 'Transaction updated successfully');
+        Inertia::flash([
+            'type'    => 'success',
+            'message' => 'Transaction updated successfully.',
+        ]);
+
+        return to_route('transactions.index');
     }
 
     /**
@@ -83,7 +87,11 @@ final class TransactionController extends Controller
 
         $transaction->delete();
 
-        return to_route('transactions.index')
-            ->with('toast', 'Transaction deleted successfully');
+        Inertia::flash([
+            'type'    => 'error',
+            'message' => 'Transaction deleted successfully.',
+        ]);
+
+        return to_route('transactions.index');
     }
 }

@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Enums\TransactionType;
 use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,8 +14,6 @@ use Inertia\Response;
 
 final class RecurringTransactionController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -72,8 +69,12 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($request->all());
 
-        return to_route('recurring.index')
-            ->with('toast', 'Recurring transaction updated successfully.');
+        Inertia::flash([
+            'type'    => 'success',
+            'message' => 'Recurring transaction updated successfully.',
+        ]);
+
+        return to_route('recurring.index');
     }
 
     /**
@@ -87,8 +88,12 @@ final class RecurringTransactionController extends Controller
             'is_active' => !$recurring->is_active,
         ]);
 
-        return to_route('recurring.index')
-            ->with('toast', $recurring->is_active ? 'Recurring transaction activated.' : 'Recurring transaction deactivated.');
+        Inertia::flash([
+            'type'    => 'recurring->is_active' ? 'success' : 'error',
+            'message' => $recurring->is_active ? 'Recurring transaction activated successfully.' : 'Recurring transaction deactivated successfully.',
+        ]);
+
+        return to_route('recurring.index');
     }
 
     /**
@@ -100,7 +105,11 @@ final class RecurringTransactionController extends Controller
 
         $recurring->delete();
 
-        return to_route('recurring.index')
-            ->with('toast', 'Recurring transaction deleted successfully.');
+        Inertia::flash([
+            'type'    => 'error',
+            'message' => 'Recurring transaction deleted successfully.',
+        ]);
+
+        return to_route('recurring.index');
     }
 }

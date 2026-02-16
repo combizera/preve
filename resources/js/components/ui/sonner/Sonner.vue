@@ -3,6 +3,16 @@ import type { ToasterProps } from "vue-sonner"
 import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "lucide-vue-next"
 import { Toaster as Sonner } from "vue-sonner"
 import { cn } from "@/lib/utils"
+import { toast } from 'vue-sonner'
+import { router, usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
+router.on('flash', (event) => {
+  if (event.detail.flash.message) {
+    toast(event.detail.flash.message as string);
+  }
+})
 
 const props = defineProps<ToasterProps>()
 </script>
