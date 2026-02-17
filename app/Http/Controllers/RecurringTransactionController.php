@@ -47,7 +47,7 @@ final class RecurringTransactionController extends Controller
 
         Auth::user()->recurringTransactions()->create($validated);
 
-        $this->toast('Recurring transaction created successfully.');
+        $this->toast::success('Recurring transaction created successfully.');
 
         return to_route('recurring.index');
     }
@@ -70,7 +70,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($request->all());
 
-        $this->toast('Recurring transaction updated successfully.');
+        $this->toast::success('Recurring transaction updated successfully.');
 
         return to_route('recurring.index');
     }
@@ -86,10 +86,11 @@ final class RecurringTransactionController extends Controller
             'is_active' => !$recurring->is_active,
         ]);
 
-        $this->toast(
-            $recurring->is_active ? 'Recurring transaction activated successfully.' : 'Recurring transaction deactivated successfully.',
-            $recurring->is_active ? 'success' : 'warning',
-        );
+        if ($recurring->is_active) {
+            $this->toast::success('Recurring transaction activated successfully.');
+        } else {
+            $this->toast::warning('Recurring transaction deactivated successfully.');
+        }
 
         return to_route('recurring.index');
     }
@@ -103,7 +104,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->delete();
 
-        $this->toast('Recurring transaction deleted successfully.', 'error');
+        $this->toast::success('Recurring transaction deleted successfully.');
 
         return to_route('recurring.index');
     }

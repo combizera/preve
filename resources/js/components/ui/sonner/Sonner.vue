@@ -1,26 +1,7 @@
 <script lang="ts" setup>
-import type { ToasterProps } from "vue-sonner"
 import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "lucide-vue-next"
-import { Toaster as Sonner } from "vue-sonner"
+import { Toaster as Sonner, type ToasterProps } from "vue-sonner"
 import { cn } from "@/lib/utils"
-import { toast } from 'vue-sonner'
-import { router, usePage } from '@inertiajs/vue3';
-
-const page = usePage();
-
-router.on('flash', (event) => {
-  const flash = event.detail.flash as { type?: string; message?: string };
-
-  if (!flash.message) return;
-
-  switch (flash.type) {
-    case 'success': toast.success(flash.message); break;
-    case 'error':   toast.error(flash.message);   break;
-    case 'warning': toast.warning(flash.message); break;
-    case 'info':    toast.info(flash.message);    break;
-    default:        toast(flash.message);
-  }
-})
 
 const props = defineProps<ToasterProps>()
 </script>
@@ -29,7 +10,7 @@ const props = defineProps<ToasterProps>()
   <Sonner
     :class="cn('toaster group', props.class)"
     :style="{
-      '--normal-bg': 'var(--popover)',
+      '--normal-bg': 'var(--sidebar)',
       '--normal-text': 'var(--popover-foreground)',
       '--normal-border': 'var(--border)',
       '--border-radius': 'var(--radius)',

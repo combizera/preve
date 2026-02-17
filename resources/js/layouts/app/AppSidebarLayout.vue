@@ -4,7 +4,6 @@ import AppShell from '@/components/AppShell.vue';
 import AppSidebar from '@/components/AppSidebar.vue';
 import AppSidebarHeader from '@/components/AppSidebarHeader.vue';
 import type { BreadcrumbItemType } from '@/types';
-import { Toaster } from '@/components/ui/sonner';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
@@ -23,6 +22,4 @@ withDefaults(defineProps<Props>(), {
             <slot />
         </AppContent>
     </AppShell>
-
-    <Toaster position="top-right" />
 </template>
