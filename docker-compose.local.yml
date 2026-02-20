@@ -1,0 +1,148 @@
+services:
+  app:
+    build:
+      context: .
+      target: php-development
+      args:
+        USER_ID: ${UID:-1000}
+        GROUP_ID: ${GID:-1000}
+      dockerfile: Dockerfile
+    container_name: preve_app
+    env_file:
+      - .env
+    environment:
+      CONTAINER_ROLE: app
+    ports:
+      - "8000:8080"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - development
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  node:
+    build:
+      context: .
+      target: node-development
+      args:
+        USER_ID: ${UID:-1000}
+        GROUP_ID: ${GID:-1000}
+      dockerfile: Dockerfile
+    container_name: preve_node
+    volumes:
+      - .:/usr/src/app/
+    working_dir: /usr/src/app/
+    networks:
+      - development
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+
+  queue:
+    build:
+      context: .
+      target: cli
+      dockerfile: Dockerfile
+    container_name: preve_queue
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PHP_MEMORY_LIMIT=512M
+    volumes:
+      - .:/var/www/html
+    networks:
+      - development
+    stop_signal: SIGTERM
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: [ "sh", "./preve.sh", "queue" ]
+    healthcheck:
+      test: [ "CMD", "healthcheck-queue" ]
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  scheduler:
+    build:
+      context: .
+      target: cli
+      dockerfile: Dockerfile
+    container_name: preve_scheduler
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+    networks:
+      - development
+    stop_signal: SIGTERM
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: [ "sh", "./preve.sh", "scheduler" ]
+    healthcheck:
+      test: [ "CMD", "healthcheck-schedule" ]
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  db:
+    image: postgres:15-alpine
+    container_name: preve_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - development
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: preve_redis
+    restart: unless-stopped
+    networks:
+      - development
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: preve_mailpit
+    restart: unless-stopped
+    networks:
+      - development
+    ports:
+      - "8025:8025"
+
+networks:
+  development:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

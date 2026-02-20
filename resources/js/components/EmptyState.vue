@@ -22,10 +22,10 @@ const emit = defineEmits<{
 
 <template>
   <Card
-    class="flex flex-col items-center justify-center gap-2 bg-sidebar p-8 text-center"
+    class="flex flex-col items-center justify-center gap-4 bg-sidebar p-8 text-center"
   >
-    <slot name="icon" />
-    <div class="space-y-1">
+    <div class="flex flex-col gap-1 items-center">
+      <slot name="icon" />
       <h3 class="text-md font-semibold text-foreground">
         {{ title }}
       </h3>
@@ -36,7 +36,7 @@ const emit = defineEmits<{
     <Button
       v-if="showButton"
       size="sm"
-      variant="outline"
+      variant="default"
       @click="emit('action')"
     >
       <Plus :size="16" />

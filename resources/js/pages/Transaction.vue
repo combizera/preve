@@ -3,7 +3,6 @@ import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 import Heading from '@/components/Heading.vue';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import ContainerTransactions from '@/components/Transaction/ContainerTransactions.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import FilterTransaction from '@/components/Transaction/FilterTransaction.vue';
@@ -12,10 +11,10 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import transactionRoutes from '@/routes/transactions';
 import type { BreadcrumbItem } from '@/types';
+import { ITransactionFilters } from '@/types/filters';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
-import { ITransactionFilters } from '@/types/filters';
 
 interface Props {
   transactions: ITransaction[];
@@ -56,10 +55,14 @@ const breadcrumbs: BreadcrumbItem[] = [
         :hasActions="true"
       >
         <div class="flex items-center gap-2">
-          <FilterTransaction :filters="filters" :categories="categories" :tags="tags" />
+          <FilterTransaction
+            :filters="filters"
+            :categories="categories"
+            :tags="tags"
+          />
           <Button type="button" @click="openCreateDialog"> Create </Button>
         </div>
-    </Heading>
+      </Heading>
 
       <ContainerTransactions
         :transactions="transactions"
@@ -73,13 +76,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         :categories="categories"
         :tags="tags"
       />
-
-      <!-- PLACEHOLDER -->
-      <div
-        class="relative mt-4 min-h-full flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
-      >
-        <PlaceholderPattern />
-      </div>
     </div>
   </AppLayout>
 </template>

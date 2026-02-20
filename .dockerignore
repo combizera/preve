@@ -1,0 +1,11 @@
+.env
+.env.example
+.git
+.github
+githooks
+
+node_modules
+vendor
+storage
+tests
+bootstrap/cache/*.php
