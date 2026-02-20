@@ -23,15 +23,15 @@ defineProps<{
             <div class="absolute inset-0 bg-zinc-900" />
             <Link
                 :href="home()"
-                class="relative z-20 flex items-center text-lg font-medium"
+                class="relative z-20 flex items-center gap-2 text-lg font-medium"
             >
-                <AppLogoIcon class="mr-2 size-8 fill-current text-white" />
-                {{ name }}
+                <AppLogoIcon class="size-8" />
+                <span class="mb-0.5">{{ name }}</span>
             </Link>
         </div>
         <div class="lg:p-8">
             <div
-                class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
+                class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-87.5"
             >
                 <div class="flex flex-col space-y-2 text-center">
                     <h1 class="text-xl font-medium tracking-tight" v-if="title">
