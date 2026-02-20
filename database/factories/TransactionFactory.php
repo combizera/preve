@@ -25,7 +25,7 @@ final class TransactionFactory extends Factory
             'user_id'          => User::factory(),
             'category_id'      => Category::factory(),
             'tag_id'           => Tag::factory(),
-            'amount'           => $this->faker->randomFloat(2, 10, 200),
+            'amount'           => $this->faker->numberBetween(1000, 9999),
             'type'             => $this->faker->randomElement(TransactionType::cases())->value,
             'description'      => $this->faker->sentence(),
             'notes'            => $this->faker->optional()->paragraph(),
