@@ -11,6 +11,7 @@ import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarSt
 import LastTransactionsTable from '@/components/Dashboard/LastTransactionsTable.vue';
 import { ITransaction } from '@/types/models/transaction';
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue';
+import { formatCentsToDisplay } from '@/lib/currency';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -21,6 +22,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
   latestTransactions: ITransaction[];
+  availableBalance: number;
+  forecast: number;
 }
 
 defineProps<Props>();
@@ -48,15 +51,15 @@ defineProps<Props>();
       <!-- CARDS -->
       <div class="grid grid-cols-2 gap-6 mb-4">
         <DashboardCard
-          title="Total Income"
-          description="Total income for the current month"
-          :amount="5000"
+          title="Available Balance"
+          description="Income minus paid expenses this month"
+          :amount="formatCentsToDisplay(availableBalance)"
         />
 
         <DashboardCard
-          title="Total Expenses"
-          description="Total expenses for the current month"
-          :amount="3000"
+          title="Forecast"
+          description="Balance after pending expenses"
+          :amount="formatCentsToDisplay(forecast)"
         />
       </div>
 

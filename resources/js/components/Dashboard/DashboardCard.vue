@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 interface Props {
   title: string;
   description: string;
-  amount: number;
+  amount: string;
 }
 
 defineProps<Props>();
@@ -22,7 +22,7 @@ defineProps<Props>();
       <p
         class="text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400"
       >
-        {{ amount }}
+        R$ {{ amount }}
       </p>
       <p class="text-xs text-muted-foreground mt-1">
         {{ description }}
