@@ -29,7 +29,8 @@ const amountClass = computed(() => {
 <template>
   <Card class="gap-0">
     <CardHeader>
-      <CardTitle class="text-sm font-medium text-muted-foreground">
+      <CardTitle class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+        <slot name="icon" />
         {{ title }}
       </CardTitle>
     </CardHeader>
