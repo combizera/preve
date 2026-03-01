@@ -15,30 +15,35 @@ final class ForecastService
         $currentDate = Carbon::create($now->year, $now->month, 1);
         $selectedDate = Carbon::create($forecastYear, $forecastMonth, 1);
 
-        if ($selectedDate->equalTo($currentDate)) {
-            $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
-
-            return $availableBalance - $pendingExpenses;
+        if ($selectedDate->lessThan($currentDate)) {
+            return $this->monthBalance($user, $selectedDate);
         }
 
-        if ($selectedDate->greaterThan($currentDate)) {
-            $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
-            $forecast = $availableBalance - $pendingExpenses;
+        $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
+        $forecast = $availableBalance - $pendingExpenses;
 
-            $cursor = $currentDate->copy()->addMonth();
-            while ($cursor->lessThanOrEqualTo($selectedDate)) {
-                $monthIncome = $user->transactions()->inMonth($cursor)->income()->sum('amount');
-                $monthExpenses = $user->transactions()->inMonth($cursor)->expense()->sum('amount');
-                $forecast += $monthIncome - $monthExpenses;
-                $cursor->addMonth();
-            }
-
-            return $forecast;
+        $cursor = $currentDate->copy()->addMonth();
+        while ($cursor->lessThanOrEqualTo($selectedDate)) {
+            $forecast += $this->monthBalance($user, $cursor);
+            $cursor->addMonth();
         }
 
-        // Past month: income - expenses for that month
-        $income = $user->transactions()->inMonth($selectedDate)->income()->sum('amount');
-        $expenses = $user->transactions()->inMonth($selectedDate)->expense()->sum('amount');
+        return $forecast;
+    }
+
+    private function monthBalance(User $user, CarbonInterface $date): int
+    {
+        $income = $user
+            ->transactions()
+            ->inMonth($date)
+            ->income()
+            ->sum('amount');
+
+        $expenses = $user
+            ->transactions()
+            ->inMonth($date)
+            ->expense()
+            ->sum('amount');
 
         return $income - $expenses;
     }
