@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { ChevronRight, ChevronLeft } from 'lucide-vue-next';
+import { nextTick, ref } from 'vue';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
+
+import CardCalendar from '@/components/Dashboard/CardCalendar.vue';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -8,12 +13,12 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button';
-import CardCalendar from '@/components/Dashboard/CardCalendar.vue';
+} from '@/components/ui/select';
 import { MONTHS } from '@/lib/calendar';
-import { ref, nextTick } from 'vue';
-import { toast } from 'vue-sonner';
+
+const emit = defineEmits<{
+  (e: 'update:month', payload: { month: number; year: number }): void;
+}>();
 
 const MIN_YEAR = 2026;
 const MAX_YEAR = 2027;
@@ -29,10 +34,28 @@ const stripRef = ref<HTMLUListElement | null>(null);
 const scrollToSelected = () => {
   nextTick(() => {
     if (!stripRef.value) return;
-    const card = stripRef.value.children[selectedMonth.value] as HTMLElement;
+    const el = stripRef.value as HTMLElement;
+    const card = el.children[selectedMonth.value] as HTMLElement;
     if (!card) return;
     card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   });
+};
+
+const emitMonth = (month: number, year: number) => {
+  emit('update:month', { month: month + 1, year });
+};
+
+const changeYear = (newYear: number, month: number): boolean => {
+  if (newYear < MIN_YEAR || newYear > MAX_YEAR) {
+    toast.error(newYear < MIN_YEAR
+      ? 'You have reached the earliest available year.'
+      : 'You have reached the latest available year.',
+    );
+    return false;
+  }
+  selectedYear.value = String(newYear);
+  selectedMonth.value = month;
+  return true;
 };
 
 const navigate = (direction: 'prev' | 'next') => {
@@ -40,36 +63,33 @@ const navigate = (direction: 'prev' | 'next') => {
 
   if (direction === 'prev') {
     if (selectedMonth.value === 0) {
-      if (year - 1 < MIN_YEAR) {
-        toast.error('You have reached the earliest available year.');
-        return;
-      }
-      selectedMonth.value = 11;
-      selectedYear.value = String(year - 1);
+      if (!changeYear(year - 1, 11)) return;
     } else {
       selectedMonth.value--;
     }
   } else {
     if (selectedMonth.value === 11) {
-      if (year + 1 > MAX_YEAR) {
-        toast.error('You have reached the latest available year.');
-        return;
-      }
-      selectedMonth.value = 0;
-      selectedYear.value = String(year + 1);
+      if (!changeYear(year + 1, 0)) return;
     } else {
       selectedMonth.value++;
     }
   }
 
   scrollToSelected();
+  emitMonth(selectedMonth.value, Number(selectedYear.value));
+};
+
+const handleYearChange = (newYear: string) => {
+  selectedYear.value = String(newYear);
+  emitMonth(selectedMonth.value, Number(newYear));
 };
 
 const handleToCurrentMonth = () => {
   selectedYear.value = String(currentYear);
   selectedMonth.value = currentMonth;
   scrollToSelected();
-}
+  emitMonth(currentMonth, currentYear);
+};
 </script>
 
 <template>
@@ -77,7 +97,7 @@ const handleToCurrentMonth = () => {
     <div class="flex justify-between items-center gap-2 relative w-full overflow-auto border rounded-lg p-2 px-4">
 
       <!-- YEAR -->
-      <Select v-model="selectedYear">
+      <Select :model-value="selectedYear" @update:model-value="handleYearChange">
         <SelectTrigger class="w-[100px]">
           <SelectValue :placeholder="String(currentYear)" />
         </SelectTrigger>
@@ -108,7 +128,7 @@ const handleToCurrentMonth = () => {
             :year="Number(selectedYear)"
             :isSelected="index === selectedMonth"
             :isCurrent="index === currentMonth && Number(selectedYear) === currentYear"
-            @select="selectedMonth = index"
+            @select="() => { selectedMonth = index; emitMonth(index, Number(selectedYear)); }"
           />
         </ul>
 

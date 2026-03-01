@@ -15,7 +15,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <header
     :class="
-      variant === 'small' ? '' : 'mt-4 mb-8 flex items-center justify-between'
+      variant === 'small' ? '' : 'my-4 flex items-center justify-between'
     "
   >
     <div class="space-y-0.5">
