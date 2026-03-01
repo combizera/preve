@@ -1,13 +1,4 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
-
-import Heading from '@/components/Heading.vue';
-import ContainerTransactions from '@/components/Transaction/ContainerTransactions.vue';
-import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
-import FilterTransaction from '@/components/Transaction/FilterTransaction.vue';
-import { Button } from '@/components/ui/button';
-import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import transactionRoutes from '@/routes/transactions';
 import type { BreadcrumbItem } from '@/types';
@@ -52,84 +43,74 @@ function amountClass(transaction: ITransaction) {
 </script>
 
 <template>
-  <Head title="Transaction" />
+  <div class="max-w-lg mx-auto py-14">
+    <Card class="gap-0 min-w-lg mx-auto">
+      <CardContent class="-mb-4">
+        <h2 class="text-lg font-medium">
+          {{ transaction.description }}
+        </h2>
+        <div class="bg-muted rounded-lg p-4 my-4 space-y-4">
+          <p class="text-lg font-medium">
+            Details
+          </p>
 
-  <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
-      <!-- HEADING -->
-      <Heading
-        title="Transaction Details"
-        description="View the details of your transaction here."
-      />
+          <ul class="space-y-2">
+            <li class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-sm">
+                Date:
+              </span>
+              <p class="text-foreground text-sm">
+                {{ formatTransactionDate(transaction.transaction_date) }}
+              </p>
+            </li>
+            <li class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-sm">
+                Category:
+              </span>
+              <p class="text-foreground text-sm">
+                {{ transaction.category?.name }}
+              </p>
+            </li>
+            <li v-if="transaction.tag" class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-sm">
+                Tag:
+              </span>
+              <p class="text-foreground text-sm">
+                {{ transaction.tag?.name }}
+              </p>
+            </li>
+            <li v-if="transaction.notes" class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-sm">
+                Notes:
+              </span>
+              <p class="text-foreground text-sm">
+                {{ transaction.notes }}
+              </p>
+            </li>
+            <li class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-sm">
+                Created At:
+              </span>
+              <p class="text-foreground text-sm">
+                {{ formatTransactionDate(transaction.created_at) }}
+              </p>
+            </li>
+          </ul>
 
-      <Card class="gap-0 min-w-lg mx-auto">
-        <CardContent class="-mb-4">
-          <h2 class="text-lg font-medium">
-            {{ transaction.description }}
-          </h2>
-          <div class="bg-muted rounded-lg p-4 my-4 space-y-4">
-            <p class="text-lg font-medium">
-              Details
-            </p>
+          <div class="w-full h-px border-b border-dashed border-muted-foreground/40" />
 
-            <ul class="space-y-2">
-              <li class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-sm">
-                  Date:
-                </span>
-                <p class="text-foreground text-sm">
-                  {{ formatTransactionDate(transaction.transaction_date) }}
-                </p>
-              </li>
-              <li class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-sm">
-                  Category:
-                </span>
-                <p class="text-foreground text-sm">
-                  {{ transaction.category?.name }}
-                </p>
-              </li>
-              <li v-if="transaction.tag" class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-sm">
-                  Tag:
-                </span>
-                <p class="text-foreground text-sm">
-                  {{ transaction.tag?.name }}
-                </p>
-              </li>
-              <li v-if="transaction.notes" class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-sm">
-                  Notes:
-                </span>
-                <p class="text-foreground text-sm">
-                  {{ transaction.notes }}
-                </p>
-              </li>
-              <li class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-sm">
-                  Created At:
-                </span>
-                <p class="text-foreground text-sm">
-                  {{ formatTransactionDate(transaction.created_at) }}
-                </p>
-              </li>
-            </ul>
-
-            <div class="w-full h-px border-b border-dashed border-muted-foreground/40" />
-
-            <ul class="space-y-2">
-              <li class="flex justify-between gap-2">
-                <span class="text-muted-foreground text-md font-medium">
-                  Amount:
-                </span>
-                <p :class="amountClass(transaction)">
-                  R$ {{ formattedAmount(transaction) }}
-                </p>
-              </li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  </AppLayout>
+          <ul class="space-y-2">
+            <li class="flex justify-between gap-2">
+              <span class="text-muted-foreground text-md font-medium">
+                Amount:
+              </span>
+              <p :class="amountClass(transaction)">
+                R$ {{ formattedAmount(transaction) }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
 </template>
