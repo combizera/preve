@@ -4,10 +4,12 @@ import { computed } from 'vue';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import CardTransaction from '@/components/Transaction/CardTransaction.vue';
-import { ITransaction } from '@/types/models/transaction';
+import { type ITransactionFilters } from '@/types/filters';
+import { type ITransaction } from '@/types/models/transaction';
 
-defineProps<{
+const props = defineProps<{
   transactions: ITransaction[];
+  filters: ITransactionFilters;
 }>();
 
 const emit = defineEmits<{
@@ -15,12 +17,13 @@ const emit = defineEmits<{
 }>();
 
 /**
- * Formats current month and year as "Jan - 2026"
+ * Derives displayed month/year from filters.date_start
+ * Falls back to current date if no filter is set
  */
 const currentMonthYear = computed<string>(() => {
-  const month = new Date().toLocaleDateString('en-US', { month: 'short' });
-  const year = new Date().getFullYear();
-  return `${month} - ${year}`;
+  const [year, month] = (props.filters.date_start ?? new Date().toISOString().slice(0, 10)).split('-');
+  const label = new Date(+year, +month - 1).toLocaleDateString('en-US', { month: 'short' });
+  return `${label} - ${year}`;
 });
 </script>
 

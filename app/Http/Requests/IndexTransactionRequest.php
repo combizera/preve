@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -21,7 +23,7 @@ final class IndexTransactionRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -41,5 +43,15 @@ final class IndexTransactionRequest extends FormRequest
                 Rule::exists('tags', 'id')->where('user_id', Auth::id()),
             ],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if (!$this->filled('date_start') && !$this->filled('date_end')) {
+            $this->merge([
+                'date_start' => Carbon::now()->startOfMonth()->toDateString(),
+                'date_end'   => Carbon::now()->endOfMonth()->toDateString(),
+            ]);
+        }
     }
 }

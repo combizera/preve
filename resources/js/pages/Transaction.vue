@@ -67,6 +67,7 @@ const breadcrumbs: BreadcrumbItem[] = [
       <!-- TRANSACTIONS -->
       <ContainerTransactions
         :transactions="transactions"
+        :filters="filters"
         @create="openCreateDialog"
       />
 
