@@ -5,10 +5,12 @@ import { TrendingUp, Wallet } from 'lucide-vue-next';
 
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue';
 import { formatCentsToDisplay } from '@/lib/currency';
+import { MONTHS } from '@/lib/calendar';
 
 interface Props {
   availableBalance: number;
   forecast: number;
+  selectedMonth: { month: number; year: number } | null;
 }
 
 const props = defineProps<Props>();
@@ -23,6 +25,11 @@ const forecastVariant = computed(() => {
   if (props.forecast > 0) return 'positive';
   if (props.forecast < 0) return 'destructive';
   return 'neutral';
+});
+
+const forecastDescription = computed(() => {
+  if (!props.selectedMonth) return 'Balance after pending expenses';
+  return `Forecast for ${MONTHS[props.selectedMonth.month - 1]} ${props.selectedMonth.year}`;
 });
 </script>
 
@@ -41,7 +48,7 @@ const forecastVariant = computed(() => {
 
     <DashboardCard
       title="Forecast"
-      description="Balance after pending expenses"
+      :description="forecastDescription"
       :amount="formatCentsToDisplay(forecast)"
       :variant="forecastVariant"
     >
