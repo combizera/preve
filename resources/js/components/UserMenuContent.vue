@@ -2,13 +2,13 @@
 import { Link, router } from '@inertiajs/vue3';
 import { LogOut, Settings } from 'lucide-vue-next';
 
+import ThemeSwitch from '@/components/ThemeSwitch.vue';
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import ThemeSwitch from '@/components/ThemeSwitch.vue';
 import UserInfo from '@/components/UserInfo.vue';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
@@ -33,12 +33,10 @@ defineProps<Props>();
   </DropdownMenuLabel>
   <DropdownMenuSeparator />
   <DropdownMenuGroup>
-    <DropdownMenuItem :as-child="true" @select.prevent>
-      <div class="flex w-full items-center justify-between px-2 py-1.5">
-        <span class="text-sm">Theme</span>
-        <ThemeSwitch />
-      </div>
-    </DropdownMenuItem>
+    <div class="flex w-full items-center justify-between">
+      <span class="text-sm px-1 text-muted-foreground">Theme</span>
+      <ThemeSwitch />
+    </div>
   </DropdownMenuGroup>
   <DropdownMenuSeparator />
   <DropdownMenuGroup>
