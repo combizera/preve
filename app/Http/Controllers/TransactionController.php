@@ -18,21 +18,23 @@ final class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexTransactionRequest $request, TransactionFilter $filters): Response
+    public function index(IndexTransactionRequest $request): Response
     {
+        $transactionFilter = new TransactionFilter($request);
+
         $transactions = Auth::user()
             ->transactions()
             ->with(['category', 'tag'])
-            ->filter($filters)
+            ->filter($transactionFilter)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
 
-        $validatedFilters = $request->validated();
+        $filters = $request->validated();
 
-        return Inertia::render('Transaction', compact('transactions', 'categories', 'tags', 'validatedFilters'));
+        return Inertia::render('Transaction', compact('transactions', 'categories', 'tags', 'filters'));
     }
 
     /**
