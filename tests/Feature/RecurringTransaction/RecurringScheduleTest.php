@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Console\Commands\GenerateRecurringTransactions;
 use App\Jobs\GenerateRecurringTransactionsJob;
 use App\Models\RecurringTransaction;
 use App\Models\User;
@@ -33,8 +34,10 @@ it('should be able to dispatch jobs only for active recurring transactions', fun
 it('should be able to verify that the weekly schedule is properly configured', function () {
     $schedule = app()->make(Schedule::class);
 
-    $events = collect($schedule->events())->filter(function ($event) {
-        return mb_stripos($event->command, 'recurring:generate --months=3') !== false;
+    $commandName = app(GenerateRecurringTransactions::class)->getName();
+
+    $events = collect($schedule->events())->filter(function ($event) use ($commandName) {
+        return mb_stripos($event->command, "{$commandName} --months=3") !== false;
     });
 
     expect($events->count())->toBe(1);
