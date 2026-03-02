@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Actions\CreateDefaultCategories;
+use App\Actions\CreateDefaultTags;
 use App\Models\User;
 
 final class UserObserver
@@ -13,7 +15,8 @@ final class UserObserver
      */
     public function created(User $user): void
     {
-        app(\App\Actions\CreateDefaultCategories::class)->execute($user);
+        app(CreateDefaultCategories::class)->execute($user);
+        app(CreateDefaultTags::class)->execute($user);
     }
 
     /**
