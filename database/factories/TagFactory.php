@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use App\Models\User;
+use App\Support\DefaultTags;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
+use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
+ * @extends Factory<Tag>
  */
 final class TagFactory extends Factory
 {
-    /**
-     * @return array<string, mixed>
-     */
+    protected $model = Tag::class;
+
     public function definition(): array
     {
-        $name = $this->faker->word();
+        $tag = $this->faker->randomElement(DefaultTags::get());
 
         return [
             'user_id'     => User::factory(),
-            'name'        => $name,
-            'slug'        => Str::slug($name),
-            'description' => $this->faker->optional()->sentence(),
+            'name'        => $tag['name'],
+            'slug'        => Str::slug($tag['name']),
+            'description' => $tag['description'],
         ];
     }
 }

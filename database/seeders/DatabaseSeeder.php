@@ -12,7 +12,6 @@ final class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            TagSeeder::class,
             TransactionSeeder::class,
             RecurringTransactionSeeder::class,
         ]);
