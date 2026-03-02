@@ -45,6 +45,32 @@ it('should be able to create recurring transaction', function () {
     ]);
 });
 
+it('should be able to store a recurring transaction and automatically generate future projections', function () {
+    $user = User::factory()->create();
+    $category = Category::factory()->create(['user_id' => $user->id, 'type' => 'expense']);
+
+    $payload = [
+        'category_id'  => $category->id,
+        'amount'       => 15000,
+        'frequency'    => 'monthly',
+        'type'         => 'expense',
+        'description'  => 'New Streaming Account',
+        'is_active'    => true,
+        'day_of_month' => 15,
+        'start_date'   => now()->format('Y-m-d'),
+    ];
+
+    $response = $this->post(route('recurring.store'), $payload);
+
+    $response->assertRedirect(route('recurring.index'));
+
+    $this->assertDatabaseHas('recurring_transactions', [
+        'description' => 'New Streaming Account',
+    ]);
+
+    $this->assertDatabaseCount('transactions', 4);
+});
+
 // READ
 it('should be able to view recurring transactions index', function () {
     $response = $this->get(route('recurring.index'));

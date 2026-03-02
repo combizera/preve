@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Database\Factories\RecurringTransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -57,5 +59,25 @@ final class RecurringTransaction extends Model
     public function tag(): BelongsTo
     {
         return $this->belongsTo(Tag::class);
+    }
+
+    public function calculateExactDateForMonth(CarbonInterface $month): Carbon
+    {
+        $day = min($this->day_of_month, $month->daysInMonth);
+
+        return Carbon::createFromDate($month->year, $month->month, $day)->startOfDay();
+    }
+
+    public function isValidTransactionDate(CarbonInterface $date): bool
+    {
+        if ($date->isBefore($this->start_date)) {
+            return false;
+        }
+
+        if ($this->end_date && $date->isAfter($this->end_date)) {
+            return false;
+        }
+
+        return true;
     }
 }
