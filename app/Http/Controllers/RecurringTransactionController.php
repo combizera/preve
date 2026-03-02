@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Enums\TransactionType;
 use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
+use App\Services\RecurringTransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -41,13 +42,14 @@ final class RecurringTransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RecurringTransactionRequest $request): RedirectResponse
+    public function store(RecurringTransactionRequest $request, RecurringTransactionService $service): RedirectResponse
     {
         $validated = $request->validated();
 
-        Auth::user()->recurringTransactions()->create($validated);
+        $recurringTransaction = Auth::user()->recurringTransactions()->create($validated);
 
-        $this->toast::success('Recurring transaction created successfully.');
+        $service->generateFutureTransactions($recurringTransaction, 3);
+        $this->toast::success('Recurring transaction created successfully! The next 3 months of transactions are now projected in your statement.');
 
         return to_route('recurring.index');
     }
