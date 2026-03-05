@@ -36,10 +36,15 @@ final class DashboardController extends Controller
             $request->integer('forecast_year', $now->year),
         );
 
+        $categories = Auth::user()->categories()->get();
+        $tags = Auth::user()->tags()->get();
+
         return Inertia::render('Dashboard', compact(
             'latestTransactions',
             'availableBalance',
             'forecast',
+            'categories',
+            'tags',
         ));
     }
 }

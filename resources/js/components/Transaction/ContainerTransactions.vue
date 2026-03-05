@@ -4,6 +4,7 @@ import { computed } from 'vue';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import CardTransaction from '@/components/Transaction/CardTransaction.vue';
+import { useTransactionStore } from '@/stores/transaction.store';
 import { type ITransactionFilters } from '@/types/filters';
 import { type ITransaction } from '@/types/models/transaction';
 
@@ -12,20 +13,22 @@ const props = defineProps<{
   filters: ITransactionFilters;
 }>();
 
-const emit = defineEmits<{
-  create: [];
-}>();
+const transactionStore = useTransactionStore();
 
 const groupedTransactions = computed(() => {
   const monthsTransactions: Record<string, ITransaction[]> = {};
 
   props.transactions.forEach((transaction) => {
     /**
-    * Derives displayed month/year from transaction.transaction_date
-    * Falls back to current date if no transaction.transaction_date is set
-    */
-    const [year, month] = (transaction.transaction_date ?? new Date().toISOString().slice(0, 10)).split('-');
-    const label = new Date(+year, +month - 1).toLocaleDateString('en-US', { month: 'short' });
+     * Derives displayed month/year from transaction.transaction_date
+     * Falls back to current date if no transaction.transaction_date is set
+     */
+    const [year, month] = (
+      transaction.transaction_date ?? new Date().toISOString().slice(0, 10)
+    ).split('-');
+    const label = new Date(+year, +month - 1).toLocaleDateString('en-US', {
+      month: 'short',
+    });
     const monthYear = `${label} - ${year}`;
 
     if (!monthsTransactions[monthYear]) {
@@ -37,29 +40,35 @@ const groupedTransactions = computed(() => {
 
   return monthsTransactions;
 });
+
+const hasTransactions = computed(() => props.transactions.length > 0);
 </script>
 
 <template>
   <div class="space-y-2">
     <!-- Empty State -->
     <EmptyState
-      v-if="transactions.length === 0"
+      v-if="!hasTransactions"
       title="No transactions yet"
       description="Start by creating your first transaction"
       button-text="Create Transaction"
-      @action="emit('create')"
+      @action="transactionStore.openCreateDialog"
     />
 
-    <section name="grouped-transactions" v-else>
-      <div v-for="(group, monthYear) in groupedTransactions" :key="monthYear" class="space-y-2">
+    <section data-name="grouped-transactions" v-if="hasTransactions">
+      <div
+        v-for="(group, monthYear) in groupedTransactions"
+        :key="monthYear"
+        class="space-y-2"
+      >
         <!-- TITLE -->
         <SectionTitle :title="monthYear" />
 
-        <CardTransaction 
+        <CardTransaction
           :transaction="transaction"
           :key="transaction.id"
-          v-for="transaction in group" 
-         />
+          v-for="transaction in group"
+        />
       </div>
     </section>
   </div>
