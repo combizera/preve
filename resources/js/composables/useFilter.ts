@@ -1,8 +1,8 @@
-import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 export function useFilter<T extends Record<string, any>>(
-    routeName: string,
+    url: string,
     initialFilters: T,
     defaultFilters: T
 ) {
@@ -37,7 +37,7 @@ export function useFilter<T extends Record<string, any>>(
                 }
             }
             return cleaned;
-        }).get(route(routeName), {
+        }).get(url, {
             preserveState: true,
             preserveScroll: true,
             replace: true,
