@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import Heading from '@/components/Heading.vue';
 import ContainerRecurrings from '@/components/Recurring/ContainerRecurrings.vue';
@@ -9,6 +9,7 @@ import RecurringCards from '@/components/Recurring/RecurringCards.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
+import { useRecurringStore } from '@/stores/recurring.store';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
 import { type IRecurringTransaction } from '@/types/models/recurring-transaction';
@@ -23,11 +24,8 @@ interface Props {
 
 defineProps<Props>();
 
-const showCreateDialog = ref(false);
-
-const openCreateDialog = () => {
-  showCreateDialog.value = true;
-};
+const recurringStore = useRecurringStore();
+const { showFormDialog } = storeToRefs(recurringStore)
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -51,7 +49,9 @@ const breadcrumbs: BreadcrumbItem[] = [
       description="Manage your recurring transactions here."
       :hasActions="true"
     >
-      <Button type="button" @click="openCreateDialog"> Create </Button>
+      <Button type="button" @click="recurringStore.openCreateDialog()">
+        Create
+      </Button>
     </Heading>
 
     <!-- RECURRING CARDS -->
@@ -61,27 +61,25 @@ const breadcrumbs: BreadcrumbItem[] = [
     />
 
     <!-- CONTAINER -->
-    <div class="space-y-10 mt-5">
+    <div class="mt-6 space-y-6">
       <ContainerRecurrings
         :tags="tags"
         :categories="categories"
         :recurringTransactions="incomeRecurring"
         type="income"
-        @create="openCreateDialog"
       />
 
       <ContainerRecurrings
         :tags="tags"
         :categories="categories"
         :recurringTransactions="expenseRecurring"
-        @create="openCreateDialog"
+        type="expense"
       />
     </div>
 
     <!-- CREATE -->
     <CreateRecurringDialog
-      v-if="showCreateDialog"
-      v-model:open="showCreateDialog"
+      v-if="showFormDialog"
       :categories="categories"
       :tags="tags"
     />

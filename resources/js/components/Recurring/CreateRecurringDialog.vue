@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
 import FormRecurring from '@/components/Recurring/FormRecurring.vue';
@@ -14,19 +15,17 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { FREQUENCY_TYPE } from '@/enums/frequency-type';
-import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import {
   extractNumbers,
   formatCentsToDisplay,
   parseToCents,
 } from '@/lib/currency';
 import { store } from '@/routes/recurring';
+import { useRecurringStore } from '@/stores/recurring.store';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
 import { formatTransactionDate } from '@/utils/formatDate';
-
-const open = defineModel<boolean>('open', { required: true });
 
 interface Props {
   categories: ICategory[];
@@ -35,6 +34,9 @@ interface Props {
 
 defineProps<Props>();
 
+const recurringStore = useRecurringStore();
+const { showFormDialog, recurringType } = storeToRefs(recurringStore);
+
 const rawAmount = ref('');
 
 const form = useForm<IRecurringTransaction>({
@@ -42,7 +44,7 @@ const form = useForm<IRecurringTransaction>({
   tag_id: undefined,
   amount: 0,
   frequency: FREQUENCY_TYPE.MONTHLY,
-  type: TRANSACTION_TYPE.EXPENSE,
+  type: recurringType.value,
   description: '',
   is_active: true,
   day_of_month: new Date().getDate(),
@@ -62,7 +64,7 @@ const displayAmount = computed({
 const createRecurring = () => {
   form.submit(store(), {
     onSuccess: () => {
-      open.value = false;
+      recurringStore.closeCreateDialog();
       form.reset();
       rawAmount.value = '';
     },
@@ -71,7 +73,7 @@ const createRecurring = () => {
 </script>
 
 <template>
-  <Dialog v-model:open="open">
+  <Dialog v-model:open="showFormDialog">
     <form>
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
