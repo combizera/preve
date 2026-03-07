@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { capitalize, computed } from 'vue';
 
 import EmptyState from '@/components/EmptyState.vue';
 import CardRecurring from '@/components/Recurring/CardRecurring.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
+import { useRecurringStore } from '@/stores/recurring.store';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
+import { TransactionType } from '@/types/models/transaction';
 
 interface Props {
   recurringTransactions: IRecurringTransaction[];
   categories: ICategory[];
   tags: ITag[];
-  type?: 'income' | 'expense';
+  type: TransactionType;
 }
 
+const recurringStore = useRecurringStore();
 const props = defineProps<Props>();
 
-const emit = defineEmits<{
-  create: [];
-}>();
-
 const emptyStateConfig = computed(() => ({
-  title: `No ${props.type === 'income' ? 'income' : 'expense'} transactions yet`,
-  description: `Start by creating your first recurring ${props.type === 'income' ? 'income' : 'expense'}`,
-  buttonText: `Create ${props.type === 'income' ? 'Income' : 'Expense'}`,
+  title: `No ${props.type} transactions yet`,
+  description: `Start by creating your first recurring ${props.type}`,
+  buttonText: `Create ${capitalize(props.type)}`,
 }));
 </script>
 
@@ -39,7 +38,7 @@ const emptyStateConfig = computed(() => ({
       :title="emptyStateConfig.title"
       :description="emptyStateConfig.description"
       :button-text="emptyStateConfig.buttonText"
-      @action="emit('create')"
+      @action="recurringStore.openCreateDialog(type)"
     />
 
     <!-- Transactions List -->

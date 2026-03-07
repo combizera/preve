@@ -24,7 +24,7 @@ const emit = defineEmits<{
   <Card
     class="flex flex-col items-center justify-center gap-4 bg-sidebar p-8 text-center"
   >
-    <div class="flex flex-col gap-1 items-center">
+    <div class="flex flex-col items-center gap-1">
       <slot name="icon" />
       <h3 class="text-md font-semibold text-foreground">
         {{ title }}

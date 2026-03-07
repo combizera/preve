@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import { TrendingUp, Wallet } from 'lucide-vue-next';
 import { computed } from 'vue';
 
-import { TrendingUp, Wallet } from 'lucide-vue-next';
-
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue';
-import { formatCentsToDisplay } from '@/lib/currency';
 import { MONTHS } from '@/lib/calendar';
+import { formatCentsToDisplay } from '@/lib/currency';
 
 interface Props {
   availableBalance: number;
@@ -34,7 +33,7 @@ const forecastDescription = computed(() => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-6 mb-4">
+  <div class="grid grid-cols-2 gap-4">
     <DashboardCard
       title="Available Balance"
       description="Income minus paid expenses this month"
