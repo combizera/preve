@@ -33,15 +33,13 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Category" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
-      <!-- HEADING -->
-      <Heading title="Category" description="Manage your categories here." />
+    <!-- HEADING -->
+    <Heading title="Category" description="Manage your categories here." />
 
-      <!-- CREATE -->
-      <CreateCategory />
+    <!-- CREATE -->
+    <CreateCategory />
 
-      <!-- CONTAINER -->
-      <ContainerCategory :incomeCategories :expenseCategories />
-    </div>
+    <!-- CONTAINER -->
+    <ContainerCategory :incomeCategories :expenseCategories />
   </AppLayout>
 </template>

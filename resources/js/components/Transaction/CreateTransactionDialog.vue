@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
 import FormTransaction from '@/components/Transaction/FormTransaction.vue';
@@ -14,13 +15,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { extractNumbers, formatCentsToDisplay, parseToCents } from '@/lib/currency';
+import {
+  extractNumbers,
+  formatCentsToDisplay,
+  parseToCents,
+} from '@/lib/currency';
 import { store } from '@/routes/transactions';
+import { useTransactionStore } from '@/stores/transaction.store';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
-
-const open = defineModel<boolean>('open', { required: true });
 
 interface Props {
   categories: ICategory[];
@@ -28,6 +32,10 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const transactionStore = useTransactionStore();
+
+const { showFormDialog } = storeToRefs(transactionStore);
 
 const rawAmount = ref('');
 
@@ -38,7 +46,7 @@ const form = useForm<ITransaction>({
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
   notes: undefined,
-  transaction_date: new Date().toLocaleDateString("pt-BR"),
+  transaction_date: new Date().toLocaleDateString('pt-BR'),
 });
 
 const displayAmount = computed({
@@ -53,7 +61,7 @@ const displayAmount = computed({
 const createTransaction = () => {
   form.submit(store(), {
     onSuccess: () => {
-      open.value = false;
+      transactionStore.closeCreateDialog();
       form.reset();
       rawAmount.value = '';
     },
@@ -62,7 +70,7 @@ const createTransaction = () => {
 </script>
 
 <template>
-  <Dialog v-model:open="open">
+  <Dialog v-model:open="showFormDialog">
     <form>
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>

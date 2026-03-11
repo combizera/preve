@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
 
 import Heading from '@/components/Heading.vue';
 import ContainerTransactions from '@/components/Transaction/ContainerTransactions.vue';
+import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import FilterTransaction from '@/components/Transaction/FilterTransaction.vue';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import transactionRoutes from '@/routes/transactions';
@@ -25,12 +24,6 @@ interface Props {
 
 defineProps<Props>();
 
-const showCreateDialog = ref(false);
-
-const openCreateDialog = () => {
-  showCreateDialog.value = true;
-};
-
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Dashboard',
@@ -44,40 +37,35 @@ const breadcrumbs: BreadcrumbItem[] = [
 </script>
 
 <template>
-  <Head title="Transaction" />
+  <Head title="Transactions" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
-      <!-- HEADING -->
-      <Heading
-        title="Transaction"
-        description="Manage your transactions here."
-        :hasActions="true"
-      >
-        <div class="flex items-center gap-2">
-          <FilterTransaction
-            :filters="filters"
-            :categories="categories"
-            :tags="tags"
-          />
-          <Button type="button" @click="openCreateDialog"> Create </Button>
-        </div>
-      </Heading>
+    <!-- HEADING -->
+    <Heading
+      title="Transactions"
+      description="Manage your transactions here."
+      :hasActions="true"
+    >
+      <div class="flex items-center gap-2">
+        <FilterTransaction
+          :filters="filters"
+          :categories="categories"
+          :tags="tags"
+        />
+        <CreateTransactionButton />
+      </div>
+    </Heading>
 
-      <!-- TRANSACTIONS -->
-      <ContainerTransactions
-        :transactions="transactions"
-        :filters="filters"
-        @create="openCreateDialog"
-      />
+    <!-- TRANSACTIONS -->
+    <ContainerTransactions
+      :transactions="transactions"
+      :filters="filters"
+    />
 
-      <!-- CREATE -->
-      <CreateTransactionDialog
-        v-if="showCreateDialog"
-        v-model:open="showCreateDialog"
-        :categories="categories"
-        :tags="tags"
-      />
-    </div>
+    <!-- CREATE -->
+    <CreateTransactionDialog
+      :categories="categories"
+      :tags="tags"
+    />
   </AppLayout>
 </template>

@@ -7,11 +7,13 @@ import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarSt
 import LastTransactionsTable from '@/components/Dashboard/LastTransactionsTable.vue';
 import Heading from '@/components/Heading.vue';
 import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
-import { Button } from '@/components/ui/button';
+import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
+import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
-
 import { type BreadcrumbItem } from '@/types';
+import { type ICategory } from '@/types/models/category';
+import { type ITag } from '@/types/models/tag';
 import { type ITransaction } from '@/types/models/transaction';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -25,6 +27,8 @@ interface Props {
   latestTransactions: ITransaction[];
   availableBalance: number;
   forecast: number;
+  categories: ICategory[];
+  tags: ITag[];
 }
 
 defineProps<Props>();
@@ -33,7 +37,8 @@ const selectedMonth = ref<{ month: number; year: number } | null>(null);
 
 const handleMonthUpdate = (payload: { month: number; year: number }) => {
   const now = new Date();
-  const isCurrentMonth = payload.month === now.getMonth() + 1 && payload.year === now.getFullYear();
+  const isCurrentMonth =
+    payload.month === now.getMonth() + 1 && payload.year === now.getFullYear();
 
   selectedMonth.value = isCurrentMonth ? null : payload;
 
@@ -48,18 +53,16 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
   <Head title="Dashboard" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
+    <!-- HEADING -->
+    <Heading
+      title="Dashboard"
+      description="Here you can get an overview of your financial activities and manage your transactions efficiently."
+      :hasActions="true"
+    >
+      <CreateTransactionButton />
+    </Heading>
 
-      <!-- HEADING -->
-      <Heading
-        title="Dashboard"
-        description="Here you can get an overview of your financial activities and manage your transactions efficiently."
-        :hasActions="true"
-      >
-        <!-- TODO: fix issue #41 -->
-        <Button type="button"> Create </Button>
-      </Heading>
-
+    <section class="flex flex-col gap-4">
       <!-- CALENDAR -->
       <HorizontalCalendarStrip @update:month="handleMonthUpdate" />
 
@@ -75,6 +78,8 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
       <!-- LAST TRANSACTIONS -->
       <LastTransactionsTable :latestTransactions />
-    </div>
+    </section>
+
+    <CreateTransactionDialog :categories="categories" :tags="tags" />
   </AppLayout>
 </template>

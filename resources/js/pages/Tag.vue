@@ -33,15 +33,13 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Tag" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
-      <!-- HEADING -->
-      <Heading title="Tag" description="Manage your tags here." />
+    <!-- HEADING -->
+    <Heading title="Tag" description="Manage your tags here." />
 
-      <!-- CREATE -->
-      <CreateTag />
+    <!-- CREATE -->
+    <CreateTag />
 
-      <!-- CONTAINER -->
-      <ContainerTag :tags="tags" />
-    </div>
+    <!-- CONTAINER -->
+    <ContainerTag :tags="tags" />
   </AppLayout>
 </template>

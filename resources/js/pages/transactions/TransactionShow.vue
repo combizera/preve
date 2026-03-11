@@ -1,68 +1,75 @@
 <script setup lang="ts">
+import { clsx } from 'clsx';
 import { StickyNote } from 'lucide-vue-next';
 
-import { cn } from '@/lib/utils';
+import DetailItem from '@/components/Transaction/DetailItem.vue';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
 import { formatCentsToDisplay } from '@/lib/currency';
 import { ITransaction } from '@/types/models/transaction';
 import { formatTransactionDate } from '@/utils/formatDate';
-import DetailItem from '@/components/Transaction/DetailItem.vue';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
 interface Props {
   transaction: ITransaction;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 function formattedAmount(transaction: ITransaction) {
   return formatCentsToDisplay(transaction.amount);
 }
 
-function amountClass(transaction: ITransaction) {
-  return cn(
-    'text-foreground text-md font-bold',
-    transaction.type === 'expense'
-      ? "text-destructive before:content-['-']"
-      : 'text-positive',
-  );
-}
+const transactionDetails = [
+  { label: 'Date:', value: formatTransactionDate(props.transaction.transaction_date) },
+  { label: 'Category:', value: props.transaction.category?.name },
+  { label: 'Tag:', value: props.transaction.tag?.name },
+  { label: 'Created At:', value: formatTransactionDate(props.transaction.created_at) },
+];
+
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto py-14">
-    <Card class="gap-0 min-w-lg mx-auto">
+  <div class="mx-auto max-w-lg py-14">
+    <Card class="mx-auto min-w-lg gap-0">
+      <CardHeader class="text-lg font-medium">
+        {{ transaction.description }}
+      </CardHeader>
       <CardContent class="-mb-4">
-        <h2 class="text-lg font-medium">
-          {{ transaction.description }}
-        </h2>
-        <div class="bg-muted rounded-lg p-4 my-4 space-y-4">
-          <p class="text-lg font-medium">
-            Details
-          </p>
-
+        <div class="my-4 space-y-4 rounded-lg bg-muted p-4">
           <ul class="space-y-2">
-            <DetailItem label="Date:" :value="formatTransactionDate(transaction.transaction_date)" />
-            <DetailItem label="Category:" :value="transaction.category?.name" />
-            <DetailItem label="Tag:" :value="transaction.tag?.name" />
-            <DetailItem label="Notes:" :value="transaction.notes" />
-            <DetailItem label="Created At:" :value="formatTransactionDate(transaction.created_at)" />
+            <DetailItem
+              v-for="detail in transactionDetails"
+              :key="detail.label"
+              :label="detail.label"
+              :value="detail.value"
+            />
           </ul>
 
-          <div class="w-full h-px border-b border-dashed border-muted-foreground/40" />
+          <div
+            class="h-px w-full border-b border-muted-foreground/40"
+          />
 
           <ul class="space-y-2">
             <DetailItem
               label="Amount:"
               :value="`R$ ${formattedAmount(transaction)}`"
-              :value-class="amountClass(transaction)"
+              :className="clsx(
+                'text-md text-lg font-medium',
+                transaction.type === 'expense' && 'text-destructive before:content-[\'-\']',
+                transaction.type === 'income' && 'text-positive'
+              )"
             />
           </ul>
         </div>
       </CardContent>
 
-      <CardFooter v-if="transaction.notes" class="py-0 mt-4">
+      <CardFooter v-if="transaction.notes" class="mt-4 py-0">
         <div class="notes-block relative w-full overflow-hidden rounded-md bg-muted/50 px-4 py-3">
-          <div class="flex items-center gap-1.5 text-sm font-medium text-muted-foreground mb-1">
+          <div class="mb-1 flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
             <StickyNote :size="14" />
             Notes
           </div>

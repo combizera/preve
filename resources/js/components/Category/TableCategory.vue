@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteCategoryDialog from '@/components/Category/DeleteCategoryDialog.vue';
 import EditCategoryDialog from '@/components/Category/EditCategoryDialog.vue';
+import SectionTitle from '@/components/SectionTitle.vue';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import {
@@ -14,9 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CategoryColor, getColorClass } from '@/lib/category-colors';
+import { getColorClass } from '@/lib/category-colors';
 import { getIconComponent } from '@/lib/category-icons';
-import { cn } from '@/lib/utils';
 import { ICategory } from '@/types/models/category';
 
 const showDeleteDialog = ref(false);
@@ -45,21 +45,8 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <div>
-    <div class="mb-2 flex w-full items-center gap-2 px-2">
-      <i
-        :class="
-          cn(
-            'size-4 rounded',
-            type === 'expense'
-              ? getColorClass(CategoryColor.Red, 'bg')
-              : getColorClass(CategoryColor.Green, 'bg'),
-          )
-        "
-      />
-      <p class="text-foreground">
-        {{ type === 'income' ? 'Income' : 'Expense' }}
-      </p>
-      <div class="ml-1 h-px flex-1 bg-border"></div>
+    <div class="my-1 pb-3 px-2">
+      <SectionTitle :title="type" />
     </div>
     <Table>
       <TableHeader>

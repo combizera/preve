@@ -36,6 +36,9 @@ bash-app:
 bash-node:
 	$(DOCKER_COMPOSE) exec node sh
 
+bash-worker:
+	$(DOCKER_COMPOSE) exec queue sh
+
 # -------------------------------------------------------------------
 # Artisan / Laravel
 # -------------------------------------------------------------------

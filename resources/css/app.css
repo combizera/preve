@@ -184,12 +184,6 @@
     }
 }
 
-@layer components {
-    .page-container {
-        @apply mx-auto flex h-full w-full max-w-375 flex-1 flex-col gap-2 overflow-x-auto rounded-xl p-4;
-    }
-}
-
 :root {
     /* THEME ANIMATION TIMES */
     --reveal-out: linear(

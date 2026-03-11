@@ -93,12 +93,12 @@ const handleToCurrentMonth = () => {
 </script>
 
 <template>
-  <section class="mb-4 p-1 border rounded-lg-outer">
+  <section class="p-1 border rounded-lg-outer">
     <div class="flex justify-between items-center gap-2 relative w-full overflow-auto border rounded-lg p-2 px-4">
 
       <!-- YEAR -->
       <Select :model-value="selectedYear" @update:model-value="handleYearChange">
-        <SelectTrigger class="w-[100px]">
+        <SelectTrigger class="w-25">
           <SelectValue :placeholder="String(currentYear)" />
         </SelectTrigger>
         <SelectContent>
