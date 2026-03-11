@@ -40,34 +40,32 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Transactions" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="page-container">
-      <!-- HEADING -->
-      <Heading
-        title="Transactions"
-        description="Manage your transactions here."
-        :hasActions="true"
-      >
-        <div class="flex items-center gap-2">
-          <FilterTransaction
-            :filters="filters"
-            :categories="categories"
-            :tags="tags"
-          />
-          <CreateTransactionButton />
-        </div>
-      </Heading>
+    <!-- HEADING -->
+    <Heading
+      title="Transactions"
+      description="Manage your transactions here."
+      :hasActions="true"
+    >
+      <div class="flex items-center gap-2">
+        <FilterTransaction
+          :filters="filters"
+          :categories="categories"
+          :tags="tags"
+        />
+        <CreateTransactionButton />
+      </div>
+    </Heading>
 
-      <!-- TRANSACTIONS -->
-      <ContainerTransactions
-        :transactions="transactions"
-        :filters="filters"
-      />
+    <!-- TRANSACTIONS -->
+    <ContainerTransactions
+      :transactions="transactions"
+      :filters="filters"
+    />
 
-      <!-- CREATE -->
-      <CreateTransactionDialog
-        :categories="categories"
-        :tags="tags"
-      />
-    </div>
+    <!-- CREATE -->
+    <CreateTransactionDialog
+      :categories="categories"
+      :tags="tags"
+    />
   </AppLayout>
 </template>

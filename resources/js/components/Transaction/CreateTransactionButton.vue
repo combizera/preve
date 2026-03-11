@@ -13,5 +13,3 @@ const transactionStore = useTransactionStore()
     Create
   </Button>
 </template>
-
-<style scoped></style>
