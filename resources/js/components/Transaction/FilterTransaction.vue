@@ -124,7 +124,7 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
               </div>
 
               <div class="space-y-2">
-                <Label for="tag">tag</Label>
+                <Label for="tag">Tag</Label>
                 <Select v-model="form.tags" multiple>
                   <SelectTrigger id="tag" class="w-full">
                     <SelectValue placeholder="Select tag(s)" />

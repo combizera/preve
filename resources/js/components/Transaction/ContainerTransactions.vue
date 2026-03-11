@@ -20,9 +20,9 @@ const groupedTransactions = computed(() => {
 
   props.transactions.forEach((transaction) => {
     /**
-     * Derives displayed month/year from transaction.transaction_date
-     * Falls back to current date if no transaction.transaction_date is set
-     */
+    * Derives displayed month/year from transaction.transaction_date
+    * Falls back to current date if no transaction.transaction_date is set
+    */
     const [year, month] = (
       transaction.transaction_date ?? new Date().toISOString().slice(0, 10)
     ).split('-');
@@ -55,7 +55,7 @@ const hasTransactions = computed(() => props.transactions.length > 0);
       @action="transactionStore.openCreateDialog"
     />
 
-    <section data-name="grouped-transactions" v-if="hasTransactions">
+    <section class="space-y-4" data-name="grouped-transactions" v-if="hasTransactions">
       <div
         v-for="(group, monthYear) in groupedTransactions"
         :key="monthYear"
