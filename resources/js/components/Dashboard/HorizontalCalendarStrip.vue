@@ -85,6 +85,7 @@ const handleYearChange = (newYear: string) => {
 };
 
 const handleToCurrentMonth = () => {
+  if (selectedMonth.value === currentMonth && Number(selectedYear.value) === currentYear) return;
   selectedYear.value = String(currentYear);
   selectedMonth.value = currentMonth;
   scrollToSelected();
@@ -128,7 +129,7 @@ const handleToCurrentMonth = () => {
             :year="Number(selectedYear)"
             :isSelected="index === selectedMonth"
             :isCurrent="index === currentMonth && Number(selectedYear) === currentYear"
-            @select="() => { selectedMonth = index; emitMonth(index, Number(selectedYear)); }"
+            @select="() => { if (index === selectedMonth) return; selectedMonth = index; emitMonth(index, Number(selectedYear)); }"
           />
         </ul>
 
