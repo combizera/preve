@@ -2,6 +2,11 @@
 set -e
 
 if [ "$CONTAINER_ROLE" == "app" ]; then
+    if [ "$APP_ENV" == "local" ]; then
+        echo "📦 [APP] Installing packages..."
+        composer install
+    fi
+
     echo "🚀 [APP] Running startup tasks..."
 
     echo "📦 Running migrations..."
