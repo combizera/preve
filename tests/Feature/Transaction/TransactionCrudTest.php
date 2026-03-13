@@ -29,7 +29,7 @@ it('should be able to create transaction', function (): void {
         'transaction_date' => '2026-01-15',
     ]);
 
-    $response->assertRedirect(route('transactions.index'));
+    $response->assertRedirectBack();
 
     $this->assertDatabaseHas('transactions', [
         'category_id' => $category->id,
@@ -93,7 +93,7 @@ it('should be able to edit transaction', function (): void {
         'transaction_date' => '2026-01-20',
     ]);
 
-    $response->assertRedirect(route('transactions.index'));
+    $response->assertRedirectBack();
 
     $this->assertDatabaseHas('transactions', [
         'id'          => $transaction->id,
@@ -159,7 +159,7 @@ it('should be able to delete transaction', function (): void {
 
     $response = $this->delete(route('transactions.destroy', $transaction->id));
 
-    $response->assertRedirect(route('transactions.index'));
+    $response->assertRedirectBack();
 });
 
 it('should not be able to delete transaction that you do not own', function (): void {
