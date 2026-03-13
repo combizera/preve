@@ -7,13 +7,13 @@ use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
 // CREATE
-it('should be able to create transaction', function () {
+it('should be able to create transaction', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::EXPENSE->value,
@@ -39,7 +39,7 @@ it('should be able to create transaction', function () {
     ]);
 });
 
-it('should not be able to create transaction with type different from category', function () {
+it('should not be able to create transaction with type different from category', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::INCOME->value,
@@ -64,14 +64,14 @@ it('should not be able to create transaction with type different from category',
 });
 
 // READ
-it('should be able to view transactions index', function () {
+it('should be able to view transactions index', function (): void {
     $response = $this->get(route('transactions.index'));
 
     $response->assertStatus(200);
 });
 
 // EDIT
-it('should be able to edit transaction', function () {
+it('should be able to edit transaction', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::INCOME->value,
@@ -102,7 +102,7 @@ it('should be able to edit transaction', function () {
     ]);
 });
 
-it('should not be able to edit transaction changing to type incompatible with category', function () {
+it('should not be able to edit transaction changing to type incompatible with category', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::EXPENSE->value,
@@ -132,7 +132,7 @@ it('should not be able to edit transaction changing to type incompatible with ca
     ]);
 });
 
-it('should not be able to edit transaction that you do not own', function () {
+it('should not be able to edit transaction that you do not own', function (): void {
     $transaction = Transaction::factory()->create();
 
     $category = Category::factory()->create([
@@ -152,7 +152,7 @@ it('should not be able to edit transaction that you do not own', function () {
 });
 
 // DELETE
-it('should be able to delete transaction', function () {
+it('should be able to delete transaction', function (): void {
     $transaction = Transaction::factory()->create([
         'user_id' => auth()->id(),
     ]);
@@ -162,7 +162,7 @@ it('should be able to delete transaction', function () {
     $response->assertRedirect(route('transactions.index'));
 });
 
-it('should not be able to delete transaction that you do not own', function () {
+it('should not be able to delete transaction that you do not own', function (): void {
     $transaction = Transaction::factory()->create();
 
     $response = $this->delete(route('transactions.destroy', $transaction->id));

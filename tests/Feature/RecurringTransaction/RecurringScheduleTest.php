@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Queue;
 
 // DISPATCH
-it('should be able to dispatch jobs only for active recurring transactions', function () {
+it('should be able to dispatch jobs only for active recurring transactions', function (): void {
     Queue::fake();
 
     $user = User::factory()->create();
@@ -21,24 +21,18 @@ it('should be able to dispatch jobs only for active recurring transactions', fun
 
     Artisan::call('recurring:generate', ['--months' => 3]);
 
-    Queue::assertPushed(GenerateRecurringTransactionsJob::class, function ($job) use ($active) {
-        return $job->recurringTransaction->id === $active->id && $job->monthsAhead === 3;
-    });
+    Queue::assertPushed(GenerateRecurringTransactionsJob::class, fn ($job): bool => $job->recurringTransaction->id === $active->id && $job->monthsAhead === 3);
 
-    Queue::assertNotPushed(GenerateRecurringTransactionsJob::class, function ($job) use ($inactive) {
-        return $job->recurringTransaction->id === $inactive->id;
-    });
+    Queue::assertNotPushed(GenerateRecurringTransactionsJob::class, fn ($job): bool => $job->recurringTransaction->id === $inactive->id);
 });
 
 // SCHEDULE
-it('should be able to verify that the weekly schedule is properly configured', function () {
+it('should be able to verify that the weekly schedule is properly configured', function (): void {
     $schedule = app()->make(Schedule::class);
 
-    $commandName = app(GenerateRecurringTransactions::class)->getName();
+    $commandName = resolve(GenerateRecurringTransactions::class)->getName();
 
-    $events = collect($schedule->events())->filter(function ($event) use ($commandName) {
-        return mb_stripos($event->command, "{$commandName} --months=3") !== false;
-    });
+    $events = collect($schedule->events())->filter(fn ($event): bool => mb_stripos((string) $event->command, "{$commandName} --months=3") !== false);
 
     expect($events->count())->toBe(1);
 

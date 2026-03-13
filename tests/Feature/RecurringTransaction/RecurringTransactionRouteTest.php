@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
-it('should be able to render Recurring Transactions screen', function () {
+it('should be able to render Recurring Transactions screen', function (): void {
     $response = $this->get(route('recurring.index'));
     $response->assertOk();
 });

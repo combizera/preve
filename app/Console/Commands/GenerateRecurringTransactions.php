@@ -27,15 +27,15 @@ final class GenerateRecurringTransactions extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $months = (int) $this->option('months');
         $this->info("Starting transaction generation for the next {$months} months...");
 
-        RecurringTransaction::where('is_active', true)
-            ->chunkById(100, function ($recurringTransactions) use ($months) {
+        RecurringTransaction::query()->where('is_active', true)
+            ->chunkById(100, function ($recurringTransactions) use ($months): void {
                 foreach ($recurringTransactions as $recurringTransaction) {
-                    GenerateRecurringTransactionsJob::dispatch($recurringTransaction, $months);
+                    dispatch(new GenerateRecurringTransactionsJob($recurringTransaction, $months));
                 }
             });
 

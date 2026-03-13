@@ -5,13 +5,13 @@ declare(strict_types=1);
 use App\Models\Tag;
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
 // CREATE
-it('should be able to create tag', function () {
+it('should be able to create tag', function (): void {
     $response = $this->post(route('tags.store'), [
         'name'        => 'New Tag',
         'description' => 'This is a new tag',
@@ -26,14 +26,14 @@ it('should be able to create tag', function () {
 });
 
 // READ
-it('should be able to view tags index', function () {
+it('should be able to view tags index', function (): void {
     $response = $this->get(route('tags.index'));
 
     $response->assertStatus(200);
 });
 
 // EDIT
-it('should be able to edit tag', function () {
+it('should be able to edit tag', function (): void {
     $tag = Tag::factory()->create([
         'user_id' => auth()->id(),
         'name'    => 'New Tag',
@@ -50,7 +50,7 @@ it('should be able to edit tag', function () {
     ]);
 });
 
-it('shoud not be able to edit tag that you do not own', function () {
+it('shoud not be able to edit tag that you do not own', function (): void {
     $tag = Tag::factory()->create();
 
     $response = $this->put(route('tags.update', $tag->id), [
@@ -61,7 +61,7 @@ it('shoud not be able to edit tag that you do not own', function () {
 });
 
 // DELETE
-it('should be able to delete tag', function () {
+it('should be able to delete tag', function (): void {
     $tag = Tag::factory()->create([
         'user_id' => auth()->id(),
     ]);
@@ -71,7 +71,7 @@ it('should be able to delete tag', function () {
     $response->assertRedirect(route('tags.index'));
 });
 
-it('should not be able to delete tag that you do not own', function () {
+it('should not be able to delete tag that you do not own', function (): void {
     $tag = Tag::factory()->create();
 
     $response = $this->delete(route('tags.destroy', $tag->id));

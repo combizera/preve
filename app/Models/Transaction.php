@@ -7,7 +7,7 @@ namespace App\Models;
 use App\Enums\TransactionType;
 use App\Filters\QueryFilter;
 use Carbon\CarbonInterface;
-use Database\Factories\TransactionFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class Transaction extends Model
 {
-    /** @use HasFactory<TransactionFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -37,42 +37,58 @@ final class Transaction extends Model
         'type'             => TransactionType::class,
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<RecurringTransaction, $this>
+     */
     public function recurringTransaction(): BelongsTo
     {
         return $this->belongsTo(RecurringTransaction::class);
     }
 
+    /**
+     * @return BelongsTo<Category, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * @return BelongsTo<Tag, $this>
+     */
     public function tag(): BelongsTo
     {
         return $this->belongsTo(Tag::class);
     }
 
-    public function scopeFilter(Builder $query, QueryFilter $filters): Builder
+    #[Scope]
+    protected function filter(Builder $query, QueryFilter $filters): Builder
     {
         return $filters->apply($query);
     }
 
-    public function scopeIncome(Builder $query): Builder
+    #[Scope]
+    protected function income(Builder $query): Builder
     {
         return $query->where('type', TransactionType::INCOME);
     }
 
-    public function scopeExpense(Builder $query): Builder
+    #[Scope]
+    protected function expense(Builder $query): Builder
     {
         return $query->where('type', TransactionType::EXPENSE);
     }
 
-    public function scopeInMonth(Builder $query, CarbonInterface $date): Builder
+    #[Scope]
+    protected function inMonth(Builder $query, CarbonInterface $date): Builder
     {
         return $query->whereBetween('transaction_date', [
             $date->copy()->startOfMonth()->toDateString(),
@@ -80,12 +96,14 @@ final class Transaction extends Model
         ]);
     }
 
-    public function scopePaid(Builder $query, CarbonInterface $date): Builder
+    #[Scope]
+    protected function paid(Builder $query, CarbonInterface $date): Builder
     {
         return $query->where('transaction_date', '<=', $date->toDateString());
     }
 
-    public function scopePending(Builder $query, CarbonInterface $date): Builder
+    #[Scope]
+    protected function pending(Builder $query, CarbonInterface $date): Builder
     {
         return $query->where('transaction_date', '>', $date->toDateString());
     }

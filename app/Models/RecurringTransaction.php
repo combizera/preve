@@ -6,13 +6,13 @@ namespace App\Models;
 
 use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
-use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Database\Factories\RecurringTransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Date;
 
 final class RecurringTransaction extends Model
 {
@@ -41,31 +41,43 @@ final class RecurringTransaction extends Model
         'end_date'   => 'date',
     ];
 
+    /**
+     * @return HasMany<Transaction, $this>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Category, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * @return BelongsTo<Tag, $this>
+     */
     public function tag(): BelongsTo
     {
         return $this->belongsTo(Tag::class);
     }
 
-    public function calculateExactDateForMonth(CarbonInterface $month): Carbon
+    public function calculateExactDateForMonth(CarbonInterface $month): CarbonInterface
     {
         $day = min($this->day_of_month, $month->daysInMonth);
 
-        return Carbon::createFromDate($month->year, $month->month, $day)->startOfDay();
+        return Date::createFromDate($month->year, $month->month, $day)->startOfDay();
     }
 
     public function isValidTransactionDate(CarbonInterface $date): bool
@@ -74,10 +86,6 @@ final class RecurringTransaction extends Model
             return false;
         }
 
-        if ($this->end_date && $date->isAfter($this->end_date)) {
-            return false;
-        }
-
-        return true;
+        return !($this->end_date && $date->isAfter($this->end_date));
     }
 }

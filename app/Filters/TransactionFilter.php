@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Filters;
 
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 
 final class TransactionFilter extends QueryFilter
 {
     public function date_start(string $date): void
     {
-        $this->builder->where('transaction_date', '>=', Carbon::parse($date)->startOfDay());
+        $this->builder->where('transaction_date', '>=', Date::parse($date)->startOfDay());
     }
 
     public function date_end(string $date): void
     {
-        $this->builder->where('transaction_date', '<=', Carbon::parse($date)->endOfDay());
+        $this->builder->where('transaction_date', '<=', Date::parse($date)->endOfDay());
     }
 
     public function type(string $type): void
@@ -25,14 +25,14 @@ final class TransactionFilter extends QueryFilter
 
     public function categories(array $categoryIds): void
     {
-        $this->builder->whereHas('category', function ($query) use ($categoryIds) {
+        $this->builder->whereHas('category', function ($query) use ($categoryIds): void {
             $query->whereIn('categories.id', $categoryIds);
         });
     }
 
     public function tags(array $tagIds): void
     {
-        $this->builder->whereHas('tag', function ($query) use ($tagIds) {
+        $this->builder->whereHas('tag', function ($query) use ($tagIds): void {
             $query->whereIn('tags.id', $tagIds);
         });
     }
@@ -41,9 +41,9 @@ final class TransactionFilter extends QueryFilter
     {
         $lowerTerm = sprintf('%%%s%%', mb_strtolower($term));
 
-        $this->builder->where(function ($query) use ($lowerTerm) {
+        $this->builder->where(function ($query) use ($lowerTerm): void {
             $query->whereRaw('LOWER(description) LIKE ?', [$lowerTerm])
-                ->orWhereHas('category', function ($q) use ($lowerTerm) {
+                ->orWhereHas('category', function ($q) use ($lowerTerm): void {
                     $q->whereRaw('LOWER(name) LIKE ?', [$lowerTerm]);
                 });
         });

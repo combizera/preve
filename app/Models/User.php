@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Observers\UserObserver;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,8 +15,9 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 #[ObservedBy([UserObserver::class])]
 final class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -42,21 +42,33 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * @return HasMany<Transaction, $this>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return HasMany<Tag, $this>
+     */
     public function tags(): HasMany
     {
         return $this->hasMany(Tag::class);
     }
 
+    /**
+     * @return HasMany<Category, $this>
+     */
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
 
+    /**
+     * @return HasMany<RecurringTransaction, $this>
+     */
     public function recurringTransactions(): HasMany
     {
         return $this->hasMany(RecurringTransaction::class);
