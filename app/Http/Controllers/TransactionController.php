@@ -48,7 +48,7 @@ final class TransactionController extends Controller
 
         $this->toast::success('Transaction created successfully.');
 
-        return to_route('transactions.index');
+        return back();
     }
 
     /**
@@ -72,7 +72,7 @@ final class TransactionController extends Controller
 
         $this->toast::success('Transaction updated successfully.');
 
-        return to_route('transactions.index');
+        return back();
     }
 
     /**
@@ -86,6 +86,6 @@ final class TransactionController extends Controller
 
         $this->toast::success('Transaction deleted successfully.');
 
-        return to_route('transactions.index');
+        return back();
     }
 }
