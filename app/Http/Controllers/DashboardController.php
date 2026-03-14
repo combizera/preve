@@ -49,6 +49,11 @@ final class DashboardController extends Controller
 
         $daysInMonth = $chartDate->copy()->endOfMonth()->day;
 
+        $carryOver = (int) $user->transactions()
+            ->where('transaction_date', '<', $chartDate->copy()->startOfMonth()->toDateString())
+            ->selectRaw('COALESCE(SUM(CASE WHEN type = ? THEN amount ELSE -amount END), 0) as total', [TransactionType::INCOME->value])
+            ->value('total');
+
         $dailyNet = $user->transactions()
             ->inMonth($chartDate)
             ->select(
@@ -76,6 +81,7 @@ final class DashboardController extends Controller
             'monthlyIncome',
             'monthlyExpenses',
             'dailyBalances',
+            'carryOver',
             'categories',
             'tags',
         ));

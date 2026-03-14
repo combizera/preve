@@ -35,6 +35,7 @@ interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
   dailyBalances: DailyBalance[];
+  carryOver: number;
   categories: ICategory[];
   tags: ITag[];
 }
@@ -52,7 +53,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
   router.reload({
     data: { forecast_month: payload.month, forecast_year: payload.year },
-    only: ['forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances'],
+    only: ['forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances', 'carryOver'],
   });
 };
 </script>
@@ -82,6 +83,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
         :monthlyIncome="props.monthlyIncome"
         :monthlyExpenses="props.monthlyExpenses"
         :dailyBalances="props.dailyBalances"
+        :carryOver="props.carryOver"
         :selectedMonth="selectedMonth"
       />
 

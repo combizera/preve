@@ -22,6 +22,7 @@ interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
   dailyBalances: DailyBalance[];
+  carryOver: number;
   selectedMonth: { month: number; year: number } | null;
 }
 
@@ -55,9 +56,9 @@ const displayMonth = computed(() => {
 
 type ChartPoint = { day: number; balance: number };
 
-// Accumulated balance per day
+// Accumulated balance per day (starting from previous months' carry-over)
 const chartData = computed(() => {
-  let acc = 0;
+  let acc = props.carryOver;
   return props.dailyBalances.map((d) => {
     acc += d.amount;
     return { day: d.day, balance: acc };
