@@ -1,30 +1,38 @@
 {
     "generic": {
-        "login": "Acessar",
-        "register": "Registrar",
-        "submit": "Enviar",
-        "cancel": "Cancelar",
-        "loading": "Carregando...",
-        "email": "Email",
-        "password": "Senha",
-        "confirmPassword": "Confirmar Senha",
-        "name": "Nome",
-        "fullName": "Nome Completo"
+        "actions": {
+            "login": "Acessar",
+            "register": "Registrar",
+            "submit": "Enviar",
+            "cancel": "Cancelar"
+        },
+        "labels": {
+            "email": "Email",
+            "password": "Senha",
+            "confirmPassword": "Confirmar Senha",
+            "name": "Nome"
+        },
+        "placeholders": {
+            "email": "email{'@'}exemplo.com",
+            "fullName": "Nome Completo"
+        },
+        "status": {
+            "loading": "Carregando..."
+        }
     },
-    "messages": {
-        "emailPlaceholder": "email{'@'}exemplo.com"
-    },
-    "login": {
-        "title": "Faça login na sua conta",
-        "description": "Digite seu email e senha abaixo para acessar",
-        "forgotPassword": "Esqueceu sua senha?",
-        "rememberMe": "Lembrar-me",
-        "noAccount": "Não tem uma conta?"
-    },
-    "register": {
-        "title": "Crie uma conta",
-        "description": "Entre seus detalhes abaixo para criar sua conta",
-        "haveAccount": "Já tem uma conta?",
-        "buttonText": "Criar uma conta"
+    "auth": {
+        "login": {
+            "title": "Faça login na sua conta",
+            "description": "Digite seu email e senha abaixo para acessar",
+            "forgotPassword": "Esqueceu sua senha?",
+            "rememberMe": "Lembrar-me",
+            "noAccount": "Não tem uma conta?"
+        },
+        "register": {
+            "title": "Crie uma conta",
+            "description": "Entre seus detalhes abaixo para criar sua conta",
+            "haveAccount": "Já tem uma conta?",
+            "buttonText": "Criar uma conta"
+        }
     }
 }

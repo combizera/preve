@@ -26,8 +26,8 @@ defineProps<{
 
 <template>
   <AuthBase
-    :title="t('login.title')"
-    :description="t('login.description')"
+    :title="t('auth.login.title')"
+    :description="t('auth.login.description')"
   >
     <Head title="Log in" />
 
@@ -47,7 +47,7 @@ defineProps<{
       <div class="grid gap-6">
         <div class="grid gap-2">
           <Label for="email">
-            {{ t('generic.email') }}
+            {{ t('generic.labels.email') }}
           </Label>
           <Input
             id="email"
@@ -57,7 +57,7 @@ defineProps<{
             autofocus
             :tabindex="1"
             autocomplete="email"
-            :placeholder="t('messages.emailPlaceholder')"
+            :placeholder="t('generic.placeholders.email')"
           />
           <InputError :message="errors.email" />
         </div>
@@ -65,7 +65,7 @@ defineProps<{
         <div class="grid gap-2">
           <div class="flex items-center justify-between">
             <Label for="password">
-              {{ t('generic.password') }}
+              {{ t('generic.labels.password') }}
             </Label>
             <TextLink
               v-if="canResetPassword"
@@ -73,7 +73,7 @@ defineProps<{
               class="text-sm"
               :tabindex="5"
             >
-              {{ t('login.forgotPassword') }}
+              {{ t('auth.login.forgotPassword') }}
             </TextLink>
           </div>
           <Input
@@ -91,7 +91,7 @@ defineProps<{
         <div class="flex items-center justify-between">
           <Label for="remember" class="flex items-center space-x-3">
             <Checkbox id="remember" name="remember" :tabindex="3" />
-            <span>{{ t('login.rememberMe') }}</span>
+            <span>{{ t('auth.login.rememberMe') }}</span>
           </Label>
         </div>
 
@@ -103,7 +103,7 @@ defineProps<{
           data-test="login-button"
         >
           <Spinner v-if="processing" />
-          {{ t('generic.login')}}
+          {{ t('generic.actions.login') }}
         </Button>
       </div>
 
@@ -111,8 +111,8 @@ defineProps<{
         class="text-center text-sm text-muted-foreground"
         v-if="canRegister"
       >
-        {{ t('login.noAccount')}}
-        <TextLink :href="register()" :tabindex="5">{{ t('generic.register') }}</TextLink>
+        {{ t('auth.login.noAccount') }}
+        <TextLink :href="register()" :tabindex="5">{{ t('generic.actions.register') }}</TextLink>
       </div>
     </Form>
   </AuthBase>

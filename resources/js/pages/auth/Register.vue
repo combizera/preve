@@ -18,8 +18,8 @@ const { t } = useI18n();
 
 <template>
   <AuthBase
-    :title="t('register.title')"
-    :description="t('register.description')"
+    :title="t('auth.register.title')"
+    :description="t('auth.register.description')"
   >
     <Head title="Register" />
 
@@ -32,7 +32,7 @@ const { t } = useI18n();
       <div class="grid gap-6">
         <div class="grid gap-2">
           <Label for="name">
-            {{ t('generic.name') }}
+            {{ t('generic.labels.name') }}
           </Label>
           <Input
             id="name"
@@ -42,13 +42,13 @@ const { t } = useI18n();
             :tabindex="1"
             autocomplete="name"
             name="name"
-            :placeholder="t('generic.fullName')"
+            :placeholder="t('generic.placeholders.fullName')"
           />
           <InputError :message="errors.name" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="email">{{ t('generic.email') }}</Label>
+          <Label for="email">{{ t('generic.labels.email') }}</Label>
           <Input
             id="email"
             type="email"
@@ -56,13 +56,13 @@ const { t } = useI18n();
             :tabindex="2"
             autocomplete="email"
             name="email"
-            :placeholder="t('messages.emailPlaceholder')"
+            :placeholder="t('generic.placeholders.email')"
           />
           <InputError :message="errors.email" />
         </div>
 
         <div class="grid gap-2">
-          <Label for="password">{{ t('generic.password') }}</Label>
+          <Label for="password">{{ t('generic.labels.password') }}</Label>
           <Input
             id="password"
             type="password"
@@ -76,7 +76,7 @@ const { t } = useI18n();
         </div>
 
         <div class="grid gap-2">
-          <Label for="password_confirmation">{{ t('generic.confirmPassword') }}</Label>
+          <Label for="password_confirmation">{{ t('generic.labels.confirmPassword') }}</Label>
           <Input
             id="password_confirmation"
             type="password"
@@ -97,17 +97,17 @@ const { t } = useI18n();
           data-test="register-user-button"
         >
           <Spinner v-if="processing" />
-          {{ t('register.buttonText') }}
+          {{ t('auth.register.buttonText') }}
         </Button>
       </div>
 
       <div class="text-center text-sm text-muted-foreground">
-        {{ t('register.haveAccount') }}
+        {{ t('auth.register.haveAccount') }}
         <TextLink
           :href="login()"
           class="underline underline-offset-4"
           :tabindex="6"
-        >{{ t('generic.login') }}</TextLink
+        >{{ t('generic.actions.login') }}</TextLink
         >
       </div>
     </Form>
