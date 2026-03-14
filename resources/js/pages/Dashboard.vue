@@ -27,11 +27,13 @@ interface Props {
   latestTransactions: ITransaction[];
   availableBalance: number;
   forecast: number;
+  monthlyIncome: number;
+  monthlyExpenses: number;
   categories: ICategory[];
   tags: ITag[];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const selectedMonth = ref<{ month: number; year: number } | null>(null);
 
@@ -70,7 +72,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <BalanceCards :availableBalance :forecast :selectedMonth="selectedMonth" />
 
       <!-- CHART -->
-      <ChartMonthly />
+      <ChartMonthly :monthlyIncome="props.monthlyIncome" :monthlyExpenses="props.monthlyExpenses" />
 
       <!-- LAST TRANSACTIONS -->
       <LastTransactionsTable :latestTransactions />

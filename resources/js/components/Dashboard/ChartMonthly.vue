@@ -6,46 +6,57 @@ import {
   ChartTooltip,
   componentToString,
 } from '@/components/ui/chart';
+import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
 import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { MONTHS } from '@/lib/calendar';
 import { CurveType } from '@unovis/ts';
 import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
 import { computed } from 'vue';
 
-const TODAY = 14;
+interface Props {
+  monthlyIncome: number;
+  monthlyExpenses: number;
+}
 
-// Mock: daily transactions for March 2026
+const props = defineProps<Props>();
+
+const now = new Date();
+const TODAY = now.getDate();
+const currentMonth = MONTHS[now.getMonth()];
+const currentYear = now.getFullYear();
+
+// Mock: daily transactions (chart data will come from backend next)
 const dailyTransactions = [
-  { day: 1, amount: -85000 },
-  { day: 2, amount: -120000 },
-  { day: 3, amount: -45000 },
+  { day: 1, amount: -150000 },
+  { day: 2, amount: -85000 },
+  { day: 3, amount: -32000 },
   { day: 4, amount: -18000 },
   { day: 5, amount: 450000 },
   { day: 6, amount: 0 },
-  { day: 7, amount: -32000 },
+  { day: 7, amount: -25000 },
   { day: 8, amount: -15000 },
   { day: 9, amount: 0 },
-  { day: 10, amount: -62000 },
-  { day: 11, amount: -28000 },
+  { day: 10, amount: -42000 },
+  { day: 11, amount: -8000 },
   { day: 12, amount: 0 },
-  { day: 13, amount: -35000 },
-  { day: 14, amount: -22000 },
+  { day: 13, amount: -22000 },
+  { day: 14, amount: -12000 },
   { day: 15, amount: 0 },
-  { day: 16, amount: 0 },
-  { day: 17, amount: -41000 },
+  { day: 16, amount: -18000 },
+  { day: 17, amount: -9000 },
   { day: 18, amount: 0 },
-  { day: 19, amount: -19000 },
-  { day: 20, amount: 350000 },
+  { day: 19, amount: -15000 },
+  { day: 20, amount: 120000 },
   { day: 21, amount: 0 },
-  { day: 22, amount: -55000 },
+  { day: 22, amount: -28000 },
   { day: 23, amount: 0 },
-  { day: 24, amount: -33000 },
+  { day: 24, amount: -19000 },
   { day: 25, amount: 0 },
-  { day: 26, amount: -27000 },
+  { day: 26, amount: -12000 },
   { day: 27, amount: 0 },
-  { day: 28, amount: -12000 },
+  { day: 28, amount: -8000 },
   { day: 29, amount: 0 },
-  { day: 30, amount: -15000 },
+  { day: 30, amount: -11000 },
   { day: 31, amount: 0 },
 ];
 
@@ -71,13 +82,6 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const totalIncome = computed(() =>
-  dailyTransactions.filter((d) => d.amount > 0).reduce((sum, d) => sum + d.amount, 0),
-);
-const totalExpense = computed(() =>
-  dailyTransactions.filter((d) => d.amount < 0).reduce((sum, d) => sum + Math.abs(d.amount), 0),
-);
-
 const x = (_d: ChartPoint, i: number) => i;
 
 // Actual: up to and including today
@@ -92,53 +96,42 @@ const formatDay = (i: number) => {
 };
 
 const formatCurrency = (d: number) => {
-  if (d === 0) return '0';
-  const formatted = formatCentsToDisplay(Math.abs(d) * 100);
-  return d < 0 ? `-R$ ${formatted}` : `R$ ${formatted}`;
+  if (d === 0) return 'R$ 0';
+  const abs = Math.abs(d);
+  const sign = d < 0 ? '-' : '';
+  if (abs >= 1000) return `${sign}R$ ${(abs / 1000).toFixed(0)}k`;
+  return `${sign}R$ ${abs.toFixed(0)}`;
 };
 </script>
 
 <template>
   <section class="double-border">
     <div class="flex flex-col border rounded-lg overflow-hidden">
-      <!-- Header -->
-      <div class="flex flex-col sm:flex-row">
-        <div class="flex flex-1 flex-col justify-center gap-1 px-6 py-4">
-          <h3 class="text-lg font-medium text-foreground">Daily Balance</h3>
-          <p class="text-sm text-muted-foreground">March 2026</p>
-        </div>
-        <div class="flex">
-          <div class="flex flex-1 flex-col justify-center gap-1 border-t sm:border-t-0 sm:border-l px-6 py-4">
-            <span class="text-sm font-medium text-muted-foreground">Income</span>
-            <span class="text-lg font-bold font-mono text-positive">
-              R$ {{ formatCentsToDisplay(totalIncome) }}
-            </span>
-          </div>
-          <div class="flex flex-1 flex-col justify-center gap-1 border-t border-l sm:border-t-0 px-6 py-4">
-            <span class="text-sm font-medium text-muted-foreground">Expenses</span>
-            <span class="text-lg font-bold font-mono text-destructive">
-              R$ {{ formatCentsToDisplay(totalExpense) }}
-            </span>
-          </div>
-        </div>
-      </div>
+      <ChartHeader
+        title="Daily Balance"
+        :description="`${currentMonth} ${currentYear}`"
+        :items="[
+          { label: 'Income', value: props.monthlyIncome, variant: 'positive' },
+          { label: 'Expenses', value: props.monthlyExpenses, variant: 'destructive' },
+        ]"
+      />
 
       <!-- Chart -->
       <ChartContainer :config="chartConfig" class="h-[300px] w-full border-t px-2 pt-4 pb-2" :cursor="true">
-        <VisXYContainer :data="chartData" :padding="{ top: 10 }">
+        <VisXYContainer :data="chartData" :padding="{ top: 20, bottom: 20 }">
           <!-- Actual: solid area + line -->
           <VisArea
             :x="x"
             :y="yActual"
             :opacity="0.08"
             :color="chartConfig.balance.color"
-            :curve-type="CurveType.Step"
+            :curve-type="CurveType.MonotoneX"
           />
           <VisLine
             :x="x"
             :y="yActual"
             :color="chartConfig.balance.color"
-            :curve-type="CurveType.Step"
+            :curve-type="CurveType.MonotoneX"
             :line-width="2"
           />
 
@@ -148,13 +141,13 @@ const formatCurrency = (d: number) => {
             :y="yForecast"
             :opacity="0.04"
             :color="chartConfig.forecast.color"
-            :curve-type="CurveType.Step"
+            :curve-type="CurveType.MonotoneX"
           />
           <VisLine
             :x="x"
             :y="yForecast"
             :color="chartConfig.forecast.color"
-            :curve-type="CurveType.Step"
+            :curve-type="CurveType.MonotoneX"
             :line-width="2"
             :line-dash-array="[6, 4]"
           />

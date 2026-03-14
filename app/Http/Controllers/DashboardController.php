@@ -36,6 +36,9 @@ final class DashboardController extends Controller
             $request->integer('forecast_year', $now->year),
         );
 
+        $monthlyIncome = (int) $user->transactions()->inMonth($now)->income()->sum('amount');
+        $monthlyExpenses = (int) $user->transactions()->inMonth($now)->expense()->sum('amount');
+
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
 
@@ -43,6 +46,8 @@ final class DashboardController extends Controller
             'latestTransactions',
             'availableBalance',
             'forecast',
+            'monthlyIncome',
+            'monthlyExpenses',
             'categories',
             'tags',
         ));
