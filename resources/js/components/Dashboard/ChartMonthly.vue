@@ -16,14 +16,19 @@ import { computed } from 'vue';
 interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
+  selectedMonth: { month: number; year: number } | null;
 }
 
 const props = defineProps<Props>();
 
 const now = new Date();
 const TODAY = now.getDate();
-const currentMonth = MONTHS[now.getMonth()];
-const currentYear = now.getFullYear();
+
+const displayMonth = computed(() => {
+  const month = props.selectedMonth?.month ?? now.getMonth() + 1;
+  const year = props.selectedMonth?.year ?? now.getFullYear();
+  return `${MONTHS[month - 1]} ${year}`;
+});
 
 // Mock: daily transactions (chart data will come from backend next)
 const dailyTransactions = [
@@ -109,7 +114,7 @@ const formatCurrency = (d: number) => {
     <div class="flex flex-col border rounded-lg overflow-hidden">
       <ChartHeader
         title="Daily Balance"
-        :description="`${currentMonth} ${currentYear}`"
+        :description="displayMonth"
         :items="[
           { label: 'Income', value: props.monthlyIncome, variant: 'positive' },
           { label: 'Expenses', value: props.monthlyExpenses, variant: 'destructive' },

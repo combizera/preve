@@ -36,8 +36,14 @@ final class DashboardController extends Controller
             $request->integer('forecast_year', $now->year),
         );
 
-        $monthlyIncome = (int) $user->transactions()->inMonth($now)->income()->sum('amount');
-        $monthlyExpenses = (int) $user->transactions()->inMonth($now)->expense()->sum('amount');
+        $chartDate = $now->copy()->setYear(
+            $request->integer('forecast_year', $now->year)
+        )->setMonth(
+            $request->integer('forecast_month', $now->month)
+        );
+
+        $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
+        $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();

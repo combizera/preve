@@ -46,7 +46,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
   router.reload({
     data: { forecast_month: payload.month, forecast_year: payload.year },
-    only: ['forecast'],
+    only: ['forecast', 'monthlyIncome', 'monthlyExpenses'],
   });
 };
 </script>
@@ -72,7 +72,11 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <BalanceCards :availableBalance :forecast :selectedMonth="selectedMonth" />
 
       <!-- CHART -->
-      <ChartMonthly :monthlyIncome="props.monthlyIncome" :monthlyExpenses="props.monthlyExpenses" />
+      <ChartMonthly
+        :monthlyIncome="props.monthlyIncome"
+        :monthlyExpenses="props.monthlyExpenses"
+        :selectedMonth="selectedMonth"
+      />
 
       <!-- LAST TRANSACTIONS -->
       <LastTransactionsTable :latestTransactions />
