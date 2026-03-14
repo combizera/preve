@@ -8,17 +8,19 @@ const props = withDefaults(
     payload?: Record<string, any>;
     config?: Record<string, any>;
     x?: number | Date;
-    labelFormatter?: (d: number | Date) => string;
+    monthName?: string;
   }>(),
   {
     payload: () => ({}),
     config: () => ({}),
+    monthName: '',
   },
 );
 
 const tooltipLabel = computed(() => {
-  if (props.labelFormatter && props.x !== undefined) {
-    return props.labelFormatter(props.x);
+  const day = props.payload?.day;
+  if (day && props.monthName) {
+    return `${props.monthName} ${day}`;
   }
   return '';
 });

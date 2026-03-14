@@ -169,13 +169,7 @@ const formatCurrency = (d: number) => {
             :color="chartConfig.balance.color"
             :template="
               componentToString(chartConfig, ChartMonthlyTooltip, {
-                labelFormatter: (i: number | Date) => {
-                  const idx = Math.round(Number(i));
-                  const data = chartData.value;
-                  if (!data || idx < 0 || idx >= data.length) return '';
-                  const point = data[idx];
-                  return point.day <= currentDay.value ? `Day ${point.day}` : `Day ${point.day} (forecast)`;
-                },
+                monthName: MONTHS[(props.selectedMonth?.month ?? now.getMonth() + 1) - 1],
               })
             "
           />
