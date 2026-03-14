@@ -6,7 +6,7 @@ import BalanceCards from '@/components/Dashboard/BalanceCards.vue';
 import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarStrip.vue';
 import LastTransactionsTable from '@/components/Dashboard/LastTransactionsTable.vue';
 import Heading from '@/components/Heading.vue';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
+import ChartMonthly from '@/components/Dashboard/ChartMonthly.vue';
 import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -69,12 +69,8 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <!-- CARDS -->
       <BalanceCards :availableBalance :forecast :selectedMonth="selectedMonth" />
 
-      <!-- PLACEHOLDER -->
-      <div
-        class="relative min-h-100 flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
-      >
-        <PlaceholderPattern />
-      </div>
+      <!-- CHART -->
+      <ChartMonthly />
 
       <!-- LAST TRANSACTIONS -->
       <LastTransactionsTable :latestTransactions />

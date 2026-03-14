@@ -4,112 +4,197 @@ import {
   ChartContainer,
   ChartCrosshair,
   ChartTooltip,
-  ChartTooltipContent,
   componentToString,
 } from '@/components/ui/chart';
+import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import { formatCentsToDisplay } from '@/lib/currency';
 import { CurveType } from '@unovis/ts';
 import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
+import { computed } from 'vue';
 
-const chartData = [
-  { month: 'Jan', income: 450000, expense: 320000 },
-  { month: 'Fev', income: 480000, expense: 350000 },
-  { month: 'Mar', income: 450000, expense: 410000 },
-  { month: 'Abr', income: 520000, expense: 380000 },
-  { month: 'Mai', income: 490000, expense: 420000 },
-  { month: 'Jun', income: 550000, expense: 370000 },
-  { month: 'Jul', income: 510000, expense: 390000 },
-  { month: 'Ago', income: 530000, expense: 450000 },
-  { month: 'Set', income: 480000, expense: 360000 },
-  { month: 'Out', income: 560000, expense: 400000 },
-  { month: 'Nov', income: 540000, expense: 430000 },
-  { month: 'Dez', income: 600000, expense: 380000 },
+const TODAY = 14;
+
+// Mock: daily transactions for March 2026
+const dailyTransactions = [
+  { day: 1, amount: -85000 },
+  { day: 2, amount: -120000 },
+  { day: 3, amount: -45000 },
+  { day: 4, amount: -18000 },
+  { day: 5, amount: 450000 },
+  { day: 6, amount: 0 },
+  { day: 7, amount: -32000 },
+  { day: 8, amount: -15000 },
+  { day: 9, amount: 0 },
+  { day: 10, amount: -62000 },
+  { day: 11, amount: -28000 },
+  { day: 12, amount: 0 },
+  { day: 13, amount: -35000 },
+  { day: 14, amount: -22000 },
+  { day: 15, amount: 0 },
+  { day: 16, amount: 0 },
+  { day: 17, amount: -41000 },
+  { day: 18, amount: 0 },
+  { day: 19, amount: -19000 },
+  { day: 20, amount: 350000 },
+  { day: 21, amount: 0 },
+  { day: 22, amount: -55000 },
+  { day: 23, amount: 0 },
+  { day: 24, amount: -33000 },
+  { day: 25, amount: 0 },
+  { day: 26, amount: -27000 },
+  { day: 27, amount: 0 },
+  { day: 28, amount: -12000 },
+  { day: 29, amount: 0 },
+  { day: 30, amount: -15000 },
+  { day: 31, amount: 0 },
 ];
 
-type DataPoint = (typeof chartData)[number];
+type ChartPoint = { day: number; balance: number };
+
+// Accumulated balance per day
+const chartData = computed(() => {
+  let acc = 0;
+  return dailyTransactions.map((d) => {
+    acc += d.amount;
+    return { day: d.day, balance: acc };
+  });
+});
 
 const chartConfig = {
-  income: {
-    label: 'Receitas',
-    color: 'var(--positive)',
+  balance: {
+    label: 'Balance',
+    color: 'var(--primary)',
   },
-  expense: {
-    label: 'Despesas',
-    color: 'var(--destructive)',
+  forecast: {
+    label: 'Forecast',
+    color: 'var(--primary)',
   },
 } satisfies ChartConfig;
 
-const x = (_d: DataPoint, i: number) => i;
-const y = [
-  (d: DataPoint) => d.income / 100,
-  (d: DataPoint) => d.expense / 100,
-];
+const totalIncome = computed(() =>
+  dailyTransactions.filter((d) => d.amount > 0).reduce((sum, d) => sum + d.amount, 0),
+);
+const totalExpense = computed(() =>
+  dailyTransactions.filter((d) => d.amount < 0).reduce((sum, d) => sum + Math.abs(d.amount), 0),
+);
 
-const colors = [chartConfig.income.color, chartConfig.expense.color];
+const x = (_d: ChartPoint, i: number) => i;
 
-const formatMonth = (i: number) => chartData[i]?.month ?? '';
+// Actual: up to and including today
+const yActual = (d: ChartPoint) => (d.day <= TODAY ? d.balance / 100 : undefined);
+
+// Forecast: from today onwards (shares today's point to connect)
+const yForecast = (d: ChartPoint) => (d.day >= TODAY ? d.balance / 100 : undefined);
+
+const formatDay = (i: number) => {
+  const point = chartData.value[i];
+  return point ? String(point.day) : '';
+};
 
 const formatCurrency = (d: number) => {
-  if (d === 0) return '';
-  return `R$ ${formatCentsToDisplay(d * 100)}`;
+  if (d === 0) return '0';
+  const formatted = formatCentsToDisplay(Math.abs(d) * 100);
+  return d < 0 ? `-R$ ${formatted}` : `R$ ${formatted}`;
 };
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 rounded-xl border p-4">
-    <div class="flex items-center justify-between px-2">
-      <div>
-        <h3 class="text-sm font-medium">Receitas vs Despesas</h3>
-        <p class="text-xs text-muted-foreground">Visão mensal do ano</p>
+  <section class="double-border">
+    <div class="flex flex-col border rounded-lg overflow-hidden">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row">
+        <div class="flex flex-1 flex-col justify-center gap-1 px-6 py-4">
+          <h3 class="text-lg font-medium text-foreground">Daily Balance</h3>
+          <p class="text-sm text-muted-foreground">March 2026</p>
+        </div>
+        <div class="flex">
+          <div class="flex flex-1 flex-col justify-center gap-1 border-t sm:border-t-0 sm:border-l px-6 py-4">
+            <span class="text-sm font-medium text-muted-foreground">Income</span>
+            <span class="text-lg font-bold font-mono text-positive">
+              R$ {{ formatCentsToDisplay(totalIncome) }}
+            </span>
+          </div>
+          <div class="flex flex-1 flex-col justify-center gap-1 border-t border-l sm:border-t-0 px-6 py-4">
+            <span class="text-sm font-medium text-muted-foreground">Expenses</span>
+            <span class="text-lg font-bold font-mono text-destructive">
+              R$ {{ formatCentsToDisplay(totalExpense) }}
+            </span>
+          </div>
+        </div>
       </div>
+
+      <!-- Chart -->
+      <ChartContainer :config="chartConfig" class="h-[300px] w-full border-t px-2 pt-4 pb-2" :cursor="true">
+        <VisXYContainer :data="chartData" :padding="{ top: 10 }">
+          <!-- Actual: solid area + line -->
+          <VisArea
+            :x="x"
+            :y="yActual"
+            :opacity="0.08"
+            :color="chartConfig.balance.color"
+            :curve-type="CurveType.Step"
+          />
+          <VisLine
+            :x="x"
+            :y="yActual"
+            :color="chartConfig.balance.color"
+            :curve-type="CurveType.Step"
+            :line-width="2"
+          />
+
+          <!-- Forecast: dashed line + subtle area -->
+          <VisArea
+            :x="x"
+            :y="yForecast"
+            :opacity="0.04"
+            :color="chartConfig.forecast.color"
+            :curve-type="CurveType.Step"
+          />
+          <VisLine
+            :x="x"
+            :y="yForecast"
+            :color="chartConfig.forecast.color"
+            :curve-type="CurveType.Step"
+            :line-width="2"
+            :line-dash-array="[6, 4]"
+          />
+
+          <!-- Axes -->
+          <VisAxis
+            type="x"
+            :x="x"
+            :tick-format="formatDay"
+            :tick-line="false"
+            :domain-line="false"
+            :grid-line="false"
+            :num-ticks="10"
+          />
+          <VisAxis
+            type="y"
+            :tick-format="formatCurrency"
+            :tick-line="false"
+            :domain-line="false"
+            :grid-line="true"
+          />
+
+          <!-- Tooltip -->
+          <ChartTooltip />
+          <ChartCrosshair
+            :color="chartConfig.balance.color"
+            :template="
+              componentToString(chartConfig, ChartMonthlyTooltip, {
+                labelFormatter: (i: number | Date) => {
+                  const idx = Math.round(Number(i));
+                  const data = chartData.value;
+                  if (!data || idx < 0 || idx >= data.length) return '';
+                  const point = data[idx];
+                  return point.day <= TODAY ? `Day ${point.day}` : `Day ${point.day} (forecast)`;
+                },
+              })
+            "
+          />
+        </VisXYContainer>
+      </ChartContainer>
     </div>
-
-    <ChartContainer :config="chartConfig" class="min-h-[300px] w-full" :cursor="true">
-      <VisXYContainer :data="chartData" :padding="{ top: 10 }">
-        <VisArea
-          :x="x"
-          :y="y"
-          :opacity="0.1"
-          :color="colors"
-          :curve-type="CurveType.MonotoneX"
-        />
-
-        <VisLine
-          :x="x"
-          :y="y"
-          :color="colors"
-          :curve-type="CurveType.MonotoneX"
-          :line-width="2"
-        />
-
-        <VisAxis
-          type="x"
-          :x="x"
-          :tick-format="formatMonth"
-          :tick-line="false"
-          :domain-line="false"
-          :grid-line="false"
-          :num-ticks="chartData.length"
-        />
-        <VisAxis
-          type="y"
-          :tick-format="formatCurrency"
-          :tick-line="false"
-          :domain-line="false"
-          :grid-line="true"
-        />
-
-        <ChartTooltip />
-        <ChartCrosshair
-          :color="colors"
-          :template="
-            componentToString(chartConfig, ChartTooltipContent, {
-              labelFormatter: (i: number | Date) => chartData[Number(i)]?.month ?? '',
-              indicator: 'line' as const,
-            })
-          "
-        />
-      </VisXYContainer>
-    </ChartContainer>
-  </div>
+  </section>
 </template>
