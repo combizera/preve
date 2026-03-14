@@ -17,7 +17,10 @@
             "clearFilters": "Limpar Filtros",
             "applyFilters": "Aplicar Filtros",
             "filtering": "Filtrando...",
-            "details": "Detalhes"
+            "details": "Detalhes",
+            "pause": "Pausar",
+            "resume": "Retomar",
+            "saveChanges": "Salvar alterações"
         },
         "labels": {
             "email": "Email",
@@ -32,7 +35,9 @@
             "allCategories": "Todas as categorias",
             "allTags": "Todas as tags",
             "startDate": "Data Início",
-            "endDate": "Data Fim"
+            "endDate": "Data Fim",
+            "endDateOptional": "Data Fim (Opcional)",
+            "inactive": "Inativo"
         },
         "sidebar": {
             "home": "Início",
@@ -53,14 +58,17 @@
             "selectTag": "Selecione uma tag",
             "selectTags": "Selecione tag(s)",
             "transactionDescription": "Digite a descrição da transação",
-            "additionalNotes": "Notas adicionais..."
+            "additionalNotes": "Notas adicionais...",
+            "recurringDescription": "ex: Assinatura Netflix, Aluguel, Salário...",
+            "selectFrequency": "Selecione a frequência"
         },
         "status": {
             "loading": "Carregando..."
         },
         "confirm": {
             "title": "Tem certeza absoluta?",
-            "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\"."
+            "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\".",
+            "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas."
         }
     },
     "models": {
@@ -136,6 +144,41 @@
             "title": "Filtrar Transações",
             "description": "Refine sua busca por período, categoria ou tags.",
             "dateRange": "Filtrar por período"
+        }
+    },
+    "recurring": {
+        "title": "Transações Recorrentes",
+        "description": "Gerencie suas transações recorrentes aqui.",
+        "empty": {
+            "title": "Nenhuma transação de {type} ainda",
+            "description": "Comece criando sua primeira {type} recorrente",
+            "button": "Criar {type}"
+        },
+        "create": {
+            "title": "Criar Transação Recorrente",
+            "description": "Preencha os detalhes abaixo para criar uma nova transação recorrente.",
+            "button": "Criar Recorrente"
+        },
+        "edit": {
+            "title": "Editar Transação Recorrente",
+            "description": "Faça alterações em {description}. Clique em salvar quando terminar."
+        },
+        "cards": {
+            "monthlyIncome": "Receita Mensal",
+            "monthlyExpense": "Despesa Mensal",
+            "monthlyBalance": "Saldo Mensal"
+        },
+        "form": {
+            "recurrenceSettings": "Configurações de Recorrência",
+            "frequency": "Frequência",
+            "monthly": "Mensal",
+            "yearly": "Anual",
+            "dayOfMonth": "Dia do Mês"
+        },
+        "details": {
+            "annualAmount": "Valor Anual",
+            "nextOccurrence": "Próxima Ocorrência",
+            "activePeriod": "Período Ativo"
         }
     }
 }

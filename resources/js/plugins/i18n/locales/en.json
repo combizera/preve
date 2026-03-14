@@ -17,7 +17,10 @@
             "clearFilters": "Clear Filters",
             "applyFilters": "Apply Filters",
             "filtering": "Filtering...",
-            "details": "Details"
+            "details": "Details",
+            "pause": "Pause",
+            "resume": "Resume",
+            "saveChanges": "Save changes"
         },
         "labels": {
             "email": "Email",
@@ -32,7 +35,9 @@
             "allCategories": "All categories",
             "allTags": "All tags",
             "startDate": "Start Date",
-            "endDate": "End Date"
+            "endDate": "End Date",
+            "endDateOptional": "End Date (Optional)",
+            "inactive": "Inactive"
         },
         "sidebar": {
             "home": "Home",
@@ -53,14 +58,17 @@
             "selectTag": "Select a tag",
             "selectTags": "Select tag(s)",
             "transactionDescription": "Enter transaction description",
-            "additionalNotes": "Additional notes..."
+            "additionalNotes": "Additional notes...",
+            "recurringDescription": "e.g., Netflix Subscription, Rent, Salary...",
+            "selectFrequency": "Select frequency"
         },
         "status": {
             "loading": "Loading..."
         },
         "confirm": {
             "title": "Are you absolutely sure?",
-            "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\"."
+            "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
+            "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected."
         }
     },
     "models": {
@@ -136,6 +144,41 @@
             "title": "Filter Transactions",
             "description": "Refine your search by date range, category, or tags.",
             "dateRange": "Filter by date range"
+        }
+    },
+    "recurring": {
+        "title": "Recurring Transactions",
+        "description": "Manage your recurring transactions here.",
+        "empty": {
+            "title": "No {type} transactions yet",
+            "description": "Start by creating your first recurring {type}",
+            "button": "Create {type}"
+        },
+        "create": {
+            "title": "Create Recurring Transaction",
+            "description": "Fill in the details below to create a new recurring transaction.",
+            "button": "Create Recurring"
+        },
+        "edit": {
+            "title": "Edit Recurring Transaction",
+            "description": "Make changes to {description}. Click save when you're done."
+        },
+        "cards": {
+            "monthlyIncome": "Monthly Income",
+            "monthlyExpense": "Monthly Expense",
+            "monthlyBalance": "Monthly Balance"
+        },
+        "form": {
+            "recurrenceSettings": "Recurrence Settings",
+            "frequency": "Frequency",
+            "monthly": "Monthly",
+            "yearly": "Yearly",
+            "dayOfMonth": "Day of Month"
+        },
+        "details": {
+            "annualAmount": "Annual Amount",
+            "nextOccurrence": "Next Occurrence",
+            "activePeriod": "Active Period"
         }
     }
 }

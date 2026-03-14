@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import FormRecurring from '@/components/Recurring/FormRecurring.vue';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { t } = useI18n();
 
 const rawAmount = ref(props.recurringTransaction.amount.toString());
 
@@ -71,10 +74,9 @@ const updateRecurring = () => {
     <form>
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
-          <DialogTitle>Edit Recurring Transaction</DialogTitle>
+          <DialogTitle>{{ t('recurring.edit.title') }}</DialogTitle>
           <DialogDescription>
-            Make changes to {{ recurringTransaction.description }}. Click save
-            when you're done.
+            {{ t('recurring.edit.description', { description: recurringTransaction.description }) }}
           </DialogDescription>
         </DialogHeader>
 
@@ -87,14 +89,14 @@ const updateRecurring = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> Cancel </Button>
+            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
           </DialogClose>
           <Button
             type="button"
             @click="updateRecurring"
             :disabled="form.processing"
           >
-            Save changes
+            {{ t('generic.actions.saveChanges') }}
           </Button>
         </DialogFooter>
       </DialogContent>

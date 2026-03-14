@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowDownLeft, ArrowUpRight, TrendingUp } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import RecurringCard from '@/components/Recurring/RecurringCard.vue';
 import { formatCentsToDisplay } from '@/lib/currency';
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const { t } = useI18n();
 
 /**
  * Check if there are any active recurring transactions
@@ -70,19 +73,19 @@ const balanceColor = computed<'positive' | 'destructive' | 'default'>(() => {
   >
     <RecurringCard
       :title="`R$ ${totalIncome}`"
-      description="Monthly Income"
+      :description="t('recurring.cards.monthlyIncome')"
       :icon="ArrowDownLeft"
     />
 
     <RecurringCard
       :title="`R$ ${totalExpense}`"
-      description="Monthly Expense"
+      :description="t('recurring.cards.monthlyExpense')"
       :icon="ArrowUpRight"
     />
 
     <RecurringCard
       :title="`R$ ${balance}`"
-      description="Monthly Balance"
+      :description="t('recurring.cards.monthlyBalance')"
       :icon="TrendingUp"
       :color="balanceColor"
     />

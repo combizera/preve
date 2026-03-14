@@ -2,6 +2,7 @@
 import type { InertiaForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -38,6 +39,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { t } = useI18n();
+
 const displayAmount = defineModel<string>('displayAmount', { required: true });
 
 const filteredCategories = computed(() => {
@@ -50,15 +53,15 @@ const filteredCategories = computed(() => {
 <template>
   <!-- Type -->
   <div class="grid gap-3">
-    <Label for="type"> Type </Label>
+    <Label for="type"> {{ t('models.transaction.type') }} </Label>
     <ToggleGroup v-model="form.type" class="w-full">
       <ToggleGroupItem :value="TRANSACTION_TYPE.EXPENSE" class="flex-1 gap-2">
         <ArrowUpRight :size="16" />
-        Expense
+        {{ t('models.transaction.expense') }}
       </ToggleGroupItem>
       <ToggleGroupItem :value="TRANSACTION_TYPE.INCOME" class="flex-1 gap-2">
         <ArrowDownLeft :size="16" />
-        Income
+        {{ t('models.transaction.income') }}
       </ToggleGroupItem>
     </ToggleGroup>
     <InputError :message="form.errors.type" />
@@ -67,10 +70,10 @@ const filteredCategories = computed(() => {
   <div class="grid grid-cols-3 gap-4">
     <!-- Name -->
     <div class="col-span-2 grid gap-3">
-      <Label for="description"> Name </Label>
+      <Label for="description"> {{ t('generic.labels.name') }} </Label>
       <Input
         id="description"
-        placeholder="e.g., Netflix Subscription, Rent, Salary..."
+        :placeholder="t('generic.placeholders.recurringDescription')"
         v-model="form.description"
       />
       <InputError :message="form.errors.description" />
@@ -78,7 +81,7 @@ const filteredCategories = computed(() => {
 
     <!-- Amount -->
     <div class="grid gap-3">
-      <Label for="amount"> Amount </Label>
+      <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
           <InputGroupText>R$</InputGroupText>
@@ -99,14 +102,14 @@ const filteredCategories = computed(() => {
   <!-- Category & Tag -->
   <div class="grid grid-cols-2 gap-4">
     <div class="grid gap-3">
-      <Label for="category"> Category </Label>
+      <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue placeholder="Select a category" />
+          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel> Category</SelectLabel>
+            <SelectLabel>{{ t('models.category.name') }}</SelectLabel>
             <SelectItem
               v-for="category in filteredCategories"
               :value="category.id"
@@ -121,15 +124,15 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> Tag (optional) </Label>
+      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
       <Select v-model="form.tag_id">
         <SelectTrigger class="w-full">
-          <SelectValue placeholder="Select a tag" />
+          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Tag</SelectLabel>
-            <SelectItem :value="null">None</SelectItem>
+            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
+            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
             <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
               {{ tag.name }}
             </SelectItem>
@@ -144,21 +147,21 @@ const filteredCategories = computed(() => {
   <hr class="mt-2" />
   <div class="grid gap-3">
     <Label class="text-sm font-semibold text-muted-foreground">
-      Recurrence Settings
+      {{ t('recurring.form.recurrenceSettings') }}
     </Label>
 
     <div class="grid grid-cols-2 gap-4">
       <div class="grid gap-3">
-        <Label for="frequency"> Frequency </Label>
+        <Label for="frequency"> {{ t('recurring.form.frequency') }} </Label>
         <Select v-model="form.frequency">
           <SelectTrigger class="w-full">
-            <SelectValue placeholder="Select frequency" />
+            <SelectValue :placeholder="t('generic.placeholders.selectFrequency')" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Frequency</SelectLabel>
-              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">Monthly</SelectItem>
-              <SelectItem :value="FREQUENCY_TYPE.YEARLY">Yearly</SelectItem>
+              <SelectLabel>{{ t('recurring.form.frequency') }}</SelectLabel>
+              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{ t('recurring.form.monthly') }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{ t('recurring.form.yearly') }}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -166,7 +169,7 @@ const filteredCategories = computed(() => {
       </div>
 
       <div class="grid gap-3">
-        <Label for="day_of_month"> Day of Month </Label>
+        <Label for="day_of_month"> {{ t('recurring.form.dayOfMonth') }} </Label>
         <Input
           id="day_of_month"
           type="number"
@@ -181,7 +184,7 @@ const filteredCategories = computed(() => {
 
     <div class="grid grid-cols-2 gap-4">
       <div class="grid gap-3">
-        <Label for="start_date"> Start Date </Label>
+        <Label for="start_date"> {{ t('generic.labels.startDate') }} </Label>
         <DatePicker
           id="start_date"
           v-model="form.start_date"
@@ -192,7 +195,7 @@ const filteredCategories = computed(() => {
 
       <div class="grid gap-3">
         <Label for="end_date" class="text-muted-foreground">
-          End Date (Optional)
+          {{ t('generic.labels.endDateOptional') }}
         </Label>
         <DatePicker
           id="end_date"
