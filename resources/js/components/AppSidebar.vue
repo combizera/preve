@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ArrowRightLeft, Github, Home, RefreshCw, Tags } from 'lucide-vue-next';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -21,41 +23,43 @@ import tags from '@/routes/tags';
 import transactions from '@/routes/transactions';
 import { type NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const { t } = useI18n();
+
+const mainNavItems = computed<NavItem[]>(() => [
   {
-    title: 'Home',
+    title: t('generic.sidebar.home'),
     href: dashboard(),
     icon: Home,
   },
   {
-    title: 'Transactions',
+    title: t('generic.sidebar.transactions'),
     href: transactions.index(),
     icon: ArrowRightLeft,
   },
   {
-    title: 'Recurring',
+    title: t('generic.sidebar.recurring'),
     href: recurring.index(),
     icon: RefreshCw,
   },
   {
-    title: 'Categories',
+    title: t('generic.sidebar.category'),
     href: categories.index(),
     icon: Tags,
   },
   {
-    title: 'Tags',
+    title: t('generic.sidebar.tags'),
     href: tags.index(),
     icon: Tags,
   }
-];
+]);
 
-const footerNavItems: NavItem[] = [
+const footerNavItems = computed<NavItem[]>(() => [
   {
     title: 'Github',
     href: 'https://github.com/combizera/preve',
     icon: Github,
   },
-];
+]);
 </script>
 
 <template>

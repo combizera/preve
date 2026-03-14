@@ -12,6 +12,16 @@
             "confirmPassword": "Confirmar Senha",
             "name": "Nome"
         },
+        "sidebar": {
+            "home": "Início",
+            "transactions": "Transações",
+            "recurring": "Recorrentes",
+            "category": "Categorias",
+            "tags": "Tags",
+            "profile": "Perfil",
+            "settings": "Configurações",
+            "logout": "Sair"
+        },
         "placeholders": {
             "email": "email{'@'}exemplo.com",
             "fullName": "Nome Completo"
