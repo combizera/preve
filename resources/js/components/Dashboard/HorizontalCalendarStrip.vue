@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { nextTick, ref } from 'vue';
 import { toast } from 'vue-sonner';
 
 import CardCalendar from '@/components/Dashboard/CardCalendar.vue';

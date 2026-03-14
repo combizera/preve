@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { formatCentsToDisplay } from '@/lib/currency';
 import { cn } from '@/lib/utils';
-import { computed } from 'vue';
 
 const props = withDefaults(
   defineProps<{

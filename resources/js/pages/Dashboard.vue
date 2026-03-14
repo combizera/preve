@@ -3,10 +3,10 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 import BalanceCards from '@/components/Dashboard/BalanceCards.vue';
+import ChartMonthly from '@/components/Dashboard/ChartMonthly.vue';
 import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarStrip.vue';
 import LastTransactionsTable from '@/components/Dashboard/LastTransactionsTable.vue';
 import Heading from '@/components/Heading.vue';
-import ChartMonthly from '@/components/Dashboard/ChartMonthly.vue';
 import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -35,7 +35,7 @@ interface Props {
   tags: ITag[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const selectedMonth = ref<{ month: number; year: number } | null>(null);
 

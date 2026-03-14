@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { CurveType } from '@unovis/ts';
+import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
+import { computed } from 'vue';
+
+import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
+import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import type { ChartConfig } from '@/components/ui/chart';
 import {
   ChartContainer,
@@ -6,13 +12,9 @@ import {
   ChartTooltip,
   componentToString,
 } from '@/components/ui/chart';
-import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
-import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import { MONTHS } from '@/lib/calendar';
 import type { IDailyBalance } from '@/types/models/transaction';
-import { CurveType } from '@unovis/ts';
-import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
-import { computed } from 'vue';
+
 
 interface Props {
   monthlyIncome: number;
