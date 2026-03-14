@@ -1,6 +1,30 @@
 {
-    "header": {
+    "generic": {
         "login": "Acessar",
-        "register": "Registrar"
+        "register": "Registrar",
+        "submit": "Enviar",
+        "cancel": "Cancelar",
+        "loading": "Carregando...",
+        "email": "Email",
+        "password": "Senha",
+        "confirmPassword": "Confirmar Senha",
+        "name": "Nome",
+        "fullName": "Nome Completo"
+    },
+    "messages": {
+        "emailPlaceholder": "email{'@'}exemplo.com"
+    },
+    "login": {
+        "title": "Faça login na sua conta",
+        "description": "Digite seu email e senha abaixo para acessar",
+        "forgotPassword": "Esqueceu sua senha?",
+        "rememberMe": "Lembrar-me",
+        "noAccount": "Não tem uma conta?"
+    },
+    "register": {
+        "title": "Crie uma conta",
+        "description": "Entre seus detalhes abaixo para criar sua conta",
+        "haveAccount": "Já tem uma conta?",
+        "buttonText": "Criar uma conta"
     }
 }
