@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionType;
 use App\Services\ForecastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,6 +47,25 @@ final class DashboardController extends Controller
         $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
         $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
 
+        $daysInMonth = $chartDate->copy()->endOfMonth()->day;
+
+        $dailyNet = $user->transactions()
+            ->inMonth($chartDate)
+            ->select(
+                DB::raw('EXTRACT(DAY FROM transaction_date)::integer as day'),
+                DB::raw('SUM(CASE WHEN type = \'' . TransactionType::INCOME->value . '\' THEN amount ELSE -amount END) as net'),
+            )
+            ->groupBy(DB::raw('EXTRACT(DAY FROM transaction_date)'))
+            ->pluck('net', 'day');
+
+        $dailyBalances = [];
+        for ($d = 1; $d <= $daysInMonth; $d++) {
+            $dailyBalances[] = [
+                'day'    => $d,
+                'amount' => (int) ($dailyNet[$d] ?? 0),
+            ];
+        }
+
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
 
@@ -54,6 +75,7 @@ final class DashboardController extends Controller
             'forecast',
             'monthlyIncome',
             'monthlyExpenses',
+            'dailyBalances',
             'categories',
             'tags',
         ));

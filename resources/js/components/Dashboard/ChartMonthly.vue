@@ -13,16 +13,38 @@ import { CurveType } from '@unovis/ts';
 import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
 import { computed } from 'vue';
 
+interface DailyBalance {
+  day: number;
+  amount: number;
+}
+
 interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
+  dailyBalances: DailyBalance[];
   selectedMonth: { month: number; year: number } | null;
 }
 
 const props = defineProps<Props>();
 
 const now = new Date();
-const TODAY = now.getDate();
+
+const currentDay = computed(() => {
+  const selectedMonth = props.selectedMonth;
+  if (!selectedMonth) return now.getDate();
+
+  const isCurrentMonth =
+    selectedMonth.month === now.getMonth() + 1 && selectedMonth.year === now.getFullYear();
+  if (isCurrentMonth) return now.getDate();
+
+  const isPastMonth =
+    selectedMonth.year < now.getFullYear() ||
+    (selectedMonth.year === now.getFullYear() && selectedMonth.month < now.getMonth() + 1);
+
+  // Past month: all actual (day 32 means all days <= 31 are actual)
+  // Future month: all forecast (day 0 means no days are actual)
+  return isPastMonth ? 32 : 0;
+});
 
 const displayMonth = computed(() => {
   const month = props.selectedMonth?.month ?? now.getMonth() + 1;
@@ -30,47 +52,13 @@ const displayMonth = computed(() => {
   return `${MONTHS[month - 1]} ${year}`;
 });
 
-// Mock: daily transactions (chart data will come from backend next)
-const dailyTransactions = [
-  { day: 1, amount: -150000 },
-  { day: 2, amount: -85000 },
-  { day: 3, amount: -32000 },
-  { day: 4, amount: -18000 },
-  { day: 5, amount: 450000 },
-  { day: 6, amount: 0 },
-  { day: 7, amount: -25000 },
-  { day: 8, amount: -15000 },
-  { day: 9, amount: 0 },
-  { day: 10, amount: -42000 },
-  { day: 11, amount: -8000 },
-  { day: 12, amount: 0 },
-  { day: 13, amount: -22000 },
-  { day: 14, amount: -12000 },
-  { day: 15, amount: 0 },
-  { day: 16, amount: -18000 },
-  { day: 17, amount: -9000 },
-  { day: 18, amount: 0 },
-  { day: 19, amount: -15000 },
-  { day: 20, amount: 120000 },
-  { day: 21, amount: 0 },
-  { day: 22, amount: -28000 },
-  { day: 23, amount: 0 },
-  { day: 24, amount: -19000 },
-  { day: 25, amount: 0 },
-  { day: 26, amount: -12000 },
-  { day: 27, amount: 0 },
-  { day: 28, amount: -8000 },
-  { day: 29, amount: 0 },
-  { day: 30, amount: -11000 },
-  { day: 31, amount: 0 },
-];
 
 type ChartPoint = { day: number; balance: number };
 
 // Accumulated balance per day
 const chartData = computed(() => {
   let acc = 0;
-  return dailyTransactions.map((d) => {
+  return props.dailyBalances.map((d) => {
     acc += d.amount;
     return { day: d.day, balance: acc };
   });
@@ -90,10 +78,10 @@ const chartConfig = {
 const x = (_d: ChartPoint, i: number) => i;
 
 // Actual: up to and including today
-const yActual = (d: ChartPoint) => (d.day <= TODAY ? d.balance / 100 : undefined);
+const yActual = (d: ChartPoint) => (d.day <= currentDay.value ? d.balance / 100 : undefined);
 
 // Forecast: from today onwards (shares today's point to connect)
-const yForecast = (d: ChartPoint) => (d.day >= TODAY ? d.balance / 100 : undefined);
+const yForecast = (d: ChartPoint) => (d.day >= currentDay.value ? d.balance / 100 : undefined);
 
 const formatDay = (i: number) => {
   const point = chartData.value[i];
@@ -186,7 +174,7 @@ const formatCurrency = (d: number) => {
                   const data = chartData.value;
                   if (!data || idx < 0 || idx >= data.length) return '';
                   const point = data[idx];
-                  return point.day <= TODAY ? `Day ${point.day}` : `Day ${point.day} (forecast)`;
+                  return point.day <= currentDay.value ? `Day ${point.day}` : `Day ${point.day} (forecast)`;
                 },
               })
             "

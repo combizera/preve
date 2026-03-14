@@ -30,7 +30,7 @@ const items = computed(() => {
       if (!itemConfig) return null;
       const numValue = typeof value === 'number' ? value : 0;
       const isNegative = numValue < 0;
-      const formatted = `R$ ${formatCentsToDisplay(Math.abs(numValue) * 100)}`;
+      const formatted = `R$ ${formatCentsToDisplay(Math.abs(numValue))}`;
       const display = isNegative ? `-${formatted}` : formatted;
       const dotColor = isNegative ? 'var(--destructive)' : 'var(--positive)';
       return { key, display, label: itemConfig.label, dotColor };

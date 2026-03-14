@@ -23,12 +23,18 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
+interface DailyBalance {
+  day: number;
+  amount: number;
+}
+
 interface Props {
   latestTransactions: ITransaction[];
   availableBalance: number;
   forecast: number;
   monthlyIncome: number;
   monthlyExpenses: number;
+  dailyBalances: DailyBalance[];
   categories: ICategory[];
   tags: ITag[];
 }
@@ -46,7 +52,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
   router.reload({
     data: { forecast_month: payload.month, forecast_year: payload.year },
-    only: ['forecast', 'monthlyIncome', 'monthlyExpenses'],
+    only: ['forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances'],
   });
 };
 </script>
@@ -75,6 +81,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <ChartMonthly
         :monthlyIncome="props.monthlyIncome"
         :monthlyExpenses="props.monthlyExpenses"
+        :dailyBalances="props.dailyBalances"
         :selectedMonth="selectedMonth"
       />
 
