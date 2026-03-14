@@ -68,7 +68,10 @@
             "selectColor": "Selecione uma cor",
             "selectIcon": "Selecione um ícone",
             "categoryName": "Nome da Categoria",
-            "categoryDescription": "Esta é uma categoria para..."
+            "categoryDescription": "Esta é uma categoria para...",
+            "tagName": "Nome da Tag",
+            "tagDescription": "Esta é uma tag para...",
+            "describeTag": "Descreva sua tag"
         },
         "status": {
             "loading": "Carregando..."
@@ -77,7 +80,8 @@
             "title": "Tem certeza absoluta?",
             "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\".",
             "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas.",
-            "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\"."
+            "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\".",
+            "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\"."
         }
     },
     "models": {
@@ -206,6 +210,19 @@
         },
         "edit": {
             "title": "Editar Categoria",
+            "description": "Faça alterações em {name}. Clique em salvar quando terminar."
+        }
+    },
+    "tags": {
+        "title": "Tags",
+        "description": "Gerencie suas tags aqui.",
+        "newTag": "Nova Tag",
+        "empty": {
+            "title": "Nenhuma tag ainda",
+            "description": "Comece criando sua primeira tag"
+        },
+        "edit": {
+            "title": "Editar Tag",
             "description": "Faça alterações em {name}. Clique em salvar quando terminar."
         }
     }

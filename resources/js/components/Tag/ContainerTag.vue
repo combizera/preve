@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { TagsIcon } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 import EmptyState from '@/components/EmptyState.vue';
 import { DataTable, DataTablePaginator } from '@/components/ui/data-table';
-import { columns } from '@/tables/tags';
+import { createColumns } from '@/tables/tags';
 import type { IPaginate } from '@/types/models/paginated';
 import type { ITag } from '@/types/models/tag';
 
@@ -15,14 +16,18 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { t } = useI18n();
+
+const columns = createColumns(t);
 </script>
 
 <template>
   <div class="mt-4">
     <EmptyState
       v-if="tags.data.length === 0 && tags.current_page === 1"
-      title="No tags yet"
-      description="Start by creating your first tag"
+      :title="t('tags.empty.title')"
+      :description="t('tags.empty.description')"
       :showButton="false"
     >
       <template #icon>

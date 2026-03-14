@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { update } from '@/routes/tags';
 import { useTagStore } from '@/stores/tag.store';
+
+const { t } = useI18n();
 
 const tagStore = useTagStore();
 
@@ -63,31 +66,30 @@ function handleOpenUpdate(open: boolean) {
     <form>
       <DialogContent class="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Edit Tag</DialogTitle>
+          <DialogTitle>{{ t('tags.edit.title') }}</DialogTitle>
           <DialogDescription>
-            Make changes to {{ tagStore.tag?.name }}. Click save when you're
-            done.
+            {{ t('tags.edit.description', { name: tagStore.tag?.name }) }}
           </DialogDescription>
         </DialogHeader>
 
         <div class="grid gap-4">
           <div class="grid gap-3">
-            <Label for="name">Name</Label>
+            <Label for="name">{{ t('generic.labels.name') }}</Label>
             <Input
               id="name"
               name="name"
-              placeholder="Tag Name"
+              :placeholder="t('generic.placeholders.tagName')"
               v-model="form.name"
             />
             <InputError :message="form.errors.name" />
           </div>
 
           <div class="grid gap-3">
-            <Label for="description">Description</Label>
+            <Label for="description">{{ t('models.transaction.description') }}</Label>
             <Input
               id="description"
               name="description"
-              placeholder="This is a tag for..."
+              :placeholder="t('generic.placeholders.tagDescription')"
               v-model="form.description"
             />
             <InputError :message="form.errors.description" />
@@ -96,10 +98,10 @@ function handleOpenUpdate(open: boolean) {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{{ t('generic.actions.cancel') }}</Button>
           </DialogClose>
           <Button @click="handleUpdateTag" :disabled="form.processing">
-            Save changes
+            {{ t('generic.actions.saveChanges') }}
           </Button>
         </DialogFooter>
       </DialogContent>

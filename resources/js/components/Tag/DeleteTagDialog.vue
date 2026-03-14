@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import {
   AlertDialog,
@@ -13,6 +14,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { destroy } from '@/routes/tags';
 import { useTagStore } from '@/stores/tag.store';
+
+const { t } = useI18n();
 
 const tagStore = useTagStore()
 
@@ -33,18 +36,17 @@ function handleDeleteTag() {
   <AlertDialog v-model:open="tagStore.showDeleteDialog">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete
-          the tag "{{ tagStore.tag?.name }}".
+          {{ t('generic.confirm.deleteTag', { name: tagStore.tag?.name }) }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>
-          Cancel
+          {{ t('generic.actions.cancel') }}
         </AlertDialogCancel>
         <AlertDialogAction variant="destructive" @click="handleDeleteTag" :disabled="form.processing">
-          Confirm
+          {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

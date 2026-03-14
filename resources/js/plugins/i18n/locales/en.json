@@ -68,7 +68,10 @@
             "selectColor": "Select a color",
             "selectIcon": "Select an icon",
             "categoryName": "Category Name",
-            "categoryDescription": "This is a category for..."
+            "categoryDescription": "This is a category for...",
+            "tagName": "Tag Name",
+            "tagDescription": "This is a tag for...",
+            "describeTag": "Describe your tag"
         },
         "status": {
             "loading": "Loading..."
@@ -77,7 +80,8 @@
             "title": "Are you absolutely sure?",
             "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
             "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected.",
-            "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\"."
+            "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\".",
+            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\"."
         }
     },
     "models": {
@@ -206,6 +210,19 @@
         },
         "edit": {
             "title": "Edit Category",
+            "description": "Make changes to {name}. Click save when you're done."
+        }
+    },
+    "tags": {
+        "title": "Tags",
+        "description": "Manage your tags here.",
+        "newTag": "New Tag",
+        "empty": {
+            "title": "No tags yet",
+            "description": "Start by creating your first tag"
+        },
+        "edit": {
+            "title": "Edit Tag",
             "description": "Make changes to {name}. Click save when you're done."
         }
     }

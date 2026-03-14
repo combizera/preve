@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
 import ContainerTag from '@/components/Tag/ContainerTag.vue';
@@ -17,24 +19,26 @@ interface Props {
 
 defineProps<Props>()
 
-const breadcrumbs: BreadcrumbItem[] = [
+const { t } = useI18n();
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
-    title: 'Dashboard',
+    title: t('dashboard.title'),
     href: dashboard().url,
   },
   {
-    title: 'Tag',
+    title: t('tags.title'),
     href: tagRoutes.index().url,
   },
-];
+]);
 </script>
 
 <template>
-  <Head title="Tag" />
+  <Head :title="t('tags.title')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
-    <Heading title="Tag" description="Manage your tags here." />
+    <Heading :title="t('tags.title')" :description="t('tags.description')" />
 
     <!-- CREATE -->
     <CreateTag />
