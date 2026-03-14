@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import { today, getLocalTimeZone } from '@internationalized/date';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import FormTransaction from '@/components/Transaction/FormTransaction.vue';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,7 @@ interface Props {
 
 defineProps<Props>();
 
+const { t } = useI18n();
 const transactionStore = useTransactionStore();
 
 const { showFormDialog } = storeToRefs(transactionStore);
@@ -75,9 +77,9 @@ const createTransaction = () => {
     <form>
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
-          <DialogTitle>Create Transaction</DialogTitle>
+          <DialogTitle>{{ t('transactions.create.title') }}</DialogTitle>
           <DialogDescription>
-            Fill in the details below to create a new transaction.
+            {{ t('transactions.create.description') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -90,14 +92,14 @@ const createTransaction = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> Cancel </Button>
+            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
           </DialogClose>
           <Button
             type="button"
             @click="createTransaction"
             :disabled="form.processing"
           >
-            Create Transaction
+            {{ t('transactions.create.title') }}
           </Button>
         </DialogFooter>
       </DialogContent>

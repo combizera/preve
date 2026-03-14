@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import {
   AlertDialog,
@@ -20,6 +21,7 @@ const props = defineProps<{
   transaction: ITransaction | null;
 }>();
 
+const { t } = useI18n();
 const form = useForm({});
 
 const deleteTransaction = () => {
@@ -38,20 +40,19 @@ const deleteTransaction = () => {
   <AlertDialog v-model:open="open">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete the
-          transaction "{{ transaction?.description }}".
+          {{ t('generic.confirm.deleteTransaction', { description: transaction?.description }) }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel> Cancel </AlertDialogCancel>
+        <AlertDialogCancel> {{ t('generic.actions.cancel') }} </AlertDialogCancel>
         <AlertDialogAction
           variant="destructive"
           @click="deleteTransaction"
           :disabled="form.processing"
         >
-          Confirm
+          {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

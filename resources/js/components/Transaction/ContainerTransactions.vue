@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import EmptyState from '@/components/EmptyState.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
@@ -13,6 +14,7 @@ const props = defineProps<{
   filters: ITransactionFilters;
 }>();
 
+const { t } = useI18n();
 const transactionStore = useTransactionStore();
 
 const groupedTransactions = computed(() => {
@@ -49,9 +51,9 @@ const hasTransactions = computed(() => props.transactions.length > 0);
     <!-- Empty State -->
     <EmptyState
       v-if="!hasTransactions"
-      title="No transactions yet"
-      description="Start by creating your first transaction"
-      button-text="Create Transaction"
+      :title="t('transactions.empty.title')"
+      :description="t('transactions.empty.description')"
+      :button-text="t('transactions.empty.button')"
       @action="transactionStore.openCreateDialog"
     />
 

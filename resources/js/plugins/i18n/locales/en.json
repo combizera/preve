@@ -9,13 +9,29 @@
             "update": "Update",
             "delete": "Delete",
             "today": "Today",
-            "viewAll": "View All"
+            "viewAll": "View All",
+            "confirm": "Confirm",
+            "duplicate": "Duplicate",
+            "edit": "Edit",
+            "filter": "Filter",
+            "clearFilters": "Clear Filters",
+            "applyFilters": "Apply Filters",
+            "filtering": "Filtering..."
         },
         "labels": {
             "email": "Email",
             "password": "Password",
             "confirmPassword": "Confirm Password",
-            "name": "Name"
+            "name": "Name",
+            "notes": "Notes",
+            "notesOptional": "Notes (Optional)",
+            "search": "Search",
+            "none": "None",
+            "allTypes": "All types",
+            "allCategories": "All categories",
+            "allTags": "All tags",
+            "startDate": "Start Date",
+            "endDate": "End Date"
         },
         "sidebar": {
             "home": "Home",
@@ -29,10 +45,21 @@
         },
         "placeholders": {
             "email": "email{'@'}example.com",
-            "fullName": "Full Name"
+            "fullName": "Full Name",
+            "searchByDescription": "Search by description...",
+            "selectCategory": "Select a category",
+            "selectCategories": "Select category(ies)",
+            "selectTag": "Select a tag",
+            "selectTags": "Select tag(s)",
+            "transactionDescription": "Enter transaction description",
+            "additionalNotes": "Additional notes..."
         },
         "status": {
             "loading": "Loading..."
+        },
+        "confirm": {
+            "title": "Are you absolutely sure?",
+            "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\"."
         }
     },
     "models": {
@@ -42,13 +69,15 @@
             "date": "Date",
             "type": "Type",
             "income": "Income",
-            "expense": "Expense"
+            "expense": "Expense",
+            "notes": "Notes"
         },
         "category": {
             "name": "Category"
         },
         "tag": {
-            "name": "Tag"
+            "name": "Tag",
+            "optional": "Tag (optional)"
         }
     },
     "auth": {
@@ -79,6 +108,33 @@
             "year": "Year",
             "earliestYear": "You have reached the earliest available year.",
             "latestYear": "You have reached the latest available year."
+        }
+    },
+    "transactions": {
+        "title": "Transactions",
+        "description": "Manage your transactions here.",
+        "empty": {
+            "title": "No transactions yet",
+            "description": "Start by creating your first transaction",
+            "button": "Create Transaction"
+        },
+        "recurring": "Recurring",
+        "create": {
+            "title": "Create Transaction",
+            "description": "Fill in the details below to create a new transaction."
+        },
+        "edit": {
+            "title": "Edit Transaction",
+            "description": "Fill in the details below to Edit a transaction."
+        },
+        "duplicate": {
+            "title": "Duplicate Transaction",
+            "description": "Fill in the details below to Duplicate a transaction."
+        },
+        "filter": {
+            "title": "Filter Transactions",
+            "description": "Refine your search by date range, category, or tags.",
+            "dateRange": "Filter by date range"
         }
     }
 }

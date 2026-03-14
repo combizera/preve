@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Filter } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { t } = useI18n();
+
 const defaultFilters: ITransactionFilters = {
   search: '',
   type: '',
@@ -56,7 +59,7 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
     <SheetTrigger as-child>
       <Button variant="outline" class="relative">
         <Filter class="mr-2 h-4 w-4" />
-        Filters
+        {{ t('generic.actions.filter') }}
         <Badge
           v-if="activeCount > 0"
           variant="secondary"
@@ -70,9 +73,9 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
       class="flex h-full w-screen translate-x-1 flex-col bg-background sm:max-w-2xl sm:translate-x-0"
     >
       <SheetHeader class="border-b border-border px-6 py-4">
-        <SheetTitle>Filter Transactions</SheetTitle>
+        <SheetTitle>{{ t('transactions.filter.title') }}</SheetTitle>
         <SheetDescription>
-          Refine your search by date range, category, or tags.
+          {{ t('transactions.filter.description') }}
         </SheetDescription>
       </SheetHeader>
 
@@ -80,11 +83,11 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
         <div class="space-y-6 p-6">
           <section data-name="search-filter">
             <div class="space-y-2">
-              <Label for="search">Search</Label>
+              <Label for="search">{{ t('generic.labels.search') }}</Label>
               <Input
                 id="search"
                 v-model="form.search"
-                placeholder="Search by description..."
+                :placeholder="t('generic.placeholders.searchByDescription')"
               />
             </div>
           </section>
@@ -92,27 +95,27 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
           <section data-name="type-category-tag-filter">
             <div class="grid grid-cols-3 gap-4">
               <div class="space-y-2">
-                <Label for="type">Type</Label>
+                <Label for="type">{{ t('models.transaction.type') }}</Label>
                 <Select v-model="form.type">
                   <SelectTrigger id="type" class="w-full">
-                    <SelectValue placeholder="All types" />
+                    <SelectValue :placeholder="t('generic.labels.allTypes')" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All types</SelectItem>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
+                    <SelectItem value="all">{{ t('generic.labels.allTypes') }}</SelectItem>
+                    <SelectItem value="income">{{ t('models.transaction.income') }}</SelectItem>
+                    <SelectItem value="expense">{{ t('models.transaction.expense') }}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div class="space-y-2">
-                <Label for="category">Category</Label>
+                <Label for="category">{{ t('models.category.name') }}</Label>
                 <Select v-model="form.categories" multiple>
                   <SelectTrigger id="category" class="w-full">
-                    <SelectValue placeholder="Select category(ies)" />
+                    <SelectValue :placeholder="t('generic.placeholders.selectCategories')" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All categories</SelectItem>
+                    <SelectItem value="all">{{ t('generic.labels.allCategories') }}</SelectItem>
                     <SelectItem
                       v-for="category in categories"
                       :key="category.id"
@@ -125,13 +128,13 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
               </div>
 
               <div class="space-y-2">
-                <Label for="tag">Tag</Label>
+                <Label for="tag">{{ t('models.tag.name') }}</Label>
                 <Select v-model="form.tags" multiple>
                   <SelectTrigger id="tag" class="w-full">
-                    <SelectValue placeholder="Select tag(s)" />
+                    <SelectValue :placeholder="t('generic.placeholders.selectTags')" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All tags</SelectItem>
+                    <SelectItem value="all">{{ t('generic.labels.allTags') }}</SelectItem>
                     <SelectItem
                       v-for="tag in tags"
                       :key="tag.id"
@@ -150,18 +153,18 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
               class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
             >
               <p class="text-sm font-medium text-foreground">
-                Filter by date range
+                {{ t('transactions.filter.dateRange') }}
               </p>
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <Label for="date_start">Start Date</Label>
+                  <Label for="date_start">{{ t('generic.labels.startDate') }}</Label>
                   <DatePicker
                     id="date_start"
                     v-model="form.date_start"
                   />
                 </div>
                 <div class="space-y-2">
-                  <Label for="date_end">End Date</Label>
+                  <Label for="date_end">{{ t('generic.labels.endDate') }}</Label>
                   <Input id="date_end" v-model="form.date_end" type="date" />
                 </div>
               </div>
@@ -174,13 +177,13 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
         class="flex-col-reverse gap-2 border-t border-border p-6 sm:flex-row sm:justify-end sm:gap-3"
       >
         <Button variant="ghost" @click="clear" :disabled="form.processing">
-          Clear Filters
+          {{ t('generic.actions.clearFilters') }}
         </Button>
 
         <SheetClose as-child>
           <Button type="submit" @click="apply" :disabled="form.processing">
-            <span v-if="form.processing">Filtering...</span>
-            <span v-else>Apply Filters</span>
+            <span v-if="form.processing">{{ t('generic.actions.filtering') }}</span>
+            <span v-else>{{ t('generic.actions.applyFilters') }}</span>
           </Button>
         </SheetClose>
       </SheetFooter>

@@ -2,6 +2,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { today, getLocalTimeZone } from '@internationalized/date';
 import { computed, inject, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import FormTransaction from '@/components/Transaction/FormTransaction.vue';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { t } = useI18n();
 const categories = inject<ICategory[]>('categories', []);
 const tags = inject<ITag[]>('tags', []);
 
@@ -115,8 +117,8 @@ const handleSubmit = () => {
 
 const submitButtonText = computed(() => {
   return props.type === 'duplicate'
-    ? 'Duplicate Transaction'
-    : 'Edit Transaction';
+    ? t('transactions.duplicate.title')
+    : t('transactions.edit.title');
 });
 </script>
 
@@ -126,11 +128,10 @@ const submitButtonText = computed(() => {
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
           <DialogTitle>
-            {{ type === 'duplicate' ? 'Duplicate' : 'Edit' }} Transaction
+            {{ type === 'duplicate' ? t('transactions.duplicate.title') : t('transactions.edit.title') }}
           </DialogTitle>
           <DialogDescription>
-            Fill in the details below to
-            {{ type === 'duplicate' ? 'Duplicate' : 'Edit' }} a transaction.
+            {{ type === 'duplicate' ? t('transactions.duplicate.description') : t('transactions.edit.description') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -143,7 +144,7 @@ const submitButtonText = computed(() => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> Cancel </Button>
+            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
           </DialogClose>
           <Button
             type="button"

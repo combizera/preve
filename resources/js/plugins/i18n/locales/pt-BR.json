@@ -9,13 +9,29 @@
             "update": "Atualizar",
             "delete": "Excluir",
             "today": "Hoje",
-            "viewAll": "Ver Tudo"
+            "viewAll": "Ver Tudo",
+            "confirm": "Confirmar",
+            "duplicate": "Duplicar",
+            "edit": "Editar",
+            "filter": "Filtrar",
+            "clearFilters": "Limpar Filtros",
+            "applyFilters": "Aplicar Filtros",
+            "filtering": "Filtrando..."
         },
         "labels": {
             "email": "Email",
             "password": "Senha",
             "confirmPassword": "Confirmar Senha",
-            "name": "Nome"
+            "name": "Nome",
+            "notes": "Notas",
+            "notesOptional": "Notas (Opcional)",
+            "search": "Buscar",
+            "none": "Nenhum",
+            "allTypes": "Todos os tipos",
+            "allCategories": "Todas as categorias",
+            "allTags": "Todas as tags",
+            "startDate": "Data Início",
+            "endDate": "Data Fim"
         },
         "sidebar": {
             "home": "Início",
@@ -29,10 +45,21 @@
         },
         "placeholders": {
             "email": "email{'@'}exemplo.com",
-            "fullName": "Nome Completo"
+            "fullName": "Nome Completo",
+            "searchByDescription": "Buscar por descrição...",
+            "selectCategory": "Selecione uma categoria",
+            "selectCategories": "Selecione categoria(s)",
+            "selectTag": "Selecione uma tag",
+            "selectTags": "Selecione tag(s)",
+            "transactionDescription": "Digite a descrição da transação",
+            "additionalNotes": "Notas adicionais..."
         },
         "status": {
             "loading": "Carregando..."
+        },
+        "confirm": {
+            "title": "Tem certeza absoluta?",
+            "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\"."
         }
     },
     "models": {
@@ -42,13 +69,15 @@
             "date": "Data",
             "type": "Tipo",
             "income": "Receita",
-            "expense": "Despesa"
+            "expense": "Despesa",
+            "notes": "Notas"
         },
         "category": {
             "name": "Categoria"
         },
         "tag": {
-            "name": "Tag"
+            "name": "Tag",
+            "optional": "Tag (opcional)"
         }
     },
     "auth": {
@@ -79,6 +108,33 @@
             "year": "Ano",
             "earliestYear": "Você atingiu o ano mais antigo disponível.",
             "latestYear": "Você atingiu o ano mais recente disponível."
+        }
+    },
+    "transactions": {
+        "title": "Transações",
+        "description": "Gerencie suas transações aqui.",
+        "empty": {
+            "title": "Nenhuma transação ainda",
+            "description": "Comece criando sua primeira transação",
+            "button": "Criar Transação"
+        },
+        "recurring": "Recorrente",
+        "create": {
+            "title": "Criar Transação",
+            "description": "Preencha os detalhes abaixo para criar uma nova transação."
+        },
+        "edit": {
+            "title": "Editar Transação",
+            "description": "Preencha os detalhes abaixo para editar a transação."
+        },
+        "duplicate": {
+            "title": "Duplicar Transação",
+            "description": "Preencha os detalhes abaixo para duplicar a transação."
+        },
+        "filter": {
+            "title": "Filtrar Transações",
+            "description": "Refine sua busca por período, categoria ou tags.",
+            "dateRange": "Filtrar por período"
         }
     }
 }
