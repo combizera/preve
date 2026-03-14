@@ -14,7 +14,7 @@ import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
 import { type ITag } from '@/types/models/tag';
-import { type ITransaction } from '@/types/models/transaction';
+import { type IDailyBalance, type ITransaction } from '@/types/models/transaction';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -23,18 +23,13 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-interface DailyBalance {
-  day: number;
-  amount: number;
-}
-
 interface Props {
   latestTransactions: ITransaction[];
   availableBalance: number;
   forecast: number;
   monthlyIncome: number;
   monthlyExpenses: number;
-  dailyBalances: DailyBalance[];
+  dailyBalances: IDailyBalance[];
   carryOver: number;
   categories: ICategory[];
   tags: ITag[];
@@ -80,11 +75,11 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
       <!-- CHART -->
       <ChartMonthly
-        :monthlyIncome="props.monthlyIncome"
-        :monthlyExpenses="props.monthlyExpenses"
-        :dailyBalances="props.dailyBalances"
-        :carryOver="props.carryOver"
-        :selectedMonth="selectedMonth"
+        :monthlyIncome
+        :monthlyExpenses
+        :dailyBalances
+        :carryOver
+        :selectedMonth
       />
 
       <!-- LAST TRANSACTIONS -->

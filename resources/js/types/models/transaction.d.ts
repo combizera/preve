@@ -4,6 +4,11 @@ import { ITag } from '@/types/models/tag';
 
 export type TransactionType = 'income' | 'expense';
 
+export interface IDailyBalance {
+    day: number;
+    amount: number;
+}
+
 export interface ITransaction {
     id?: string;
     recurring_transaction_id?: number;

@@ -9,19 +9,15 @@ import {
 import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
 import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import { MONTHS } from '@/lib/calendar';
+import type { IDailyBalance } from '@/types/models/transaction';
 import { CurveType } from '@unovis/ts';
 import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
 import { computed } from 'vue';
 
-interface DailyBalance {
-  day: number;
-  amount: number;
-}
-
 interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
-  dailyBalances: DailyBalance[];
+  dailyBalances: IDailyBalance[];
   carryOver: number;
   selectedMonth: { month: number; year: number } | null;
 }
@@ -47,12 +43,14 @@ const currentDay = computed(() => {
   return isPastMonth ? 32 : 0;
 });
 
-const displayMonth = computed(() => {
-  const month = props.selectedMonth?.month ?? now.getMonth() + 1;
-  const year = props.selectedMonth?.year ?? now.getFullYear();
-  return `${MONTHS[month - 1]} ${year}`;
-});
+const selectedMonthIndex = computed(() => (props.selectedMonth?.month ?? now.getMonth() + 1) - 1);
 
+const monthName = computed(() => MONTHS[selectedMonthIndex.value]);
+
+const displayMonth = computed(() => {
+  const year = props.selectedMonth?.year ?? now.getFullYear();
+  return `${monthName.value} ${year}`;
+});
 
 type ChartPoint = { day: number; balance: number };
 
@@ -170,7 +168,7 @@ const formatCurrency = (d: number) => {
             :color="chartConfig.balance.color"
             :template="
               componentToString(chartConfig, ChartMonthlyTooltip, {
-                monthName: MONTHS[(props.selectedMonth?.month ?? now.getMonth() + 1) - 1],
+                monthName: monthName.value,
               })
             "
           />
