@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { TrendingUp, Wallet } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue';
 import { MONTHS } from '@/lib/calendar';
 import { formatCentsToDisplay } from '@/lib/currency';
+
+const { t } = useI18n();
 
 interface Props {
   availableBalance: number;
@@ -27,16 +30,19 @@ const forecastVariant = computed(() => {
 });
 
 const forecastDescription = computed(() => {
-  if (!props.selectedMonth) return 'Balance after pending expenses';
-  return `Forecast for ${MONTHS[props.selectedMonth.month - 1]} ${props.selectedMonth.year}`;
+  if (!props.selectedMonth) return t('dashboard.forecastDescription');
+  return t('dashboard.forecastForMonth', {
+    month: MONTHS[props.selectedMonth.month - 1],
+    year: props.selectedMonth.year,
+  });
 });
 </script>
 
 <template>
   <div class="grid grid-cols-2 gap-4">
     <DashboardCard
-      title="Available Balance"
-      description="Income minus paid expenses this month"
+      :title="t('dashboard.availableBalance')"
+      :description="t('dashboard.availableBalanceDescription')"
       :amount="formatCentsToDisplay(availableBalance)"
       :variant="balanceVariant"
     >
@@ -46,7 +52,7 @@ const forecastDescription = computed(() => {
     </DashboardCard>
 
     <DashboardCard
-      title="Forecast"
+      :title="t('dashboard.forecast')"
       :description="forecastDescription"
       :amount="formatCentsToDisplay(forecast)"
       :variant="forecastVariant"

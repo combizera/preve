@@ -2,6 +2,7 @@
 import { nextTick, ref } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
 
 import CardCalendar from '@/components/Dashboard/CardCalendar.vue';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { MONTHS } from '@/lib/calendar';
+
+const { t } = useI18n();
 
 const emit = defineEmits<{
   (e: 'update:month', payload: { month: number; year: number }): void;
@@ -48,8 +51,8 @@ const emitMonth = (month: number, year: number) => {
 const changeYear = (newYear: number, month: number): boolean => {
   if (newYear < MIN_YEAR || newYear > MAX_YEAR) {
     toast.error(newYear < MIN_YEAR
-      ? 'You have reached the earliest available year.'
-      : 'You have reached the latest available year.',
+      ? t('dashboard.calendar.earliestYear')
+      : t('dashboard.calendar.latestYear'),
     );
     return false;
   }
@@ -104,7 +107,7 @@ const handleToCurrentMonth = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Year</SelectLabel>
+            <SelectLabel>{{ t('dashboard.calendar.year') }}</SelectLabel>
             <SelectItem value="2026">
               2026
             </SelectItem>
@@ -139,7 +142,7 @@ const handleToCurrentMonth = () => {
       </div>
 
       <!-- BUTTON -->
-      <Button variant="outline" type="button" @click="handleToCurrentMonth"> Today </Button>
+      <Button variant="outline" type="button" @click="handleToCurrentMonth"> {{ t('generic.actions.today') }} </Button>
     </div>
   </section>
 </template>

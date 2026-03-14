@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -16,6 +17,8 @@ interface Props {
 
 defineProps<Props>();
 
+const { t } = useI18n();
+
 function getAmountClass(type: string) {
   return cn(
     'text-sm font-medium',
@@ -30,8 +33,8 @@ function getAmountClass(type: string) {
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Last Transactions</TableHead>
-        <TableHead class="text-right">Amount</TableHead>
+        <TableHead>{{ t('dashboard.lastTransactions') }}</TableHead>
+        <TableHead class="text-right">{{ t('models.transaction.amount') }}</TableHead>
       </TableRow>
     </TableHeader>
 
@@ -66,7 +69,7 @@ function getAmountClass(type: string) {
           <div class="flex items-center justify-center">
             <Button variant="link" size="sm" class="text-muted-foreground hover:bg-transparent hover:underline" as-child>
               <Link :href="transactions.index.url()">
-                View All
+                {{ t('generic.actions.viewAll') }}
               </Link>
             </Button>
           </div>

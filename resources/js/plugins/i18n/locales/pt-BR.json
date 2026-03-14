@@ -4,7 +4,12 @@
             "login": "Acessar",
             "register": "Registrar",
             "submit": "Enviar",
-            "cancel": "Cancelar"
+            "cancel": "Cancelar",
+            "create": "Criar",
+            "update": "Atualizar",
+            "delete": "Excluir",
+            "today": "Hoje",
+            "viewAll": "Ver Tudo"
         },
         "labels": {
             "email": "Email",
@@ -30,6 +35,22 @@
             "loading": "Carregando..."
         }
     },
+    "models": {
+        "transaction": {
+            "amount": "Valor",
+            "description": "Descrição",
+            "date": "Data",
+            "type": "Tipo",
+            "income": "Receita",
+            "expense": "Despesa"
+        },
+        "category": {
+            "name": "Categoria"
+        },
+        "tag": {
+            "name": "Tag"
+        }
+    },
     "auth": {
         "login": {
             "title": "Faça login na sua conta",
@@ -43,6 +64,21 @@
             "description": "Entre seus detalhes abaixo para criar sua conta",
             "haveAccount": "Já tem uma conta?",
             "buttonText": "Criar uma conta"
+        }
+    },
+    "dashboard": {
+        "title": "Painel",
+        "description": "Aqui você pode ter uma visão geral das suas atividades financeiras e gerenciar suas transações de forma eficiente.",
+        "lastTransactions": "Últimas Transações",
+        "availableBalance": "Saldo Disponível",
+        "availableBalanceDescription": "Receitas menos despesas pagas neste mês",
+        "forecast": "Previsão",
+        "forecastDescription": "Saldo após despesas pendentes",
+        "forecastForMonth": "Previsão para {month} {year}",
+        "calendar": {
+            "year": "Ano",
+            "earliestYear": "Você atingiu o ano mais antigo disponível.",
+            "latestYear": "Você atingiu o ano mais recente disponível."
         }
     }
 }

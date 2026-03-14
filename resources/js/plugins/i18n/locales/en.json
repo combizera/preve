@@ -4,7 +4,12 @@
             "login": "Login",
             "register": "Register",
             "submit": "Submit",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "create": "Create",
+            "update": "Update",
+            "delete": "Delete",
+            "today": "Today",
+            "viewAll": "View All"
         },
         "labels": {
             "email": "Email",
@@ -30,6 +35,22 @@
             "loading": "Loading..."
         }
     },
+    "models": {
+        "transaction": {
+            "amount": "Amount",
+            "description": "Description",
+            "date": "Date",
+            "type": "Type",
+            "income": "Income",
+            "expense": "Expense"
+        },
+        "category": {
+            "name": "Category"
+        },
+        "tag": {
+            "name": "Tag"
+        }
+    },
     "auth": {
         "login": {
             "title": "Log in to your account",
@@ -43,6 +64,21 @@
             "description": "Enter your details below to create your account",
             "haveAccount": "Already have an account?",
             "buttonText": "Create an account"
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "description": "Here you can get an overview of your financial activities and manage your transactions efficiently.",
+        "lastTransactions": "Last Transactions",
+        "availableBalance": "Available Balance",
+        "availableBalanceDescription": "Income minus paid expenses this month",
+        "forecast": "Forecast",
+        "forecastDescription": "Balance after pending expenses",
+        "forecastForMonth": "Forecast for {month} {year}",
+        "calendar": {
+            "year": "Year",
+            "earliestYear": "You have reached the earliest available year.",
+            "latestYear": "You have reached the latest available year."
         }
     }
 }

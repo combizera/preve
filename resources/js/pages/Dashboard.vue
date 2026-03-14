@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import BalanceCards from '@/components/Dashboard/BalanceCards.vue';
 import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarStrip.vue';
@@ -16,12 +17,14 @@ import { type ICategory } from '@/types/models/category';
 import { type ITag } from '@/types/models/tag';
 import { type ITransaction } from '@/types/models/transaction';
 
-const breadcrumbs: BreadcrumbItem[] = [
+const { t } = useI18n();
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
-    title: 'Dashboard',
+    title: t('dashboard.title'),
     href: dashboard().url,
   },
-];
+]);
 
 interface Props {
   latestTransactions: ITransaction[];
@@ -50,13 +53,13 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head :title="t('dashboard.title')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
     <Heading
-      title="Dashboard"
-      description="Here you can get an overview of your financial activities and manage your transactions efficiently."
+      :title="t('dashboard.title')"
+      :description="t('dashboard.description')"
       :hasActions="true"
     >
       <CreateTransactionButton />
