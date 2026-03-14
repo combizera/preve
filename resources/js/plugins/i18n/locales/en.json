@@ -37,7 +37,10 @@
             "startDate": "Start Date",
             "endDate": "End Date",
             "endDateOptional": "End Date (Optional)",
-            "inactive": "Inactive"
+            "inactive": "Inactive",
+            "actions": "Actions",
+            "color": "Color",
+            "icon": "Icon"
         },
         "sidebar": {
             "home": "Home",
@@ -60,7 +63,12 @@
             "transactionDescription": "Enter transaction description",
             "additionalNotes": "Additional notes...",
             "recurringDescription": "e.g., Netflix Subscription, Rent, Salary...",
-            "selectFrequency": "Select frequency"
+            "selectFrequency": "Select frequency",
+            "selectType": "Select a type",
+            "selectColor": "Select a color",
+            "selectIcon": "Select an icon",
+            "categoryName": "Category Name",
+            "categoryDescription": "This is a category for..."
         },
         "status": {
             "loading": "Loading..."
@@ -68,7 +76,8 @@
         "confirm": {
             "title": "Are you absolutely sure?",
             "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
-            "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected."
+            "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected.",
+            "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\"."
         }
     },
     "models": {
@@ -179,6 +188,25 @@
             "annualAmount": "Annual Amount",
             "nextOccurrence": "Next Occurrence",
             "activePeriod": "Active Period"
+        }
+    },
+    "categories": {
+        "title": "Categories",
+        "description": "Manage your categories here.",
+        "newCategory": "New Category",
+        "empty": {
+            "income": {
+                "title": "No income categories yet",
+                "description": "Start by creating your first income category"
+            },
+            "expense": {
+                "title": "No expense categories yet",
+                "description": "Start by creating your first expense category"
+            }
+        },
+        "edit": {
+            "title": "Edit Category",
+            "description": "Make changes to {name}. Click save when you're done."
         }
     }
 }

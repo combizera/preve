@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { update } from '@/routes/categories';
 import { ICategory, ICategoryForm } from '@/types/models/category';
 
+const { t } = useI18n();
 const open = defineModel<boolean>('open', { required: true });
 
 const props = defineProps<{
@@ -51,59 +53,59 @@ const updateCategory = () => {
     <form>
       <DialogContent class="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Edit Category</DialogTitle>
+          <DialogTitle>{{ t('categories.edit.title') }}</DialogTitle>
           <DialogDescription>
-            Make changes to {{ category?.name }}. Click save when you're done.
+            {{ t('categories.edit.description', { name: category?.name }) }}
           </DialogDescription>
         </DialogHeader>
 
         <div class="grid grid-cols-2 gap-4">
           <!-- Type -->
           <div class="col-span-2 grid gap-3">
-            <Label for="type"> Type </Label>
+            <Label for="type"> {{ t('models.transaction.type') }} </Label>
             <ToggleGroup v-model="form.type" class="w-full">
               <ToggleGroupItem
                 :value="TRANSACTION_TYPE.EXPENSE"
                 class="flex-1 gap-2"
               >
                 <ArrowUpRight :size="16" />
-                Expense
+                {{ t('models.transaction.expense') }}
               </ToggleGroupItem>
               <ToggleGroupItem
                 :value="TRANSACTION_TYPE.INCOME"
                 class="flex-1 gap-2"
               >
                 <ArrowDownLeft :size="16" />
-                Income
+                {{ t('models.transaction.income') }}
               </ToggleGroupItem>
             </ToggleGroup>
             <InputError :message="form.errors.type" />
           </div>
 
           <div class="col-span-2 grid gap-3">
-            <Label for="name"> Name </Label>
+            <Label for="name"> {{ t('generic.labels.name') }} </Label>
             <Input
               id="name"
               name="name"
-              placeholder="Category Name"
+              :placeholder="t('generic.placeholders.categoryName')"
               v-model="form.name"
             />
             <InputError :message="form.errors.name" />
           </div>
 
           <div class="col-span-2 grid gap-3">
-            <Label for="description"> Description </Label>
+            <Label for="description"> {{ t('models.transaction.description') }} </Label>
             <Input
               id="description"
               name="description"
-              placeholder="This is a category for..."
+              :placeholder="t('generic.placeholders.categoryDescription')"
               v-model="form.description"
             />
             <InputError :message="form.errors.description" />
           </div>
 
           <div class="col-span-2 grid gap-3">
-            <Label>Icon</Label>
+            <Label>{{ t('generic.labels.icon') }}</Label>
             <div class="grid grid-cols-8 justify-start gap-2">
               <label
                 v-for="icon in availableIcons"
@@ -143,7 +145,7 @@ const updateCategory = () => {
           </div>
 
           <div class="col-span-2 grid gap-3">
-            <Label>Color</Label>
+            <Label>{{ t('generic.labels.color') }}</Label>
             <div class="grid grid-cols-8 gap-2">
               <label
                 v-for="color in availableColors"
@@ -180,14 +182,14 @@ const updateCategory = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> Cancel </Button>
+            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
           </DialogClose>
           <Button
             type="button"
             @click="updateCategory"
             :disabled="form.processing"
           >
-            Save changes
+            {{ t('generic.actions.saveChanges') }}
           </Button>
         </DialogFooter>
       </DialogContent>

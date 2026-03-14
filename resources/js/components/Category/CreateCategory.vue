@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import QuickCreateCard from '@/components/QuickCreateCard.vue';
@@ -22,6 +23,7 @@ import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { store } from '@/routes/categories';
 import { ICategoryForm } from '@/types/models/category';
 
+const { t } = useI18n();
 const types = TRANSACTION_TYPE;
 
 const form = useForm<ICategoryForm>({
@@ -40,37 +42,37 @@ const createCategory = () => {
 </script>
 
 <template>
-  <QuickCreateCard title="New Category">
+  <QuickCreateCard :title="t('categories.newCategory')">
     <form
       class="flex w-full flex-wrap items-start gap-3"
       @submit.prevent="createCategory"
     >
       <div class="flex min-w-1/4 flex-col justify-start gap-2">
-        <Label for="name">Name</Label>
-        <Input id="name" name="name" placeholder="Name" v-model="form.name" />
+        <Label for="name">{{ t('generic.labels.name') }}</Label>
+        <Input id="name" name="name" :placeholder="t('generic.labels.name')" v-model="form.name" />
         <InputError :message="form.errors.name" />
       </div>
 
       <div class="flex min-w-1/4 flex-1 flex-col justify-start gap-2">
-        <Label for="description">Description</Label>
+        <Label for="description">{{ t('models.transaction.description') }}</Label>
         <Input
           id="description"
           name="description"
-          placeholder="Describe your category"
+          :placeholder="t('generic.placeholders.categoryDescription')"
           v-model="form.description"
         />
         <InputError :message="form.errors.description" />
       </div>
 
       <div class="flex flex-col justify-start gap-2">
-        <Label for="type">Type</Label>
+        <Label for="type">{{ t('models.transaction.type') }}</Label>
         <Select v-model="form.type">
           <SelectTrigger class="w-full min-w-37.5">
-            <SelectValue placeholder="Select a type" />
+            <SelectValue :placeholder="t('generic.placeholders.selectType')" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Type</SelectLabel>
+              <SelectLabel>{{ t('models.transaction.type') }}</SelectLabel>
               <SelectItem v-for="type in types" :value="type" :key="type">
                 {{ capitalizeFirstLetter(type) }}
               </SelectItem>
@@ -81,10 +83,10 @@ const createCategory = () => {
       </div>
 
       <div class="flex flex-col justify-start gap-2">
-        <Label for="color">Color</Label>
+        <Label for="color">{{ t('generic.labels.color') }}</Label>
         <Select v-model="form.color">
           <SelectTrigger class="w-full min-w-37.5">
-            <SelectValue placeholder="Select a color">
+            <SelectValue :placeholder="t('generic.placeholders.selectColor')">
               <div v-if="form.color" class="flex items-center gap-2">
                 <div
                   :class="
@@ -97,7 +99,7 @@ const createCategory = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Color</SelectLabel>
+              <SelectLabel>{{ t('generic.labels.color') }}</SelectLabel>
               <div class="grid grid-cols-4 gap-1">
                 <SelectItem
                   v-for="color in availableColors"
@@ -122,10 +124,10 @@ const createCategory = () => {
       </div>
 
       <div class="flex flex-col justify-start gap-2">
-        <Label for="icon">Icon</Label>
+        <Label for="icon">{{ t('generic.labels.icon') }}</Label>
         <Select v-model="form.icon">
           <SelectTrigger :class="cn('w-full min-w-37.5', form.icon && 'pl-1')">
-            <SelectValue placeholder="Select an icon">
+            <SelectValue :placeholder="t('generic.placeholders.selectIcon')">
               <div
                 v-if="form.icon"
                 :class="
@@ -150,7 +152,7 @@ const createCategory = () => {
           </SelectTrigger>
           <SelectContent class="min-w-37.5">
             <SelectGroup>
-              <SelectLabel>Icon</SelectLabel>
+              <SelectLabel>{{ t('generic.labels.icon') }}</SelectLabel>
               <div class="grid grid-cols-4 gap-1">
                 <SelectItem
                   v-for="icon in availableIcons"
@@ -172,7 +174,7 @@ const createCategory = () => {
 
       <div class="ml-2 flex h-full items-start pt-5.5">
         <Button type="submit" :disabled="form.processing" class="h-9">
-          Create
+          {{ t('generic.actions.create') }}
         </Button>
       </div>
     </form>

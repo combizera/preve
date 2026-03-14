@@ -37,7 +37,10 @@
             "startDate": "Data Início",
             "endDate": "Data Fim",
             "endDateOptional": "Data Fim (Opcional)",
-            "inactive": "Inativo"
+            "inactive": "Inativo",
+            "actions": "Ações",
+            "color": "Cor",
+            "icon": "Ícone"
         },
         "sidebar": {
             "home": "Início",
@@ -60,7 +63,12 @@
             "transactionDescription": "Digite a descrição da transação",
             "additionalNotes": "Notas adicionais...",
             "recurringDescription": "ex: Assinatura Netflix, Aluguel, Salário...",
-            "selectFrequency": "Selecione a frequência"
+            "selectFrequency": "Selecione a frequência",
+            "selectType": "Selecione um tipo",
+            "selectColor": "Selecione uma cor",
+            "selectIcon": "Selecione um ícone",
+            "categoryName": "Nome da Categoria",
+            "categoryDescription": "Esta é uma categoria para..."
         },
         "status": {
             "loading": "Carregando..."
@@ -68,7 +76,8 @@
         "confirm": {
             "title": "Tem certeza absoluta?",
             "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\".",
-            "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas."
+            "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas.",
+            "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\"."
         }
     },
     "models": {
@@ -179,6 +188,25 @@
             "annualAmount": "Valor Anual",
             "nextOccurrence": "Próxima Ocorrência",
             "activePeriod": "Período Ativo"
+        }
+    },
+    "categories": {
+        "title": "Categorias",
+        "description": "Gerencie suas categorias aqui.",
+        "newCategory": "Nova Categoria",
+        "empty": {
+            "income": {
+                "title": "Nenhuma categoria de receita ainda",
+                "description": "Comece criando sua primeira categoria de receita"
+            },
+            "expense": {
+                "title": "Nenhuma categoria de despesa ainda",
+                "description": "Comece criando sua primeira categoria de despesa"
+            }
+        },
+        "edit": {
+            "title": "Editar Categoria",
+            "description": "Faça alterações em {name}. Clique em salvar quando terminar."
         }
     }
 }

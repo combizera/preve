@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import ContainerCategory from '@/components/Category/ContainerCategory.vue';
 import CreateCategory from '@/components/Category/CreateCategory.vue';
@@ -17,24 +19,26 @@ interface Props {
 
 defineProps<Props>();
 
-const breadcrumbs: BreadcrumbItem[] = [
+const { t } = useI18n();
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
-    title: 'Dashboard',
+    title: t('dashboard.title'),
     href: dashboard().url,
   },
   {
-    title: 'Category',
+    title: t('categories.title'),
     href: categoryRoutes.index().url,
   },
-];
+]);
 </script>
 
 <template>
-  <Head title="Category" />
+  <Head :title="t('categories.title')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
-    <Heading title="Category" description="Manage your categories here." />
+    <Heading :title="t('categories.title')" :description="t('categories.description')" />
 
     <!-- CREATE -->
     <CreateCategory />
