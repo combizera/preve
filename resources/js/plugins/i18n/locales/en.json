@@ -16,7 +16,8 @@
             "filter": "Filter",
             "clearFilters": "Clear Filters",
             "applyFilters": "Apply Filters",
-            "filtering": "Filtering..."
+            "filtering": "Filtering...",
+            "details": "Details"
         },
         "labels": {
             "email": "Email",
