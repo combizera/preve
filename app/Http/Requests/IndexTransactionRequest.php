@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Validation\Rule;
 
 final class IndexTransactionRequest extends FormRequest
@@ -49,8 +49,8 @@ final class IndexTransactionRequest extends FormRequest
     {
         if (!$this->filled('date_start') && !$this->filled('date_end')) {
             $this->merge([
-                'date_start' => Carbon::now()->startOfMonth()->toDateString(),
-                'date_end'   => Carbon::now()->endOfMonth()->toDateString(),
+                'date_start' => Date::now()->startOfMonth()->toDateString(),
+                'date_end'   => Date::now()->endOfMonth()->toDateString(),
             ]);
         }
     }

@@ -27,9 +27,7 @@ final class RecurringTransactionController extends Controller
             ->orderBy('day_of_month', 'asc')
             ->get();
 
-        [$expenseRecurring, $incomeRecurring] = $recurring->partition(function (RecurringTransaction $recurringTransaction) {
-            return $recurringTransaction->type === TransactionType::EXPENSE;
-        });
+        [$expenseRecurring, $incomeRecurring] = $recurring->partition(fn (RecurringTransaction $recurringTransaction): bool => $recurringTransaction->type === TransactionType::EXPENSE);
 
         $expenseRecurring = $expenseRecurring->values();
         $incomeRecurring = $incomeRecurring->values();

@@ -38,7 +38,7 @@ trait GeneratesUniqueSlug
 
         $existingSlugs = $modelClass::query()
             ->where('user_id', $userId)
-            ->where(function ($query) use ($slug) {
+            ->where(function ($query) use ($slug): void {
                 $query->where('slug', $slug)
                     ->orWhere('slug', 'LIKE', "{$slug}-%");
             })

@@ -12,7 +12,7 @@ final class TransactionPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
         return false;
     }
@@ -20,7 +20,7 @@ final class TransactionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Transaction $transaction): bool
+    public function view(): bool
     {
         return true;
     }
@@ -28,7 +28,7 @@ final class TransactionPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(): bool
     {
         return false;
     }

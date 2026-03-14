@@ -14,7 +14,7 @@ return new class() extends Migration
 {
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table
                 ->foreignIdFor(User::class)

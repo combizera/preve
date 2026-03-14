@@ -11,6 +11,9 @@
         "enabled": true,
         "actions": [
             {
+                "action": "\\GitHooks\\Rector"
+            },
+            {
                 "action": "\\GitHooks\\Pint"
             },
             {

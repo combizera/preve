@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\RecurringTransaction;
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
 use Exception;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
 final class RecurringTransactionService
@@ -21,23 +22,23 @@ final class RecurringTransactionService
         $period = $this->defineGenerationPeriod($recurringTransaction, $monthsAhead);
 
         collect($period)
-            ->map(fn (Carbon $month) => $recurringTransaction->calculateExactDateForMonth($month))
-            ->filter(fn (Carbon $date) => $recurringTransaction->isValidTransactionDate($date))
-            ->each(fn (Carbon $date) => $this->createTransactionIfNotExists($recurringTransaction, $date));
+            ->map(fn (CarbonInterface $month): CarbonInterface => $recurringTransaction->calculateExactDateForMonth($month))
+            ->filter(fn (CarbonInterface $date): bool => $recurringTransaction->isValidTransactionDate($date))
+            ->each(fn (CarbonInterface $date) => $this->createTransactionIfNotExists($recurringTransaction, $date));
     }
 
     private function defineGenerationPeriod(RecurringTransaction $recurringTransaction, int $monthsAhead): CarbonPeriod
     {
         $startMonth = $recurringTransaction->start_date->isFuture()
             ? $recurringTransaction->start_date->copy()->startOfMonth()
-            : Carbon::today()->startOfMonth();
+            : Date::today()->startOfMonth();
 
         return CarbonPeriod::since($startMonth)
             ->months(1)
             ->until($startMonth->copy()->addMonthsNoOverflow($monthsAhead));
     }
 
-    private function createTransactionIfNotExists(RecurringTransaction $recurringTransaction, Carbon $transactionDate): void
+    private function createTransactionIfNotExists(RecurringTransaction $recurringTransaction, CarbonInterface $transactionDate): void
     {
         $exists = $recurringTransaction->transactions()
             ->whereYear('transaction_date', $transactionDate->year)
@@ -64,12 +65,12 @@ final class RecurringTransactionService
                 'user_id'      => $recurringTransaction->user_id,
                 'date'         => $transactionDate->toDateString(),
             ]);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             Log::error('Failed to generate recurring transaction.', [
                 'recurring_id' => $recurringTransaction->id,
                 'user_id'      => $recurringTransaction->user_id,
                 'date'         => $transactionDate->toDateString(),
-                'error'        => $e->getMessage(),
+                'error'        => $exception->getMessage(),
             ]);
         }
     }

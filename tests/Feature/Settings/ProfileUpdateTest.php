@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-it('should be able to display profile page', function () {
+it('should be able to display profile page', function (): void {
     $user = User::factory()->create();
 
     $response = $this
@@ -14,7 +14,7 @@ it('should be able to display profile page', function () {
     $response->assertOk();
 });
 
-it('should be able to update profile information', function () {
+it('should be able to update profile information', function (): void {
     $user = User::factory()->create();
 
     $response = $this
@@ -35,7 +35,7 @@ it('should be able to update profile information', function () {
     expect($user->email_verified_at)->toBeNull();
 });
 
-it('should be able to keep email verification status unchanged when the email address is unchanged', function () {
+it('should be able to keep email verification status unchanged when the email address is unchanged', function (): void {
     $user = User::factory()->create();
 
     $response = $this
@@ -52,7 +52,7 @@ it('should be able to keep email verification status unchanged when the email ad
     expect($user->refresh()->email_verified_at)->not->toBeNull();
 });
 
-it('should be able to delete their account', function () {
+it('should be able to delete their account', function (): void {
     $user = User::factory()->create();
 
     $response = $this
@@ -69,7 +69,7 @@ it('should be able to delete their account', function () {
     expect($user->fresh())->toBeNull();
 });
 
-it('should be able to require correct password to delete account', function () {
+it('should be able to require correct password to delete account', function (): void {
     $user = User::factory()->create();
 
     $response = $this

@@ -28,7 +28,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
     }
 
-    protected function configureDefaults(): void
+    private function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);
 

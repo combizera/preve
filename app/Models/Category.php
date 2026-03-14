@@ -32,11 +32,17 @@ final class Category extends Model
         'icon'  => CategoryIcon::class,
     ];
 
+    /**
+     * @return HasMany<Transaction, $this>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * @return HasMany<RecurringTransaction, $this>
+     */
     public function recurringTransactions(): HasMany
     {
         return $this->hasMany(RecurringTransaction::class);

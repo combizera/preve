@@ -15,14 +15,14 @@ final class UserObserver
      */
     public function created(User $user): void
     {
-        app(CreateDefaultCategories::class)->execute($user);
-        app(CreateDefaultTags::class)->execute($user);
+        resolve(CreateDefaultCategories::class)->execute($user);
+        resolve(CreateDefaultTags::class)->execute($user);
     }
 
     /**
      * Handle the User "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(): void
     {
         //
     }
@@ -30,7 +30,7 @@ final class UserObserver
     /**
      * Handle the User "deleted" event.
      */
-    public function deleted(User $user): void
+    public function deleted(): void
     {
         //
     }
@@ -38,7 +38,7 @@ final class UserObserver
     /**
      * Handle the User "restored" event.
      */
-    public function restored(User $user): void
+    public function restored(): void
     {
         //
     }
@@ -46,7 +46,7 @@ final class UserObserver
     /**
      * Handle the User "force deleted" event.
      */
-    public function forceDeleted(User $user): void
+    public function forceDeleted(): void
     {
         //
     }

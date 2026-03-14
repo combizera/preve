@@ -6,13 +6,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
-it('should be able to render login screen', function () {
+it('should be able to render login screen', function (): void {
     $response = $this->get(route('login'));
 
     $response->assertOk();
 });
 
-it('should be able to authenticate using the login screen', function () {
+it('should be able to authenticate using the login screen', function (): void {
     $user = User::factory()->create();
 
     $response = $this->post(route('login.store'), [
@@ -24,7 +24,7 @@ it('should be able to authenticate using the login screen', function () {
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-it('should be able to redirect users with two factor enabled to two factor challenge', function () {
+it('should be able to redirect users with two factor enabled to two factor challenge', function (): void {
     if (!Features::canManageTwoFactorAuthentication()) {
         $this->markTestSkipped('Two-factor authentication is not enabled.');
     }
@@ -52,7 +52,7 @@ it('should be able to redirect users with two factor enabled to two factor chall
     $this->assertGuest();
 });
 
-it('should not be able to authenticate with invalid password', function () {
+it('should not be able to authenticate with invalid password', function (): void {
     $user = User::factory()->create();
 
     $this->post(route('login.store'), [
@@ -63,7 +63,7 @@ it('should not be able to authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
-it('should be able to logout', function () {
+it('should be able to logout', function (): void {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post(route('logout'));
@@ -72,7 +72,7 @@ it('should be able to logout', function () {
     $response->assertRedirect(route('home'));
 });
 
-it('should be able to rate limit users', function () {
+it('should be able to rate limit users', function (): void {
     $user = User::factory()->create();
 
     RateLimiter::increment(md5('login' . implode('|', [$user->email, '127.0.0.1'])), amount: 5);

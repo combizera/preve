@@ -19,6 +19,7 @@
     },
     "require-dev": {
         "captainhook/captainhook": "^5.27",
+        "driftingly/rector-laravel": "^2.1",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^3.9",
         "laravel/pail": "^1.2.2",
@@ -63,6 +64,7 @@
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
         ],
         "lint": [
+            "rector",
             "pint --parallel"
         ],
         "test": [
@@ -70,6 +72,7 @@
             "@php artisan test"
         ],
         "test:lint": [
+            "rector --dry-run",
             "pint --parallel --test"
         ],
         "test:watch": [

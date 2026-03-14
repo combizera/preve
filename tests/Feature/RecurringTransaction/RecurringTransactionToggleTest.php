@@ -5,13 +5,13 @@ declare(strict_types=1);
 use App\Models\RecurringTransaction;
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
 // TOGGLE
-it('should be able to toggle recurring transaction active status', function () {
+it('should be able to toggle recurring transaction active status', function (): void {
     $recurring = RecurringTransaction::factory()->create([
         'user_id'   => auth()->id(),
         'is_active' => true,
@@ -27,7 +27,7 @@ it('should be able to toggle recurring transaction active status', function () {
     ]);
 });
 
-it('should not be able to toggle recurring transaction that you do not own', function () {
+it('should not be able to toggle recurring transaction that you do not own', function (): void {
     $recurring = RecurringTransaction::factory()->create();
 
     $response = $this->patch(route('recurring.toggle', $recurring->id));

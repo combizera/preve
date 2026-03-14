@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 
-it('should be able to render email verification screen', function () {
+it('should be able to render email verification screen', function (): void {
     $user = User::factory()->unverified()->create();
 
     $response = $this->actingAs($user)->get(route('verification.notice'));
@@ -15,7 +15,7 @@ it('should be able to render email verification screen', function () {
     $response->assertOk();
 });
 
-it('should be able to verify email', function () {
+it('should be able to verify email', function (): void {
     $user = User::factory()->unverified()->create();
 
     Event::fake();
@@ -23,7 +23,7 @@ it('should be able to verify email', function () {
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1($user->email)]
+        ['id' => $user->id, 'hash' => sha1((string) $user->email)]
     );
 
     $response = $this->actingAs($user)->get($verificationUrl);
@@ -33,7 +33,7 @@ it('should be able to verify email', function () {
     $response->assertRedirect(route('dashboard', absolute: false) . '?verified=1');
 });
 
-it('should not be able to verify email with invalid hash', function () {
+it('should not be able to verify email with invalid hash', function (): void {
     $user = User::factory()->unverified()->create();
 
     Event::fake();
@@ -50,7 +50,7 @@ it('should not be able to verify email with invalid hash', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('should not be able to verify email with invalid user id', function () {
+it('should not be able to verify email with invalid user id', function (): void {
     $user = User::factory()->unverified()->create();
 
     Event::fake();
@@ -58,7 +58,7 @@ it('should not be able to verify email with invalid user id', function () {
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),
-        ['id' => 123, 'hash' => sha1($user->email)]
+        ['id' => 123, 'hash' => sha1((string) $user->email)]
     );
 
     $this->actingAs($user)->get($verificationUrl);
@@ -67,7 +67,7 @@ it('should not be able to verify email with invalid user id', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-it('should be able to redirect verified user to dashboard from verification prompt', function () {
+it('should be able to redirect verified user to dashboard from verification prompt', function (): void {
     $user = User::factory()->create();
 
     Event::fake();
@@ -78,7 +78,7 @@ it('should be able to redirect verified user to dashboard from verification prom
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-it('should be able to redirect already verified user visiting verification link without firing event again', function () {
+it('should be able to redirect already verified user visiting verification link without firing event again', function (): void {
     $user = User::factory()->create();
 
     Event::fake();
@@ -86,7 +86,7 @@ it('should be able to redirect already verified user visiting verification link 
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
         now()->addMinutes(60),
-        ['id' => $user->id, 'hash' => sha1($user->email)]
+        ['id' => $user->id, 'hash' => sha1((string) $user->email)]
     );
 
     $this->actingAs($user)->get($verificationUrl)

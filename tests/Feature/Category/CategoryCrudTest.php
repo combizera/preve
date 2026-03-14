@@ -8,13 +8,13 @@ use App\Enums\TransactionType;
 use App\Models\Category;
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
 // CREATE
-it('should be able to create category', function () {
+it('should be able to create category', function (): void {
     $response = $this->post(route('categories.store'), [
         'name'  => 'New Category',
         'color' => CategoryColor::BLUE->value,
@@ -33,14 +33,14 @@ it('should be able to create category', function () {
 });
 
 // READ
-it('should be able to view categories index', function () {
+it('should be able to view categories index', function (): void {
     $response = $this->get(route('categories.index'));
 
     $response->assertStatus(200);
 });
 
 // EDIT
-it('should be able to edit category', function () {
+it('should be able to edit category', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'name'    => 'New Category',
@@ -64,7 +64,7 @@ it('should be able to edit category', function () {
     ]);
 });
 
-it('shoud not be able to edit category that you do not own', function () {
+it('shoud not be able to edit category that you do not own', function (): void {
     $category = Category::factory()->create();
 
     $response = $this->put(route('categories.update', $category->id), [
@@ -76,7 +76,7 @@ it('shoud not be able to edit category that you do not own', function () {
 });
 
 // DELETE
-it('should be able to delete category', function () {
+it('should be able to delete category', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
     ]);
@@ -86,7 +86,7 @@ it('should be able to delete category', function () {
     $response->assertRedirect(route('categories.index'));
 });
 
-it('should not be able to delete category that you do not own', function () {
+it('should not be able to delete category that you do not own', function (): void {
     $category = Category::factory()->create();
 
     $response = $this->delete(route('categories.destroy', $category->id));

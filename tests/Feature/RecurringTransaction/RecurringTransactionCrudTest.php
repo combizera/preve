@@ -8,13 +8,13 @@ use App\Models\Category;
 use App\Models\RecurringTransaction;
 use App\Models\User;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $user = User::factory()->create();
     $this->actingAs($user);
 });
 
 // CREATE
-it('should be able to create recurring transaction', function () {
+it('should be able to create recurring transaction', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::EXPENSE->value,
@@ -45,7 +45,7 @@ it('should be able to create recurring transaction', function () {
     ]);
 });
 
-it('should be able to store a recurring transaction and automatically generate future projections', function () {
+it('should be able to store a recurring transaction and automatically generate future projections', function (): void {
     $user = User::factory()->create();
     $category = Category::factory()->create(['user_id' => $user->id, 'type' => 'expense']);
 
@@ -72,14 +72,14 @@ it('should be able to store a recurring transaction and automatically generate f
 });
 
 // READ
-it('should be able to view recurring transactions index', function () {
+it('should be able to view recurring transactions index', function (): void {
     $response = $this->get(route('recurring.index'));
 
     $response->assertStatus(200);
 });
 
 // EDIT
-it('should be able to edit recurring transaction', function () {
+it('should be able to edit recurring transaction', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'type'    => TransactionType::EXPENSE->value,
@@ -115,7 +115,7 @@ it('should be able to edit recurring transaction', function () {
     ]);
 });
 
-it('should not be able to edit recurring transaction that you do not own', function () {
+it('should not be able to edit recurring transaction that you do not own', function (): void {
     $recurring = RecurringTransaction::factory()->create();
 
     $category = Category::factory()->create([
@@ -137,7 +137,7 @@ it('should not be able to edit recurring transaction that you do not own', funct
 });
 
 // DELETE
-it('should be able to delete recurring transaction', function () {
+it('should be able to delete recurring transaction', function (): void {
     $recurring = RecurringTransaction::factory()->create([
         'user_id' => auth()->id(),
     ]);
@@ -147,7 +147,7 @@ it('should be able to delete recurring transaction', function () {
     $response->assertRedirect(route('recurring.index'));
 });
 
-it('should not be able to delete recurring transaction that you do not own', function () {
+it('should not be able to delete recurring transaction that you do not own', function (): void {
     $recurring = RecurringTransaction::factory()->create();
 
     $response = $this->delete(route('recurring.destroy', $recurring->id));

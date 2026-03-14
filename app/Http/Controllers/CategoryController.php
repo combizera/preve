@@ -22,9 +22,7 @@ final class CategoryController extends Controller
     {
         $categories = Auth::user()->categories()->get();
 
-        [$expenseCategories, $incomeCategories] = $categories->partition(function (Category $category) {
-            return $category->type === TransactionType::EXPENSE;
-        });
+        [$expenseCategories, $incomeCategories] = $categories->partition(fn (Category $category): bool => $category->type === TransactionType::EXPENSE);
 
         $expenseCategories = $expenseCategories->values();
         $incomeCategories = $incomeCategories->values();

@@ -38,7 +38,9 @@ jobs:
         run: cp .env.example .env
 
       - name: Generate Application Key
-        run: php artisan key:generate
+        run: |
+          php artisan key:generate
+          php artisan key:generate --env=testing
 
       - name: Setup Node
         uses: actions/setup-node@v4

@@ -5,21 +5,21 @@ declare(strict_types=1);
 use App\Models\RecurringTransaction;
 use App\Models\User;
 use App\Services\RecurringTransactionService;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->service = new RecurringTransactionService();
     $this->user = User::factory()->create();
 });
 
 // GENERATION
-it('should be able to generate future transactions and avoid duplicates', function () {
-    Carbon::setTestNow('2026-03-01');
+it('should be able to generate future transactions and avoid duplicates', function (): void {
+    Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
-        'start_date'   => Carbon::parse('2026-03-01'),
+        'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
         'end_date'     => null,
@@ -32,7 +32,7 @@ it('should be able to generate future transactions and avoid duplicates', functi
     expect($recurring->transactions()->count())->toBe(4);
 });
 
-it('should not be able to generate transactions for inactive templates', function () {
+it('should not be able to generate transactions for inactive templates', function (): void {
     $recurring = RecurringTransaction::factory()->create([
         'user_id'   => $this->user->id,
         'is_active' => false,
@@ -42,13 +42,13 @@ it('should not be able to generate transactions for inactive templates', functio
     expect($recurring->transactions()->count())->toBe(0);
 });
 
-it('should not be able to generate transactions beyond the end_date limit', function () {
-    Carbon::setTestNow('2026-03-01');
+it('should not be able to generate transactions beyond the end_date limit', function (): void {
+    Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
-        'start_date'   => Carbon::parse('2026-03-01'),
-        'end_date'     => Carbon::parse('2026-04-30'),
+        'start_date'   => Date::parse('2026-03-01'),
+        'end_date'     => Date::parse('2026-04-30'),
         'day_of_month' => 15,
         'is_active'    => true,
     ]);
@@ -59,14 +59,14 @@ it('should not be able to generate transactions beyond the end_date limit', func
 });
 
 // LOGGING
-it('should log a success message when a transaction is generated', function () {
+it('should log a success message when a transaction is generated', function (): void {
     Log::spy();
 
-    Carbon::setTestNow('2026-03-01');
+    Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
-        'start_date'   => Carbon::parse('2026-03-01'),
+        'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
     ]);
@@ -75,20 +75,18 @@ it('should log a success message when a transaction is generated', function () {
 
     Log::shouldHaveReceived('info')
         ->once()
-        ->withArgs(function ($message, $context) use ($recurring) {
-            return $message === 'Recurring transaction generated successfully.'
-                && $context['recurring_id'] === $recurring->id;
-        });
+        ->withArgs(fn ($message, array $context): bool => $message === 'Recurring transaction generated successfully.'
+            && $context['recurring_id'] === $recurring->id);
 });
 
-it('should log an error message when transaction generation fails', function () {
+it('should log an error message when transaction generation fails', function (): void {
     Log::spy();
 
-    Carbon::setTestNow('2026-03-01');
+    Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
-        'start_date'   => Carbon::parse('2026-03-01'),
+        'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
     ]);
@@ -99,9 +97,7 @@ it('should log an error message when transaction generation fails', function () 
 
     Log::shouldHaveReceived('error')
         ->once()
-        ->withArgs(function ($message, $context) use ($recurring) {
-            return $message === 'Failed to generate recurring transaction.'
-                && $context['recurring_id'] === $recurring->id
-                && isset($context['error']);
-        });
+        ->withArgs(fn ($message, array $context): bool => $message === 'Failed to generate recurring transaction.'
+            && $context['recurring_id'] === $recurring->id
+            && isset($context['error']));
 });
