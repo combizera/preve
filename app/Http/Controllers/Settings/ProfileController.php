@@ -61,4 +61,12 @@ final class ProfileController extends Controller
 
         return redirect('/');
     }
+
+    /**
+     * Setting the user preferences
+     */
+    public function preferences(): Response
+    {
+        return Inertia::render('settings/Preferences');
+    }
 }
