@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Enums\TransactionType;
 use App\Services\ForecastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -49,27 +47,14 @@ final class DashboardController extends Controller
 
         $daysInMonth = $chartDate->copy()->endOfMonth()->day;
 
-        $carryOver = (int) $user->transactions()
-            ->where('transaction_date', '<', $chartDate->copy()->startOfMonth()->toDateString())
-            ->selectRaw('COALESCE(SUM(CASE WHEN type = ? THEN amount ELSE -amount END), 0) as total', [TransactionType::INCOME->value])
-            ->value('total');
+        $carryOver = (int) $user->transactions()->before($chartDate)->netBalance()->value('net_balance');
 
-        $dailyNet = $user->transactions()
-            ->inMonth($chartDate)
-            ->select(
-                DB::raw('EXTRACT(DAY FROM transaction_date)::integer as day'),
-                DB::raw('SUM(CASE WHEN type = \'' . TransactionType::INCOME->value . '\' THEN amount ELSE -amount END) as net'),
-            )
-            ->groupBy(DB::raw('EXTRACT(DAY FROM transaction_date)'))
-            ->pluck('net', 'day');
+        $dailyNet = $user->transactions()->inMonth($chartDate)->dailyNet()->pluck('net', 'day');
 
-        $dailyBalances = [];
-        for ($d = 1; $d <= $daysInMonth; $d++) {
-            $dailyBalances[] = [
-                'day'    => $d,
-                'amount' => (int) ($dailyNet[$d] ?? 0),
-            ];
-        }
+        $dailyBalances = collect(range(1, $daysInMonth))->map(fn (int $day) => [
+            'day'    => $day,
+            'amount' => (int) ($dailyNet[$day] ?? 0),
+        ])->all();
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
