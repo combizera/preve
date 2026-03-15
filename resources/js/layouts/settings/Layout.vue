@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
@@ -11,21 +12,23 @@ import { show } from '@/routes/two-factor';
 import { edit as editPassword } from '@/routes/user-password';
 import { type NavItem } from '@/types';
 
+const { t } = useI18n();
+
 const sidebarNavItems: NavItem[] = [
   {
-    title: 'Profile',
+    title: t('settings.nav.profile'),
     href: editProfile(),
   },
   {
-    title: 'Preferences',
+    title: t('settings.nav.preferences'),
     href: preferences(),
   },
   {
-    title: 'Password',
+    title: t('settings.nav.password'),
     href: editPassword(),
   },
   {
-    title: 'Two-Factor Auth',
+    title: t('settings.nav.twoFactorAuth'),
     href: show(),
   },
 ];
@@ -36,15 +39,15 @@ const { isCurrentUrl } = useCurrentUrl();
 <template>
   <div class="px-4 py-6">
     <Heading
-      title="Settings"
-      description="Manage your profile and account settings"
+      :title="t('settings.title')"
+      :description="t('settings.description')"
     />
 
     <div class="flex flex-col lg:flex-row lg:space-x-12">
       <aside class="w-full max-w-xl lg:w-48">
         <nav
           class="flex flex-col space-y-1 space-x-0"
-          aria-label="Settings"
+          :aria-label="t('settings.title')"
         >
           <Button
             v-for="item in sidebarNavItems"

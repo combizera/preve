@@ -218,6 +218,91 @@
             "description": "Make changes to {name}. Click save when you're done."
         }
     },
+    "settings": {
+        "title": "Settings",
+        "description": "Manage your profile and account settings",
+        "nav": {
+            "profile": "Profile",
+            "preferences": "Preferences",
+            "password": "Password",
+            "twoFactorAuth": "Two-Factor Auth"
+        },
+        "profile": {
+            "title": "Profile settings",
+            "heading": "Profile information",
+            "description": "Update your name and email address",
+            "nameLabel": "Name",
+            "namePlaceholder": "Full name",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "Email address",
+            "unverifiedEmail": "Your email address is unverified.",
+            "resendVerification": "Click here to resend the verification email.",
+            "verificationSent": "A new verification link has been sent to your email address.",
+            "save": "Save",
+            "saved": "Saved."
+        },
+        "password": {
+            "title": "Password settings",
+            "heading": "Update password",
+            "description": "Ensure your account is using a long, random password to stay secure",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm password",
+            "savePassword": "Save password",
+            "saved": "Saved."
+        },
+        "preferences": {
+            "title": "Preferences settings",
+            "heading": "Choose your language",
+            "description": "Select the language you want to use in the application"
+        },
+        "deleteAccount": {
+            "title": "Delete account",
+            "description": "Delete your account and all of its resources",
+            "warning": "Warning",
+            "warningMessage": "Please proceed with caution, this cannot be undone.",
+            "button": "Delete account",
+            "confirmTitle": "Are you sure you want to delete your account?",
+            "confirmDescription": "Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Password"
+        },
+        "twoFactor": {
+            "title": "Two-Factor Authentication",
+            "description": "Manage your two-factor authentication settings",
+            "disabled": "Disabled",
+            "enabled": "Enabled",
+            "disabledDescription": "When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.",
+            "enabledDescription": "With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.",
+            "continueSetup": "Continue Setup",
+            "enable": "Enable 2FA",
+            "disable": "Disable 2FA",
+            "recoveryCodes": {
+                "title": "2FA Recovery Codes",
+                "description": "Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.",
+                "hide": "Hide",
+                "view": "View",
+                "recoveryCodes": "Recovery Codes",
+                "regenerate": "Regenerate Codes",
+                "info": "Each recovery code can be used once to access your account and will be removed after use. If you need more, click",
+                "infoHighlight": "Regenerate Codes",
+                "infoEnd": "above."
+            },
+            "setup": {
+                "enabledTitle": "Two-Factor Authentication Enabled",
+                "enabledDescription": "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
+                "close": "Close",
+                "verifyTitle": "Verify Authentication Code",
+                "verifyDescription": "Enter the 6-digit code from your authenticator app",
+                "continue": "Continue",
+                "enableTitle": "Enable Two-Factor Authentication",
+                "enableDescription": "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
+                "orEnterManually": "or, enter the code manually",
+                "back": "Back",
+                "confirm": "Confirm"
+            }
+        }
+    },
     "tags": {
         "title": "Tags",
         "description": "Manage your tags here.",

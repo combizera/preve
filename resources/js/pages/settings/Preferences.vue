@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -7,9 +8,11 @@ import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { edit } from '@/routes/profile';
 import { type BreadcrumbItem } from '@/types';
 
+const { t } = useI18n();
+
 const breadcrumbItems: BreadcrumbItem[] = [
     {
-        title: 'Preferences settings',
+        title: t('settings.preferences.title'),
         href: edit().url,
     },
 ];
@@ -20,16 +23,16 @@ const user = page.props.auth.user;
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Profile settings" />
+        <Head :title="t('settings.preferences.title')" />
 
-        <h1 class="sr-only">Profile Settings</h1>
+        <h1 class="sr-only">{{ t('settings.preferences.title') }}</h1>
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
                 <Heading
                     variant="small"
-                    title="Choose your language"
-                    description="Select the language you want to use in the application"
+                    :title="t('settings.preferences.heading')"
+                    :description="t('settings.preferences.description')"
                 />
               <h1>
                 hello

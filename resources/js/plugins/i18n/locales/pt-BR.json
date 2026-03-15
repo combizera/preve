@@ -218,6 +218,91 @@
             "description": "Faça alterações em {name}. Clique em salvar quando terminar."
         }
     },
+    "settings": {
+        "title": "Configurações",
+        "description": "Gerencie seu perfil e configurações da conta",
+        "nav": {
+            "profile": "Perfil",
+            "preferences": "Preferências",
+            "password": "Senha",
+            "twoFactorAuth": "Autenticação 2FA"
+        },
+        "profile": {
+            "title": "Configurações do perfil",
+            "heading": "Informações do perfil",
+            "description": "Atualize seu nome e endereço de email",
+            "nameLabel": "Nome",
+            "namePlaceholder": "Nome completo",
+            "emailLabel": "Endereço de email",
+            "emailPlaceholder": "Endereço de email",
+            "unverifiedEmail": "Seu endereço de email não foi verificado.",
+            "resendVerification": "Clique aqui para reenviar o email de verificação.",
+            "verificationSent": "Um novo link de verificação foi enviado para seu endereço de email.",
+            "save": "Salvar",
+            "saved": "Salvo."
+        },
+        "password": {
+            "title": "Configurações de senha",
+            "heading": "Atualizar senha",
+            "description": "Garanta que sua conta esteja usando uma senha longa e aleatória para se manter segura",
+            "currentPassword": "Senha atual",
+            "newPassword": "Nova senha",
+            "confirmPassword": "Confirmar senha",
+            "savePassword": "Salvar senha",
+            "saved": "Salvo."
+        },
+        "preferences": {
+            "title": "Configurações de preferências",
+            "heading": "Escolha seu idioma",
+            "description": "Selecione o idioma que deseja usar na aplicação"
+        },
+        "deleteAccount": {
+            "title": "Excluir conta",
+            "description": "Exclua sua conta e todos os seus recursos",
+            "warning": "Aviso",
+            "warningMessage": "Prossiga com cautela, esta ação não pode ser desfeita.",
+            "button": "Excluir conta",
+            "confirmTitle": "Tem certeza que deseja excluir sua conta?",
+            "confirmDescription": "Assim que sua conta for excluída, todos os seus recursos e dados também serão permanentemente excluídos. Por favor, digite sua senha para confirmar que deseja excluir permanentemente sua conta.",
+            "passwordLabel": "Senha",
+            "passwordPlaceholder": "Senha"
+        },
+        "twoFactor": {
+            "title": "Autenticação de Dois Fatores",
+            "description": "Gerencie suas configurações de autenticação de dois fatores",
+            "disabled": "Desativado",
+            "enabled": "Ativado",
+            "disabledDescription": "Quando você ativar a autenticação de dois fatores, será solicitado um pin seguro durante o login. Esse pin pode ser obtido em um aplicativo compatível com TOTP no seu celular.",
+            "enabledDescription": "Com a autenticação de dois fatores ativada, você será solicitado por um pin seguro e aleatório durante o login, que pode ser obtido no aplicativo compatível com TOTP no seu celular.",
+            "continueSetup": "Continuar Configuração",
+            "enable": "Ativar 2FA",
+            "disable": "Desativar 2FA",
+            "recoveryCodes": {
+                "title": "Códigos de Recuperação 2FA",
+                "description": "Os códigos de recuperação permitem que você recupere o acesso caso perca seu dispositivo 2FA. Armazene-os em um gerenciador de senhas seguro.",
+                "hide": "Ocultar",
+                "view": "Ver",
+                "recoveryCodes": "Códigos de Recuperação",
+                "regenerate": "Regenerar Códigos",
+                "info": "Cada código de recuperação pode ser usado uma vez para acessar sua conta e será removido após o uso. Se precisar de mais, clique em",
+                "infoHighlight": "Regenerar Códigos",
+                "infoEnd": "acima."
+            },
+            "setup": {
+                "enabledTitle": "Autenticação de Dois Fatores Ativada",
+                "enabledDescription": "A autenticação de dois fatores está agora ativada. Escaneie o código QR ou insira a chave de configuração no seu aplicativo autenticador.",
+                "close": "Fechar",
+                "verifyTitle": "Verificar Código de Autenticação",
+                "verifyDescription": "Digite o código de 6 dígitos do seu aplicativo autenticador",
+                "continue": "Continuar",
+                "enableTitle": "Ativar Autenticação de Dois Fatores",
+                "enableDescription": "Para finalizar a ativação da autenticação de dois fatores, escaneie o código QR ou insira a chave de configuração no seu aplicativo autenticador",
+                "orEnterManually": "ou, insira o código manualmente",
+                "back": "Voltar",
+                "confirm": "Confirmar"
+            }
+        }
+    },
     "tags": {
         "title": "Tags",
         "description": "Gerencie suas tags aqui.",
