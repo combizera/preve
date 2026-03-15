@@ -53,7 +53,7 @@ final class TransactionRequest extends FormRequest
                 if ($category && $category->type->value !== $this->type) {
                     $validator->errors()->add(
                         'category_id',
-                        "The selected category must be of type {$this->type}."
+                        __('validation.custom.category_id.type_mismatch', ['type' => $this->type]),
                     );
                 }
             },

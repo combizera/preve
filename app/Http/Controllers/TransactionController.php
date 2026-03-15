@@ -46,7 +46,7 @@ final class TransactionController extends Controller
 
         Auth::user()->transactions()->create($validated);
 
-        $this->toast::success('Transaction created successfully.');
+        $this->toast::success(__('messages.transaction.created'));
 
         return back();
     }
@@ -70,7 +70,7 @@ final class TransactionController extends Controller
 
         $transaction->update($request->all());
 
-        $this->toast::success('Transaction updated successfully.');
+        $this->toast::success(__('messages.transaction.updated'));
 
         return back();
     }
@@ -84,7 +84,7 @@ final class TransactionController extends Controller
 
         $transaction->delete();
 
-        $this->toast::success('Transaction deleted successfully.');
+        $this->toast::success(__('messages.transaction.deleted'));
 
         return back();
     }

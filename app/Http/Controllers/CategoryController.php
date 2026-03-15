@@ -39,7 +39,7 @@ final class CategoryController extends Controller
 
         Auth::user()->categories()->create($validated);
 
-        $this->toast::success('Category created successfully.');
+        $this->toast::success(__('messages.category.created'));
 
         return to_route('categories.index');
     }
@@ -53,7 +53,7 @@ final class CategoryController extends Controller
 
         $category->update($request->all());
 
-        $this->toast::success('Category updated successfully.');
+        $this->toast::success(__('messages.category.updated'));
 
         return to_route('categories.index');
     }
@@ -67,7 +67,7 @@ final class CategoryController extends Controller
 
         $category->delete();
 
-        $this->toast::success('Category deleted successfully.');
+        $this->toast::success(__('messages.category.deleted'));
 
         return to_route('categories.index');
     }

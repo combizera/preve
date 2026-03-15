@@ -11,6 +11,7 @@ Route::middleware(['auth'])->group(function (): void {
     Route::redirect('settings', '/settings/profile');
 
     Route::get('settings/preferences', [ProfileController::class, 'preferences'])->name('profile.preferences');
+    Route::patch('settings/locale', [ProfileController::class, 'updateLocale'])->name('profile.locale');
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
 });

@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n';
 
+import { BACKEND_TO_FRONTEND_LOCALE } from './locale-map';
 import en from './locales/en.json';
 import ptBR from './locales/pt-BR.json';
 
@@ -10,23 +11,26 @@ export const SUPPORTED_LOCALES: { value: SupportedLocale; label: string }[] = [
     { value: 'en', label: 'English' },
 ];
 
-function getStoredLocale(): SupportedLocale {
+function getInitialLocale(): SupportedLocale {
     if (typeof window === 'undefined') {
-        return 'pt-BR';
+        return 'en';
     }
 
-    const stored = localStorage.getItem('locale') as SupportedLocale | null;
-
-    if (stored && SUPPORTED_LOCALES.some((l) => l.value === stored)) {
-        return stored;
+    const inertiaEl = document.getElementById('app');
+    if (inertiaEl?.dataset.page) {
+        const pageData = JSON.parse(inertiaEl.dataset.page);
+        const backendLocale = pageData?.props?.auth?.user?.locale;
+        if (backendLocale && BACKEND_TO_FRONTEND_LOCALE[backendLocale]) {
+            return BACKEND_TO_FRONTEND_LOCALE[backendLocale];
+        }
     }
 
-    return 'pt-BR';
+    return 'en';
 }
 
 const i18n = createI18n({
     legacy: false,
-    locale: getStoredLocale(),
+    locale: getInitialLocale(),
     fallbackLocale: 'en',
     messages: {
         en,

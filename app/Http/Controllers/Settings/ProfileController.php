@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Http\Requests\Settings\UpdateLocaleRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,7 +41,7 @@ final class ProfileController extends Controller
 
         $request->user()->save();
 
-        $this->toast::success('Profile updated successfully.');
+        $this->toast::success(__('messages.profile.updated'));
 
         return to_route('profile.edit');
     }
@@ -60,6 +61,16 @@ final class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Update the user's locale.
+     */
+    public function updateLocale(UpdateLocaleRequest $request): RedirectResponse
+    {
+        Auth::user()->update($request->validated());
+
+        return back();
     }
 
     /**
