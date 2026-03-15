@@ -9,7 +9,7 @@ defineProps<Props>();
 </script>
 
 <template>
-  <div class="flex flex-col rounded-lg-outer border bg-sidebar p-1">
+  <div class="double-border flex flex-col bg-sidebar">
     <div class="p-2 pb-3">
       <div class="flex items-center gap-1 text-foreground">
         <Plus class="size-4" />

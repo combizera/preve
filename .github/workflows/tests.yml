@@ -20,6 +20,21 @@ jobs:
       matrix:
         php-version: ['8.4', '8.5']
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: preve_testing
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -55,6 +70,12 @@ jobs:
 
       - name: Build Assets
         run: npm run build
+
+      - name: Configure test database
+        run: |
+          sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/' .env.testing
+          sed -i 's/DB_USERNAME=root/DB_USERNAME=postgres/' .env.testing
+          sed -i 's/DB_PASSWORD=root/DB_PASSWORD=postgres/' .env.testing
 
       - name: Tests
         run: ./vendor/bin/pest --coverage --coverage-clover clover.xml

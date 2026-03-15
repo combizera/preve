@@ -1,6 +1,7 @@
+import type { FrequencyType } from '@/types/models/recurring-transaction';
+
 import { capitalizeFirstLetter } from './utils';
 
-import type { FrequencyType } from '@/types/models/recurring-transaction';
 
 /**
  * Formats the frequency text with the day of month

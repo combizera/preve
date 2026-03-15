@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { nextTick, ref } from 'vue';
 import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';
 
@@ -97,7 +97,7 @@ const handleToCurrentMonth = () => {
 </script>
 
 <template>
-  <section class="p-1 border rounded-lg-outer">
+  <section class="double-border">
     <div class="flex justify-between items-center gap-2 relative w-full overflow-auto border rounded-lg p-2 px-4">
 
       <!-- YEAR -->
