@@ -2,6 +2,7 @@
 import { CurveType } from '@unovis/ts';
 import { VisArea, VisAxis, VisLine, VisXYContainer } from '@unovis/vue';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
 import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
@@ -12,9 +13,10 @@ import {
   ChartTooltip,
   componentToString,
 } from '@/components/ui/chart';
-import { MONTHS } from '@/lib/calendar';
+import { MONTH_KEYS } from '@/lib/calendar';
 import type { IDailyBalance } from '@/types/models/transaction';
 
+const { t } = useI18n();
 
 interface Props {
   monthlyIncome: number;
@@ -47,7 +49,7 @@ const currentDay = computed(() => {
 
 const selectedMonthIndex = computed(() => (props.selectedMonth?.month ?? now.getMonth() + 1) - 1);
 
-const monthName = computed(() => MONTHS[selectedMonthIndex.value]);
+const monthName = computed(() => t(`dashboard.calendar.months.${MONTH_KEYS[selectedMonthIndex.value]}`));
 
 const displayMonth = computed(() => {
   const year = props.selectedMonth?.year ?? now.getFullYear();
@@ -65,16 +67,16 @@ const chartData = computed(() => {
   });
 });
 
-const chartConfig = {
+const chartConfig = computed<ChartConfig>(() => ({
   balance: {
-    label: 'Balance',
+    label: t('dashboard.chart.balance'),
     color: 'var(--primary)',
   },
   forecast: {
-    label: 'Forecast',
+    label: t('dashboard.chart.forecast'),
     color: 'var(--primary)',
   },
-} satisfies ChartConfig;
+}));
 
 const x = (_d: ChartPoint, i: number) => i;
 
@@ -102,11 +104,11 @@ const formatCurrency = (d: number) => {
   <section class="double-border">
     <div class="flex flex-col border rounded-lg overflow-hidden">
       <ChartHeader
-        title="Daily Balance"
+        :title="t('dashboard.chart.dailyBalance')"
         :description="displayMonth"
         :items="[
-          { label: 'Income', value: props.monthlyIncome, variant: 'positive' },
-          { label: 'Expenses', value: props.monthlyExpenses, variant: 'destructive' },
+          { label: t('dashboard.chart.income'), value: props.monthlyIncome, variant: 'positive' },
+          { label: t('dashboard.chart.expenses'), value: props.monthlyExpenses, variant: 'destructive' },
         ]"
       />
 
@@ -170,7 +172,7 @@ const formatCurrency = (d: number) => {
             :color="chartConfig.balance.color"
             :template="
               componentToString(chartConfig, ChartMonthlyTooltip, {
-                monthName: monthName.value,
+                monthName: monthName,
               })
             "
           />

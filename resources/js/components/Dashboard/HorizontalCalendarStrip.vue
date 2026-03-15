@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MONTHS } from '@/lib/calendar';
+import { MONTH_KEYS } from '@/lib/calendar';
 
 const { t } = useI18n();
 
@@ -126,9 +126,9 @@ const handleToCurrentMonth = () => {
 
         <ul ref="stripRef" class="w-full h-full py-1 flex items-center gap-0 overflow-hidden scroll-smooth">
           <CardCalendar
-            v-for="(month, index) in MONTHS"
+            v-for="(key, index) in MONTH_KEYS"
             :key="index"
-            :month="month"
+            :month="t(`dashboard.calendar.months.${key}`)"
             :year="Number(selectedYear)"
             :isSelected="index === selectedMonth"
             :isCurrent="index === currentMonth && Number(selectedYear) === currentYear"

@@ -1,6 +1,8 @@
 /**
- * List of month names used in the HorizontalCalendarStrip
+ * Month translation keys used across dashboard components.
+ * Maps to dashboard.calendar.months.* in locale files.
  */
-export const MONTHS = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
+export const MONTH_KEYS = [
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december',
 ] as const;

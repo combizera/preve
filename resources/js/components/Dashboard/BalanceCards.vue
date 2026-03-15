@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import DashboardCard from '@/components/Dashboard/DashboardCard.vue';
-import { MONTHS } from '@/lib/calendar';
+import { MONTH_KEYS } from '@/lib/calendar';
 import { formatCentsToDisplay } from '@/lib/currency';
 
 const { t } = useI18n();
@@ -32,7 +32,7 @@ const forecastVariant = computed(() => {
 const forecastDescription = computed(() => {
   if (!props.selectedMonth) return t('dashboard.forecastDescription');
   return t('dashboard.forecastForMonth', {
-    month: MONTHS[props.selectedMonth.month - 1],
+    month: t(`dashboard.calendar.months.${MONTH_KEYS[props.selectedMonth.month - 1]}`),
     year: props.selectedMonth.year,
   });
 });

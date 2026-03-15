@@ -174,7 +174,28 @@
         "calendar": {
             "year": "Year",
             "earliestYear": "You have reached the earliest available year.",
-            "latestYear": "You have reached the latest available year."
+            "latestYear": "You have reached the latest available year.",
+            "months": {
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
+            }
+        },
+        "chart": {
+            "dailyBalance": "Daily Balance",
+            "income": "Income",
+            "expenses": "Expenses",
+            "balance": "Balance",
+            "forecast": "Forecast"
         }
     },
     "transactions": {
