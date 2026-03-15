@@ -120,6 +120,46 @@
             "description": "Enter your details below to create your account",
             "haveAccount": "Already have an account?",
             "buttonText": "Create an account"
+        },
+        "confirmPassword": {
+            "title": "Confirm your password",
+            "description": "This is a secure area of the application. Please confirm your password before continuing.",
+            "button": "Confirm Password"
+        },
+        "forgotPassword": {
+            "title": "Forgot password",
+            "description": "Enter your email to receive a password reset link",
+            "emailLabel": "Email address",
+            "button": "Email password reset link",
+            "orReturnTo": "Or, return to",
+            "logIn": "log in"
+        },
+        "resetPassword": {
+            "title": "Reset password",
+            "description": "Please enter your new password below",
+            "button": "Reset password"
+        },
+        "twoFactorChallenge": {
+            "authCode": {
+                "title": "Authentication Code",
+                "description": "Enter the authentication code provided by your authenticator application.",
+                "toggleText": "login using a recovery code"
+            },
+            "recoveryCode": {
+                "title": "Recovery Code",
+                "description": "Please confirm access to your account by entering one of your emergency recovery codes.",
+                "toggleText": "login using an authentication code",
+                "placeholder": "Enter recovery code"
+            },
+            "orYouCan": "or you can",
+            "continue": "Continue"
+        },
+        "verifyEmail": {
+            "title": "Verify email",
+            "description": "Please verify your email address by clicking on the link we just emailed to you.",
+            "verificationSent": "A new verification link has been sent to the email address you provided during registration.",
+            "resendButton": "Resend verification email",
+            "logOut": "Log out"
         }
     },
     "dashboard": {
