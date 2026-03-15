@@ -43,6 +43,7 @@
             "icon": "Ícone"
         },
         "sidebar": {
+            "platform": "Plataforma",
             "home": "Início",
             "transactions": "Transações",
             "recurring": "Recorrentes",
@@ -50,7 +51,11 @@
             "tags": "Tags",
             "profile": "Perfil",
             "settings": "Configurações",
-            "logout": "Sair"
+            "logout": "Sair",
+            "theme": "Tema",
+            "systemTheme": "Tema do sistema",
+            "lightTheme": "Tema claro",
+            "darkTheme": "Tema escuro"
         },
         "placeholders": {
             "email": "email{'@'}exemplo.com",
