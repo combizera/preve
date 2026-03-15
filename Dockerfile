@@ -152,13 +152,13 @@ HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
 # ############################################
 FROM ${CLI_IMAGE} AS cli
 
-USER root
 WORKDIR /var/www/html
 
-COPY --from=build /var/www/html /var/www/html
+COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html \
-    && mkdir -p storage/framework/views \
+ENV AUTORUN_ENABLED="false"
+
+RUN mkdir -p storage/framework/views \
     && mkdir -p storage/framework/cache \
     && mkdir -p storage/framework/sessions \
     && mkdir -p storage/logs \
