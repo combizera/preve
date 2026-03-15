@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 final class Transaction extends Model
 {
@@ -36,6 +37,11 @@ final class Transaction extends Model
         'transaction_date' => 'datetime',
         'type'             => TransactionType::class,
     ];
+
+    public static function netAmountSql(): string
+    {
+        return 'SUM(CASE WHEN type = ? THEN amount ELSE -amount END)';
+    }
 
     /**
      * @return BelongsTo<User, $this>
@@ -106,5 +112,29 @@ final class Transaction extends Model
     protected function pending(Builder $query, CarbonInterface $date): Builder
     {
         return $query->where('transaction_date', '>', $date->toDateString());
+    }
+
+    #[Scope]
+    protected function before(Builder $query, CarbonInterface $date): Builder
+    {
+        return $query->where('transaction_date', '<', $date->copy()->startOfMonth()->toDateString());
+    }
+
+    #[Scope]
+    protected function netBalance(Builder $query): Builder
+    {
+        return $query->selectRaw(
+            'COALESCE(' . self::netAmountSql() . ', 0) as net_balance',
+            [TransactionType::INCOME->value],
+        );
+    }
+
+    #[Scope]
+    protected function dailyNet(Builder $query): Builder
+    {
+        return $query
+            ->selectRaw('EXTRACT(DAY FROM transaction_date)::integer as day')
+            ->selectRaw(self::netAmountSql() . ' as net', [TransactionType::INCOME->value])
+            ->groupBy(DB::raw('EXTRACT(DAY FROM transaction_date)'));
     }
 }

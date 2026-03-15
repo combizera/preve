@@ -55,6 +55,15 @@ wayfinder:
 	$(DOCKER_COMPOSE) exec app php artisan wayfinder:generate --with-form
 
 # -------------------------------------------------------------------
+# Tests
+# -------------------------------------------------------------------
+test:
+	$(DOCKER_COMPOSE) exec app php artisan test
+
+test-coverage:
+	$(DOCKER_COMPOSE) exec app ./vendor/bin/pest --coverage
+
+# -------------------------------------------------------------------
 # Node / Vite / NPM
 # -------------------------------------------------------------------
 npm-install:

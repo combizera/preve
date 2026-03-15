@@ -96,6 +96,10 @@
             'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
             'Noto Color Emoji';
     }
+
+    .double-border {
+        @apply p-1 border rounded-lg-outer;
+    }
 }
 
 :root {

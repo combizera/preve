@@ -4,11 +4,12 @@ import { useI18n } from 'vue-i18n';
 
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import transactions from '@/routes/transactions';
-import { ITransaction } from '@/types/models/transaction';
+import type { ITransaction, TransactionType } from '@/types/models/transaction';
 import { formatTransactionDate } from '@/utils/formatDate';
 
 interface Props {
@@ -18,11 +19,10 @@ interface Props {
 defineProps<Props>();
 
 const { t } = useI18n();
-
-function getAmountClass(type: string) {
+function getAmountClass(type: TransactionType) {
   return cn(
     'text-sm font-medium',
-    type === 'expense'
+    type === TRANSACTION_TYPE.EXPENSE
       ? "text-foreground/70 before:content-['-']"
       : 'text-positive',
   );
