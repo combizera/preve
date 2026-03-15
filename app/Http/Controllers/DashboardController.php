@@ -36,28 +36,27 @@ final class DashboardController extends Controller
             $request->integer('forecast_year', $now->year),
         );
 
-        $chartDate = $now->copy()->setYear(
-            $request->integer('forecast_year', $now->year)
-        )->setMonth(
-            $request->integer('forecast_month', $now->month)
-        );
+        $chartDate = $now->copy()
+            ->setYear($request->integer('forecast_year', $now->year))
+            ->setMonth($request->integer('forecast_month', $now->month))
+            ->startOfMonth();
 
         $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
         $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
 
-        $daysInMonth = $chartDate->copy()->endOfMonth()->day;
+        $daysInMonth = $chartDate->endOfMonth()->day;
 
         $carryOver = (int) $user->transactions()->before($chartDate)->netBalance()->value('net_balance');
 
         $dailyNet = $user->transactions()->inMonth($chartDate)->dailyNet()->pluck('net', 'day');
 
-        $dailyBalances = collect(range(1, $daysInMonth))->map(fn (int $day) => [
+        $dailyBalances = collect(range(1, $daysInMonth))->map(fn (int $day): array => [
             'day'    => $day,
             'amount' => (int) ($dailyNet[$day] ?? 0),
         ])->all();
 
-        $categories = Auth::user()->categories()->get();
-        $tags = Auth::user()->tags()->get();
+        $categories = $user->categories()->get();
+        $tags = $user->tags()->get();
 
         return Inertia::render('Dashboard', compact(
             'latestTransactions',
