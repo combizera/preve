@@ -1,8 +1,8 @@
 import { createI18n } from 'vue-i18n';
 
+import { BACKEND_TO_FRONTEND_LOCALE } from './locale-map';
 import en from './locales/en.json';
 import ptBR from './locales/pt-BR.json';
-import { BACKEND_TO_FRONTEND_LOCALE } from './locale-map';
 
 export type SupportedLocale = 'en' | 'pt-BR';
 

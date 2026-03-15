@@ -1,5 +1,5 @@
-import { useI18n } from 'vue-i18n';
 import { usePage, router } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import { type SupportedLocale, SUPPORTED_LOCALES } from '@/plugins/i18n';
 import { BACKEND_TO_FRONTEND_LOCALE, FRONTEND_TO_BACKEND_LOCALE } from '@/plugins/i18n/locale-map';
