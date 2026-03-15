@@ -110,6 +110,7 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./docker/postgres/create-testing-db.sql:/docker-entrypoint-initdb.d/create-testing-db.sql
     networks:
       - development
     healthcheck:
