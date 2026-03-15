@@ -181,8 +181,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'category_id' => [
+            'type_mismatch' => 'The selected category must be of type :type.',
         ],
     ],
 
