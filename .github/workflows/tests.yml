@@ -71,6 +71,12 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Configure test database
+        run: |
+          sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/' .env.testing
+          sed -i 's/DB_USERNAME=root/DB_USERNAME=postgres/' .env.testing
+          sed -i 's/DB_PASSWORD=root/DB_PASSWORD=postgres/' .env.testing
+
       - name: Tests
         run: ./vendor/bin/pest --coverage --coverage-clover clover.xml
 
