@@ -293,8 +293,17 @@
         },
         "preferences": {
             "title": "Preferences settings",
-            "heading": "Choose your language",
-            "description": "Select the language you want to use in the application"
+            "language": {
+                "title": "Language",
+                "description": "Select the language you want to use in the application",
+                "label": "Language",
+                "placeholder": "Select a language"
+            },
+            "currency": {
+                "title": "Currency",
+                "description": "Choose the currency for displaying your financial data",
+                "comingSoon": "Coming soon"
+            }
         },
         "deleteAccount": {
             "title": "Delete account",
