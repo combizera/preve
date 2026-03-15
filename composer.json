@@ -3,6 +3,7 @@
     "name": "laravel/vue-starter-kit",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
+    "version": "1.0.0",
     "keywords": [
         "laravel",
         "framework"
@@ -114,7 +115,10 @@
         ],
         "format": "./vendor/bin/pint",
         "analyse": "./vendor/bin/phpstan",
-        "analyse:type": "./vendor/bin/pest --type-coverage"
+        "analyse:type": "./vendor/bin/pest --type-coverage",
+        "get-version": [
+            "@php -r \"echo json_decode(file_get_contents('composer.json'))->version;\""
+        ]
     },
     "extra": {
         "laravel": {
