@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import { dashboard, login, register } from '@/routes';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
