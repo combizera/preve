@@ -18,6 +18,9 @@
             },
             {
                 "action": "\\GitHooks\\PHPStan"
+            },
+            {
+                "action": "\\GitHooks\\EsLint"
             }
         ]
     },
