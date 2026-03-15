@@ -35,7 +35,7 @@ final class TagController extends Controller
 
         Auth::user()->tags()->create($validated);
 
-        $this->toast::success('Tag created successfully.');
+        $this->toast::success(__('messages.tag.created'));
 
         return to_route('tags.index');
     }
@@ -49,7 +49,7 @@ final class TagController extends Controller
 
         $tag->update($request->all());
 
-        $this->toast::success('Tag updated successfully.');
+        $this->toast::success(__('messages.tag.updated'));
 
         return to_route('tags.index');
     }
@@ -63,7 +63,7 @@ final class TagController extends Controller
 
         $tag->delete();
 
-        $this->toast::success('Tag deleted successfully.');
+        $this->toast::success(__('messages.tag.deleted'));
 
         return to_route('tags.index');
     }

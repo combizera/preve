@@ -41,7 +41,7 @@ final class ProfileController extends Controller
 
         $request->user()->save();
 
-        $this->toast::success('Profile updated successfully.');
+        $this->toast::success(__('messages.profile.updated'));
 
         return to_route('profile.edit');
     }

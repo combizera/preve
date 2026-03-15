@@ -8,9 +8,9 @@ use App\Enums\TransactionType;
 use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
 use App\Services\RecurringTransactionService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -48,7 +48,7 @@ final class RecurringTransactionController extends Controller
         $recurringTransaction = Auth::user()->recurringTransactions()->create($validated);
 
         $service->generateFutureTransactions($recurringTransaction, 3);
-        $this->toast::success('Recurring transaction created successfully! The next 3 months of transactions are now projected in your statement.');
+        $this->toast::success(__('messages.recurring.created'));
 
         return to_route('recurring.index');
     }
@@ -62,7 +62,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($request->all());
 
-        $this->toast::success('Recurring transaction updated successfully.');
+        $this->toast::success(__('messages.recurring.updated'));
 
         return to_route('recurring.index');
     }
@@ -79,9 +79,9 @@ final class RecurringTransactionController extends Controller
         ]);
 
         if ($recurring->is_active) {
-            $this->toast::success('Recurring transaction activated successfully.');
+            $this->toast::success(__('messages.recurring.activated'));
         } else {
-            $this->toast::warning('Recurring transaction deactivated successfully.');
+            $this->toast::warning(__('messages.recurring.deactivated'));
         }
 
         return to_route('recurring.index');
@@ -94,7 +94,7 @@ final class RecurringTransactionController extends Controller
     {
         $this->authorize('delete', $recurring);
 
-        $startOfNextMonth = Carbon::now()->endOfMonth()->addDay()->startOfDay();
+        $startOfNextMonth = Date::now()->endOfMonth()->addDay()->startOfDay();
 
         $recurring->transactions()
             ->where('transaction_date', '>=', $startOfNextMonth)
@@ -102,7 +102,7 @@ final class RecurringTransactionController extends Controller
 
         $recurring->delete();
 
-        $this->toast::success('Recurring transaction deleted successfully.');
+        $this->toast::success(__('messages.recurring.deleted'));
 
         return to_route('recurring.index');
     }
