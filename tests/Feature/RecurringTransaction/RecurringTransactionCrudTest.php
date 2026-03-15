@@ -23,7 +23,7 @@ it('should be able to create recurring transaction', function (): void {
     $response = $this->post(route('recurring.store'), [
         'category_id'  => $category->id,
         'tag_id'       => null,
-        'amount'       => 99.90,
+        'amount'       => 9990,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
         'description'  => 'Internet Service',
@@ -37,7 +37,7 @@ it('should be able to create recurring transaction', function (): void {
 
     $this->assertDatabaseHas('recurring_transactions', [
         'category_id'  => $category->id,
-        'amount'       => 99.90,
+        'amount'       => 9990,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
         'description'  => 'Internet Service',
@@ -88,7 +88,7 @@ it('should be able to edit recurring transaction', function (): void {
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => auth()->id(),
         'category_id'  => $category->id,
-        'amount'       => 99.90,
+        'amount'       => 9990,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
         'description'  => 'Internet Service',
@@ -97,7 +97,7 @@ it('should be able to edit recurring transaction', function (): void {
 
     $response = $this->put(route('recurring.update', $recurring->id), [
         'category_id'  => $category->id,
-        'amount'       => 129.90,
+        'amount'       => 12990,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
         'description'  => 'Updated Internet Service',
@@ -109,7 +109,7 @@ it('should be able to edit recurring transaction', function (): void {
 
     $this->assertDatabaseHas('recurring_transactions', [
         'id'           => $recurring->id,
-        'amount'       => 129.90,
+        'amount'       => 12990,
         'description'  => 'Updated Internet Service',
         'day_of_month' => 15,
     ]);
@@ -125,7 +125,7 @@ it('should not be able to edit recurring transaction that you do not own', funct
 
     $response = $this->put(route('recurring.update', $recurring->id), [
         'category_id'  => $category->id,
-        'amount'       => 200.00,
+        'amount'       => 20000,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
         'description'  => 'Updated Recurring',

@@ -25,7 +25,7 @@ final class ForecastService
         $cursor = $currentDate->copy()->addMonth();
         while ($cursor->lessThanOrEqualTo($selectedDate)) {
             $forecast += $this->monthBalance($user, $cursor);
-            $cursor->addMonth();
+            $cursor = $cursor->addMonth();
         }
 
         return $forecast;
@@ -33,18 +33,10 @@ final class ForecastService
 
     private function monthBalance(User $user, CarbonInterface $date): int
     {
-        $income = $user
+        return (int) $user
             ->transactions()
             ->inMonth($date)
-            ->income()
-            ->sum('amount');
-
-        $expenses = $user
-            ->transactions()
-            ->inMonth($date)
-            ->expense()
-            ->sum('amount');
-
-        return $income - $expenses;
+            ->netBalance()
+            ->value('net_balance');
     }
 }
