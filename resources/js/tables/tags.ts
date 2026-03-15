@@ -4,15 +4,15 @@ import { h } from 'vue';
 import TagActions from '@/components/Tag/TagActions.vue';
 import { ITag } from '@/types/models/tag';
 
-export const columns: ColumnDef<ITag>[] = [
+export const createColumns = (t: (key: string) => string): ColumnDef<ITag>[] => [
     {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('generic.labels.name'),
         cell: ({ row }) => h('p', { class: 'font-medium' }, row.original.name),
     },
     {
         accessorKey: 'description',
-        header: 'Description',
+        header: t('models.transaction.description'),
         cell: ({ row }) => {
             const description = row.original.description ?? '';
             const shortDescription = description.slice(0, 25) + '…';
@@ -26,7 +26,7 @@ export const columns: ColumnDef<ITag>[] = [
     },
     {
         accessorKey: 'actions',
-        header: () => h('div', { class: 'text-right' }, 'Actions'),
+        header: () => h('div', { class: 'text-right' }, t('generic.labels.actions')),
         cell: ({ row }) => {
             const tag = row.original;
 

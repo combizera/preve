@@ -114,12 +114,14 @@ final class Transaction extends Model
         return $query->where('transaction_date', '>', $date->toDateString());
     }
 
-    public function scopeBefore(Builder $query, CarbonInterface $date): Builder
+    #[Scope]
+    protected function before(Builder $query, CarbonInterface $date): Builder
     {
         return $query->where('transaction_date', '<', $date->copy()->startOfMonth()->toDateString());
     }
 
-    public function scopeNetBalance(Builder $query): Builder
+    #[Scope]
+    protected function netBalance(Builder $query): Builder
     {
         return $query->selectRaw(
             'COALESCE(' . self::netAmountSql() . ', 0) as net_balance',
@@ -127,7 +129,8 @@ final class Transaction extends Model
         );
     }
 
-    public function scopeDailyNet(Builder $query): Builder
+    #[Scope]
+    protected function dailyNet(Builder $query): Builder
     {
         return $query
             ->selectRaw('EXTRACT(DAY FROM transaction_date)::integer as day')

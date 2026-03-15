@@ -6,11 +6,11 @@ namespace GitHooks;
 
 use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
-use CaptainHook\App\Hook;
+use CaptainHook\App\Hook\Action;
 use RuntimeException;
 use SebastianFeldmann\Git\Repository;
 
-final class EsLint implements Hook\Action
+final class EsLint implements Action
 {
     public function execute(Config $config, IO $io, Repository $repository, Config\Action $action): void
     {
@@ -30,7 +30,7 @@ final class EsLint implements Hook\Action
             return;
         }
 
-        $files = implode(' ', array_map('escapeshellarg', $filesToLint));
+        $files = implode(' ', array_map(escapeshellarg(...), $filesToLint));
         $output = [];
         $exitCode = 0;
 

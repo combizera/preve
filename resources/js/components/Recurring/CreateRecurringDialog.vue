@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import { today, getLocalTimeZone } from '@internationalized/date';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import FormRecurring from '@/components/Recurring/FormRecurring.vue';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,7 @@ interface Props {
 
 defineProps<Props>();
 
+const { t } = useI18n();
 const recurringStore = useRecurringStore();
 const { showFormDialog, recurringType } = storeToRefs(recurringStore);
 
@@ -77,9 +79,9 @@ const createRecurring = () => {
     <form>
       <DialogContent class="sm:max-w-137.5">
         <DialogHeader>
-          <DialogTitle>Create Recurring Transaction</DialogTitle>
+          <DialogTitle>{{ t('recurring.create.title') }}</DialogTitle>
           <DialogDescription>
-            Fill in the details below to create a new recurring transaction.
+            {{ t('recurring.create.description') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -92,14 +94,14 @@ const createRecurring = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> Cancel </Button>
+            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
           </DialogClose>
           <Button
             type="button"
             @click="createRecurring"
             :disabled="form.processing"
           >
-            Create Recurring
+            {{ t('recurring.create.button') }}
           </Button>
         </DialogFooter>
       </DialogContent>

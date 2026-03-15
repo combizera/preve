@@ -1,0 +1,389 @@
+{
+    "generic": {
+        "actions": {
+            "login": "Login",
+            "register": "Register",
+            "submit": "Submit",
+            "cancel": "Cancel",
+            "create": "Create",
+            "update": "Update",
+            "delete": "Delete",
+            "today": "Today",
+            "viewAll": "View All",
+            "confirm": "Confirm",
+            "duplicate": "Duplicate",
+            "edit": "Edit",
+            "filter": "Filter",
+            "clearFilters": "Clear Filters",
+            "applyFilters": "Apply Filters",
+            "filtering": "Filtering...",
+            "details": "Details",
+            "pause": "Pause",
+            "resume": "Resume",
+            "saveChanges": "Save changes"
+        },
+        "labels": {
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "name": "Name",
+            "notes": "Notes",
+            "notesOptional": "Notes (Optional)",
+            "search": "Search",
+            "none": "None",
+            "allTypes": "All types",
+            "allCategories": "All categories",
+            "allTags": "All tags",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "endDateOptional": "End Date (Optional)",
+            "inactive": "Inactive",
+            "actions": "Actions",
+            "color": "Color",
+            "icon": "Icon"
+        },
+        "sidebar": {
+            "platform": "Platform",
+            "home": "Home",
+            "transactions": "Transactions",
+            "recurring": "Recurring",
+            "category": "Category",
+            "tags": "Tags",
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Logout",
+            "theme": "Theme",
+            "systemTheme": "System theme",
+            "lightTheme": "Light theme",
+            "darkTheme": "Dark theme"
+        },
+        "placeholders": {
+            "email": "email{'@'}example.com",
+            "fullName": "Full Name",
+            "searchByDescription": "Search by description...",
+            "selectCategory": "Select a category",
+            "selectCategories": "Select category(ies)",
+            "selectTag": "Select a tag",
+            "selectTags": "Select tag(s)",
+            "transactionDescription": "Enter transaction description",
+            "additionalNotes": "Additional notes...",
+            "recurringDescription": "e.g., Netflix Subscription, Rent, Salary...",
+            "selectFrequency": "Select frequency",
+            "selectType": "Select a type",
+            "selectColor": "Select a color",
+            "selectIcon": "Select an icon",
+            "categoryName": "Category Name",
+            "categoryDescription": "This is a category for...",
+            "tagName": "Tag Name",
+            "tagDescription": "This is a tag for...",
+            "describeTag": "Describe your tag"
+        },
+        "status": {
+            "loading": "Loading..."
+        },
+        "confirm": {
+            "title": "Are you absolutely sure?",
+            "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
+            "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected.",
+            "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\".",
+            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\"."
+        }
+    },
+    "models": {
+        "transaction": {
+            "amount": "Amount",
+            "description": "Description",
+            "date": "Date",
+            "type": "Type",
+            "income": "Income",
+            "expense": "Expense",
+            "notes": "Notes"
+        },
+        "category": {
+            "name": "Category"
+        },
+        "tag": {
+            "name": "Tag",
+            "optional": "Tag (optional)"
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Log in to your account",
+            "description": "Enter your email and password below to log in",
+            "forgotPassword": "Forgot your password?",
+            "rememberMe": "Remember me",
+            "noAccount": "Don't have an account?"
+        },
+        "register": {
+            "title": "Create an account",
+            "description": "Enter your details below to create your account",
+            "haveAccount": "Already have an account?",
+            "buttonText": "Create an account"
+        },
+        "confirmPassword": {
+            "title": "Confirm your password",
+            "description": "This is a secure area of the application. Please confirm your password before continuing.",
+            "button": "Confirm Password"
+        },
+        "forgotPassword": {
+            "title": "Forgot password",
+            "description": "Enter your email to receive a password reset link",
+            "emailLabel": "Email address",
+            "button": "Email password reset link",
+            "orReturnTo": "Or, return to",
+            "logIn": "log in"
+        },
+        "resetPassword": {
+            "title": "Reset password",
+            "description": "Please enter your new password below",
+            "button": "Reset password"
+        },
+        "twoFactorChallenge": {
+            "authCode": {
+                "title": "Authentication Code",
+                "description": "Enter the authentication code provided by your authenticator application.",
+                "toggleText": "login using a recovery code"
+            },
+            "recoveryCode": {
+                "title": "Recovery Code",
+                "description": "Please confirm access to your account by entering one of your emergency recovery codes.",
+                "toggleText": "login using an authentication code",
+                "placeholder": "Enter recovery code"
+            },
+            "orYouCan": "or you can",
+            "continue": "Continue"
+        },
+        "verifyEmail": {
+            "title": "Verify email",
+            "description": "Please verify your email address by clicking on the link we just emailed to you.",
+            "verificationSent": "A new verification link has been sent to the email address you provided during registration.",
+            "resendButton": "Resend verification email",
+            "logOut": "Log out"
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "description": "Here you can get an overview of your financial activities and manage your transactions efficiently.",
+        "lastTransactions": "Last Transactions",
+        "availableBalance": "Available Balance",
+        "availableBalanceDescription": "Income minus paid expenses this month",
+        "forecast": "Forecast",
+        "forecastDescription": "Balance after pending expenses",
+        "forecastForMonth": "Forecast for {month} {year}",
+        "calendar": {
+            "year": "Year",
+            "earliestYear": "You have reached the earliest available year.",
+            "latestYear": "You have reached the latest available year.",
+            "months": {
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
+            }
+        },
+        "chart": {
+            "dailyBalance": "Daily Balance",
+            "income": "Income",
+            "expenses": "Expenses",
+            "balance": "Balance",
+            "forecast": "Forecast"
+        }
+    },
+    "transactions": {
+        "title": "Transactions",
+        "description": "Manage your transactions here.",
+        "empty": {
+            "title": "No transactions yet",
+            "description": "Start by creating your first transaction",
+            "button": "Create Transaction"
+        },
+        "recurring": "Recurring",
+        "create": {
+            "title": "Create Transaction",
+            "description": "Fill in the details below to create a new transaction."
+        },
+        "edit": {
+            "title": "Edit Transaction",
+            "description": "Fill in the details below to Edit a transaction."
+        },
+        "duplicate": {
+            "title": "Duplicate Transaction",
+            "description": "Fill in the details below to Duplicate a transaction."
+        },
+        "filter": {
+            "title": "Filter Transactions",
+            "description": "Refine your search by date range, category, or tags.",
+            "dateRange": "Filter by date range"
+        }
+    },
+    "recurring": {
+        "title": "Recurring Transactions",
+        "description": "Manage your recurring transactions here.",
+        "empty": {
+            "title": "No {type} transactions yet",
+            "description": "Start by creating your first recurring {type}",
+            "button": "Create {type}"
+        },
+        "create": {
+            "title": "Create Recurring Transaction",
+            "description": "Fill in the details below to create a new recurring transaction.",
+            "button": "Create Recurring"
+        },
+        "edit": {
+            "title": "Edit Recurring Transaction",
+            "description": "Make changes to {description}. Click save when you're done."
+        },
+        "cards": {
+            "monthlyIncome": "Monthly Income",
+            "monthlyExpense": "Monthly Expense",
+            "monthlyBalance": "Monthly Balance"
+        },
+        "form": {
+            "recurrenceSettings": "Recurrence Settings",
+            "frequency": "Frequency",
+            "monthly": "Monthly",
+            "yearly": "Yearly",
+            "dayOfMonth": "Day of Month"
+        },
+        "details": {
+            "annualAmount": "Annual Amount",
+            "nextOccurrence": "Next Occurrence",
+            "activePeriod": "Active Period"
+        }
+    },
+    "categories": {
+        "title": "Categories",
+        "description": "Manage your categories here.",
+        "newCategory": "New Category",
+        "empty": {
+            "income": {
+                "title": "No income categories yet",
+                "description": "Start by creating your first income category"
+            },
+            "expense": {
+                "title": "No expense categories yet",
+                "description": "Start by creating your first expense category"
+            }
+        },
+        "edit": {
+            "title": "Edit Category",
+            "description": "Make changes to {name}. Click save when you're done."
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "description": "Manage your profile and account settings",
+        "nav": {
+            "profile": "Profile",
+            "preferences": "Preferences",
+            "password": "Password",
+            "twoFactorAuth": "Two-Factor Auth"
+        },
+        "profile": {
+            "title": "Profile settings",
+            "heading": "Profile information",
+            "description": "Update your name and email address",
+            "nameLabel": "Name",
+            "namePlaceholder": "Full name",
+            "emailLabel": "Email address",
+            "emailPlaceholder": "Email address",
+            "unverifiedEmail": "Your email address is unverified.",
+            "resendVerification": "Click here to resend the verification email.",
+            "verificationSent": "A new verification link has been sent to your email address.",
+            "save": "Save",
+            "saved": "Saved."
+        },
+        "password": {
+            "title": "Password settings",
+            "heading": "Update password",
+            "description": "Ensure your account is using a long, random password to stay secure",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm password",
+            "savePassword": "Save password",
+            "saved": "Saved."
+        },
+        "preferences": {
+            "title": "Preferences settings",
+            "language": {
+                "title": "Language",
+                "description": "Select the language you want to use in the application",
+                "label": "Language",
+                "placeholder": "Select a language"
+            },
+            "currency": {
+                "title": "Currency",
+                "description": "Choose the currency for displaying your financial data",
+                "comingSoon": "Coming soon"
+            }
+        },
+        "deleteAccount": {
+            "title": "Delete account",
+            "description": "Delete your account and all of its resources",
+            "warning": "Warning",
+            "warningMessage": "Please proceed with caution, this cannot be undone.",
+            "button": "Delete account",
+            "confirmTitle": "Are you sure you want to delete your account?",
+            "confirmDescription": "Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Password"
+        },
+        "twoFactor": {
+            "title": "Two-Factor Authentication",
+            "description": "Manage your two-factor authentication settings",
+            "disabled": "Disabled",
+            "enabled": "Enabled",
+            "disabledDescription": "When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.",
+            "enabledDescription": "With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.",
+            "continueSetup": "Continue Setup",
+            "enable": "Enable 2FA",
+            "disable": "Disable 2FA",
+            "recoveryCodes": {
+                "title": "2FA Recovery Codes",
+                "description": "Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.",
+                "hide": "Hide",
+                "view": "View",
+                "recoveryCodes": "Recovery Codes",
+                "regenerate": "Regenerate Codes",
+                "info": "Each recovery code can be used once to access your account and will be removed after use. If you need more, click",
+                "infoHighlight": "Regenerate Codes",
+                "infoEnd": "above."
+            },
+            "setup": {
+                "enabledTitle": "Two-Factor Authentication Enabled",
+                "enabledDescription": "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
+                "close": "Close",
+                "verifyTitle": "Verify Authentication Code",
+                "verifyDescription": "Enter the 6-digit code from your authenticator app",
+                "continue": "Continue",
+                "enableTitle": "Enable Two-Factor Authentication",
+                "enableDescription": "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
+                "orEnterManually": "or, enter the code manually",
+                "back": "Back",
+                "confirm": "Confirm"
+            }
+        }
+    },
+    "tags": {
+        "title": "Tags",
+        "description": "Manage your tags here.",
+        "newTag": "New Tag",
+        "empty": {
+            "title": "No tags yet",
+            "description": "Start by creating your first tag"
+        },
+        "edit": {
+            "title": "Edit Tag",
+            "description": "Make changes to {name}. Click save when you're done."
+        }
+    }
+}

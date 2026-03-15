@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Repeat } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
@@ -16,6 +17,8 @@ import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay } from '@/lib/currency';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { ITransaction } from '@/types/models/transaction';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   transaction: ITransaction;
@@ -75,7 +78,7 @@ const openDeleteDialog = (transaction: ITransaction) => {
           {{ transaction.category?.name }} •
           {{ capitalizeFirstLetter(transaction.type) }}
           <span v-if="transaction.recurring_transaction_id" class="flex items-center gap-1">
-            • <Repeat :size="12" /> Recurring
+            • <Repeat :size="12" /> {{ t('transactions.recurring') }}
           </span>
         </span>
       </div>

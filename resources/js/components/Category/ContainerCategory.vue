@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
 import TableCategory from '@/components/Category/TableCategory.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import type { ICategory } from '@/types/models/category';
+
+const { t } = useI18n();
 
 interface Props {
   incomeCategories: ICategory[];
@@ -17,8 +21,8 @@ defineProps<Props>();
     <div>
       <EmptyState
         v-if="incomeCategories.length === 0"
-        title="No income categories yet"
-        description="Start by creating your first income category"
+        :title="t('categories.empty.income.title')"
+        :description="t('categories.empty.income.description')"
         :showButton="false"
       />
 
@@ -28,8 +32,8 @@ defineProps<Props>();
     <div>
       <EmptyState
         v-if="expenseCategories.length === 0"
-        title="No expense categories yet"
-        description="Start by creating your first expense category"
+        :title="t('categories.empty.expense.title')"
+        :description="t('categories.empty.expense.description')"
         :showButton="false"
       />
 

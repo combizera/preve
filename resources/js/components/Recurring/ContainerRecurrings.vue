@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { capitalize, computed } from 'vue';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import EmptyState from '@/components/EmptyState.vue';
 import CardRecurring from '@/components/Recurring/CardRecurring.vue';
@@ -17,20 +18,25 @@ interface Props {
   type: TransactionType;
 }
 
+const { t } = useI18n();
 const recurringStore = useRecurringStore();
 const props = defineProps<Props>();
 
+const typeLabel = computed(() =>
+  props.type === 'income' ? t('models.transaction.income') : t('models.transaction.expense'),
+);
+
 const emptyStateConfig = computed(() => ({
-  title: `No ${props.type} transactions yet`,
-  description: `Start by creating your first recurring ${props.type}`,
-  buttonText: `Create ${capitalize(props.type)}`,
+  title: t('recurring.empty.title', { type: typeLabel.value.toLowerCase() }),
+  description: t('recurring.empty.description', { type: typeLabel.value.toLowerCase() }),
+  buttonText: t('recurring.empty.button', { type: typeLabel.value }),
 }));
 </script>
 
 <template>
   <div class="space-y-3">
     <!-- TITLE -->
-    <SectionTitle :title="type === 'income' ? 'Income' : 'Expense'" />
+    <SectionTitle :title="typeLabel" />
 
     <!-- Empty State -->
     <EmptyState

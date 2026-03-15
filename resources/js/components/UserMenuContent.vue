@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
 import { LogOut, Settings } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 import ThemeSwitch from '@/components/ThemeSwitch.vue';
 import {
@@ -13,6 +14,8 @@ import UserInfo from '@/components/UserInfo.vue';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
 import { IUser } from '@/types/models/user';
+
+const { t } = useI18n();
 
 interface Props {
   user: IUser;
@@ -34,7 +37,7 @@ defineProps<Props>();
   <DropdownMenuSeparator />
   <DropdownMenuGroup>
     <div class="flex w-full items-center justify-between">
-      <span class="text-sm px-1 text-muted-foreground">Theme</span>
+      <span class="text-sm px-1 text-muted-foreground">{{ t('generic.sidebar.theme') }}</span>
       <ThemeSwitch />
     </div>
   </DropdownMenuGroup>
@@ -43,7 +46,7 @@ defineProps<Props>();
     <DropdownMenuItem :as-child="true">
       <Link class="block w-full cursor-pointer" :href="edit()" prefetch>
         <Settings class="mr-2 h-4 w-4" />
-        Settings
+        {{ t('generic.sidebar.settings') }}
       </Link>
     </DropdownMenuItem>
   </DropdownMenuGroup>
@@ -57,7 +60,7 @@ defineProps<Props>();
       data-test="logout-button"
     >
       <LogOut class="mr-2 h-4 w-4" />
-      Log out
+      {{ t('generic.sidebar.logout') }}
     </Link>
   </DropdownMenuItem>
 </template>

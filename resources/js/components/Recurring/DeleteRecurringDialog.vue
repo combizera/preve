@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import {
   AlertDialog,
@@ -20,6 +21,7 @@ const props = defineProps<{
   recurringTransaction: IRecurringTransaction | null;
 }>();
 
+const { t } = useI18n();
 const form = useForm({});
 
 const deleteRecurring = () => {
@@ -40,19 +42,15 @@ const deleteRecurring = () => {
   <AlertDialog v-model:open="open">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete the
-          recurring transaction "{{ recurringTransaction?.description }}"
-          and all its generated transactions from next month onwards.
-          <br><br>
-          Transactions from the current month and past months will not be affected.
+          {{ t('generic.confirm.deleteRecurring', { description: recurringTransaction?.description }) }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel> Cancel </AlertDialogCancel>
+        <AlertDialogCancel> {{ t('generic.actions.cancel') }} </AlertDialogCancel>
         <AlertDialogAction variant="destructive" @click="deleteRecurring" :disabled="form.processing">
-          Confirm
+          {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

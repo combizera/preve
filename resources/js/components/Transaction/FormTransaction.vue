@@ -2,6 +2,7 @@
 import type { InertiaForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -37,6 +38,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { t } = useI18n();
+
 const displayAmount = defineModel<string>('displayAmount', { required: true });
 
 const filteredCategories = computed(() => {
@@ -49,15 +52,15 @@ const filteredCategories = computed(() => {
 <template>
   <!-- Type -->
   <div class="grid gap-3">
-    <Label for="type"> Type </Label>
+    <Label for="type"> {{ t('models.transaction.type') }} </Label>
     <ToggleGroup v-model="form.type" class="w-full">
       <ToggleGroupItem :value="TRANSACTION_TYPE.EXPENSE" class="flex-1 gap-2">
         <ArrowUpRight :size="16" />
-        Expense
+        {{ t('models.transaction.expense') }}
       </ToggleGroupItem>
       <ToggleGroupItem :value="TRANSACTION_TYPE.INCOME" class="flex-1 gap-2">
         <ArrowDownLeft :size="16" />
-        Income
+        {{ t('models.transaction.income') }}
       </ToggleGroupItem>
     </ToggleGroup>
     <InputError :message="form.errors.type" />
@@ -66,7 +69,7 @@ const filteredCategories = computed(() => {
   <!-- Amount & Date -->
   <div class="grid grid-cols-2 gap-4">
     <div class="grid gap-3">
-      <Label for="amount"> Amount </Label>
+      <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
           <InputGroupText>R$</InputGroupText>
@@ -84,7 +87,7 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="transaction_date"> Date </Label>
+      <Label for="transaction_date"> {{ t('models.transaction.date') }} </Label>
       <DatePicker
         id="transaction_date"
         v-model="form.transaction_date"
@@ -97,14 +100,14 @@ const filteredCategories = computed(() => {
   <!-- Category & Tag -->
   <div class="grid grid-cols-2 gap-4">
     <div class="grid gap-3">
-      <Label for="category"> Category </Label>
+      <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue placeholder="Select a category" />
+          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Category</SelectLabel>
+            <SelectLabel>{{ t('models.category.name') }}</SelectLabel>
             <SelectItem
               v-for="category in filteredCategories"
               :value="category.id"
@@ -119,15 +122,15 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> Tag (optional) </Label>
+      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
       <Select v-model="form.tag_id">
         <SelectTrigger class="w-full">
-          <SelectValue placeholder="Select a tag" />
+          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Tag</SelectLabel>
-            <SelectItem :value="null">None</SelectItem>
+            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
+            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
             <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
               {{ tag.name }}
             </SelectItem>
@@ -140,10 +143,10 @@ const filteredCategories = computed(() => {
 
   <!-- Description -->
   <div class="grid gap-3">
-    <Label for="description"> Description </Label>
+    <Label for="description"> {{ t('models.transaction.description') }} </Label>
     <Input
       id="description"
-      placeholder="Enter transaction description"
+      :placeholder="t('generic.placeholders.transactionDescription')"
       v-model="form.description"
     />
     <InputError :message="form.errors.description" />
@@ -151,8 +154,8 @@ const filteredCategories = computed(() => {
 
   <!-- Notes -->
   <div class="grid gap-3">
-    <Label for="notes" class="text-muted-foreground"> Notes (Optional) </Label>
-    <Input id="notes" placeholder="Additional notes..." v-model="form.notes" />
+    <Label for="notes" class="text-muted-foreground"> {{ t('generic.labels.notesOptional') }} </Label>
+    <Input id="notes" :placeholder="t('generic.placeholders.additionalNotes')" v-model="form.notes" />
     <InputError :message="form.errors.notes" />
   </div>
 </template>

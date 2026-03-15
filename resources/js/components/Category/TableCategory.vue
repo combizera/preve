@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteCategoryDialog from '@/components/Category/DeleteCategoryDialog.vue';
@@ -33,27 +34,33 @@ const openDeleteDialog = (category: ICategory) => {
   showDeleteDialog.value = true;
 };
 
+const { t } = useI18n();
+
 interface Props {
   categories: ICategory[];
   type?: 'income' | 'expense';
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   type: 'expense',
 });
+
+const typeLabel = computed(() =>
+  props.type === 'income' ? t('models.transaction.income') : t('models.transaction.expense'),
+);
 </script>
 
 <template>
   <div>
     <div class="my-1 pb-3 px-2">
-      <SectionTitle :title="type" />
+      <SectionTitle :title="typeLabel" />
     </div>
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead class="text-right">Actions</TableHead>
+          <TableHead>{{ t('generic.labels.name') }}</TableHead>
+          <TableHead>{{ t('models.transaction.description') }}</TableHead>
+          <TableHead class="text-right">{{ t('generic.labels.actions') }}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

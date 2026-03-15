@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { nextTick, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 
 import CardCalendar from '@/components/Dashboard/CardCalendar.vue';
@@ -14,7 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MONTHS } from '@/lib/calendar';
+import { MONTH_KEYS } from '@/lib/calendar';
+
+const { t } = useI18n();
 
 const emit = defineEmits<{
   (e: 'update:month', payload: { month: number; year: number }): void;
@@ -48,8 +51,8 @@ const emitMonth = (month: number, year: number) => {
 const changeYear = (newYear: number, month: number): boolean => {
   if (newYear < MIN_YEAR || newYear > MAX_YEAR) {
     toast.error(newYear < MIN_YEAR
-      ? 'You have reached the earliest available year.'
-      : 'You have reached the latest available year.',
+      ? t('dashboard.calendar.earliestYear')
+      : t('dashboard.calendar.latestYear'),
     );
     return false;
   }
@@ -104,7 +107,7 @@ const handleToCurrentMonth = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Year</SelectLabel>
+            <SelectLabel>{{ t('dashboard.calendar.year') }}</SelectLabel>
             <SelectItem value="2026">
               2026
             </SelectItem>
@@ -123,9 +126,9 @@ const handleToCurrentMonth = () => {
 
         <ul ref="stripRef" class="w-full h-full py-1 flex items-center gap-0 overflow-hidden scroll-smooth">
           <CardCalendar
-            v-for="(month, index) in MONTHS"
+            v-for="(key, index) in MONTH_KEYS"
             :key="index"
-            :month="month"
+            :month="t(`dashboard.calendar.months.${key}`)"
             :year="Number(selectedYear)"
             :isSelected="index === selectedMonth"
             :isCurrent="index === currentMonth && Number(selectedYear) === currentYear"
@@ -139,7 +142,7 @@ const handleToCurrentMonth = () => {
       </div>
 
       <!-- BUTTON -->
-      <Button variant="outline" type="button" @click="handleToCurrentMonth"> Today </Button>
+      <Button variant="outline" type="button" @click="handleToCurrentMonth"> {{ t('generic.actions.today') }} </Button>
     </div>
   </section>
 </template>

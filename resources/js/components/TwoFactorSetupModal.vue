@@ -3,6 +3,7 @@ import { Form } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
 import { Check, Copy, ScanLine } from 'lucide-vue-next';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
@@ -29,6 +30,7 @@ interface Props {
   twoFactorEnabled: boolean;
 }
 
+const { t } = useI18n();
 const { resolvedAppearance } = useAppearance();
 
 const props = defineProps<Props>();
@@ -50,26 +52,24 @@ const modalConfig = computed<{
 }>(() => {
   if (props.twoFactorEnabled) {
     return {
-      title: 'Two-Factor Authentication Enabled',
-      description:
-        'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
-      buttonText: 'Close',
+      title: t('settings.twoFactor.setup.enabledTitle'),
+      description: t('settings.twoFactor.setup.enabledDescription'),
+      buttonText: t('settings.twoFactor.setup.close'),
     };
   }
 
   if (showVerificationStep.value) {
     return {
-      title: 'Verify Authentication Code',
-      description: 'Enter the 6-digit code from your authenticator app',
-      buttonText: 'Continue',
+      title: t('settings.twoFactor.setup.verifyTitle'),
+      description: t('settings.twoFactor.setup.verifyDescription'),
+      buttonText: t('settings.twoFactor.setup.continue'),
     };
   }
 
   return {
-    title: 'Enable Two-Factor Authentication',
-    description:
-      'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
-    buttonText: 'Continue',
+    title: t('settings.twoFactor.setup.enableTitle'),
+    description: t('settings.twoFactor.setup.enableDescription'),
+    buttonText: t('settings.twoFactor.setup.continue'),
   };
 });
 
@@ -196,7 +196,7 @@ function handleErrorMessage(errors: Record<string, string>) {
             <div class="relative flex w-full items-center justify-center">
               <div class="absolute inset-0 top-1/2 h-px w-full bg-border" />
               <span class="relative bg-card px-2 py-1"
-                >or, enter the code manually</span
+                >{{ t('settings.twoFactor.setup.orEnterManually') }}</span
               >
             </div>
 
@@ -268,14 +268,14 @@ function handleErrorMessage(errors: Record<string, string>) {
                   @click="showVerificationStep = false"
                   :disabled="processing"
                 >
-                  Back
+                  {{ t('settings.twoFactor.setup.back') }}
                 </Button>
                 <Button
                   type="submit"
                   class="w-auto flex-1"
                   :disabled="processing || code.length < 6"
                 >
-                  Confirm
+                  {{ t('settings.twoFactor.setup.confirm') }}
                 </Button>
               </div>
             </div>

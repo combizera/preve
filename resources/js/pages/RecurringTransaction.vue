@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
 import ContainerRecurrings from '@/components/Recurring/ContainerRecurrings.vue';
@@ -24,33 +26,34 @@ interface Props {
 
 defineProps<Props>();
 
+const { t } = useI18n();
 const recurringStore = useRecurringStore();
 const { showFormDialog } = storeToRefs(recurringStore)
 
-const breadcrumbs: BreadcrumbItem[] = [
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
-    title: 'Dashboard',
+    title: t('dashboard.title'),
     href: dashboard().url,
   },
   {
-    title: 'Recurring',
+    title: t('generic.sidebar.recurring'),
     href: dashboard().url,
   },
-];
+]);
 </script>
 
 <template>
-  <Head title="Recurring" />
+  <Head :title="t('generic.sidebar.recurring')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
     <Heading
-      title="Recurring Transactions"
-      description="Manage your recurring transactions here."
+      :title="t('recurring.title')"
+      :description="t('recurring.description')"
       :hasActions="true"
     >
       <Button type="button" @click="recurringStore.openCreateDialog()">
-        Create
+        {{ t('generic.actions.create') }}
       </Button>
     </Heading>
 

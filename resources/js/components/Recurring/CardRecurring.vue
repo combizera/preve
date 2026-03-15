@@ -7,6 +7,7 @@ import {
   Tag as TagIcon,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteRecurringDialog from '@/components/Recurring/DeleteRecurringDialog.vue';
@@ -28,6 +29,8 @@ import { cn } from '@/lib/utils';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   recurringTransaction: IRecurringTransaction;
@@ -130,7 +133,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
               variant="secondary"
               class="text-xs px-1.5 py-0"
             >
-              Inactive
+              {{ t('generic.labels.inactive') }}
             </Badge>
           </div>
           <div class="mt-1.5 flex items-center gap-2">
@@ -181,7 +184,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
         <div class="grid grid-cols-3 gap-3 text-xs">
           <div class="space-y-1">
             <div class="font-medium text-muted-foreground/70">
-              Annual Amount
+              {{ t('recurring.details.annualAmount') }}
             </div>
             <div
               :class="
@@ -202,7 +205,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
           <div class="space-y-1">
             <div class="font-medium text-muted-foreground/70">
-              Next Occurrence
+              {{ t('recurring.details.nextOccurrence') }}
             </div>
             <div class="flex items-center gap-1.5 text-foreground">
               <Calendar :size="12" />
@@ -212,7 +215,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
           <div class="space-y-1">
             <div class="font-medium text-muted-foreground/70">
-              Active Period
+              {{ t('recurring.details.activePeriod') }}
             </div>
             <div class="flex items-center gap-1.5 text-foreground">
               <Calendar :size="12" />

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
 import ContainerTransactions from '@/components/Transaction/ContainerTransactions.vue';
@@ -24,26 +26,28 @@ interface Props {
 
 defineProps<Props>();
 
-const breadcrumbs: BreadcrumbItem[] = [
+const { t } = useI18n();
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
-    title: 'Dashboard',
+    title: t('dashboard.title'),
     href: dashboard().url,
   },
   {
-    title: 'Transactions',
+    title: t('transactions.title'),
     href: transactionRoutes.index().url,
   },
-];
+]);
 </script>
 
 <template>
-  <Head title="Transactions" />
+  <Head :title="t('transactions.title')" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
     <Heading
-      title="Transactions"
-      description="Manage your transactions here."
+      :title="t('transactions.title')"
+      :description="t('transactions.description')"
       :hasActions="true"
     >
       <div class="flex items-center gap-2">

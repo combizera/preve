@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 import {
     AlertDialog,
@@ -20,6 +21,7 @@ const props = defineProps<{
     category: ICategory | null;
 }>();
 
+const { t } = useI18n();
 const form = useForm({});
 
 const deleteCategory = () => {
@@ -38,18 +40,17 @@ const deleteCategory = () => {
     <AlertDialog v-model:open="open">
         <AlertDialogContent>
             <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
                 <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the category "{{ category?.name }}".
+                    {{ t('generic.confirm.deleteCategory', { name: category?.name }) }}
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>
-                    Cancel
+                    {{ t('generic.actions.cancel') }}
                 </AlertDialogCancel>
                 <AlertDialogAction variant="destructive" @click="deleteCategory" :disabled="form.processing">
-                    Confirm
+                    {{ t('generic.actions.confirm') }}
                 </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>

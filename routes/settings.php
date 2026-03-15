@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function (): void {
     Route::redirect('settings', '/settings/profile');
 
+    Route::get('settings/preferences', [ProfileController::class, 'preferences'])->name('profile.preferences');
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
 });

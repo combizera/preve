@@ -1,0 +1,389 @@
+{
+    "generic": {
+        "actions": {
+            "login": "Acessar",
+            "register": "Registrar",
+            "submit": "Enviar",
+            "cancel": "Cancelar",
+            "create": "Criar",
+            "update": "Atualizar",
+            "delete": "Excluir",
+            "today": "Hoje",
+            "viewAll": "Ver Tudo",
+            "confirm": "Confirmar",
+            "duplicate": "Duplicar",
+            "edit": "Editar",
+            "filter": "Filtrar",
+            "clearFilters": "Limpar Filtros",
+            "applyFilters": "Aplicar Filtros",
+            "filtering": "Filtrando...",
+            "details": "Detalhes",
+            "pause": "Pausar",
+            "resume": "Retomar",
+            "saveChanges": "Salvar alterações"
+        },
+        "labels": {
+            "email": "Email",
+            "password": "Senha",
+            "confirmPassword": "Confirmar Senha",
+            "name": "Nome",
+            "notes": "Notas",
+            "notesOptional": "Notas (Opcional)",
+            "search": "Buscar",
+            "none": "Nenhum",
+            "allTypes": "Todos os tipos",
+            "allCategories": "Todas as categorias",
+            "allTags": "Todas as tags",
+            "startDate": "Data Início",
+            "endDate": "Data Fim",
+            "endDateOptional": "Data Fim (Opcional)",
+            "inactive": "Inativo",
+            "actions": "Ações",
+            "color": "Cor",
+            "icon": "Ícone"
+        },
+        "sidebar": {
+            "platform": "Plataforma",
+            "home": "Início",
+            "transactions": "Transações",
+            "recurring": "Recorrentes",
+            "category": "Categorias",
+            "tags": "Tags",
+            "profile": "Perfil",
+            "settings": "Configurações",
+            "logout": "Sair",
+            "theme": "Tema",
+            "systemTheme": "Tema do sistema",
+            "lightTheme": "Tema claro",
+            "darkTheme": "Tema escuro"
+        },
+        "placeholders": {
+            "email": "email{'@'}exemplo.com",
+            "fullName": "Nome Completo",
+            "searchByDescription": "Buscar por descrição...",
+            "selectCategory": "Selecione uma categoria",
+            "selectCategories": "Selecione categoria(s)",
+            "selectTag": "Selecione uma tag",
+            "selectTags": "Selecione tag(s)",
+            "transactionDescription": "Digite a descrição da transação",
+            "additionalNotes": "Notas adicionais...",
+            "recurringDescription": "ex: Assinatura Netflix, Aluguel, Salário...",
+            "selectFrequency": "Selecione a frequência",
+            "selectType": "Selecione um tipo",
+            "selectColor": "Selecione uma cor",
+            "selectIcon": "Selecione um ícone",
+            "categoryName": "Nome da Categoria",
+            "categoryDescription": "Esta é uma categoria para...",
+            "tagName": "Nome da Tag",
+            "tagDescription": "Esta é uma tag para...",
+            "describeTag": "Descreva sua tag"
+        },
+        "status": {
+            "loading": "Carregando..."
+        },
+        "confirm": {
+            "title": "Tem certeza absoluta?",
+            "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\".",
+            "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas.",
+            "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\".",
+            "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\"."
+        }
+    },
+    "models": {
+        "transaction": {
+            "amount": "Valor",
+            "description": "Descrição",
+            "date": "Data",
+            "type": "Tipo",
+            "income": "Receita",
+            "expense": "Despesa",
+            "notes": "Notas"
+        },
+        "category": {
+            "name": "Categoria"
+        },
+        "tag": {
+            "name": "Tag",
+            "optional": "Tag (opcional)"
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Faça login na sua conta",
+            "description": "Digite seu email e senha abaixo para acessar",
+            "forgotPassword": "Esqueceu sua senha?",
+            "rememberMe": "Lembrar-me",
+            "noAccount": "Não tem uma conta?"
+        },
+        "register": {
+            "title": "Crie uma conta",
+            "description": "Entre seus detalhes abaixo para criar sua conta",
+            "haveAccount": "Já tem uma conta?",
+            "buttonText": "Criar uma conta"
+        },
+        "confirmPassword": {
+            "title": "Confirme sua senha",
+            "description": "Esta é uma área segura da aplicação. Por favor, confirme sua senha antes de continuar.",
+            "button": "Confirmar Senha"
+        },
+        "forgotPassword": {
+            "title": "Esqueceu a senha",
+            "description": "Digite seu email para receber um link de redefinição de senha",
+            "emailLabel": "Endereço de email",
+            "button": "Enviar link de redefinição",
+            "orReturnTo": "Ou, volte para",
+            "logIn": "entrar"
+        },
+        "resetPassword": {
+            "title": "Redefinir senha",
+            "description": "Por favor, digite sua nova senha abaixo",
+            "button": "Redefinir senha"
+        },
+        "twoFactorChallenge": {
+            "authCode": {
+                "title": "Código de Autenticação",
+                "description": "Digite o código de autenticação fornecido pelo seu aplicativo autenticador.",
+                "toggleText": "entrar usando um código de recuperação"
+            },
+            "recoveryCode": {
+                "title": "Código de Recuperação",
+                "description": "Por favor, confirme o acesso à sua conta digitando um dos seus códigos de recuperação de emergência.",
+                "toggleText": "entrar usando um código de autenticação",
+                "placeholder": "Digite o código de recuperação"
+            },
+            "orYouCan": "ou você pode",
+            "continue": "Continuar"
+        },
+        "verifyEmail": {
+            "title": "Verificar email",
+            "description": "Por favor, verifique seu endereço de email clicando no link que acabamos de enviar.",
+            "verificationSent": "Um novo link de verificação foi enviado para o endereço de email que você forneceu durante o cadastro.",
+            "resendButton": "Reenviar email de verificação",
+            "logOut": "Sair"
+        }
+    },
+    "dashboard": {
+        "title": "Painel",
+        "description": "Aqui você pode ter uma visão geral das suas atividades financeiras e gerenciar suas transações de forma eficiente.",
+        "lastTransactions": "Últimas Transações",
+        "availableBalance": "Saldo Disponível",
+        "availableBalanceDescription": "Receitas menos despesas pagas neste mês",
+        "forecast": "Previsão",
+        "forecastDescription": "Saldo após despesas pendentes",
+        "forecastForMonth": "Previsão para {month} {year}",
+        "calendar": {
+            "year": "Ano",
+            "earliestYear": "Você atingiu o ano mais antigo disponível.",
+            "latestYear": "Você atingiu o ano mais recente disponível.",
+            "months": {
+                "january": "Janeiro",
+                "february": "Fevereiro",
+                "march": "Março",
+                "april": "Abril",
+                "may": "Maio",
+                "june": "Junho",
+                "july": "Julho",
+                "august": "Agosto",
+                "september": "Setembro",
+                "october": "Outubro",
+                "november": "Novembro",
+                "december": "Dezembro"
+            }
+        },
+        "chart": {
+            "dailyBalance": "Saldo Diário",
+            "income": "Receitas",
+            "expenses": "Despesas",
+            "balance": "Saldo",
+            "forecast": "Previsão"
+        }
+    },
+    "transactions": {
+        "title": "Transações",
+        "description": "Gerencie suas transações aqui.",
+        "empty": {
+            "title": "Nenhuma transação ainda",
+            "description": "Comece criando sua primeira transação",
+            "button": "Criar Transação"
+        },
+        "recurring": "Recorrente",
+        "create": {
+            "title": "Criar Transação",
+            "description": "Preencha os detalhes abaixo para criar uma nova transação."
+        },
+        "edit": {
+            "title": "Editar Transação",
+            "description": "Preencha os detalhes abaixo para editar a transação."
+        },
+        "duplicate": {
+            "title": "Duplicar Transação",
+            "description": "Preencha os detalhes abaixo para duplicar a transação."
+        },
+        "filter": {
+            "title": "Filtrar Transações",
+            "description": "Refine sua busca por período, categoria ou tags.",
+            "dateRange": "Filtrar por período"
+        }
+    },
+    "recurring": {
+        "title": "Transações Recorrentes",
+        "description": "Gerencie suas transações recorrentes aqui.",
+        "empty": {
+            "title": "Nenhuma transação de {type} ainda",
+            "description": "Comece criando sua primeira {type} recorrente",
+            "button": "Criar {type}"
+        },
+        "create": {
+            "title": "Criar Transação Recorrente",
+            "description": "Preencha os detalhes abaixo para criar uma nova transação recorrente.",
+            "button": "Criar Recorrente"
+        },
+        "edit": {
+            "title": "Editar Transação Recorrente",
+            "description": "Faça alterações em {description}. Clique em salvar quando terminar."
+        },
+        "cards": {
+            "monthlyIncome": "Receita Mensal",
+            "monthlyExpense": "Despesa Mensal",
+            "monthlyBalance": "Saldo Mensal"
+        },
+        "form": {
+            "recurrenceSettings": "Configurações de Recorrência",
+            "frequency": "Frequência",
+            "monthly": "Mensal",
+            "yearly": "Anual",
+            "dayOfMonth": "Dia do Mês"
+        },
+        "details": {
+            "annualAmount": "Valor Anual",
+            "nextOccurrence": "Próxima Ocorrência",
+            "activePeriod": "Período Ativo"
+        }
+    },
+    "categories": {
+        "title": "Categorias",
+        "description": "Gerencie suas categorias aqui.",
+        "newCategory": "Nova Categoria",
+        "empty": {
+            "income": {
+                "title": "Nenhuma categoria de receita ainda",
+                "description": "Comece criando sua primeira categoria de receita"
+            },
+            "expense": {
+                "title": "Nenhuma categoria de despesa ainda",
+                "description": "Comece criando sua primeira categoria de despesa"
+            }
+        },
+        "edit": {
+            "title": "Editar Categoria",
+            "description": "Faça alterações em {name}. Clique em salvar quando terminar."
+        }
+    },
+    "settings": {
+        "title": "Configurações",
+        "description": "Gerencie seu perfil e configurações da conta",
+        "nav": {
+            "profile": "Perfil",
+            "preferences": "Preferências",
+            "password": "Senha",
+            "twoFactorAuth": "Autenticação 2FA"
+        },
+        "profile": {
+            "title": "Configurações do perfil",
+            "heading": "Informações do perfil",
+            "description": "Atualize seu nome e endereço de email",
+            "nameLabel": "Nome",
+            "namePlaceholder": "Nome completo",
+            "emailLabel": "Endereço de email",
+            "emailPlaceholder": "Endereço de email",
+            "unverifiedEmail": "Seu endereço de email não foi verificado.",
+            "resendVerification": "Clique aqui para reenviar o email de verificação.",
+            "verificationSent": "Um novo link de verificação foi enviado para seu endereço de email.",
+            "save": "Salvar",
+            "saved": "Salvo."
+        },
+        "password": {
+            "title": "Configurações de senha",
+            "heading": "Atualizar senha",
+            "description": "Garanta que sua conta esteja usando uma senha longa e aleatória para se manter segura",
+            "currentPassword": "Senha atual",
+            "newPassword": "Nova senha",
+            "confirmPassword": "Confirmar senha",
+            "savePassword": "Salvar senha",
+            "saved": "Salvo."
+        },
+        "preferences": {
+            "title": "Configurações de preferências",
+            "language": {
+                "title": "Idioma",
+                "description": "Selecione o idioma que deseja usar na aplicação",
+                "label": "Idioma",
+                "placeholder": "Selecione um idioma"
+            },
+            "currency": {
+                "title": "Moeda",
+                "description": "Escolha a moeda para exibir seus dados financeiros",
+                "comingSoon": "Em breve"
+            }
+        },
+        "deleteAccount": {
+            "title": "Excluir conta",
+            "description": "Exclua sua conta e todos os seus recursos",
+            "warning": "Aviso",
+            "warningMessage": "Prossiga com cautela, esta ação não pode ser desfeita.",
+            "button": "Excluir conta",
+            "confirmTitle": "Tem certeza que deseja excluir sua conta?",
+            "confirmDescription": "Assim que sua conta for excluída, todos os seus recursos e dados também serão permanentemente excluídos. Por favor, digite sua senha para confirmar que deseja excluir permanentemente sua conta.",
+            "passwordLabel": "Senha",
+            "passwordPlaceholder": "Senha"
+        },
+        "twoFactor": {
+            "title": "Autenticação de Dois Fatores",
+            "description": "Gerencie suas configurações de autenticação de dois fatores",
+            "disabled": "Desativado",
+            "enabled": "Ativado",
+            "disabledDescription": "Quando você ativar a autenticação de dois fatores, será solicitado um pin seguro durante o login. Esse pin pode ser obtido em um aplicativo compatível com TOTP no seu celular.",
+            "enabledDescription": "Com a autenticação de dois fatores ativada, você será solicitado por um pin seguro e aleatório durante o login, que pode ser obtido no aplicativo compatível com TOTP no seu celular.",
+            "continueSetup": "Continuar Configuração",
+            "enable": "Ativar 2FA",
+            "disable": "Desativar 2FA",
+            "recoveryCodes": {
+                "title": "Códigos de Recuperação 2FA",
+                "description": "Os códigos de recuperação permitem que você recupere o acesso caso perca seu dispositivo 2FA. Armazene-os em um gerenciador de senhas seguro.",
+                "hide": "Ocultar",
+                "view": "Ver",
+                "recoveryCodes": "Códigos de Recuperação",
+                "regenerate": "Regenerar Códigos",
+                "info": "Cada código de recuperação pode ser usado uma vez para acessar sua conta e será removido após o uso. Se precisar de mais, clique em",
+                "infoHighlight": "Regenerar Códigos",
+                "infoEnd": "acima."
+            },
+            "setup": {
+                "enabledTitle": "Autenticação de Dois Fatores Ativada",
+                "enabledDescription": "A autenticação de dois fatores está agora ativada. Escaneie o código QR ou insira a chave de configuração no seu aplicativo autenticador.",
+                "close": "Fechar",
+                "verifyTitle": "Verificar Código de Autenticação",
+                "verifyDescription": "Digite o código de 6 dígitos do seu aplicativo autenticador",
+                "continue": "Continuar",
+                "enableTitle": "Ativar Autenticação de Dois Fatores",
+                "enableDescription": "Para finalizar a ativação da autenticação de dois fatores, escaneie o código QR ou insira a chave de configuração no seu aplicativo autenticador",
+                "orEnterManually": "ou, insira o código manualmente",
+                "back": "Voltar",
+                "confirm": "Confirmar"
+            }
+        }
+    },
+    "tags": {
+        "title": "Tags",
+        "description": "Gerencie suas tags aqui.",
+        "newTag": "Nova Tag",
+        "empty": {
+            "title": "Nenhuma tag ainda",
+            "description": "Comece criando sua primeira tag"
+        },
+        "edit": {
+            "title": "Editar Tag",
+            "description": "Faça alterações em {name}. Clique em salvar quando terminar."
+        }
+    }
+}
