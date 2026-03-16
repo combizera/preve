@@ -11,6 +11,9 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeController::class)->name('home');
+Route::get('/receipt/{transaction}', [TransactionController::class, 'receipt'])
+    ->name('transactions.receipt')
+    ->middleware('signed');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -18,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('categories', CategoryController::class)->except('create', 'edit', 'show');
     Route::resource('tags', TagController::class)->except('create', 'edit', 'show');
     Route::resource('transactions', TransactionController::class)->except('create', 'edit');
+    Route::post('/transactions/{transaction}/share', [TransactionController::class, 'share'])
+        ->name('transactions.share');
+
     Route::patch('recurring/{recurring}/toggle', [RecurringTransactionController::class, 'toggle'])->name('recurring.toggle');
     Route::resource('recurring', RecurringTransactionController::class)->except('create', 'edit', 'show');
 });
