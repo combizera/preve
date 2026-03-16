@@ -20,7 +20,8 @@
             "details": "Details",
             "pause": "Pause",
             "resume": "Resume",
-            "saveChanges": "Save changes"
+            "saveChanges": "Save changes",
+            "share": "Share"
         },
         "labels": {
             "email": "Email",
@@ -223,6 +224,10 @@
             "title": "Filter Transactions",
             "description": "Refine your search by date range, category, or tags.",
             "dateRange": "Filter by date range"
+        },
+        "share": {
+            "success": "Link copied to clipboard!",
+            "error": "Error generating share link."
         }
     },
     "recurring": {
