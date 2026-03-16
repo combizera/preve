@@ -10,6 +10,7 @@ use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,9 +57,31 @@ final class TransactionController extends Controller
      */
     public function show(Transaction $transaction): Response
     {
-        $transaction->load(['category', 'tag']);
+        return $this->renderTransactionDetails($transaction);
+    }
 
-        return Inertia::render('transactions/TransactionShow', compact('transaction'));
+    /**
+     * Display the publicly accessible receipt for the specified resource.
+     */
+    public function receipt(Transaction $transaction): Response
+    {
+        return $this->renderTransactionDetails($transaction);
+    }
+
+    /**
+     * Generate and flash a signed URL to share the specified resource.
+     */
+    public function share(Transaction $transaction): RedirectResponse
+    {
+        $this->authorize('view', $transaction);
+
+        $url = URL::temporarySignedRoute(
+            'transactions.receipt',
+            now()->addDays(7),
+            ['transaction' => $transaction->id]
+        );
+
+        return back()->with('transaction_share_url', $url);
     }
 
     /**
@@ -87,5 +110,12 @@ final class TransactionController extends Controller
         $this->toast::success(__('messages.transaction.deleted'));
 
         return back();
+    }
+
+    private function renderTransactionDetails(Transaction $transaction): Response
+    {
+        $transaction->load(['category', 'tag']);
+
+        return Inertia::render('transactions/TransactionShow', compact('transaction'));
     }
 }
