@@ -57,15 +57,9 @@ final class TransactionController extends Controller
      */
     public function show(Transaction $transaction): Response
     {
-        return $this->renderTransactionDetails($transaction);
-    }
+        $transaction->load(['category', 'tag']);
 
-    /**
-     * Display the publicly accessible receipt for the specified resource.
-     */
-    public function receipt(Transaction $transaction): Response
-    {
-        return $this->renderTransactionDetails($transaction);
+        return Inertia::render('transactions/TransactionShow', compact('transaction'));
     }
 
     /**
@@ -110,12 +104,5 @@ final class TransactionController extends Controller
         $this->toast::success(__('messages.transaction.deleted'));
 
         return back();
-    }
-
-    private function renderTransactionDetails(Transaction $transaction): Response
-    {
-        $transaction->load(['category', 'tag']);
-
-        return Inertia::render('transactions/TransactionShow', compact('transaction'));
     }
 }
