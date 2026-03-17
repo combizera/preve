@@ -25,6 +25,21 @@ function getInitialLocale(): SupportedLocale {
         }
     }
 
+    const browserLang = navigator.language;
+
+    if (browserLang) {
+        const baseBrowserLang = browserLang.split('-')[0].toLowerCase();
+
+        const matchedLocale = SUPPORTED_LOCALES.find(
+            (locale) =>
+                locale.value.split('-')[0].toLowerCase() === baseBrowserLang,
+        );
+
+        if (matchedLocale) {
+            return matchedLocale.value;
+        }
+    }
+
     return 'en';
 }
 
