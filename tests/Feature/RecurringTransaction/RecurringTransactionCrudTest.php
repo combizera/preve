@@ -56,7 +56,7 @@ it('should be able to store a recurring transaction and automatically generate f
         'type'         => 'expense',
         'description'  => 'New Streaming Account',
         'is_active'    => true,
-        'day_of_month' => 15,
+        'day_of_month' => now()->day,
         'start_date'   => now()->format('Y-m-d'),
     ];
 
