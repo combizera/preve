@@ -390,5 +390,13 @@
             "title": "Editar Tag",
             "description": "Faça alterações em {name}. Clique em salvar quando terminar."
         }
+    },
+    "errors": {
+        "linkExpired": {
+            "title": "Link Expirado ou Inválido",
+            "subtitle": "Erro {status}",
+            "description": "O link que tentou acessar não é mais válido. Ele pode ter expirado ou a assinatura de segurança está incorreta.",
+            "backToHome": "Voltar para o Início"
+        }
     }
 }

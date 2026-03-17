@@ -390,5 +390,13 @@
             "title": "Edit Tag",
             "description": "Make changes to {name}. Click save when you're done."
         }
+    },
+    "errors": {
+        "linkExpired": {
+            "title": "Link Expired or Invalid",
+            "subtitle": "Error {status}",
+            "description": "The shared link you are trying to access is no longer valid. It may have expired or the security signature is incorrect.",
+            "backToHome": "Return to Homepage"
+        }
     }
 }
