@@ -17,9 +17,11 @@ return [
     ],
 
     'transaction' => [
-        'created' => 'Transaction created successfully.',
-        'updated' => 'Transaction updated successfully.',
-        'deleted' => 'Transaction deleted successfully.',
+        'created'     => 'Transaction created successfully.',
+        'updated'     => 'Transaction updated successfully.',
+        'deleted'     => 'Transaction deleted successfully.',
+        'shared'      => 'Link copied to clipboard!',
+        'share_error' => 'Error generating share link.',
     ],
 
     'recurring' => [

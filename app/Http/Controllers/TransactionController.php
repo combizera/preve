@@ -10,6 +10,7 @@ use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,6 +60,22 @@ final class TransactionController extends Controller
         $transaction->load(['category', 'tag']);
 
         return Inertia::render('transactions/TransactionShow', compact('transaction'));
+    }
+
+    /**
+     * Generate and flash a signed URL to share the specified resource.
+     */
+    public function share(Transaction $transaction): RedirectResponse
+    {
+        $this->authorize('view', $transaction);
+
+        $url = URL::temporarySignedRoute(
+            'transactions.receipt',
+            now()->addDays(7),
+            ['transaction' => $transaction->id]
+        );
+
+        return back()->with('transaction_share_url', $url);
     }
 
     /**
