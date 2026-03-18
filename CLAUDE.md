@@ -5,7 +5,7 @@ This file helps AI assistants understand the Preve project structure, patterns, 
 ## Project Overview
 
 **Preve** is a personal finance management application built with:
-- **Backend**: Laravel 12 + Inertia.js
+- **Backend**: Laravel 13 + Inertia.js
 - **Frontend**: Vue 3 + TypeScript + Tailwind CSS
 - **UI Components**: shadcn/ui pattern
 - **Database**: MySQL (with user-scoped data)
@@ -458,7 +458,7 @@ export function formatCentsToDisplay(cents: number | string): string {
 ---
 
 **Last Updated**: 2026-01-25
-**Laravel Version**: 11
+**Laravel Version**: 13
 **Vue Version**: 3
 **TypeScript**: Strict mode
 
@@ -478,7 +478,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - php - 8.4
 - inertiajs/inertia-laravel (INERTIA_LARAVEL) - v2
 - laravel/fortify (FORTIFY) - v1
-- laravel/framework (LARAVEL) - v12
+- laravel/framework (LARAVEL) - v13
 - laravel/prompts (PROMPTS) - v0
 - laravel/wayfinder (WAYFINDER) - v0
 - tightenco/ziggy (ZIGGY) - v2
