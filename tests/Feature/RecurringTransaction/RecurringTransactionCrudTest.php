@@ -71,6 +71,36 @@ it('should be able to store a recurring transaction and automatically generate f
     $this->assertDatabaseCount('transactions', 4);
 });
 
+it('should not be able to create recurring transaction with zero or negative amount', function (int|float $amount): void {
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    $response = $this->post(route('recurring.store'), [
+        'category_id'  => $category->id,
+        'tag_id'       => null,
+        'amount'       => $amount,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::MONTHLY->value,
+        'description'  => 'Internet Service',
+        'is_active'    => true,
+        'day_of_month' => 20,
+        'start_date'   => '2026-01-01',
+        'end_date'     => null,
+    ]);
+
+    $response->assertSessionHasErrors('amount');
+
+    $this->assertDatabaseMissing('recurring_transactions', [
+        'category_id' => $category->id,
+        'description' => 'Internet Service',
+    ]);
+})->with([
+    'zero'     => 0,
+    'negative' => -100,
+]);
+
 // READ
 it('should be able to view recurring transactions index', function (): void {
     $response = $this->get(route('recurring.index'));

@@ -29,7 +29,7 @@ final class TransactionRequest extends FormRequest
         return [
             'category_id'      => ['required', 'integer', 'exists:categories,id'],
             'tag_id'           => ['nullable', 'integer', 'exists:tags,id'],
-            'amount'           => ['required', 'numeric'],
+            'amount'           => ['required', 'numeric', 'min:1'],
             'type'             => ['required', 'in:income,expense'],
             'description'      => ['required', 'string', 'min:3'],
             'notes'            => ['nullable', 'string'],

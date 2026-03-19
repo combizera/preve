@@ -27,6 +27,7 @@ import { useRecurringStore } from '@/stores/recurring.store';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
+import { validateAmount } from '@/utils/validateAmount';
 
 interface Props {
   categories: ICategory[];
@@ -64,6 +65,8 @@ const displayAmount = computed({
 });
 
 const createRecurring = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       recurringStore.closeCreateDialog();

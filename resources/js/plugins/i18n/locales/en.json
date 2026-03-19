@@ -373,6 +373,9 @@
             }
         }
     },
+    "validation": {
+        "amountRequired": "Please enter an amount greater than zero."
+    },
     "tags": {
         "title": "Tags",
         "description": "Manage your tags here.",
