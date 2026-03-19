@@ -10,6 +10,7 @@ import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import InfoButton from '@/components/ui/button/InfoButton.vue';
+import ShareButton from '@/components/ui/button/ShareButton.vue';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -88,7 +89,9 @@ const openDeleteDialog = (transaction: ITransaction) => {
       <span :class="amountClass"> {{ getCurrencySymbol() }} {{ formattedAmount }} </span>
       <ActionGroup>
         <InfoButton :transactionId="transaction.id" />
-
+        
+        <ShareButton :transactionId="transaction.id" />
+        
         <DuplicateButton @click="openEditDialog(transaction, 'duplicate')" />
 
         <EditButton @click="openEditDialog(transaction, 'edit')" />

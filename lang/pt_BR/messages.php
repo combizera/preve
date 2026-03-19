@@ -17,9 +17,11 @@ return [
     ],
 
     'transaction' => [
-        'created' => 'Transação criada com sucesso.',
-        'updated' => 'Transação atualizada com sucesso.',
-        'deleted' => 'Transação excluída com sucesso.',
+        'created'     => 'Transação criada com sucesso.',
+        'updated'     => 'Transação atualizada com sucesso.',
+        'deleted'     => 'Transação excluída com sucesso.',
+        'shared'      => 'Link copiado para a área de transferência!',
+        'share_error' => 'Erro ao gerar o link de compartilhamento.',
     ],
 
     'recurring' => [

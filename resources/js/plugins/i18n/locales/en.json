@@ -20,7 +20,8 @@
             "details": "Details",
             "pause": "Pause",
             "resume": "Resume",
-            "saveChanges": "Save changes"
+            "saveChanges": "Save changes",
+            "share": "Share"
         },
         "labels": {
             "email": "Email",
@@ -223,6 +224,10 @@
             "title": "Filter Transactions",
             "description": "Refine your search by date range, category, or tags.",
             "dateRange": "Filter by date range"
+        },
+        "share": {
+            "success": "Link copied to clipboard!",
+            "error": "Error generating share link."
         }
     },
     "recurring": {
@@ -387,6 +392,14 @@
         "edit": {
             "title": "Edit Tag",
             "description": "Make changes to {name}. Click save when you're done."
+        }
+    },
+    "errors": {
+        "linkExpired": {
+            "title": "Link Expired or Invalid",
+            "subtitle": "Error {status}",
+            "description": "The shared link you are trying to access is no longer valid. It may have expired or the security signature is incorrect.",
+            "backToHome": "Return to Homepage"
         }
     }
 }
