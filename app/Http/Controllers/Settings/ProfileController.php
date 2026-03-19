@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Http\Requests\Settings\UpdateCurrencyRequest;
 use App\Http\Requests\Settings\UpdateLocaleRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -67,6 +68,16 @@ final class ProfileController extends Controller
      * Update the user's locale.
      */
     public function updateLocale(UpdateLocaleRequest $request): RedirectResponse
+    {
+        Auth::user()->update($request->validated());
+
+        return back();
+    }
+
+    /**
+     * Update the user's currency.
+     */
+    public function updateCurrency(UpdateCurrencyRequest $request): RedirectResponse
     {
         Auth::user()->update($request->validated());
 
