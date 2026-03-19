@@ -7,10 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecurringTransactionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', WelcomeController::class)->name('home');
+Route::redirect('/', 'login');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
