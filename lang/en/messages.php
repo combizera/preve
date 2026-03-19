@@ -35,6 +35,7 @@ return [
     ],
 
     'preferences' => [
+        'locale_updated'   => 'Language updated successfully.',
         'currency_updated' => 'Currency updated successfully.',
     ],
 

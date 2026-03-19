@@ -71,6 +71,8 @@ final class ProfileController extends Controller
     {
         Auth::user()->update($request->validated());
 
+        $this->toast::success(__('messages.preferences.locale_updated'));
+
         return back();
     }
 
