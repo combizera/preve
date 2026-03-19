@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
+import { getCurrencySymbol } from '@/lib/currency';
 import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import type { ChartConfig } from '@/components/ui/chart';
 import {
@@ -92,11 +93,12 @@ const formatDay = (i: number) => {
 };
 
 const formatCurrency = (d: number) => {
-  if (d === 0) return 'R$ 0';
+  const symbol = getCurrencySymbol();
+  if (d === 0) return `${symbol} 0`;
   const abs = Math.abs(d);
   const sign = d < 0 ? '-' : '';
-  if (abs >= 1000) return `${sign}R$ ${(abs / 1000).toFixed(0)}k`;
-  return `${sign}R$ ${abs.toFixed(0)}`;
+  if (abs >= 1000) return `${sign}${symbol} ${(abs / 1000).toFixed(0)}k`;
+  return `${sign}${symbol} ${abs.toFixed(0)}`;
 };
 </script>
 

@@ -26,6 +26,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { FREQUENCY_TYPE } from '@/enums/frequency-type';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
 import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import type { ITag } from '@/types/models/tag';
@@ -42,6 +43,7 @@ const props = defineProps<Props>();
 const { t } = useI18n();
 
 const displayAmount = defineModel<string>('displayAmount', { required: true });
+const currencySymbol = getCurrencySymbol();
 
 const filteredCategories = computed(() => {
   return props.categories.filter(
@@ -84,7 +86,7 @@ const filteredCategories = computed(() => {
       <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
-          <InputGroupText>R$</InputGroupText>
+          <InputGroupText>{{ currencySymbol }}</InputGroupText>
         </InputGroupAddon>
         <InputGroupInput
           id="amount"

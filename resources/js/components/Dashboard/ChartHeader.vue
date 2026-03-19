@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 
 interface ChartHeaderItem {
   label: string;
@@ -37,7 +37,7 @@ const variantClass: Record<ChartHeaderItem['variant'], string> = {
       >
         <span class="text-sm font-medium text-muted-foreground">{{ item.label }}</span>
         <span class="text-lg font-bold font-mono" :class="variantClass[item.variant]">
-          R$ {{ formatCentsToDisplay(item.value) }}
+          {{ getCurrencySymbol() }} {{ formatCentsToDisplay(item.value) }}
         </span>
       </div>
     </div>

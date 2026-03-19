@@ -14,7 +14,7 @@ import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { ITransaction } from '@/types/models/transaction';
 
@@ -85,7 +85,7 @@ const openDeleteDialog = (transaction: ITransaction) => {
     </div>
 
     <div class="flex items-center gap-2">
-      <span :class="amountClass"> R$ {{ formattedAmount }} </span>
+      <span :class="amountClass"> {{ getCurrencySymbol() }} {{ formattedAmount }} </span>
       <ActionGroup>
         <InfoButton :transactionId="transaction.id" />
 
