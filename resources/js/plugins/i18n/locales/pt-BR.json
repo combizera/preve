@@ -323,7 +323,7 @@
             "currency": {
                 "title": "Moeda",
                 "description": "Escolha a moeda para exibir seus dados financeiros",
-                "comingSoon": "Em breve"
+                "placeholder": "Selecione uma moeda"
             }
         },
         "deleteAccount": {
