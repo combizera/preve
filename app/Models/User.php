@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\SupportedCurrency;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,7 @@ final class User extends Authenticatable
         'email',
         'password',
         'locale',
+        'currency',
     ];
 
     /**
@@ -86,6 +88,7 @@ final class User extends Authenticatable
             'email_verified_at'       => 'datetime',
             'password'                => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'currency'                => SupportedCurrency::class,
         ];
     }
 }
