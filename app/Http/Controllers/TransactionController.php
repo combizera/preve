@@ -57,6 +57,8 @@ final class TransactionController extends Controller
      */
     public function show(Transaction $transaction): Response
     {
+        $this->authorize('view', $transaction);
+
         $transaction->load(['category', 'tag']);
 
         return Inertia::render('transactions/TransactionShow', compact('transaction'));
