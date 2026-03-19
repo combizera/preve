@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRightLeft, Github, Home, RefreshCw, Tags } from 'lucide-vue-next';
+import { ArrowRightLeft, Bug, Github, Home, RefreshCw, Tags } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -58,6 +58,11 @@ const footerNavItems = computed<NavItem[]>(() => [
     title: 'Github',
     href: 'https://github.com/combizera/preve',
     icon: Github,
+  },
+  {
+    title: t('generic.sidebar.bugReport'),
+    href: 'https://github.com/combizera/preve/issues/new',
+    icon: Bug,
   },
 ]);
 </script>

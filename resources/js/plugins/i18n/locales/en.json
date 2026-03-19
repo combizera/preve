@@ -56,7 +56,8 @@
             "theme": "Theme",
             "systemTheme": "System theme",
             "lightTheme": "Light theme",
-            "darkTheme": "Dark theme"
+            "darkTheme": "Dark theme",
+            "bugReport": "Bug Report"
         },
         "placeholders": {
             "email": "email{'@'}example.com",
