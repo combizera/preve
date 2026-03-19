@@ -18,7 +18,7 @@ import EditButton from '@/components/ui/button/EditButton.vue';
 import ToggleActiveButton from '@/components/ui/button/ToggleActiveButton.vue';
 import { Card } from '@/components/ui/card';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import {
   calculateAnnualAmount,
   calculateNextOccurrence,
@@ -155,7 +155,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
         <!-- Right Section: Amount & Actions -->
         <div class="flex shrink-0 items-center gap-1" @click.stop>
-          <span :class="amountClass">R$ {{ formattedAmount }}</span>
+          <span :class="amountClass">{{ getCurrencySymbol() }} {{ formattedAmount }}</span>
           <ActionGroup>
             <EditButton @click="openEditDialog(recurringTransaction)" />
             <ToggleActiveButton
@@ -198,7 +198,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
             >
               <CalendarSync :size="14" />
               <span>
-                R$ {{ annualAmount }}
+                {{ getCurrencySymbol() }} {{ annualAmount }}
               </span>
             </div>
           </div>

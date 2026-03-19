@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import RecurringCard from '@/components/Recurring/RecurringCard.vue';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { calculateTotalMonthly } from '@/lib/recurring';
 import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
 
@@ -72,19 +72,19 @@ const balanceColor = computed<'positive' | 'destructive' | 'default'>(() => {
     class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
   >
     <RecurringCard
-      :title="`R$ ${totalIncome}`"
+      :title="`${getCurrencySymbol()} ${totalIncome}`"
       :description="t('recurring.cards.monthlyIncome')"
       :icon="ArrowDownLeft"
     />
 
     <RecurringCard
-      :title="`R$ ${totalExpense}`"
+      :title="`${getCurrencySymbol()} ${totalExpense}`"
       :description="t('recurring.cards.monthlyExpense')"
       :icon="ArrowUpRight"
     />
 
     <RecurringCard
-      :title="`R$ ${balance}`"
+      :title="`${getCurrencySymbol()} ${balance}`"
       :description="t('recurring.cards.monthlyBalance')"
       :icon="TrendingUp"
       :color="balanceColor"

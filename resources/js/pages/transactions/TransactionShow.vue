@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/card';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { ITransaction } from '@/types/models/transaction';
 import { formatTransactionDate } from '@/utils/formatDate';
 
@@ -56,7 +56,7 @@ const transactionDetails = [
           <ul class="space-y-2">
             <DetailItem
               label="Amount:"
-              :value="`R$ ${formattedAmount(transaction)}`"
+              :value="`${getCurrencySymbol()} ${formattedAmount(transaction)}`"
               :className="clsx(
                 'text-md text-lg font-medium',
                 transaction.type === 'expense' && 'text-destructive before:content-[\'-\']',

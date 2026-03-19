@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import transactions from '@/routes/transactions';
 import type { ITransaction, TransactionType } from '@/types/models/transaction';
@@ -57,7 +57,7 @@ function getAmountClass(type: TransactionType) {
 
         <TableCell class="text-right">
           <p :class="getAmountClass(transaction.type)">
-            R$ {{ formatCentsToDisplay(transaction.amount) }}
+            {{ getCurrencySymbol() }} {{ formatCentsToDisplay(transaction.amount) }}
           </p>
         </TableCell>
       </TableRow>

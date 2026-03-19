@@ -34,6 +34,11 @@ return [
         'updated' => 'Perfil atualizado com sucesso.',
     ],
 
+    'preferences' => [
+        'locale_updated'   => 'Idioma atualizado com sucesso.',
+        'currency_updated' => 'Moeda atualizada com sucesso.',
+    ],
+
     'password' => [
         'updated' => 'Senha atualizada com sucesso.',
     ],

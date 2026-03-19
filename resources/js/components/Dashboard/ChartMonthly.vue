@@ -14,6 +14,7 @@ import {
   componentToString,
 } from '@/components/ui/chart';
 import { MONTH_KEYS } from '@/lib/calendar';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { IDailyBalance } from '@/types/models/transaction';
 
 const { t } = useI18n();
@@ -92,11 +93,12 @@ const formatDay = (i: number) => {
 };
 
 const formatCurrency = (d: number) => {
-  if (d === 0) return 'R$ 0';
+  const symbol = getCurrencySymbol();
+  if (d === 0) return `${symbol} 0`;
   const abs = Math.abs(d);
   const sign = d < 0 ? '-' : '';
-  if (abs >= 1000) return `${sign}R$ ${(abs / 1000).toFixed(0)}k`;
-  return `${sign}R$ ${abs.toFixed(0)}`;
+  if (abs >= 1000) return `${sign}${symbol} ${(abs / 1000).toFixed(0)}k`;
+  return `${sign}${symbol} ${abs.toFixed(0)}`;
 };
 </script>
 
