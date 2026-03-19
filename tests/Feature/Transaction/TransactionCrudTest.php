@@ -97,6 +97,24 @@ it('should be able to view transactions index', function (): void {
     $response->assertStatus(200);
 });
 
+it('should be able to view own transaction', function (): void {
+    $transaction = Transaction::factory()->create([
+        'user_id' => auth()->id(),
+    ]);
+
+    $response = $this->get(route('transactions.show', $transaction->id));
+
+    $response->assertSuccessful();
+});
+
+it('should not be able to view transaction that you do not own', function (): void {
+    $transaction = Transaction::factory()->create();
+
+    $response = $this->get(route('transactions.show', $transaction->id));
+
+    $response->assertForbidden();
+});
+
 // EDIT
 it('should be able to edit transaction', function (): void {
     $category = Category::factory()->create([
