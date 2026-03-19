@@ -5,6 +5,7 @@ import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import FormTransaction from '@/components/Transaction/FormTransaction.vue';
+import { validateAmount } from '@/utils/validateAmount';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -82,6 +83,8 @@ const displayAmount = computed({
 });
 
 const createTransaction = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       open.value = false;
@@ -97,6 +100,8 @@ const updateTransaction = () => {
   if (!transactionId) {
     return;
   }
+
+  if (!validateAmount(form, t)) return;
 
   form.submit(update(transactionId), {
     onSuccess: () => {

@@ -29,7 +29,7 @@ final class RecurringTransactionRequest extends FormRequest
         return [
             'category_id'  => ['required', 'integer', 'exists:categories,id'],
             'tag_id'       => ['nullable', 'integer', 'exists:tags,id'],
-            'amount'       => ['required', 'numeric'],
+            'amount'       => ['required', 'numeric', 'min:1'],
             'type'         => ['required', 'in:income,expense'],
             'frequency'    => ['required', 'in:monthly,yearly'],
             'description'  => ['required', 'string', 'min:3'],

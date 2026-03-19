@@ -63,6 +63,33 @@ it('should not be able to create transaction with type different from category',
     ]);
 });
 
+it('should not be able to create transaction with zero or negative amount', function (int|float $amount): void {
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    $response = $this->post(route('transactions.store'), [
+        'category_id'      => $category->id,
+        'tag_id'           => null,
+        'amount'           => $amount,
+        'type'             => TransactionType::EXPENSE->value,
+        'description'      => 'Grocery shopping',
+        'notes'            => null,
+        'transaction_date' => '2026-01-15',
+    ]);
+
+    $response->assertSessionHasErrors('amount');
+
+    $this->assertDatabaseMissing('transactions', [
+        'category_id' => $category->id,
+        'description' => 'Grocery shopping',
+    ]);
+})->with([
+    'zero'     => 0,
+    'negative' => -100,
+]);
+
 // READ
 it('should be able to view transactions index', function (): void {
     $response = $this->get(route('transactions.index'));

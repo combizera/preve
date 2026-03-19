@@ -373,6 +373,9 @@
             }
         }
     },
+    "validation": {
+        "amountRequired": "Informe um valor maior que zero."
+    },
     "tags": {
         "title": "Tags",
         "description": "Gerencie suas tags aqui.",
