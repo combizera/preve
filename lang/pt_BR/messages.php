@@ -34,6 +34,10 @@ return [
         'updated' => 'Perfil atualizado com sucesso.',
     ],
 
+    'preferences' => [
+        'currency_updated' => 'Moeda atualizada com sucesso.',
+    ],
+
     'password' => [
         'updated' => 'Senha atualizada com sucesso.',
     ],

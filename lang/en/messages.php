@@ -34,6 +34,10 @@ return [
         'updated' => 'Profile updated successfully.',
     ],
 
+    'preferences' => [
+        'currency_updated' => 'Currency updated successfully.',
+    ],
+
     'password' => [
         'updated' => 'Password updated successfully.',
     ],

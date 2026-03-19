@@ -81,6 +81,8 @@ final class ProfileController extends Controller
     {
         Auth::user()->update($request->validated());
 
+        $this->toast::success(__('messages.preferences.currency_updated'));
+
         return back();
     }
 
