@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table): void {
@@ -18,7 +15,7 @@ return new class() extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('locale', 10)->default('en');
-            $table->string('currency', 3)->default('BRL');
+            $table->string('currency', 3)->default('USD');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->text('two_factor_secret')->nullable();
@@ -44,9 +41,6 @@ return new class() extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
