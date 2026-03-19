@@ -24,6 +24,7 @@ import { type ICategory } from '@/types/models/category';
 import { type IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
 import { formatTransactionDate } from '@/utils/formatDate';
+import { validateAmount } from '@/utils/validateAmount';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -60,6 +61,8 @@ const updateRecurring = () => {
   if (!transactionId) {
     return;
   }
+
+  if (!validateAmount(form, t)) return;
 
   form.submit(update(transactionId), {
     onSuccess: () => {
