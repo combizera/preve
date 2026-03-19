@@ -20,9 +20,9 @@ final class RecurringTransactionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(): bool
+    public function view(User $user, RecurringTransaction $recurringTransaction): bool
     {
-        return true;
+        return $user->id === $recurringTransaction->user_id;
     }
 
     /**
