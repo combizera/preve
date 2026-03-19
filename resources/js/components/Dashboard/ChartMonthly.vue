@@ -5,7 +5,6 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ChartHeader from '@/components/Dashboard/ChartHeader.vue';
-import { getCurrencySymbol } from '@/lib/currency';
 import ChartMonthlyTooltip from '@/components/Dashboard/ChartMonthlyTooltip.vue';
 import type { ChartConfig } from '@/components/ui/chart';
 import {
@@ -15,6 +14,7 @@ import {
   componentToString,
 } from '@/components/ui/chart';
 import { MONTH_KEYS } from '@/lib/calendar';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { IDailyBalance } from '@/types/models/transaction';
 
 const { t } = useI18n();
