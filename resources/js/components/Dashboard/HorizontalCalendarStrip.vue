@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { nextTick, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
@@ -97,9 +97,17 @@ const handleToCurrentMonth = () => {
 </script>
 
 <template>
-  <section class="double-border">
-    <div class="flex justify-between items-center gap-2 relative w-full overflow-auto border rounded-lg p-2 px-4">
+  <section class="double-border flex flex-col bg-sidebar">
+    <!-- HEADER -->
+    <div class="p-2 pb-3 px-4">
+      <div class="flex items-center gap-2 text-muted-foreground">
+        <CalendarDays class="size-4" />
+        <p class="text-sm">{{ t('dashboard.calendar.title') }}</p>
+      </div>
+    </div>
 
+    <!-- CONTENT -->
+    <div class="border rounded-lg bg-background p-2 px-4 flex justify-between items-center gap-2 overflow-auto w-full">
       <!-- YEAR -->
       <Select :model-value="selectedYear" @update:model-value="handleYearChange">
         <SelectTrigger class="w-25">
@@ -119,7 +127,7 @@ const handleToCurrentMonth = () => {
       </Select>
 
       <!-- STRIP -->
-      <div class="dark:border-sidebar-border rounded-lg p-2 flex items-center gap-0 overflow-x-auto w-full h-20">
+      <div class="rounded-lg p-2 flex items-center gap-0 overflow-x-auto w-full h-20">
         <Button variant="ghost" type="button" class="hover:bg-muted" @click="navigate('prev')">
           <ChevronLeft />
         </Button>
@@ -142,7 +150,9 @@ const handleToCurrentMonth = () => {
       </div>
 
       <!-- BUTTON -->
-      <Button variant="outline" type="button" @click="handleToCurrentMonth"> {{ t('generic.actions.today') }} </Button>
+      <Button variant="outline" type="button" @click="handleToCurrentMonth">
+        {{ t('generic.actions.today') }}
+      </Button>
     </div>
   </section>
 </template>

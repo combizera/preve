@@ -23,7 +23,7 @@ const variantClass: Record<ChartHeaderItem['variant'], string> = {
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row">
+  <div class="flex flex-col sm:flex-row bg-sidebar">
     <div class="flex flex-1 flex-col justify-center gap-1 px-6 py-4">
       <h3 class="text-lg font-medium text-foreground">{{ title }}</h3>
       <p class="text-sm text-muted-foreground">{{ description }}</p>
