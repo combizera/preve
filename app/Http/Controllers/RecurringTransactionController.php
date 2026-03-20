@@ -60,7 +60,7 @@ final class RecurringTransactionController extends Controller
     {
         $this->authorize('update', $recurring);
 
-        $recurring->update($request->all());
+        $recurring->update($request->validated());
 
         $this->toast::success(__('messages.recurring.updated'));
 

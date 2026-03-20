@@ -51,7 +51,7 @@ final class CategoryController extends Controller
     {
         $this->authorize('update', $category);
 
-        $category->update($request->all());
+        $category->update($request->validated());
 
         $this->toast::success(__('messages.category.updated'));
 

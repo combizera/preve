@@ -87,7 +87,7 @@ final class TransactionController extends Controller
     {
         $this->authorize('update', $transaction);
 
-        $transaction->update($request->all());
+        $transaction->update($request->validated());
 
         $this->toast::success(__('messages.transaction.updated'));
 
