@@ -46,8 +46,7 @@ it('should be able to create recurring transaction', function (): void {
 });
 
 it('should be able to store a recurring transaction and automatically generate future projections', function (): void {
-    $user = User::factory()->create();
-    $category = Category::factory()->create(['user_id' => $user->id, 'type' => 'expense']);
+    $category = Category::factory()->create(['user_id' => auth()->id(), 'type' => 'expense']);
 
     $payload = [
         'category_id'  => $category->id,

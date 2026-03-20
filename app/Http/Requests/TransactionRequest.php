@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Models\Category;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 final class TransactionRequest extends FormRequest
@@ -27,8 +27,8 @@ final class TransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id'      => ['required', 'integer', 'exists:categories,id'],
-            'tag_id'           => ['nullable', 'integer', 'exists:tags,id'],
+            'category_id'      => ['required', 'integer', Rule::exists('categories', 'id')->where('user_id', $this->user()->id)],
+            'tag_id'           => ['nullable', 'integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
             'amount'           => ['required', 'numeric', 'min:1'],
             'type'             => ['required', 'in:income,expense'],
             'description'      => ['required', 'string', 'min:3'],
@@ -48,7 +48,7 @@ final class TransactionRequest extends FormRequest
                     return;
                 }
 
-                $category = Category::query()->find($this->category_id);
+                $category = $this->user()->categories()->find($this->category_id);
 
                 if ($category && $category->type->value !== $this->type) {
                     $validator->errors()->add(
