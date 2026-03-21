@@ -32,7 +32,7 @@ const variantClass: Record<ChartHeaderItem['variant'], string> = {
       <div
         v-for="(item, index) in items"
         :key="item.label"
-        class="flex flex-1 flex-col justify-center gap-1 min-w-[150px] border-t sm:border-t-0 sm:border-l px-6 py-4"
+        class="flex flex-col justify-center gap-1 min-w-44 border-t sm:border-t-0 sm:border-l px-6 py-4"
         :class="{ 'border-l': index > 0 }"
       >
         <span class="text-sm font-medium text-muted-foreground">{{ item.label }}</span>
