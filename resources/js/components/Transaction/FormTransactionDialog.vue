@@ -5,7 +5,6 @@ import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import FormTransaction from '@/components/Transaction/FormTransaction.vue';
-import { validateAmount } from '@/utils/validateAmount';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,6 +25,7 @@ import { update, store } from '@/routes/transactions';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
+import { validateAmount } from '@/utils/validateAmount';
 
 const open = defineModel<boolean>('open', { required: true });
 

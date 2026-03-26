@@ -16,13 +16,13 @@ import {
 } from '@/components/ui/select';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter,
-  SheetClose,
 } from '@/components/ui/sheet';
 import { useFilter } from '@/composables/useFilter';
 import transactionRoutes from '@/routes/transactions';
@@ -149,12 +149,13 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
           </section>
 
           <section data-name="date-range-filter">
-            <div
-              class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
-            >
-              <p class="text-sm font-medium text-foreground">
-                {{ t('transactions.filter.dateRange') }}
-              </p>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <p class="text-sm font-medium text-foreground text-nowrap">
+                  {{ t('transactions.filter.dateRange') }}
+                </p>
+                <div class="h-px bg-border w-full" />
+              </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <Label for="date_start">{{ t('generic.labels.startDate') }}</Label>
@@ -165,7 +166,10 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                 </div>
                 <div class="space-y-2">
                   <Label for="date_end">{{ t('generic.labels.endDate') }}</Label>
-                  <Input id="date_end" v-model="form.date_end" type="date" />
+                  <DatePicker
+                    id="date_end"
+                    v-model="form.date_end"
+                  />
                 </div>
               </div>
             </div>
