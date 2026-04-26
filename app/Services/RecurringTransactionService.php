@@ -33,9 +33,11 @@ final class RecurringTransactionService
             ? $recurringTransaction->start_date->copy()->startOfMonth()
             : Date::today()->startOfMonth();
 
+        $until = $startMonth->copy()->addMonthsNoOverflow($monthsAhead);
+
         return CarbonPeriod::since($startMonth)
-            ->months(1)
-            ->until($startMonth->copy()->addMonthsNoOverflow($monthsAhead));
+            ->until($until)
+            ->{$recurringTransaction->frequency->periodUnit()}(1);
     }
 
     private function createTransactionIfNotExists(RecurringTransaction $recurringTransaction, CarbonInterface $transactionDate): void

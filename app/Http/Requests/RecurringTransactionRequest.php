@@ -6,8 +6,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
+use Throwable;
 
 final class RecurringTransactionRequest extends FormRequest
 {
@@ -34,7 +36,7 @@ final class RecurringTransactionRequest extends FormRequest
             'frequency'    => ['required', 'in:monthly,yearly'],
             'description'  => ['required', 'string', 'min:3'],
             'is_active'    => ['boolean'],
-            'day_of_month' => ['required', 'integer', 'min:1', 'max:31'],
+            'day_of_month' => ['required_if:frequency,monthly', 'nullable', 'integer', 'min:1', 'max:31'],
             'start_date'   => ['required', 'date'],
             'end_date'     => ['nullable', 'date', 'after:start_date'],
         ];
@@ -61,5 +63,31 @@ final class RecurringTransactionRequest extends FormRequest
                 }
             },
         ];
+    }
+
+    /**
+     * Yearly recurrences ignore the user-supplied day_of_month — the day part
+     * is fully encoded by start_date. Normalize the input before validation
+     * so the merged value is what ends up in validated().
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('frequency') !== 'yearly') {
+            return;
+        }
+
+        $startDate = $this->input('start_date');
+
+        if (!is_string($startDate)) {
+            return;
+        }
+
+        try {
+            $day = Date::parse($startDate)->day;
+        } catch (Throwable) {
+            return;
+        }
+
+        $this->merge(['day_of_month' => $day]);
     }
 }

@@ -45,6 +45,34 @@ it('should be able to create recurring transaction', function (): void {
     ]);
 });
 
+it('should derive day_of_month from start_date when frequency is yearly', function (): void {
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    $response = $this->post(route('recurring.store'), [
+        'category_id'  => $category->id,
+        'tag_id'       => null,
+        'amount'       => 50000,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::YEARLY->value,
+        'description'  => 'Annual Subscription',
+        'is_active'    => true,
+        'day_of_month' => 1,
+        'start_date'   => '2026-08-22',
+        'end_date'     => null,
+    ]);
+
+    $response->assertRedirect(route('recurring.index'));
+
+    $this->assertDatabaseHas('recurring_transactions', [
+        'description'  => 'Annual Subscription',
+        'frequency'    => FrequencyType::YEARLY->value,
+        'day_of_month' => 22,
+    ]);
+});
+
 it('should be able to store a recurring transaction and automatically generate future projections', function (): void {
     $category = Category::factory()->create(['user_id' => auth()->id(), 'type' => 'expense']);
 
