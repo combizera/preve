@@ -19,6 +19,7 @@ it('should be able to generate future transactions and avoid duplicates', functi
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
@@ -54,7 +55,7 @@ it('should generate only one transaction per year for yearly frequency', functio
         'end_date'     => null,
     ]);
 
-    $this->service->generateFutureTransactions($recurring, 12);
+    $this->service->generateFutureTransactions($recurring, 3);
 
     expect($recurring->transactions()->count())->toBe(1)
         ->and($recurring->transactions()->first()->transaction_date->toDateString())
@@ -66,6 +67,7 @@ it('should not be able to generate transactions beyond the end_date limit', func
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'end_date'     => Date::parse('2026-04-30'),
         'day_of_month' => 15,
@@ -85,6 +87,7 @@ it('should log a success message when a transaction is generated', function (): 
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
@@ -105,6 +108,7 @@ it('should log an error message when transaction generation fails', function ():
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,

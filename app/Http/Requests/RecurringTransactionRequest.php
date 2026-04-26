@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
+use Throwable;
 
 final class RecurringTransactionRequest extends FormRequest
 {
@@ -66,15 +67,27 @@ final class RecurringTransactionRequest extends FormRequest
 
     /**
      * Yearly recurrences ignore the user-supplied day_of_month — the day part
-     * is fully encoded by start_date. Normalize the input here so the model
-     * stays free of HTTP-shaped logic.
+     * is fully encoded by start_date. Normalize the input before validation
+     * so the merged value is what ends up in validated().
      */
-    protected function passedValidation(): void
+    protected function prepareForValidation(): void
     {
-        if ($this->input('frequency') === 'yearly') {
-            $this->merge([
-                'day_of_month' => Date::parse((string) $this->input('start_date'))->day,
-            ]);
+        if ($this->input('frequency') !== 'yearly') {
+            return;
         }
+
+        $startDate = $this->input('start_date');
+
+        if (!is_string($startDate)) {
+            return;
+        }
+
+        try {
+            $day = Date::parse($startDate)->day;
+        } catch (Throwable) {
+            return;
+        }
+
+        $this->merge(['day_of_month' => $day]);
     }
 }
