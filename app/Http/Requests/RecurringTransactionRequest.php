@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -61,5 +62,19 @@ final class RecurringTransactionRequest extends FormRequest
                 }
             },
         ];
+    }
+
+    /**
+     * Yearly recurrences ignore the user-supplied day_of_month — the day part
+     * is fully encoded by start_date. Normalize the input here so the model
+     * stays free of HTTP-shaped logic.
+     */
+    protected function passedValidation(): void
+    {
+        if ($this->input('frequency') === 'yearly') {
+            $this->merge([
+                'day_of_month' => Date::parse((string) $this->input('start_date'))->day,
+            ]);
+        }
     }
 }

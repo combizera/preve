@@ -96,13 +96,4 @@ final class RecurringTransaction extends Model
 
         return !($this->end_date && $date->isAfter($this->end_date));
     }
-
-    protected static function booted(): void
-    {
-        self::saving(function (RecurringTransaction $recurring): void {
-            if ($recurring->frequency === FrequencyType::YEARLY) {
-                $recurring->day_of_month = $recurring->start_date->day;
-            }
-        });
-    }
 }

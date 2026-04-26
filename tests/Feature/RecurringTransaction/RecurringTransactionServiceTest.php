@@ -46,11 +46,12 @@ it('should generate only one transaction per year for yearly frequency', functio
     Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
-        'user_id'    => $this->user->id,
-        'frequency'  => 'yearly',
-        'start_date' => Date::parse('2026-03-15'),
-        'is_active'  => true,
-        'end_date'   => null,
+        'user_id'      => $this->user->id,
+        'frequency'    => 'yearly',
+        'start_date'   => Date::parse('2026-03-15'),
+        'day_of_month' => 15,
+        'is_active'    => true,
+        'end_date'     => null,
     ]);
 
     $this->service->generateFutureTransactions($recurring, 12);
@@ -58,18 +59,6 @@ it('should generate only one transaction per year for yearly frequency', functio
     expect($recurring->transactions()->count())->toBe(1)
         ->and($recurring->transactions()->first()->transaction_date->toDateString())
         ->toBe('2026-03-15');
-});
-
-it('should derive day_of_month from start_date for yearly frequency', function (): void {
-    $recurring = RecurringTransaction::factory()->create([
-        'user_id'      => $this->user->id,
-        'frequency'    => 'yearly',
-        'start_date'   => Date::parse('2026-08-22'),
-        'day_of_month' => 1,
-        'is_active'    => true,
-    ]);
-
-    expect($recurring->fresh()->day_of_month)->toBe(22);
 });
 
 it('should not be able to generate transactions beyond the end_date limit', function (): void {
