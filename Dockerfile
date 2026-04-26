@@ -133,6 +133,10 @@ COPY --chown=node:node --from=build /var/www/html/resources/js/routes /usr/src/a
 COPY --chown=node:node --from=build /var/www/html/resources/js/actions /usr/src/app/resources/js/actions
 COPY --chown=node:node --from=build /var/www/html/resources/js/wayfinder /usr/src/app/resources/js/wayfinder
 
+# This stage has no PHP, so tell the Wayfinder Vite plugin to skip the regen
+# step (already done upstream in the build stage).
+ENV WAYFINDER_NO_GENERATE=1
+
 RUN npm ci
 RUN npm run build
 
