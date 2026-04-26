@@ -15,12 +15,12 @@ export const createColumns = (t: (key: string) => string): ColumnDef<ITag>[] => 
         header: t('models.transaction.description'),
         cell: ({ row }) => {
             const description = row.original.description ?? '';
-            const shortDescription = description.slice(0, 25) + '…';
+            const shortDescription = description.slice(0, 50) + '…';
 
             return h(
                 'p',
                 { class: 'text-sm text-muted-foreground' },
-                description.length > 25 ? shortDescription : description,
+                description.length > 50 ? shortDescription : description,
             );
         },
     },
