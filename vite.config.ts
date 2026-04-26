@@ -12,6 +12,8 @@ export default defineConfig({
             refresh: true,
         }),
         wayfinder({
+            // Generate .form() helpers used by Inertia v2 <Form> components.
+            formVariants: true,
             // The Docker node-build stage has no PHP — routes are generated
             // upstream in the PHP build stage. Skip the regen step there.
             command: process.env.WAYFINDER_NO_GENERATE === '1' ? 'true' : undefined,

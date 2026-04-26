@@ -46,7 +46,7 @@ USER www-data
 # build downstream depends on them.
 RUN cp .env.example .env \
     && php artisan key:generate --force \
-    && php artisan wayfinder:generate \
+    && php artisan wayfinder:generate --with-form \
     && rm .env
 
 ############################################
