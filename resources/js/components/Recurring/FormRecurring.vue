@@ -152,7 +152,7 @@ const filteredCategories = computed(() => {
       {{ t('recurring.form.recurrenceSettings') }}
     </Label>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div :class="form.frequency === FREQUENCY_TYPE.MONTHLY ? 'grid grid-cols-2 gap-4' : 'grid gap-4'">
       <div class="grid gap-3">
         <Label for="frequency"> {{ t('recurring.form.frequency') }} </Label>
         <Select v-model="form.frequency">
@@ -170,7 +170,7 @@ const filteredCategories = computed(() => {
         <InputError :message="form.errors.frequency" />
       </div>
 
-      <div class="grid gap-3">
+      <div v-if="form.frequency === FREQUENCY_TYPE.MONTHLY" class="grid gap-3">
         <Label for="day_of_month"> {{ t('recurring.form.dayOfMonth') }} </Label>
         <Input
           id="day_of_month"
