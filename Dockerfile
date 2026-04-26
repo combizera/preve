@@ -71,7 +71,7 @@ EXPOSE 8080 8443
 STOPSIGNAL SIGQUIT
 CMD ["/init"]
 
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 --start-period=30s \
     CMD ["sh", "-c", "curl --insecure --silent --location --show-error --fail http://localhost:8080$HEALTHCHECK_PATH || exit 1"]
 
 ############################################
@@ -124,7 +124,26 @@ RUN npm ci
 RUN npm run build
 
 # ############################################
-# App - Production Image
+# PHP - CLI image for Workers and Schedulers
+# ############################################
+FROM ${CLI_IMAGE} AS cli
+
+WORKDIR /var/www/html
+
+COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
+
+ENV AUTORUN_ENABLED="false"
+
+RUN mkdir -p storage/framework/views \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/logs \
+    && chmod -R 755 storage bootstrap/cache
+
+USER www-data
+
+# ############################################
+# App - Production Image (MUST be the last stage so default builds pick this target)
 # ############################################
 FROM ${FULL_IMAGE} AS production
 
@@ -144,24 +163,5 @@ EXPOSE 8080 8443
 STOPSIGNAL SIGQUIT
 CMD ["/init"]
 
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 --start-period=30s \
     CMD ["sh", "-c", "curl --insecure --silent --location --show-error --fail http://localhost:8080$HEALTHCHECK_PATH || exit 1"]
-
-# ############################################
-# PHP - CLI image for Workers and Schedulers
-# ############################################
-FROM ${CLI_IMAGE} AS cli
-
-WORKDIR /var/www/html
-
-COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
-
-ENV AUTORUN_ENABLED="false"
-
-RUN mkdir -p storage/framework/views \
-    && mkdir -p storage/framework/cache \
-    && mkdir -p storage/framework/sessions \
-    && mkdir -p storage/logs \
-    && chmod -R 755 storage bootstrap/cache
-
-USER www-data
