@@ -131,6 +131,7 @@ COPY --chown=node:node . /usr/src/app/
 # so not present in the host context).
 COPY --chown=node:node --from=build /var/www/html/resources/js/routes /usr/src/app/resources/js/routes
 COPY --chown=node:node --from=build /var/www/html/resources/js/actions /usr/src/app/resources/js/actions
+COPY --chown=node:node --from=build /var/www/html/resources/js/wayfinder /usr/src/app/resources/js/wayfinder
 
 RUN npm ci
 RUN npm run build
