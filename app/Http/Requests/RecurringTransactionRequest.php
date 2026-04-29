@@ -30,7 +30,8 @@ final class RecurringTransactionRequest extends FormRequest
     {
         return [
             'category_id'  => ['required', 'integer', Rule::exists('categories', 'id')->where('user_id', $this->user()->id)],
-            'tag_id'       => ['nullable', 'integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
+            'tags'         => ['nullable', 'array'],
+            'tags.*'       => ['integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
             'amount'       => ['required', 'numeric', 'min:1'],
             'type'         => ['required', 'in:income,expense'],
             'frequency'    => ['required', 'in:monthly,yearly'],

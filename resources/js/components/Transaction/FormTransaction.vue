@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
+import TagsMultiSelect from '@/components/Tag/TagsMultiSelect.vue';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import {
@@ -28,11 +29,11 @@ import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
-import type { ITransaction } from '@/types/models/transaction';
+import type { ITransactionInput } from '@/types/models/transaction';
 import { filterNumericInput } from '@/utils/numericInput';
 
 interface Props {
-  form: InertiaForm<ITransaction>;
+  form: InertiaForm<ITransactionInput>;
   categories: ICategory[];
   tags: ITag[];
 }
@@ -125,21 +126,8 @@ const filteredCategories = computed(() => {
 
     <div class="grid gap-3">
       <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
-      <Select v-model="form.tag_id">
-        <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
-            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
-            <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
-              {{ tag.name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <InputError :message="form.errors.tag_id" />
+      <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
+      <InputError :message="form.errors.tags" />
     </div>
   </div>
 

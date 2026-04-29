@@ -8,7 +8,7 @@ use Database\Factories\TagFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 #[Fillable([
     'name',
@@ -21,18 +21,18 @@ final class Tag extends Model
     use HasFactory;
 
     /**
-     * @return HasMany<Transaction, $this>
+     * @return MorphToMany<Transaction, $this>
      */
-    public function transactions(): HasMany
+    public function transactions(): MorphToMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->morphedByMany(Transaction::class, 'taggable');
     }
 
     /**
-     * @return HasMany<RecurringTransaction, $this>
+     * @return MorphToMany<RecurringTransaction, $this>
      */
-    public function recurringTransactions(): HasMany
+    public function recurringTransactions(): MorphToMany
     {
-        return $this->hasMany(RecurringTransaction::class);
+        return $this->morphedByMany(RecurringTransaction::class, 'taggable');
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
 use App\Services\RecurringTransactionService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Inertia\Inertia;
@@ -23,7 +24,7 @@ final class RecurringTransactionController extends Controller
     {
         $recurring = Auth::user()
             ->recurringTransactions()
-            ->with(['transactions', 'category', 'tag'])
+            ->with(['transactions', 'category', 'tags'])
             ->orderBy('day_of_month', 'asc')
             ->get();
 
@@ -44,8 +45,10 @@ final class RecurringTransactionController extends Controller
     public function store(RecurringTransactionRequest $request, RecurringTransactionService $service): RedirectResponse
     {
         $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
 
         $recurringTransaction = Auth::user()->recurringTransactions()->create($validated);
+        $recurringTransaction->tags()->sync($tagIds);
 
         $service->generateFutureTransactions($recurringTransaction, 3);
         $this->toast::success(__('messages.recurring.created'));
@@ -60,7 +63,11 @@ final class RecurringTransactionController extends Controller
     {
         $this->authorize('update', $recurring);
 
-        $recurring->update($request->validated());
+        $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
+
+        $recurring->update($validated);
+        $recurring->tags()->sync($tagIds);
 
         $this->toast::success(__('messages.recurring.updated'));
 

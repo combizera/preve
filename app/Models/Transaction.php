@@ -14,13 +14,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\DB;
 
 #[Fillable([
     'user_id',
     'recurring_transaction_id',
     'category_id',
-    'tag_id',
     'amount',
     'type',
     'description',
@@ -68,11 +68,11 @@ final class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<Tag, $this>
+     * @return MorphToMany<Tag, $this>
      */
-    public function tag(): BelongsTo
+    public function tags(): MorphToMany
     {
-        return $this->belongsTo(Tag::class);
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     #[Scope]

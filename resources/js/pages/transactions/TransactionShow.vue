@@ -26,7 +26,7 @@ function formattedAmount(transaction: ITransaction) {
 const transactionDetails = [
   { label: 'Date:', value: formatTransactionDate(props.transaction.transaction_date) },
   { label: 'Category:', value: props.transaction.category?.name },
-  { label: 'Tag:', value: props.transaction.tag?.name },
+  { label: 'Tags:', value: props.transaction.tags?.map((tag) => tag.name).join(', ') || undefined },
   { label: 'Created At:', value: formatTransactionDate(props.transaction.created_at) },
 ];
 

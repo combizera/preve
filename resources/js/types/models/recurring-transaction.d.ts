@@ -8,8 +8,7 @@ export interface IRecurringTransaction {
     id?: number;
     category_id: number;
     category?: ICategory;
-    tag_id?: number;
-    tag?: ITag;
+    tags?: ITag[];
     amount: number;
     frequency: FrequencyType;
     type: TransactionType;
@@ -20,4 +19,18 @@ export interface IRecurringTransaction {
     end_date?: string;
     created_at?: string;
     updated_at?: string;
+}
+
+export interface IRecurringTransactionInput {
+    id?: number;
+    category_id: number;
+    tags: number[];
+    amount: number;
+    frequency: FrequencyType;
+    type: TransactionType;
+    description: string;
+    is_active: boolean;
+    day_of_month: number;
+    start_date: string;
+    end_date?: string;
 }
