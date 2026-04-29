@@ -11,7 +11,7 @@ export interface IDailyBalance {
 
 export interface ITransaction {
     id?: string;
-    recurring_transaction_id?: number;
+    recurring_transaction_id?: string;
     recurring_transaction?: IRecurringTransaction;
     category_id?: number;
     category?: ICategory;
@@ -27,7 +27,7 @@ export interface ITransaction {
 
 export interface ITransactionInput {
     id?: string;
-    recurring_transaction_id?: number;
+    recurring_transaction_id?: string;
     category_id: number;
     tags: number[];
     amount: number;
