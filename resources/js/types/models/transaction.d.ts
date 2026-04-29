@@ -15,8 +15,7 @@ export interface ITransaction {
     recurring_transaction?: IRecurringTransaction;
     category_id?: number;
     category?: ICategory;
-    tag_id?: number;
-    tag?: ITag;
+    tags?: ITag[];
     amount: number;
     type: TransactionType;
     description: string;

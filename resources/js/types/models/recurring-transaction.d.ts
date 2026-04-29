@@ -8,8 +8,7 @@ export interface IRecurringTransaction {
     id?: number;
     category_id: number;
     category?: ICategory;
-    tag_id?: number;
-    tag?: ITag;
+    tags?: ITag[];
     amount: number;
     frequency: FrequencyType;
     type: TransactionType;
