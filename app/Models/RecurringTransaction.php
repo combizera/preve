@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Eloquent\Relations\MorphToManyOnVarcharId;
 use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
 use Carbon\CarbonInterface;
 use Database\Factories\RecurringTransactionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Date;
 
 #[Fillable([
     'user_id',
     'category_id',
-    'tag_id',
     'amount',
     'frequency',
     'type',
@@ -66,11 +68,11 @@ final class RecurringTransaction extends Model
     }
 
     /**
-     * @return BelongsTo<Tag, $this>
+     * @return MorphToMany<Tag, $this>
      */
-    public function tag(): BelongsTo
+    public function tags(): MorphToMany
     {
-        return $this->belongsTo(Tag::class);
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     public function calculateExactDateForMonth(CarbonInterface $month): CarbonInterface
@@ -95,5 +97,37 @@ final class RecurringTransaction extends Model
         }
 
         return !($this->end_date && $date->isAfter($this->end_date));
+    }
+
+    /**
+     * Use the varchar-aware MorphToMany so eager-loaded morph relations
+     * (e.g. `tags`) bind this model's integer key as a string against the
+     * polymorphic `taggables.taggable_id` varchar column, which also
+     * accommodates UUID-keyed siblings like Transaction.
+     */
+    protected function newMorphToMany(
+        Builder $query,
+        Model $parent,
+        $name,
+        $table,
+        $foreignPivotKey,
+        $relatedPivotKey,
+        $parentKey,
+        $relatedKey,
+        $relationName = null,
+        $inverse = false,
+    ): MorphToManyOnVarcharId {
+        return new MorphToManyOnVarcharId(
+            $query,
+            $parent,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            $relationName,
+            $inverse,
+        );
     }
 }
