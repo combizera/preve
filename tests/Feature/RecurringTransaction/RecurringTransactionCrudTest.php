@@ -6,6 +6,7 @@ use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
 use App\Models\Category;
 use App\Models\RecurringTransaction;
+use App\Models\Tag;
 use App\Models\User;
 
 beforeEach(function (): void {
@@ -22,7 +23,6 @@ it('should be able to create recurring transaction', function (): void {
 
     $response = $this->post(route('recurring.store'), [
         'category_id'  => $category->id,
-        'tag_id'       => null,
         'amount'       => 9990,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
@@ -53,7 +53,6 @@ it('should derive day_of_month from start_date when frequency is yearly', functi
 
     $response = $this->post(route('recurring.store'), [
         'category_id'  => $category->id,
-        'tag_id'       => null,
         'amount'       => 50000,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::YEARLY->value,
@@ -106,7 +105,6 @@ it('should not be able to create recurring transaction with zero or negative amo
 
     $response = $this->post(route('recurring.store'), [
         'category_id'  => $category->id,
-        'tag_id'       => null,
         'amount'       => $amount,
         'type'         => TransactionType::EXPENSE->value,
         'frequency'    => FrequencyType::MONTHLY->value,
@@ -127,6 +125,36 @@ it('should not be able to create recurring transaction with zero or negative amo
     'zero'     => 0,
     'negative' => -100,
 ]);
+
+it('should attach tags and propagate them to generated transactions', function (): void {
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    $tags = Tag::factory()->count(2)->create(['user_id' => auth()->id()]);
+
+    $response = $this->post(route('recurring.store'), [
+        'category_id'  => $category->id,
+        'tags'         => $tags->pluck('id')->all(),
+        'amount'       => 9990,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::MONTHLY->value,
+        'description'  => 'Tagged recurring',
+        'is_active'    => true,
+        'day_of_month' => now()->day,
+        'start_date'   => now()->format('Y-m-d'),
+    ]);
+
+    $response->assertRedirect(route('recurring.index'));
+
+    $recurring = RecurringTransaction::query()->where('description', 'Tagged recurring')->firstOrFail();
+    expect($recurring->tags()->pluck('tags.id')->all())->toEqualCanonicalizing($tags->pluck('id')->all());
+
+    $generatedTransaction = $recurring->transactions()->first();
+    expect($generatedTransaction)->not->toBeNull()
+        ->and($generatedTransaction->tags()->pluck('tags.id')->all())->toEqualCanonicalizing($tags->pluck('id')->all());
+});
 
 // READ
 it('should be able to view recurring transactions index', function (): void {
