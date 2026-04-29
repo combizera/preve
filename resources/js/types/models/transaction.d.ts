@@ -24,3 +24,15 @@ export interface ITransaction {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface ITransactionInput {
+    id?: string;
+    recurring_transaction_id?: number;
+    category_id: number;
+    tags: number[];
+    amount: number;
+    type: TransactionType;
+    description: string;
+    notes?: string;
+    transaction_date: string;
+}

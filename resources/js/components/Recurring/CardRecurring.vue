@@ -226,11 +226,16 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
           </div>
         </div>
 
-        <!-- Tag -->
-        <div v-if="recurringTransaction.tag" class="flex items-center gap-2">
-          <Badge variant="secondary" class="gap-1 px-2 py-0.5 text-xs">
+        <!-- Tags -->
+        <div v-if="recurringTransaction.tags?.length" class="flex flex-wrap items-center gap-2">
+          <Badge
+            v-for="tag in recurringTransaction.tags"
+            :key="tag.id"
+            variant="secondary"
+            class="gap-1 rounded px-2 py-0.5 text-xs"
+          >
             <TagIcon :size="10" />
-            {{ recurringTransaction.tag.name }}
+            {{ tag.name }}
           </Badge>
         </div>
       </div>
