@@ -16,7 +16,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const toggleActive = () => {
-  router.patch(toggle(Number(props.id)).url);
+  router.patch(toggle(props.id).url);
 };
 </script>
 

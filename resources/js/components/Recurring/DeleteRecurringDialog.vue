@@ -28,9 +28,7 @@ const deleteRecurring = () => {
   const recurringTransaction = props.recurringTransaction;
   if (!recurringTransaction?.id) return;
 
-  const id = Number(recurringTransaction.id);
-
-  form.submit(destroy(id), {
+  form.submit(destroy(recurringTransaction.id), {
     onSuccess: () => {
       open.value = false;
     },
