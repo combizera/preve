@@ -9,6 +9,7 @@ export interface IForecastSeries {
     default_amount: number;
     default_notes?: string | null;
     is_active: boolean;
+    forecasts?: IForecast[];
 }
 
 export interface IForecast {

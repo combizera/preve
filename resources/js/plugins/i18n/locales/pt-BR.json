@@ -299,7 +299,8 @@
             "spent": "Gasto",
             "remaining": "Restante",
             "dailyAllowance": "Limite diário",
-            "ofTotal": "de {total}"
+            "ofTotal": "de {total}",
+            "viewTransactions": "Ver transações desta categoria e mês"
         },
         "pace": {
             "over_pace": "Acima do ritmo",
@@ -332,6 +333,16 @@
         "table": {
             "budget": "Orçamento",
             "perMonthShort": "mês"
+        },
+        "sections": {
+            "details": "Detalhes",
+            "appearance": "Aparência",
+            "budget": "Orçamento"
+        },
+        "budget": {
+            "notSet": "Não definido",
+            "remove": "Remover",
+            "removeConfirm": "Isso remove permanentemente o orçamento de \"{name}\" e todo o histórico mensal. Não pode ser desfeito."
         }
     },
     "settings": {

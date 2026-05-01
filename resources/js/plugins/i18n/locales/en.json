@@ -299,7 +299,8 @@
             "spent": "Spent",
             "remaining": "Remaining",
             "dailyAllowance": "Daily allowance",
-            "ofTotal": "of {total}"
+            "ofTotal": "of {total}",
+            "viewTransactions": "View transactions for this category and month"
         },
         "pace": {
             "over_pace": "Over pace",
@@ -332,6 +333,16 @@
         "table": {
             "budget": "Budget",
             "perMonthShort": "mo"
+        },
+        "sections": {
+            "details": "Details",
+            "appearance": "Appearance",
+            "budget": "Budget"
+        },
+        "budget": {
+            "notSet": "Not set",
+            "remove": "Remove",
+            "removeConfirm": "This permanently removes the budget for \"{name}\" along with all its monthly history. This cannot be undone."
         }
     },
     "settings": {
