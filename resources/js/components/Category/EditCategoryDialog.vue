@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import InputError from '@/components/InputError.vue';
+import CategoryAppearanceSection from '@/components/Category/sections/CategoryAppearanceSection.vue';
+import CategoryBudgetSection from '@/components/Category/sections/CategoryBudgetSection.vue';
+import CategoryDetailsSection from '@/components/Category/sections/CategoryDetailsSection.vue';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -14,24 +16,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { availableColors, getColorClass } from '@/lib/category-colors';
-import { availableIcons, getIconComponent } from '@/lib/category-icons';
-import { cn } from '@/lib/utils';
-import { update } from '@/routes/categories';
-import { ICategory, ICategoryForm } from '@/types/models/category';
+import { update as updateCategoryRoute } from '@/routes/categories';
+import { store as storeForecast, update as updateForecast } from '@/routes/forecasts';
+import type { ICategory, ICategoryForm } from '@/types/models/category';
+import type { IForecastInput } from '@/types/models/forecast';
+import { validateAmount } from '@/utils/validateAmount';
+
+export type CategorySection = 'details' | 'appearance' | 'budget';
 
 const { t } = useI18n();
 const open = defineModel<boolean>('open', { required: true });
 
-const props = defineProps<{
+interface Props {
   category: ICategory;
-}>();
+  defaultSection?: CategorySection;
+}
 
-const form = useForm<ICategoryForm>({
+const props = withDefaults(defineProps<Props>(), {
+  defaultSection: 'details',
+});
+
+const isExpense = computed(() => props.category.type === 'expense');
+
+const appearanceOpen = ref(props.defaultSection === 'appearance');
+const budgetOpen = ref(props.defaultSection === 'budget' && isExpense.value);
+
+const series = computed(() => props.category.forecast_series ?? null);
+const latestForecast = computed(() => series.value?.latest_forecast ?? null);
+
+const categoryForm = useForm<ICategoryForm>({
   name: props.category.name,
   type: props.category.type,
   description: props.category.description ?? '',
@@ -39,160 +52,94 @@ const form = useForm<ICategoryForm>({
   color: props.category.color,
 });
 
-const updateCategory = () => {
-  form.submit(update(props.category.id), {
-    onSuccess: () => {
+const today = new Date();
+const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+
+const budgetForm = useForm<IForecastInput>({
+  category_id: props.category.id,
+  amount: series.value?.default_amount ?? 0,
+  month: currentMonth,
+  notes: series.value?.default_notes ?? '',
+  apply_to_default: false,
+});
+
+const dialogDescription = computed(() =>
+  t('categories.edit.description', { name: props.category.name }),
+);
+
+const save = () => {
+  const persistBudget = () => {
+    if (!isExpense.value || !budgetForm.isDirty) {
       open.value = false;
-    },
-  });
+      return;
+    }
+
+    if (budgetForm.amount <= 0 && !validateAmount(budgetForm, t)) {
+      return;
+    }
+
+    if (series.value && latestForecast.value?.id) {
+      budgetForm.submit(updateForecast(latestForecast.value.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+          open.value = false;
+        },
+      });
+      return;
+    }
+
+    budgetForm.submit(storeForecast(), {
+      preserveScroll: true,
+      onSuccess: () => {
+        open.value = false;
+      },
+    });
+  };
+
+  if (categoryForm.isDirty) {
+    categoryForm.submit(updateCategoryRoute(props.category.id), {
+      preserveScroll: true,
+      onSuccess: persistBudget,
+    });
+    return;
+  }
+
+  persistBudget();
 };
+
+const isProcessing = computed(
+  () => categoryForm.processing || budgetForm.processing,
+);
 </script>
 
 <template>
   <Dialog v-model:open="open">
-    <form>
-      <DialogContent class="sm:max-w-125">
-        <DialogHeader>
-          <DialogTitle>{{ t('categories.edit.title') }}</DialogTitle>
-          <DialogDescription>
-            {{ t('categories.edit.description', { name: category?.name }) }}
-          </DialogDescription>
-        </DialogHeader>
+    <DialogContent class="sm:max-w-150">
+      <DialogHeader>
+        <DialogTitle>{{ t('categories.edit.title') }}</DialogTitle>
+        <DialogDescription>{{ dialogDescription }}</DialogDescription>
+      </DialogHeader>
 
-        <div class="grid grid-cols-2 gap-4">
-          <!-- Type -->
-          <div class="col-span-2 grid gap-3">
-            <Label for="type"> {{ t('models.transaction.type') }} </Label>
-            <ToggleGroup v-model="form.type" class="w-full">
-              <ToggleGroupItem
-                :value="TRANSACTION_TYPE.EXPENSE"
-                class="flex-1 gap-2"
-              >
-                <ArrowUpRight :size="16" />
-                {{ t('models.transaction.expense') }}
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                :value="TRANSACTION_TYPE.INCOME"
-                class="flex-1 gap-2"
-              >
-                <ArrowDownLeft :size="16" />
-                {{ t('models.transaction.income') }}
-              </ToggleGroupItem>
-            </ToggleGroup>
-            <InputError :message="form.errors.type" />
-          </div>
+      <div class="grid gap-3">
+        <CategoryDetailsSection :form="categoryForm">
+          <CategoryAppearanceSection v-model:open="appearanceOpen" :form="categoryForm" />
+          <CategoryBudgetSection
+            v-if="isExpense"
+            v-model:open="budgetOpen"
+            :category="category"
+            :form="budgetForm"
+          />
+        </CategoryDetailsSection>
+      </div>
 
-          <div class="col-span-2 grid gap-3">
-            <Label for="name"> {{ t('generic.labels.name') }} </Label>
-            <Input
-              id="name"
-              name="name"
-              :placeholder="t('generic.placeholders.categoryName')"
-              v-model="form.name"
-            />
-            <InputError :message="form.errors.name" />
-          </div>
-
-          <div class="col-span-2 grid gap-3">
-            <Label for="description"> {{ t('models.transaction.description') }} </Label>
-            <Input
-              id="description"
-              name="description"
-              :placeholder="t('generic.placeholders.categoryDescription')"
-              v-model="form.description"
-            />
-            <InputError :message="form.errors.description" />
-          </div>
-
-          <div class="col-span-2 grid gap-3">
-            <Label>{{ t('generic.labels.icon') }}</Label>
-            <div class="grid grid-cols-8 justify-start gap-2">
-              <label
-                v-for="icon in availableIcons"
-                :key="icon"
-                :class="
-                  cn(
-                    'flex cursor-pointer items-center justify-center rounded border-2 p-2',
-                    form.icon === icon && getColorClass(form.color, 'bg'),
-                    form.icon === icon
-                      ? getColorClass(form.color, 'border')
-                      : 'hover:border-muted-foreground',
-                    form.icon === icon && getColorClass(form.color, 'text'),
-                  )
-                "
-              >
-                <input
-                  type="radio"
-                  name="icon"
-                  :value="icon"
-                  v-model="form.icon"
-                  class="sr-only"
-                />
-                <component
-                  :is="getIconComponent(icon)"
-                  :class="
-                    cn(
-                      'size-5',
-                      form.icon === icon
-                        ? getColorClass(form.color, 'text')
-                        : 'text-foreground',
-                    )
-                  "
-                />
-              </label>
-            </div>
-            <InputError :message="form.errors.icon" />
-          </div>
-
-          <div class="col-span-2 grid gap-3">
-            <Label>{{ t('generic.labels.color') }}</Label>
-            <div class="grid grid-cols-8 gap-2">
-              <label
-                v-for="color in availableColors"
-                :key="color"
-                :class="
-                  cn(
-                    'group h-8 w-12 cursor-pointer rounded border-2 p-1',
-                    form.color === color
-                      ? getColorClass(color, 'border')
-                      : 'border-border hover:border-muted-foreground',
-                  )
-                "
-              >
-                <input
-                  type="radio"
-                  name="color"
-                  :value="color"
-                  v-model="form.color"
-                  class="sr-only"
-                />
-                <div
-                  :class="
-                    cn(
-                      'h-full w-full rounded-xs group-hover:brightness-90',
-                      getColorClass(color, 'picker'),
-                    )
-                  "
-                />
-              </label>
-            </div>
-            <InputError :message="form.errors.color" />
-          </div>
-        </div>
-
-        <DialogFooter>
-          <DialogClose as-child>
-            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
-          </DialogClose>
-          <Button
-            type="button"
-            @click="updateCategory"
-            :disabled="form.processing"
-          >
-            {{ t('generic.actions.saveChanges') }}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </form>
+      <DialogFooter>
+        <DialogClose as-child>
+          <Button variant="outline">{{ t('generic.actions.cancel') }}</Button>
+        </DialogClose>
+        <Button type="button" @click="save" :disabled="isProcessing">
+          {{ t('generic.actions.saveChanges') }}
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   </Dialog>
 </template>

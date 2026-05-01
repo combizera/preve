@@ -42,6 +42,23 @@ export function formatCentsToDisplay(cents: number | string): string {
 }
 
 /**
+ * Formats a value in cents into a compact currency label suited for chart axes
+ * (no decimals, k-suffix for thousands).
+ * @param cents - Value in cents (e.g., 250000 = 2500.00)
+ * @returns Compact label (e.g., "R$ 3k", "R$ 250", "-R$ 1k", "R$ 0")
+ */
+export function formatCompactCurrency(cents: number): string {
+  const symbol = getCurrencySymbol();
+  if (cents === 0) return `${symbol} 0`;
+
+  const abs = Math.abs(cents) / 100;
+  const sign = cents < 0 ? '-' : '';
+  const value = abs >= 1000 ? `${(abs / 1000).toFixed(0)}k` : abs.toFixed(0);
+
+  return `${sign}${symbol} ${value}`;
+}
+
+/**
  * Converts a typed string to cents
  * @param input - String with numbers only (e.g., "12510")
  * @returns Value in cents (e.g., 12510)

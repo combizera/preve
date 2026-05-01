@@ -39,6 +39,7 @@
             "endDate": "Data Fim",
             "endDateOptional": "Data Fim (Opcional)",
             "inactive": "Inativo",
+            "paused": "Pausado",
             "actions": "Ações",
             "color": "Cor",
             "icon": "Ícone"
@@ -48,6 +49,7 @@
             "home": "Início",
             "transactions": "Transações",
             "recurring": "Recorrentes",
+            "forecasts": "Orçamentos",
             "category": "Categorias",
             "tags": "Tags",
             "profile": "Perfil",
@@ -88,7 +90,9 @@
             "deleteTransaction": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação \"{description}\".",
             "deleteRecurring": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a transação recorrente \"{description}\" e todas as transações geradas a partir do próximo mês. Transações do mês atual e meses anteriores não serão afetadas.",
             "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\".",
-            "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\"."
+            "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\".",
+            "deleteForecast": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o orçamento de \"{category}\" em {month}.",
+            "deleteForecastSeries": "Este orçamento está pausado. Excluí-lo removerá permanentemente o orçamento de \"{category}\" e todos os meses associados."
         }
     },
     "models": {
@@ -267,6 +271,50 @@
             "activePeriod": "Período Ativo"
         }
     },
+    "forecasts": {
+        "title": "Orçamentos",
+        "description": "Defina orçamentos mensais por categoria. Eles renovam automaticamente todo mês — pause quando quiser.",
+        "newForecast": "Novo orçamento",
+        "empty": {
+            "title": "Nenhum orçamento ainda",
+            "description": "Crie seu primeiro orçamento e a gente cuida da renovação todo mês.",
+            "currentMonthTitle": "Sem orçamentos ativos neste mês",
+            "currentMonthDescription": "Todos os seus orçamentos estão pausados ou em outros meses."
+        },
+        "create": {
+            "title": "Criar orçamento",
+            "description": "Defina um orçamento mensal para uma categoria. Ele será renovado automaticamente todo mês.",
+            "button": "Criar orçamento"
+        },
+        "edit": {
+            "title": "Editar orçamento",
+            "description": "Atualize o orçamento de {category} em {month}."
+        },
+        "form": {
+            "month": "Mês",
+            "amount": "Valor do orçamento",
+            "notes": "Observações (opcional)",
+            "applyToDefault": "Aplicar como novo padrão mensal",
+            "applyToDefaultHelp": "Próximos meses serão criados com este valor a cada renovação."
+        },
+        "card": {
+            "spent": "Gasto",
+            "remaining": "Restante",
+            "dailyAllowance": "Limite diário",
+            "ofTotal": "de {total}",
+            "viewTransactions": "Ver transações desta categoria e mês",
+            "expectedByNow": "Esperado até agora: {percent}% do mês decorrido"
+        },
+        "summary": {
+            "title": "Orçamento do mês",
+            "subtitle": "{count} categorias ativas"
+        },
+        "pace": {
+            "over_pace": "Acima do ritmo",
+            "on_pace": "No ritmo",
+            "under_pace": "Abaixo do ritmo"
+        }
+    },
     "categories": {
         "title": "Categorias",
         "description": "Gerencie suas categorias aqui.",
@@ -284,6 +332,24 @@
         "edit": {
             "title": "Editar Categoria",
             "description": "Faça alterações em {name}. Clique em salvar quando terminar."
+        },
+        "actions": {
+            "setBudget": "Definir orçamento",
+            "manageBudget": "Gerenciar orçamento"
+        },
+        "table": {
+            "budget": "Orçamento",
+            "perMonthShort": "mês"
+        },
+        "sections": {
+            "details": "Detalhes",
+            "appearance": "Aparência",
+            "budget": "Orçamento"
+        },
+        "budget": {
+            "notSet": "Não definido",
+            "remove": "Remover",
+            "removeConfirm": "Isso remove permanentemente o orçamento de \"{name}\" e todo o histórico mensal. Não pode ser desfeito."
         }
     },
     "settings": {

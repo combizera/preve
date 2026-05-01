@@ -26,6 +26,7 @@ import {
   formatFrequency,
 } from '@/lib/recurring';
 import { cn } from '@/lib/utils';
+import { toggle as toggleRecurring } from '@/routes/recurring';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
@@ -161,7 +162,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
           <ActionGroup>
             <EditButton @click="openEditDialog(recurringTransaction)" />
             <ToggleActiveButton
-              :id="recurringTransaction.id!"
+              :toggle-url="toggleRecurring(recurringTransaction.id!).url"
               :is-active="recurringTransaction.is_active"
             />
             <DeleteButton @click="openDeleteDialog(recurringTransaction)" />

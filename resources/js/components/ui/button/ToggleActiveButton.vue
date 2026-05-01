@@ -4,19 +4,18 @@ import { Pause, Play } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { toggle } from '@/routes/recurring';
 
 const { t } = useI18n();
 
 interface Props {
-  id: string | number;
+  toggleUrl: string;
   isActive: boolean;
 }
 
 const props = defineProps<Props>();
 
 const toggleActive = () => {
-  router.patch(toggle(props.id).url);
+  router.patch(props.toggleUrl);
 };
 </script>
 

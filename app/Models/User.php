@@ -68,6 +68,22 @@ final class User extends Authenticatable
     }
 
     /**
+     * @return HasMany<Forecast, $this>
+     */
+    public function forecasts(): HasMany
+    {
+        return $this->hasMany(Forecast::class);
+    }
+
+    /**
+     * @return HasMany<ForecastSeries, $this>
+     */
+    public function forecastSeries(): HasMany
+    {
+        return $this->hasMany(ForecastSeries::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

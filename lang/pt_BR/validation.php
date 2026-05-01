@@ -184,6 +184,9 @@ return [
         'category_id' => [
             'type_mismatch' => 'A categoria selecionada deve ser do tipo :type.',
         ],
+        'forecast' => [
+            'series_already_exists' => 'Essa categoria já tem um orçamento. Edite o existente ou retome se estiver pausado.',
+        ],
     ],
 
     /*
