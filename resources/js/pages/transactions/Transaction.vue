@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
@@ -24,7 +24,10 @@ interface Props {
   filters: ITransactionFilters;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+provide('categories', props.categories);
+provide('tags', props.tags);
 
 const { t } = useI18n();
 

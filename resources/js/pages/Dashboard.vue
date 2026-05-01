@@ -52,7 +52,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
   router.reload({
     data: { forecast_month: payload.month, forecast_year: payload.year },
-    only: ['forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances', 'dailyForecastedSpend', 'carryOver'],
+    only: ['availableBalance', 'forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances', 'dailyForecastedSpend', 'carryOver'],
   });
 };
 </script>

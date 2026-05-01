@@ -173,7 +173,7 @@
         "description": "Here you can get an overview of your financial activities and manage your transactions efficiently.",
         "lastTransactions": "Last Transactions",
         "availableBalance": "Available Balance",
-        "availableBalanceDescription": "Income minus paid expenses this month",
+        "availableBalanceDescription": "Paid income minus paid expenses to date",
         "forecast": "Forecast",
         "forecastDescription": "Balance after pending expenses",
         "forecastForMonth": "Forecast for {month} {year}",
