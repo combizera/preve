@@ -8,6 +8,7 @@ use App\Enums\TransactionType;
 use App\Http\Requests\CreateForecastRequest;
 use App\Http\Requests\UpdateForecastRequest;
 use App\Models\Forecast;
+use App\Models\ForecastSeries;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -130,5 +131,16 @@ final class ForecastController extends Controller
         $this->toast::success(__('messages.forecast.deleted'));
 
         return to_route('forecasts.index');
+    }
+
+    public function destroySeries(ForecastSeries $series): RedirectResponse
+    {
+        $this->authorize('delete', $series);
+
+        $series->delete();
+
+        $this->toast::success(__('messages.forecast.deleted'));
+
+        return back();
     }
 }
