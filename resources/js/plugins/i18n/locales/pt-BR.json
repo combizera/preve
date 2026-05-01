@@ -277,7 +277,9 @@
         "newForecast": "Novo orçamento",
         "empty": {
             "title": "Nenhum orçamento ainda",
-            "description": "Crie seu primeiro orçamento e a gente cuida da renovação todo mês."
+            "description": "Crie seu primeiro orçamento e a gente cuida da renovação todo mês.",
+            "currentMonthTitle": "Sem orçamentos ativos neste mês",
+            "currentMonthDescription": "Todos os seus orçamentos estão pausados ou em outros meses."
         },
         "create": {
             "title": "Criar orçamento",

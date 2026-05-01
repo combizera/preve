@@ -277,7 +277,9 @@
         "newForecast": "New forecast",
         "empty": {
             "title": "No forecasts yet",
-            "description": "Create your first forecast and we'll keep it rolling every month."
+            "description": "Create your first forecast and we'll keep it rolling every month.",
+            "currentMonthTitle": "No active forecasts this month",
+            "currentMonthDescription": "All your forecasts are paused or scheduled for other months."
         },
         "create": {
             "title": "Create forecast",

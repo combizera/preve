@@ -9,14 +9,19 @@ import CardForecast from '@/components/Forecast/CardForecast.vue';
 import CreateForecastDialog from '@/components/Forecast/CreateForecastDialog.vue';
 import ForecastSummaryCard from '@/components/Forecast/ForecastSummaryCard.vue';
 import Heading from '@/components/Heading.vue';
+import SectionTitle from '@/components/SectionTitle.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
+import {
+  getCurrentMonthString,
+  groupCurrentMonthByPace,
+} from '@/lib/forecast';
 import { dashboard } from '@/routes';
 import forecastRoutes from '@/routes/forecasts';
 import { useForecastStore } from '@/stores/forecast.store';
 import { type BreadcrumbItem } from '@/types';
 import type { ICategory } from '@/types/models/category';
-import type { IForecast } from '@/types/models/forecast';
+import type { ForecastPaceStatus, IForecast } from '@/types/models/forecast';
 
 interface Props {
   forecasts: IForecast[];
@@ -40,6 +45,16 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 ]);
 
 const canCreate = computed(() => props.categories.length > 0);
+
+const paceSections: ForecastPaceStatus[] = ['over_pace', 'on_pace', 'under_pace'];
+
+const grouped = computed(() =>
+  groupCurrentMonthByPace(props.forecasts, getCurrentMonthString()),
+);
+
+const hasCurrentMonthForecasts = computed(() =>
+  paceSections.some((status) => grouped.value[status].length > 0),
+);
 
 const openCreate = () => forecastStore.openCreateDialog();
 
@@ -92,13 +107,36 @@ onMounted(() => {
       <template v-else>
         <ForecastSummaryCard :forecasts="forecasts" class="mb-3" />
 
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <CardForecast
-            v-for="forecast in forecasts"
-            :key="forecast.id"
-            :forecast="forecast"
-            :categories="categories"
-          />
+        <EmptyState
+          v-if="!hasCurrentMonthForecasts"
+          :title="t('forecasts.empty.currentMonthTitle')"
+          :description="t('forecasts.empty.currentMonthDescription')"
+          :button-text="t('forecasts.newForecast')"
+          :show-button="canCreate"
+          @action="openCreate"
+        >
+          <template #icon>
+            <Wallet />
+          </template>
+        </EmptyState>
+
+        <div v-else class="space-y-6">
+          <section
+            v-for="status in paceSections"
+            :key="status"
+            v-show="grouped[status].length > 0"
+            class="space-y-3"
+          >
+            <SectionTitle :title="t(`forecasts.pace.${status}`)" />
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <CardForecast
+                v-for="forecast in grouped[status]"
+                :key="forecast.id"
+                :forecast="forecast"
+                :categories="categories"
+              />
+            </div>
+          </section>
         </div>
       </template>
     </div>

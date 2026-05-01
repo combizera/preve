@@ -96,6 +96,24 @@ export function summarizeForecasts(
     };
 }
 
+export function groupCurrentMonthByPace(
+    forecasts: IForecast[],
+    monthString: string,
+): Record<ForecastPaceStatus, IForecast[]> {
+    const groups: Record<ForecastPaceStatus, IForecast[]> = {
+        over_pace: [],
+        on_pace: [],
+        under_pace: [],
+    };
+
+    for (const forecast of forecasts) {
+        if (!isInMonth(forecast.month, monthString)) continue;
+        groups[forecast.pace_status].push(forecast);
+    }
+
+    return groups;
+}
+
 export function buildForecastTransactionsUrl(forecast: IForecast): string {
     const [year, month] = forecast.month.split('-');
     const lastDay = new Date(Number(year), Number(month), 0).getDate();
