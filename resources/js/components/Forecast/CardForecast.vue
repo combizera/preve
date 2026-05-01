@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -6,13 +7,15 @@ import { useI18n } from 'vue-i18n';
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteForecastDialog from '@/components/Forecast/DeleteForecastDialog.vue';
 import EditForecastDialog from '@/components/Forecast/EditForecastDialog.vue';
+import ForecastProgressBar from '@/components/Forecast/ForecastProgressBar.vue';
+import ForecastStatsGrid from '@/components/Forecast/ForecastStatsGrid.vue';
 import { Badge } from '@/components/ui/badge';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import ToggleActiveButton from '@/components/ui/button/ToggleActiveButton.vue';
 import { Card } from '@/components/ui/card';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
+import { buildForecastTransactionsUrl, getPaceClasses } from '@/lib/forecast';
 import { cn } from '@/lib/utils';
 import { toggle as toggleForecast } from '@/routes/forecasts';
 import { useForecastStore } from '@/stores/forecast.store';
@@ -47,51 +50,9 @@ watch(
 const categoryIcon = computed(() =>
   getIconComponent(props.forecast.category?.icon ?? null),
 );
-
-const formattedAmount = computed(() =>
-  formatCentsToDisplay(props.forecast.amount),
-);
-const formattedSpent = computed(() =>
-  formatCentsToDisplay(props.forecast.spent_to_date),
-);
-const formattedRemaining = computed(() =>
-  formatCentsToDisplay(props.forecast.remaining),
-);
-const formattedDaily = computed(() =>
-  formatCentsToDisplay(props.forecast.daily_allowance),
-);
-
 const monthLabel = computed(() => formatMonth(props.forecast.month));
-
-const progressPercent = computed(() => {
-  if (props.forecast.amount <= 0) return 0;
-  return Math.min(
-    100,
-    Math.round((props.forecast.spent_to_date / props.forecast.amount) * 100),
-  );
-});
-
-const paceClass = computed(() => {
-  switch (props.forecast.pace_status) {
-    case 'over_pace':
-      return 'bg-destructive/10 text-destructive border-destructive/30';
-    case 'under_pace':
-      return 'bg-positive/10 text-positive border-positive/30';
-    default:
-      return 'bg-muted text-muted-foreground';
-  }
-});
-
-const progressBarClass = computed(() => {
-  switch (props.forecast.pace_status) {
-    case 'over_pace':
-      return 'bg-destructive';
-    case 'under_pace':
-      return 'bg-positive';
-    default:
-      return 'bg-foreground/70';
-  }
-});
+const transactionsUrl = computed(() => buildForecastTransactionsUrl(props.forecast));
+const paceBadgeClass = computed(() => getPaceClasses(props.forecast.pace_status).badge);
 </script>
 
 <template>
@@ -103,18 +64,23 @@ const progressBarClass = computed(() => {
       )
     "
   >
-    <!-- Header -->
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-2">
-          <component
-            :is="categoryIcon"
-            :size="16"
-            class="shrink-0 text-muted-foreground"
-          />
-          <h3 class="truncate text-sm leading-tight font-semibold text-foreground">
-            {{ forecast.category?.name }}
-          </h3>
+          <Link
+            :href="transactionsUrl"
+            class="flex min-w-0 items-center gap-2 rounded-sm hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            :title="t('forecasts.card.viewTransactions')"
+          >
+            <component
+              :is="categoryIcon"
+              :size="16"
+              class="shrink-0 text-muted-foreground"
+            />
+            <h3 class="truncate text-sm leading-tight font-semibold text-foreground hover:underline">
+              {{ forecast.category?.name }}
+            </h3>
+          </Link>
           <Badge
             v-if="!forecast.is_active"
             variant="secondary"
@@ -125,7 +91,7 @@ const progressBarClass = computed(() => {
           <Badge
             v-else
             variant="secondary"
-            :class="cn('rounded-md border px-2 py-0.5 text-[11px] font-medium', paceClass)"
+            :class="cn('rounded-md border px-2 py-0.5 text-[11px] font-medium', paceBadgeClass)"
           >
             {{ t(`forecasts.pace.${forecast.pace_status}`) }}
           </Badge>
@@ -147,52 +113,17 @@ const progressBarClass = computed(() => {
       </div>
     </div>
 
-    <!-- Progress bar -->
-    <div class="space-y-1.5">
-      <div class="flex items-baseline justify-between text-xs">
-        <span class="font-medium text-foreground">
-          {{ getCurrencySymbol() }} {{ formattedSpent }}
-          <span class="font-normal text-muted-foreground">
-            {{ t('forecasts.card.ofTotal', { total: `${getCurrencySymbol()} ${formattedAmount}` }) }}
-          </span>
-        </span>
-        <span class="text-muted-foreground">{{ progressPercent }}%</span>
-      </div>
-      <div class="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
-        <div
-          :class="cn('h-full transition-all', progressBarClass)"
-          :style="{ width: `${progressPercent}%` }"
-        />
-      </div>
-    </div>
+    <ForecastProgressBar
+      :spent="forecast.spent_to_date"
+      :amount="forecast.amount"
+      :pace-status="forecast.pace_status"
+    />
 
-    <!-- Stats grid -->
-    <div class="grid grid-cols-3 gap-3 text-xs">
-      <div>
-        <div class="font-medium text-muted-foreground/70">
-          {{ t('forecasts.card.spent') }}
-        </div>
-        <div class="font-semibold text-foreground">
-          {{ getCurrencySymbol() }} {{ formattedSpent }}
-        </div>
-      </div>
-      <div>
-        <div class="font-medium text-muted-foreground/70">
-          {{ t('forecasts.card.remaining') }}
-        </div>
-        <div class="font-semibold text-foreground">
-          {{ getCurrencySymbol() }} {{ formattedRemaining }}
-        </div>
-      </div>
-      <div>
-        <div class="font-medium text-muted-foreground/70">
-          {{ t('forecasts.card.dailyAllowance') }}
-        </div>
-        <div class="font-semibold text-foreground">
-          {{ getCurrencySymbol() }} {{ formattedDaily }}
-        </div>
-      </div>
-    </div>
+    <ForecastStatsGrid
+      :spent="forecast.spent_to_date"
+      :remaining="forecast.remaining"
+      :daily-allowance="forecast.daily_allowance"
+    />
   </Card>
 
   <EditForecastDialog
