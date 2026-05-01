@@ -21,10 +21,12 @@ final class ForecastService
 
         $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
         $forecast = $availableBalance - $pendingExpenses;
+        $forecast -= $this->forecastShortfall($user, $currentDate, $now);
 
         $cursor = $currentDate->copy()->addMonth();
         while ($cursor->lessThanOrEqualTo($selectedDate)) {
             $forecast += $this->monthBalance($user, $cursor);
+            $forecast -= $this->forecastShortfall($user, $cursor, $now);
             $cursor = $cursor->addMonth();
         }
 
@@ -56,6 +58,28 @@ final class ForecastService
             ->get();
 
         return (int) $forecasts->sum(fn ($forecast): int => intdiv($forecast->remaining, $daysRemaining));
+    }
+
+    /**
+     * Sum of expected forecast spend not yet captured in transactions for the
+     * given month. Current month uses `remaining` (budget minus already-paid);
+     * future months use the full `amount`. Past months return 0.
+     */
+    private function forecastShortfall(User $user, CarbonInterface $monthDate, CarbonInterface $now): int
+    {
+        $isCurrentMonth = $monthDate->isSameMonth($now);
+        $isFutureMonth = $monthDate->greaterThan($now->copy()->startOfMonth()) && !$isCurrentMonth;
+
+        if (!$isCurrentMonth && !$isFutureMonth) {
+            return 0;
+        }
+
+        return (int) $user->forecasts()
+            ->whereYear('month', $monthDate->year)
+            ->whereMonth('month', $monthDate->month)
+            ->whereHas('series', fn ($query) => $query->where('is_active', true))
+            ->get()
+            ->sum(fn ($forecast): int => $isCurrentMonth ? $forecast->remaining : $forecast->amount);
     }
 
     private function monthBalance(User $user, CarbonInterface $date): int
