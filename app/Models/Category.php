@@ -47,4 +47,20 @@ final class Category extends Model
     {
         return $this->hasMany(RecurringTransaction::class);
     }
+
+    /**
+     * @return HasMany<Forecast, $this>
+     */
+    public function forecasts(): HasMany
+    {
+        return $this->hasMany(Forecast::class);
+    }
+
+    /**
+     * @return HasMany<ForecastSeries, $this>
+     */
+    public function forecastSeries(): HasMany
+    {
+        return $this->hasMany(ForecastSeries::class);
+    }
 }
