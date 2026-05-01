@@ -418,6 +418,7 @@ export function formatCentsToDisplay(cents: number | string): string {
 - Use `compact()` for passing data
 - Use `Auth::user()` for current user
 - Use `to_route()` for redirects
+- Extract domain calculations / projections to a Service (e.g. `ForecastService`); controllers stay thin (orchestration + render). Anything that's a pure function of `(user, date, ...)` returning a number/array belongs in a Service, not in a private controller method.
 
 **Frontend:**
 - Use `useForm()` composable for ALL forms
@@ -435,7 +436,8 @@ export function formatCentsToDisplay(cents: number | string): string {
 - Don't validate in controllers (use Form Requests)
 - Don't use `auth()->user()` (use `Auth::user()`)
 - Don't return views directly (use Inertia)
-- Don't check authorization manually (use policies)
+- Don't check authorization manually (use policies). In particular, don't reach for `abort_if($model->user_id !== Auth::id(), 403)` — register a Policy and use `$this->authorize()`, just like the rest of the controllers.
+- Don't use Eloquent's `latestOfMany` / `ofMany` on relations whose related model has UUID PKs (`HasUuids`). Postgres has no `MAX(uuid)` aggregate and the inner subquery crashes at runtime with `function max(uuid) does not exist`. Use a sub-query eager-load (`->with(['rel' => fn ($q) => $q->latest('col')->limit(1)])`) plus an `Attribute` accessor on the parent (`$appends` to expose it, `$hidden` on the underlying relation to keep the JSON clean). See `ForecastSeries::latestForecast` for the working pattern.
 
 **Frontend:**
 - Don't use `<Form>` component (use `useForm()`)
@@ -444,6 +446,7 @@ export function formatCentsToDisplay(cents: number | string): string {
 - Don't use empty strings for optional fields (use `null`)
 - Don't forget `form.errors` and `form.processing`
 - Don't put complex logic in templates (use computed/methods)
+- Don't add inline `//` explanatory comments restating what the code does. Names should carry meaning. Reserve comments for non-obvious *why* (a hidden constraint, a workaround). When transforming data for a chart, do the transform in the data layer (e.g. `chartData` computed) so that line, area, tooltip and crosshair all read the same values — don't apply the transform only inside a y-accessor.
 
 ---
 

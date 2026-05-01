@@ -14,7 +14,7 @@ import {
   componentToString,
 } from '@/components/ui/chart';
 import { MONTH_KEYS } from '@/lib/calendar';
-import { getCurrencySymbol } from '@/lib/currency';
+import { formatCompactCurrency } from '@/lib/currency';
 import type { IDailyBalance } from '@/types/models/transaction';
 
 const { t } = useI18n();
@@ -23,6 +23,7 @@ interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
   dailyBalances: IDailyBalance[];
+  dailyForecastedSpend: number;
   carryOver: number;
   selectedMonth: { month: number; year: number } | null;
 }
@@ -43,8 +44,6 @@ const currentDay = computed(() => {
     selectedMonth.year < now.getFullYear() ||
     (selectedMonth.year === now.getFullYear() && selectedMonth.month < now.getMonth() + 1);
 
-  // Past month: all actual (day 32 means all days <= 31 are actual)
-  // Future month: all forecast (day 0 means no days are actual)
   return isPastMonth ? 32 : 0;
 });
 
@@ -59,12 +58,13 @@ const displayMonth = computed(() => {
 
 type ChartPoint = { day: number; balance: number };
 
-// Accumulated balance per day (starting from previous months' carry-over)
 const chartData = computed(() => {
   let acc = props.carryOver;
   return props.dailyBalances.map((d) => {
     acc += d.amount;
-    return { day: d.day, balance: acc };
+    const daysIntoFuture = Math.max(0, d.day - currentDay.value);
+    const balance = acc - props.dailyForecastedSpend * daysIntoFuture;
+    return { day: d.day, balance };
   });
 });
 
@@ -81,24 +81,13 @@ const chartConfig = computed<ChartConfig>(() => ({
 
 const x = (_d: ChartPoint, i: number) => i;
 
-// Actual: up to and including today
-const yActual = (d: ChartPoint) => (d.day <= currentDay.value ? d.balance / 100 : undefined);
+const yActual = (d: ChartPoint) => (d.day <= currentDay.value ? d.balance : undefined);
 
-// Forecast: from today onwards (shares today's point to connect)
-const yForecast = (d: ChartPoint) => (d.day >= currentDay.value ? d.balance / 100 : undefined);
+const yForecast = (d: ChartPoint) => (d.day >= currentDay.value ? d.balance : undefined);
 
 const formatDay = (i: number) => {
   const point = chartData.value[i];
   return point ? String(point.day) : '';
-};
-
-const formatCurrency = (d: number) => {
-  const symbol = getCurrencySymbol();
-  if (d === 0) return `${symbol} 0`;
-  const abs = Math.abs(d);
-  const sign = d < 0 ? '-' : '';
-  if (abs >= 1000) return `${sign}${symbol} ${(abs / 1000).toFixed(0)}k`;
-  return `${sign}${symbol} ${abs.toFixed(0)}`;
 };
 </script>
 
@@ -114,10 +103,8 @@ const formatCurrency = (d: number) => {
         ]"
       />
 
-      <!-- Chart -->
       <ChartContainer :config="chartConfig" class="h-[300px] w-full border-t px-2 pt-4 pb-2" :cursor="true">
         <VisXYContainer :data="chartData" :padding="{ top: 20, bottom: 20 }">
-          <!-- Actual: solid area + line -->
           <VisArea
             :x="x"
             :y="yActual"
@@ -133,7 +120,6 @@ const formatCurrency = (d: number) => {
             :line-width="2"
           />
 
-          <!-- Forecast: dashed line + subtle area -->
           <VisArea
             :x="x"
             :y="yForecast"
@@ -150,7 +136,6 @@ const formatCurrency = (d: number) => {
             :line-dash-array="[6, 4]"
           />
 
-          <!-- Axes -->
           <VisAxis
             type="x"
             :x="x"
@@ -162,13 +147,12 @@ const formatCurrency = (d: number) => {
           />
           <VisAxis
             type="y"
-            :tick-format="formatCurrency"
+            :tick-format="formatCompactCurrency"
             :tick-line="false"
             :domain-line="false"
             :grid-line="true"
           />
 
-          <!-- Tooltip -->
           <ChartTooltip />
           <ChartCrosshair
             :color="chartConfig.balance.color"
