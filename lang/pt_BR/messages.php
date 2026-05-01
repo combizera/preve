@@ -32,6 +32,14 @@ return [
         'deleted'     => 'Transação recorrente excluída com sucesso.',
     ],
 
+    'forecast' => [
+        'created'   => 'Orçamento criado com sucesso.',
+        'updated'   => 'Orçamento atualizado com sucesso.',
+        'deleted'   => 'Orçamento excluído com sucesso.',
+        'activated' => 'Orçamento retomado.',
+        'paused'    => 'Orçamento pausado.',
+    ],
+
     'profile' => [
         'updated' => 'Perfil atualizado com sucesso.',
     ],

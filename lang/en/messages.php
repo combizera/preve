@@ -32,6 +32,14 @@ return [
         'deleted'     => 'Recurring transaction deleted successfully.',
     ],
 
+    'forecast' => [
+        'created'   => 'Forecast created successfully.',
+        'updated'   => 'Forecast updated successfully.',
+        'deleted'   => 'Forecast deleted successfully.',
+        'activated' => 'Forecast resumed.',
+        'paused'    => 'Forecast paused.',
+    ],
+
     'profile' => [
         'updated' => 'Profile updated successfully.',
     ],

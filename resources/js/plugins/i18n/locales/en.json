@@ -39,6 +39,7 @@
             "endDate": "End Date",
             "endDateOptional": "End Date (Optional)",
             "inactive": "Inactive",
+            "paused": "Paused",
             "actions": "Actions",
             "color": "Color",
             "icon": "Icon"
@@ -48,6 +49,7 @@
             "home": "Home",
             "transactions": "Transactions",
             "recurring": "Recurring",
+            "forecasts": "Forecasts",
             "category": "Category",
             "tags": "Tags",
             "profile": "Profile",
@@ -88,7 +90,9 @@
             "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
             "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected.",
             "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\".",
-            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\"."
+            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\".",
+            "deleteForecast": "This action cannot be undone. This will permanently delete the forecast for \"{category}\" in {month}.",
+            "deleteForecastSeries": "This forecast is paused. Deleting it will permanently remove the budget for \"{category}\" and all of its monthly entries."
         }
     },
     "models": {
@@ -265,6 +269,42 @@
             "annualAmount": "Annual Amount",
             "nextOccurrence": "Next Occurrence",
             "activePeriod": "Active Period"
+        }
+    },
+    "forecasts": {
+        "title": "Forecasts",
+        "description": "Set monthly budgets per category. They renew automatically each month — pause anytime.",
+        "newForecast": "New forecast",
+        "empty": {
+            "title": "No forecasts yet",
+            "description": "Create your first forecast and we'll keep it rolling every month."
+        },
+        "create": {
+            "title": "Create forecast",
+            "description": "Set a monthly budget for a category. It will renew automatically each month.",
+            "button": "Create forecast"
+        },
+        "edit": {
+            "title": "Edit forecast",
+            "description": "Update the budget for {category} in {month}."
+        },
+        "form": {
+            "month": "Month",
+            "amount": "Budget amount",
+            "notes": "Notes (optional)",
+            "applyToDefault": "Apply as new monthly default",
+            "applyToDefaultHelp": "Future months will be created with this amount on each rollover."
+        },
+        "card": {
+            "spent": "Spent",
+            "remaining": "Remaining",
+            "dailyAllowance": "Daily allowance",
+            "ofTotal": "of {total}"
+        },
+        "pace": {
+            "over_pace": "Over pace",
+            "on_pace": "On pace",
+            "under_pace": "Under pace"
         }
     },
     "categories": {
