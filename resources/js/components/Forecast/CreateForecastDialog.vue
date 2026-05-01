@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import FormForecast from '@/components/Forecast/FormForecast.vue';
@@ -30,11 +30,11 @@ interface Props {
   categories: ICategory[];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const { t } = useI18n();
 const forecastStore = useForecastStore();
-const { showFormDialog } = storeToRefs(forecastStore);
+const { showFormDialog, presetCategoryId } = storeToRefs(forecastStore);
 
 const rawAmount = ref('');
 
@@ -57,6 +57,14 @@ const displayAmount = computed({
   },
 });
 
+const lockCategory = computed(() => presetCategoryId.value !== null);
+
+watch(showFormDialog, (open) => {
+  if (open && presetCategoryId.value !== null) {
+    form.category_id = presetCategoryId.value;
+  }
+});
+
 const createForecast = () => {
   if (!validateAmount(form, t)) return;
 
@@ -68,6 +76,13 @@ const createForecast = () => {
     },
   });
 };
+
+const dialogCategories = computed<ICategory[]>(() => {
+  if (presetCategoryId.value === null) return props.categories;
+
+  const preset = props.categories.find((c) => c.id === presetCategoryId.value);
+  return preset ? [preset] : props.categories;
+});
 </script>
 
 <template>
@@ -81,7 +96,8 @@ const createForecast = () => {
       <FormForecast
         :form="form"
         v-model:displayAmount="displayAmount"
-        :categories="categories"
+        :categories="dialogCategories"
+        :lock-category="lockCategory"
       />
 
       <DialogFooter>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
@@ -14,6 +15,7 @@ import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import { toggle as toggleForecast } from '@/routes/forecasts';
+import { useForecastStore } from '@/stores/forecast.store';
 import type { ICategory } from '@/types/models/category';
 import type { IForecast } from '@/types/models/forecast';
 import { formatMonth } from '@/utils/formatDate';
@@ -27,6 +29,20 @@ const { t } = useI18n();
 
 const showEditDialog = ref(false);
 const showDeleteDialog = ref(false);
+
+const forecastStore = useForecastStore();
+const { editForecastSeriesId } = storeToRefs(forecastStore);
+
+watch(
+  editForecastSeriesId,
+  (seriesId) => {
+    if (seriesId && seriesId === props.forecast.forecast_series_id) {
+      showEditDialog.value = true;
+      forecastStore.clearEditRequest();
+    }
+  },
+  { immediate: true },
+);
 
 const categoryIcon = computed(() =>
   getIconComponent(props.forecast.category?.icon ?? null),

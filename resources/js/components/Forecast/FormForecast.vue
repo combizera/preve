@@ -30,6 +30,7 @@ interface Props {
   form: InertiaForm<IForecastInput>;
   categories: ICategory[];
   editMode?: boolean;
+  lockCategory?: boolean;
 }
 
 defineProps<Props>();
@@ -45,7 +46,7 @@ const currencySymbol = getCurrencySymbol();
   <div class="grid grid-cols-2 gap-4">
     <div class="grid gap-3">
       <Label for="category">{{ t('models.category.name') }}</Label>
-      <Select v-model="form.category_id" :disabled="editMode">
+      <Select v-model="form.category_id" :disabled="editMode || lockCategory">
         <SelectTrigger class="w-full">
           <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
         </SelectTrigger>

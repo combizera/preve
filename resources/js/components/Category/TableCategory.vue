@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -8,6 +9,7 @@ import EditCategoryDialog from '@/components/Category/EditCategoryDialog.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
+import SetBudgetButton from '@/components/ui/button/SetBudgetButton.vue';
 import {
   Table,
   TableBody,
@@ -18,11 +20,15 @@ import {
 } from '@/components/ui/table';
 import { getColorClass } from '@/lib/category-colors';
 import { getIconComponent } from '@/lib/category-icons';
+import forecastRoutes from '@/routes/forecasts';
+import { useForecastStore } from '@/stores/forecast.store';
 import { ICategory } from '@/types/models/category';
 
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
 const selectedCategory = ref<ICategory | null>(null);
+
+const forecastStore = useForecastStore();
 
 const openEditDialog = (category: ICategory) => {
   selectedCategory.value = category;
@@ -32,6 +38,15 @@ const openEditDialog = (category: ICategory) => {
 const openDeleteDialog = (category: ICategory) => {
   selectedCategory.value = category;
   showDeleteDialog.value = true;
+};
+
+const onBudgetAction = (category: ICategory) => {
+  if (category.forecast_series) {
+    router.visit(forecastRoutes.index({ query: { manage: category.forecast_series.id } }).url);
+    return;
+  }
+
+  forecastStore.openCreateDialog(category.id);
 };
 
 const { t } = useI18n();
@@ -48,6 +63,8 @@ const props = withDefaults(defineProps<Props>(), {
 const typeLabel = computed(() =>
   props.type === 'income' ? t('models.transaction.income') : t('models.transaction.expense'),
 );
+
+const isExpense = computed(() => props.type === 'expense');
 </script>
 
 <template>
@@ -95,6 +112,12 @@ const typeLabel = computed(() =>
           <TableCell class="text-right">
             <ActionGroup>
               <EditButton @click="openEditDialog(category)" />
+
+              <SetBudgetButton
+                v-if="isExpense"
+                :has-series="!!category.forecast_series"
+                @click="onBudgetAction(category)"
+              />
 
               <DeleteButton @click="openDeleteDialog(category)" />
             </ActionGroup>

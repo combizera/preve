@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { Plus, Wallet } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import EmptyState from '@/components/EmptyState.vue';
@@ -41,6 +41,18 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 const canCreate = computed(() => props.categories.length > 0);
 
 const openCreate = () => forecastStore.openCreateDialog();
+
+onMounted(() => {
+  const url = new URL(window.location.href);
+  const manage = url.searchParams.get('manage');
+
+  if (!manage) return;
+
+  forecastStore.requestEdit(manage);
+
+  url.searchParams.delete('manage');
+  window.history.replaceState({}, '', url.toString());
+});
 </script>
 
 <template>
@@ -52,7 +64,6 @@ const openCreate = () => forecastStore.openCreateDialog();
         :title="t('forecasts.title')"
         :description="t('forecasts.description')"
       />
-
       <Button
         v-if="forecasts.length > 0 && canCreate"
         size="sm"
