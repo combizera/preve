@@ -5,7 +5,7 @@ import { ChevronDown, Pause, Play, Trash2 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import InputError from '@/components/InputError.vue';
+import BudgetFormFields from '@/components/Forecast/BudgetFormFields.vue';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,31 +19,16 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { Input } from '@/components/ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from '@/components/ui/input-group';
-import { Label } from '@/components/ui/label';
-import {
-  extractNumbers,
-  formatCentsToDisplay,
-  getCurrencySymbol,
-  parseToCents,
-} from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { destroy as destroySeries } from '@/routes/forecast-series';
 import { toggle as toggleForecast } from '@/routes/forecasts';
 import type { ICategory } from '@/types/models/category';
 import type { IForecastInput } from '@/types/models/forecast';
-import { filterNumericInput } from '@/utils/numericInput';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -59,22 +44,10 @@ const latestForecast = computed(() => series.value?.latest_forecast ?? null);
 const hasSeries = computed(() => series.value !== null);
 const isPaused = computed(() => !!series.value && !series.value.is_active);
 
-const rawAmount = ref(props.form.amount > 0 ? props.form.amount.toString() : '');
-
-const displayAmount = computed({
-  get: () => formatCentsToDisplay(rawAmount.value),
-  set: (value: string) => {
-    const numbers = extractNumbers(value);
-    rawAmount.value = numbers;
-    props.form.amount = parseToCents(numbers);
-  },
-});
-
 const headerSummary = computed(() => {
   if (!series.value) return t('categories.budget.notSet');
 
-  const amount = `${getCurrencySymbol()} ${formatCentsToDisplay(series.value.default_amount)}/${t('categories.table.perMonthShort')}`;
-  return amount;
+  return `${getCurrencySymbol()} ${formatCentsToDisplay(series.value.default_amount)}/${t('categories.table.perMonthShort')}`;
 });
 
 const togglePause = () => {
@@ -118,7 +91,6 @@ const removeBudget = () => {
     </CollapsibleTrigger>
 
     <CollapsibleContent class="border-t px-4 py-4">
-      <!-- Top-right inline actions, only when a series exists -->
       <div v-if="hasSeries" class="mb-3 flex items-center justify-end gap-2">
         <Button
           type="button"
@@ -156,63 +128,7 @@ const removeBudget = () => {
         </AlertDialog>
       </div>
 
-      <div class="grid gap-4">
-        <!-- Amount -->
-        <div class="grid gap-3">
-          <Label for="budget_amount">{{ t('forecasts.form.amount') }}</Label>
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>{{ getCurrencySymbol() }}</InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput
-              id="budget_amount"
-              type="text"
-              inputmode="numeric"
-              placeholder="0,00"
-              v-model="displayAmount"
-              @keydown="filterNumericInput"
-            />
-          </InputGroup>
-          <InputError :message="form.errors.amount" />
-        </div>
-
-        <!-- Notes -->
-        <div class="grid gap-3">
-          <Label for="budget_notes" class="text-muted-foreground">
-            {{ t('forecasts.form.notes') }}
-          </Label>
-          <Input
-            id="budget_notes"
-            :placeholder="t('generic.placeholders.additionalNotes')"
-            v-model="form.notes"
-          />
-          <InputError :message="form.errors.notes" />
-        </div>
-
-        <!-- Apply-as-default checkbox, only when editing an existing series -->
-        <div
-          v-if="hasSeries"
-          class="flex items-start gap-3 rounded-md border bg-muted/30 p-3"
-        >
-          <Checkbox
-            id="budget_apply_default"
-            :model-value="form.apply_to_default ?? false"
-            @update:model-value="(value) => (form.apply_to_default = !!value)"
-            class="mt-0.5"
-          />
-          <div class="grid gap-1">
-            <Label
-              for="budget_apply_default"
-              class="cursor-pointer text-sm leading-none font-medium"
-            >
-              {{ t('forecasts.form.applyToDefault') }}
-            </Label>
-            <p class="text-xs text-muted-foreground">
-              {{ t('forecasts.form.applyToDefaultHelp') }}
-            </p>
-          </div>
-        </div>
-      </div>
+      <BudgetFormFields :form="form" :show-apply-to-default="hasSeries" />
     </CollapsibleContent>
   </Collapsible>
 </template>

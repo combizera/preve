@@ -300,7 +300,8 @@
             "remaining": "Remaining",
             "dailyAllowance": "Daily allowance",
             "ofTotal": "of {total}",
-            "viewTransactions": "View transactions for this category and month"
+            "viewTransactions": "View transactions for this category and month",
+            "expectedByNow": "Expected by now: {percent}% of the month elapsed"
         },
         "pace": {
             "over_pace": "Over pace",

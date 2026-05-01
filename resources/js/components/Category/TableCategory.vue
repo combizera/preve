@@ -102,8 +102,8 @@ const isExpense = computed(() => props.type === 'expense');
           <TableCell>
             <p class="text-sm text-muted-foreground">
               {{
-                category.description && category.description.length > 25
-                  ? category.description.slice(0, 25) + '...'
+                category.description && category.description.length > 40
+                  ? category.description.slice(0, 40) + '...'
                   : category.description
               }}
             </p>

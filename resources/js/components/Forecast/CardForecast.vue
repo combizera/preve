@@ -116,6 +116,7 @@ const paceBadgeClass = computed(() => getPaceClasses(props.forecast.pace_status)
     <ForecastProgressBar
       :spent="forecast.spent_to_date"
       :amount="forecast.amount"
+      :month="forecast.month"
       :pace-status="forecast.pace_status"
     />
 

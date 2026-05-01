@@ -3,19 +3,25 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
-import { getPaceClasses, getProgressPercent } from '@/lib/forecast';
+import {
+  getMonthProgressPercent,
+  getPaceClasses,
+  getProgressPercent,
+} from '@/lib/forecast';
 import { cn } from '@/lib/utils';
 import type { ForecastPaceStatus } from '@/types/models/forecast';
 
 const props = defineProps<{
   spent: number;
   amount: number;
+  month: string;
   paceStatus: ForecastPaceStatus;
 }>();
 
 const { t } = useI18n();
 
 const percent = computed(() => getProgressPercent(props.spent, props.amount));
+const pacePercent = computed(() => getMonthProgressPercent(props.month));
 const barClass = computed(() => getPaceClasses(props.paceStatus).bar);
 
 const totalLabel = computed(
@@ -37,10 +43,15 @@ const spentLabel = computed(
       </span>
       <span class="text-muted-foreground">{{ percent }}%</span>
     </div>
-    <div class="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
+    <div class="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
       <div
         :class="cn('h-full transition-all', barClass)"
         :style="{ width: `${percent}%` }"
+      />
+      <div
+        class="absolute top-0 h-full w-0.5 -translate-x-1/2 bg-foreground/60"
+        :style="{ left: `${pacePercent}%` }"
+        :title="t('forecasts.card.expectedByNow', { percent: pacePercent })"
       />
     </div>
   </div>

@@ -30,6 +30,18 @@ export function getProgressPercent(spent: number, total: number): number {
     return Math.min(100, Math.round((spent / total) * 100));
 }
 
+export function getMonthProgressPercent(month: string, now: Date = new Date()): number {
+    const [year, monthNumber] = month.split('-').map(Number);
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    if (currentYear > year || (currentYear === year && currentMonth > monthNumber)) return 100;
+    if (currentYear < year || (currentYear === year && currentMonth < monthNumber)) return 0;
+
+    const daysInMonth = new Date(year, monthNumber, 0).getDate();
+    return Math.round((now.getDate() / daysInMonth) * 100);
+}
+
 export function buildForecastTransactionsUrl(forecast: IForecast): string {
     const [year, month] = forecast.month.split('-');
     const lastDay = new Date(Number(year), Number(month), 0).getDate();

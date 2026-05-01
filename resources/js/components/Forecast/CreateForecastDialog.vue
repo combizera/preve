@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import FormForecast from '@/components/Forecast/FormForecast.vue';
@@ -15,11 +15,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  extractNumbers,
-  formatCentsToDisplay,
-  parseToCents,
-} from '@/lib/currency';
 import { store } from '@/routes/forecasts';
 import { useForecastStore } from '@/stores/forecast.store';
 import type { ICategory } from '@/types/models/category';
@@ -36,8 +31,6 @@ const { t } = useI18n();
 const forecastStore = useForecastStore();
 const { showFormDialog, presetCategoryId } = storeToRefs(forecastStore);
 
-const rawAmount = ref('');
-
 const today = new Date();
 const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
@@ -46,15 +39,6 @@ const form = useForm<IForecastInput>({
   amount: 0,
   month: currentMonth,
   notes: '',
-});
-
-const displayAmount = computed({
-  get: () => formatCentsToDisplay(rawAmount.value),
-  set: (value: string) => {
-    const numbers = extractNumbers(value);
-    rawAmount.value = numbers;
-    form.amount = parseToCents(numbers);
-  },
 });
 
 const lockCategory = computed(() => presetCategoryId.value !== null);
@@ -72,7 +56,6 @@ const createForecast = () => {
     onSuccess: () => {
       forecastStore.closeCreateDialog();
       form.reset();
-      rawAmount.value = '';
     },
   });
 };
@@ -95,7 +78,6 @@ const dialogCategories = computed<ICategory[]>(() => {
 
       <FormForecast
         :form="form"
-        v-model:displayAmount="displayAmount"
         :categories="dialogCategories"
         :lock-category="lockCategory"
       />

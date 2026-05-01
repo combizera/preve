@@ -300,7 +300,8 @@
             "remaining": "Restante",
             "dailyAllowance": "Limite diário",
             "ofTotal": "de {total}",
-            "viewTransactions": "Ver transações desta categoria e mês"
+            "viewTransactions": "Ver transações desta categoria e mês",
+            "expectedByNow": "Esperado até agora: {percent}% do mês decorrido"
         },
         "pace": {
             "over_pace": "Acima do ritmo",
