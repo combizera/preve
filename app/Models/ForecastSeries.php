@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\ForecastSeriesFactory;
+use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $id
@@ -25,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read User $user
  * @property-read Category $category
  * @property-read Collection<int, Forecast> $forecasts
- * @property-read Forecast|null $latestForecast
+ * @property-read Forecast|null $latest_forecast
  */
 #[Fillable([
     'user_id',
@@ -35,6 +37,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'is_active',
 ])]
 #[Table(name: 'forecast_series')]
+#[Appends(['latest_forecast'])]
+#[Hidden(['forecasts'])]
 final class ForecastSeries extends Model
 {
     /** @use HasFactory<ForecastSeriesFactory> */
@@ -70,11 +74,12 @@ final class ForecastSeries extends Model
         return $this->hasMany(Forecast::class);
     }
 
-    /**
-     * @return HasOne<Forecast, $this>
-     */
-    public function latestForecast(): HasOne
+    protected function latestForecast(): Attribute
     {
-        return $this->hasOne(Forecast::class)->latestOfMany('month');
+        return Attribute::make(
+            get: fn (): ?Forecast => $this->relationLoaded('forecasts')
+                ? $this->forecasts->sortByDesc('month')->first()
+                : $this->forecasts()->latest('month')->first(),
+        );
     }
 }
