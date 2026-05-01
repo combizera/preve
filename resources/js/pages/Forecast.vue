@@ -7,6 +7,7 @@ import { useI18n } from 'vue-i18n';
 import EmptyState from '@/components/EmptyState.vue';
 import CardForecast from '@/components/Forecast/CardForecast.vue';
 import CreateForecastDialog from '@/components/Forecast/CreateForecastDialog.vue';
+import ForecastSummaryCard from '@/components/Forecast/ForecastSummaryCard.vue';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -88,14 +89,18 @@ onMounted(() => {
         </template>
       </EmptyState>
 
-      <div v-else class="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <CardForecast
-          v-for="forecast in forecasts"
-          :key="forecast.id"
-          :forecast="forecast"
-          :categories="categories"
-        />
-      </div>
+      <template v-else>
+        <ForecastSummaryCard :forecasts="forecasts" class="mb-3" />
+
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <CardForecast
+            v-for="forecast in forecasts"
+            :key="forecast.id"
+            :forecast="forecast"
+            :categories="categories"
+          />
+        </div>
+      </template>
     </div>
 
     <CreateForecastDialog :categories="categories" />

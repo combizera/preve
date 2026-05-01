@@ -303,6 +303,10 @@
             "viewTransactions": "Ver transações desta categoria e mês",
             "expectedByNow": "Esperado até agora: {percent}% do mês decorrido"
         },
+        "summary": {
+            "title": "Orçamento do mês",
+            "subtitle": "{count} categorias ativas"
+        },
         "pace": {
             "over_pace": "Acima do ritmo",
             "on_pace": "No ritmo",

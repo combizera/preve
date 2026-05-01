@@ -303,6 +303,10 @@
             "viewTransactions": "View transactions for this category and month",
             "expectedByNow": "Expected by now: {percent}% of the month elapsed"
         },
+        "summary": {
+            "title": "This month's budget",
+            "subtitle": "{count} active categories"
+        },
         "pace": {
             "over_pace": "Over pace",
             "on_pace": "On pace",
