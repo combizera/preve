@@ -9,10 +9,14 @@ use App\Enums\CategoryIcon;
 use App\Enums\TransactionType;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static Builder<Category> availableForForecast()
+ */
 #[Fillable([
     'name',
     'slug',
@@ -62,5 +66,16 @@ final class Category extends Model
     public function forecastSeries(): HasMany
     {
         return $this->hasMany(ForecastSeries::class);
+    }
+
+    /**
+     * Categories that don't yet have a forecast series — eligible to be picked
+     * when creating a new forecast.
+     *
+     * @param  Builder<Category>  $query
+     */
+    protected function scopeAvailableForForecast(Builder $query): void
+    {
+        $query->whereDoesntHave('forecastSeries');
     }
 }

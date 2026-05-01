@@ -6,15 +6,35 @@ namespace App\Models;
 
 use App\Enums\ForecastPaceStatus;
 use App\Enums\TransactionType;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Database\Factories\ForecastFactory;
+use Illuminate\Database\Eloquent\Attributes\Appends;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Date;
 
+/**
+ * @property string $id
+ * @property string $forecast_series_id
+ * @property int $user_id
+ * @property int $category_id
+ * @property int $amount
+ * @property CarbonImmutable $month
+ * @property string|null $notes
+ * @property-read ForecastSeries $series
+ * @property-read Category $category
+ * @property-read User $user
+ * @property-read bool $is_active
+ * @property-read int $daily_allowance
+ * @property-read int $spent_to_date
+ * @property-read int $remaining
+ * @property-read string $pace_status
+ */
 #[Fillable([
     'forecast_series_id',
     'user_id',
@@ -22,6 +42,16 @@ use Illuminate\Support\Facades\Date;
     'amount',
     'month',
     'notes',
+])]
+#[Appends([
+    'is_active',
+    'daily_allowance',
+    'spent_to_date',
+    'remaining',
+    'pace_status',
+])]
+#[Hidden([
+    'series',
 ])]
 final class Forecast extends Model
 {
@@ -31,7 +61,7 @@ final class Forecast extends Model
     use HasUuids;
 
     protected $casts = [
-        'month' => 'date',
+        'month' => 'date:Y-m-d',
     ];
 
     /**
@@ -62,7 +92,7 @@ final class Forecast extends Model
      * Linear daily share of the budget (cents). Uses integer division so callers
      * always work in whole-cent units; remainder bias is acceptable for budgets.
      */
-    public function dailyAllowance(): int
+    public function computeDailyAllowance(): int
     {
         return intdiv($this->amount, $this->month->daysInMonth);
     }
@@ -71,7 +101,7 @@ final class Forecast extends Model
      * Sum of paid expense transactions in this forecast's category and month,
      * up to and including $asOf (default today).
      */
-    public function spentToDate(?CarbonInterface $asOf = null): int
+    public function computeSpentToDate(?CarbonInterface $asOf = null): int
     {
         $asOf ??= Date::today();
 
@@ -87,9 +117,9 @@ final class Forecast extends Model
             ->sum('amount');
     }
 
-    public function remaining(?CarbonInterface $asOf = null): int
+    public function computeRemaining(?CarbonInterface $asOf = null): int
     {
-        return $this->amount - $this->spentToDate($asOf);
+        return $this->amount - $this->computeSpentToDate($asOf);
     }
 
     /**
@@ -97,7 +127,7 @@ final class Forecast extends Model
      * that should have been used by $asOf, given a flat distribution across the
      * month. Past months clamp $asOf to month end; future months return ON_PACE.
      */
-    public function paceStatus(?CarbonInterface $asOf = null): ForecastPaceStatus
+    public function computePaceStatus(?CarbonInterface $asOf = null): ForecastPaceStatus
     {
         $asOf ??= Date::today();
 
@@ -118,12 +148,37 @@ final class Forecast extends Model
             return ForecastPaceStatus::ON_PACE;
         }
 
-        $ratio = $this->spentToDate($effectiveAsOf) / $expectedByNow;
+        $ratio = $this->computeSpentToDate($effectiveAsOf) / $expectedByNow;
 
         return match (true) {
             $ratio > 1.05 => ForecastPaceStatus::OVER_PACE,
             $ratio < 0.85 => ForecastPaceStatus::UNDER_PACE,
             default       => ForecastPaceStatus::ON_PACE,
         };
+    }
+
+    protected function getIsActiveAttribute(): bool
+    {
+        return $this->series->is_active;
+    }
+
+    protected function getDailyAllowanceAttribute(): int
+    {
+        return $this->computeDailyAllowance();
+    }
+
+    protected function getSpentToDateAttribute(): int
+    {
+        return $this->computeSpentToDate();
+    }
+
+    protected function getRemainingAttribute(): int
+    {
+        return $this->computeRemaining();
+    }
+
+    protected function getPaceStatusAttribute(): string
+    {
+        return $this->computePaceStatus()->value;
     }
 }
