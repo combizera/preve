@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
     Route::patch('forecasts/{forecast}/toggle', [ForecastController::class, 'toggle'])->name('forecasts.toggle');
     Route::resource('forecasts', ForecastController::class)->except('create', 'edit', 'show');
+    Route::delete('forecast-series/{series}', [ForecastController::class, 'destroySeries'])->name('forecast-series.destroy');
 });
 
 require __DIR__ . '/settings.php';
