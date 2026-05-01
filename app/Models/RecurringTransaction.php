@@ -8,30 +8,33 @@ use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
 use Carbon\CarbonInterface;
 use Database\Factories\RecurringTransactionFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Date;
 
+#[Fillable([
+    'user_id',
+    'category_id',
+    'amount',
+    'frequency',
+    'type',
+    'description',
+    'is_active',
+    'day_of_month',
+    'start_date',
+    'end_date',
+])]
 final class RecurringTransaction extends Model
 {
     /** @use HasFactory<RecurringTransactionFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'category_id',
-        'tag_id',
-        'amount',
-        'frequency',
-        'type',
-        'description',
-        'is_active',
-        'day_of_month',
-        'start_date',
-        'end_date',
-    ];
+    use HasUuids;
 
     protected $casts = [
         'frequency'  => FrequencyType::class,
@@ -66,15 +69,23 @@ final class RecurringTransaction extends Model
     }
 
     /**
-     * @return BelongsTo<Tag, $this>
+     * @return MorphToMany<Tag, $this>
      */
-    public function tag(): BelongsTo
+    public function tags(): MorphToMany
     {
-        return $this->belongsTo(Tag::class);
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     public function calculateExactDateForMonth(CarbonInterface $month): CarbonInterface
     {
+        if ($this->frequency === FrequencyType::YEARLY) {
+            $targetMonth = $this->start_date->month;
+            $reference = Date::createFromDate($month->year, $targetMonth, 1);
+            $day = min($this->day_of_month, $reference->daysInMonth);
+
+            return Date::createFromDate($month->year, $targetMonth, $day)->startOfDay();
+        }
+
         $day = min($this->day_of_month, $month->daysInMonth);
 
         return Date::createFromDate($month->year, $month->month, $day)->startOfDay();

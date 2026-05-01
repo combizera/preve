@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { nextTick, ref } from 'vue';
+import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 
@@ -24,7 +24,7 @@ const emit = defineEmits<{
 }>();
 
 const MIN_YEAR = 2026;
-const MAX_YEAR = 2027;
+const MAX_YEAR = 2030;
 
 const now = new Date();
 const currentYear = now.getFullYear();
@@ -32,17 +32,7 @@ const currentMonth = now.getMonth();
 
 const selectedYear = ref<string>(String(currentYear));
 const selectedMonth = ref<number>(currentMonth);
-const stripRef = ref<HTMLUListElement | null>(null);
-
-const scrollToSelected = () => {
-  nextTick(() => {
-    if (!stripRef.value) return;
-    const el = stripRef.value as HTMLElement;
-    const card = el.children[selectedMonth.value] as HTMLElement;
-    if (!card) return;
-    card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  });
-};
+const monthCards = ref([]);
 
 const emitMonth = (month: number, year: number) => {
   emit('update:month', { month: month + 1, year });
@@ -78,7 +68,6 @@ const navigate = (direction: 'prev' | 'next') => {
     }
   }
 
-  scrollToSelected();
   emitMonth(selectedMonth.value, Number(selectedYear.value));
 };
 
@@ -88,61 +77,130 @@ const handleYearChange = (newYear: string) => {
 };
 
 const handleToCurrentMonth = () => {
-  if (selectedMonth.value === currentMonth && Number(selectedYear.value) === currentYear) return;
+  if (
+    selectedMonth.value === currentMonth &&
+    Number(selectedYear.value) === currentYear
+  ) {
+    return;
+  }
+
   selectedYear.value = String(currentYear);
   selectedMonth.value = currentMonth;
-  scrollToSelected();
+
   emitMonth(currentMonth, currentYear);
 };
+
+const years = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) =>
+  String(MIN_YEAR + i),
+);
+
+watch(
+  () => selectedMonth.value,
+  async (newIndex) => {
+    await nextTick();
+
+    const targetCard = monthCards.value[newIndex];
+
+    // @ts-expect-error no type for $el
+    const el = targetCard?.$el || targetCard;
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  },
+);
 </script>
 
 <template>
-  <section class="double-border">
-    <div class="flex justify-between items-center gap-2 relative w-full overflow-auto border rounded-lg p-2 px-4">
+  <section class="double-border flex flex-col bg-sidebar">
+    <!-- HEADER -->
+    <div class="p-2 px-4 pb-3">
+      <div class="flex items-center gap-2 text-muted-foreground">
+        <CalendarDays class="size-4" />
+        <p class="text-sm">{{ t('dashboard.calendar.title') }}</p>
+      </div>
+    </div>
 
+    <!-- CONTENT -->
+    <div
+      class="flex w-full items-center justify-between gap-2 overflow-auto rounded-lg border bg-background p-2 px-4"
+    >
       <!-- YEAR -->
-      <Select :model-value="selectedYear" @update:model-value="handleYearChange">
+      <Select
+        :model-value="selectedYear"
+        @update:model-value="handleYearChange"
+      >
         <SelectTrigger class="w-25">
           <SelectValue :placeholder="String(currentYear)" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{{ t('dashboard.calendar.year') }}</SelectLabel>
-            <SelectItem value="2026">
-              2026
-            </SelectItem>
-            <SelectItem value="2027">
-              2027
+            <SelectItem v-for="year in years" :value="year" :key="year">
+              {{ year }}
             </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
       <!-- STRIP -->
-      <div class="dark:border-sidebar-border rounded-lg p-2 flex items-center gap-0 overflow-x-auto w-full h-20">
-        <Button variant="ghost" type="button" class="hover:bg-muted" @click="navigate('prev')">
+      <div
+        class="flex h-20 w-full items-center gap-0 overflow-x-auto rounded-lg p-2"
+      >
+        <Button
+          variant="ghost"
+          type="button"
+          class="hover:bg-muted"
+          @click="navigate('prev')"
+        >
           <ChevronLeft />
         </Button>
 
-        <ul ref="stripRef" class="w-full h-full py-1 flex items-center gap-0 overflow-hidden scroll-smooth">
-          <CardCalendar
-            v-for="(key, index) in MONTH_KEYS"
-            :key="index"
-            :month="t(`dashboard.calendar.months.${key}`)"
-            :year="Number(selectedYear)"
-            :isSelected="index === selectedMonth"
-            :isCurrent="index === currentMonth && Number(selectedYear) === currentYear"
-            @select="() => { if (index === selectedMonth) return; selectedMonth = index; emitMonth(index, Number(selectedYear)); }"
-          />
-        </ul>
+        <div
+          class="h-full w-full overflow-x-auto scroll-smooth py-1"
+        >
+          <div
+            class="mx-auto flex h-full w-max items-center justify-start gap-0"
+          >
+            <CardCalendar
+              v-for="(key, index) in MONTH_KEYS"
+              :key="index"
+              ref="monthCards"
+              :month="t(`dashboard.calendar.months.${key}`)"
+              :year="Number(selectedYear)"
+              :isSelected="index === selectedMonth"
+              :isCurrent="
+                index === currentMonth && Number(selectedYear) === currentYear
+              "
+              @select="
+                () => {
+                  if (index === selectedMonth) return;
+                  selectedMonth = index;
+                  emitMonth(index, Number(selectedYear));
+                }
+              "
+            />
+          </div>
+        </div>
 
-        <Button variant="ghost" type="button" class="hover:bg-muted" @click="navigate('next')">
+        <Button
+          variant="ghost"
+          type="button"
+          class="hover:bg-muted"
+          @click="navigate('next')"
+        >
           <ChevronRight />
         </Button>
       </div>
 
       <!-- BUTTON -->
-      <Button variant="outline" type="button" @click="handleToCurrentMonth"> {{ t('generic.actions.today') }} </Button>
+      <Button variant="outline" type="button" @click="handleToCurrentMonth">
+        {{ t('generic.actions.today') }}
+      </Button>
     </div>
   </section>
 </template>

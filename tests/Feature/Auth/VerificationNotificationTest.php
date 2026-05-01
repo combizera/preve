@@ -13,7 +13,7 @@ it('should be able to send verification notification', function (): void {
 
     $this->actingAs($user)
         ->post(route('verification.send'))
-        ->assertRedirect(route('home'));
+        ->assertRedirect('/');
 
     Notification::assertSentTo($user, VerifyEmail::class);
 });

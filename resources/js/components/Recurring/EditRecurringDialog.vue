@@ -21,9 +21,10 @@ import {
 } from '@/lib/currency';
 import { update } from '@/routes/recurring';
 import { type ICategory } from '@/types/models/category';
-import { type IRecurringTransaction } from '@/types/models/recurring-transaction';
+import type { IRecurringTransaction, IRecurringTransactionInput } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
 import { formatTransactionDate } from '@/utils/formatDate';
+import { validateAmount } from '@/utils/validateAmount';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -39,8 +40,9 @@ const { t } = useI18n();
 
 const rawAmount = ref(props.recurringTransaction.amount.toString());
 
-const form = useForm<IRecurringTransaction>({
+const form = useForm<IRecurringTransactionInput>({
   ...props.recurringTransaction,
+  tags: props.recurringTransaction.tags?.map((tag) => tag.id) ?? [],
   start_date: formatTransactionDate(props.recurringTransaction.start_date),
   end_date: formatTransactionDate(props.recurringTransaction.end_date),
 });
@@ -60,6 +62,8 @@ const updateRecurring = () => {
   if (!transactionId) {
     return;
   }
+
+  if (!validateAmount(form, t)) return;
 
   form.submit(update(transactionId), {
     onSuccess: () => {

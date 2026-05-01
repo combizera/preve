@@ -26,7 +26,8 @@ import { store } from '@/routes/transactions';
 import { useTransactionStore } from '@/stores/transaction.store';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
-import { ITransaction } from '@/types/models/transaction';
+import type { ITransactionInput } from '@/types/models/transaction';
+import { validateAmount } from '@/utils/validateAmount';
 
 interface Props {
   categories: ICategory[];
@@ -42,9 +43,9 @@ const { showFormDialog } = storeToRefs(transactionStore);
 
 const rawAmount = ref('');
 
-const form = useForm<ITransaction>({
+const form = useForm<ITransactionInput>({
   category_id: 0,
-  tag_id: undefined,
+  tags: [],
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
@@ -62,6 +63,8 @@ const displayAmount = computed({
 });
 
 const createTransaction = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       transactionStore.closeCreateDialog();

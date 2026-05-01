@@ -18,7 +18,7 @@ const props = defineProps<ToasterProps>()
     v-bind="props"
   >
     <template #success-icon>
-      <CircleCheckIcon class="size-4" />
+      <CircleCheckIcon class="size-5 fill-positive text-background" />
     </template>
     <template #info-icon>
       <InfoIcon class="size-4" />

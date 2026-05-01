@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRightLeft, Github, Home, RefreshCw, Tags } from 'lucide-vue-next';
+import { ArrowRightLeft, Bug, Github, Home, RefreshCw, Tags, Wallet } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
+import forecasts from '@/routes/forecasts';
 import recurring from '@/routes/recurring';
 import tags from '@/routes/tags';
 import transactions from '@/routes/transactions';
@@ -42,6 +43,11 @@ const mainNavItems = computed<NavItem[]>(() => [
     icon: RefreshCw,
   },
   {
+    title: t('generic.sidebar.forecasts'),
+    href: forecasts.index(),
+    icon: Wallet,
+  },
+  {
     title: t('generic.sidebar.category'),
     href: categories.index(),
     icon: Tags,
@@ -58,6 +64,11 @@ const footerNavItems = computed<NavItem[]>(() => [
     title: 'Github',
     href: 'https://github.com/combizera/preve',
     icon: Github,
+  },
+  {
+    title: t('generic.sidebar.bugReport'),
+    href: 'https://github.com/combizera/preve/issues/new',
+    icon: Bug,
   },
 ]);
 </script>

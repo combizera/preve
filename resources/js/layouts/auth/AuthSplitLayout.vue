@@ -2,7 +2,6 @@
 import { Link, usePage } from '@inertiajs/vue3';
 
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import { home } from '@/routes';
 
 const page = usePage();
 const name = page.props.name;
@@ -15,19 +14,25 @@ defineProps<{
 
 <template>
     <div
-        class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0"
+        class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-[7fr_3fr] lg:px-0"
     >
         <div
-            class="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r"
+            class="relative hidden h-full flex-col bg-cover bg-center text-white lg:flex dark:border-r"
+            style="background-image: url('/auth-bg.webp')"
         >
-            <div class="absolute inset-0 bg-zinc-900" />
             <Link
-                :href="home()"
-                class="relative z-20 flex items-center gap-2 text-lg font-medium"
+                href="/"
+                class="absolute top-10 left-10 z-20 flex items-center gap-2 text-xl font-medium"
             >
-                <AppLogoIcon class="size-8" />
+                <AppLogoIcon class="size-9.5" />
                 <span class="mb-0.5">{{ name }}</span>
             </Link>
+            <p
+                class="absolute bottom-10 left-10 z-20 max-w-xl text-3xl tracking-tight"
+            >
+                Predictable finances.<br />
+                <span class="font-bold">Peaceful days.</span>
+            </p>
         </div>
         <div class="lg:p-8">
             <div

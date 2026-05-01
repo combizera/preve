@@ -2,7 +2,7 @@
 import {
   Calendar,
   ChevronDown,
-  Repeat,
+  RefreshCw,
   CalendarSync,
   Tag as TagIcon,
 } from 'lucide-vue-next';
@@ -18,7 +18,7 @@ import EditButton from '@/components/ui/button/EditButton.vue';
 import ToggleActiveButton from '@/components/ui/button/ToggleActiveButton.vue';
 import { Card } from '@/components/ui/card';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import {
   calculateAnnualAmount,
   calculateNextOccurrence,
@@ -26,6 +26,7 @@ import {
   formatFrequency,
 } from '@/lib/recurring';
 import { cn } from '@/lib/utils';
+import { toggle as toggleRecurring } from '@/routes/recurring';
 import { type ICategory } from '@/types/models/category';
 import { IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
@@ -53,7 +54,7 @@ const amountClass = computed(() =>
     'text-sm font-medium',
     props.recurringTransaction.type === 'expense'
       ? "text-foreground before:content-['-']"
-      : 'text-positive',
+      : "text-positive before:content-['+']",
   ),
 );
 
@@ -131,12 +132,12 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
             <Badge
               v-if="!recurringTransaction.is_active"
               variant="secondary"
-              class="text-xs px-1.5 py-0"
+              class="px-1.5 py-0 text-xs"
             >
               {{ t('generic.labels.inactive') }}
             </Badge>
           </div>
-          <div class="mt-1.5 flex items-center gap-2">
+          <div class="mt-1.5 flex items-center gap-1">
             <component
               :is="categoryIcon"
               :size="14"
@@ -147,7 +148,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
             </span>
             <span class="text-xs text-muted-foreground">•</span>
             <div class="flex items-center gap-1 text-xs text-muted-foreground">
-              <Repeat :size="12" />
+              <RefreshCw :size="14" />
               <span class="font-medium">{{ frequencyText }}</span>
             </div>
           </div>
@@ -155,11 +156,13 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
         <!-- Right Section: Amount & Actions -->
         <div class="flex shrink-0 items-center gap-1" @click.stop>
-          <span :class="amountClass">R$ {{ formattedAmount }}</span>
+          <span :class="amountClass">
+            {{ getCurrencySymbol() }} {{ formattedAmount }}
+          </span>
           <ActionGroup>
             <EditButton @click="openEditDialog(recurringTransaction)" />
             <ToggleActiveButton
-              :id="recurringTransaction.id!"
+              :toggle-url="toggleRecurring(recurringTransaction.id!).url"
               :is-active="recurringTransaction.is_active"
             />
             <DeleteButton @click="openDeleteDialog(recurringTransaction)" />
@@ -198,7 +201,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
             >
               <CalendarSync :size="14" />
               <span>
-                R$ {{ annualAmount }}
+                {{ getCurrencySymbol() }} {{ annualAmount }}
               </span>
             </div>
           </div>
@@ -224,11 +227,16 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
           </div>
         </div>
 
-        <!-- Tag -->
-        <div v-if="recurringTransaction.tag" class="flex items-center gap-2">
-          <Badge variant="secondary" class="gap-1 px-2 py-0.5 text-xs">
+        <!-- Tags -->
+        <div v-if="recurringTransaction.tags?.length" class="flex flex-wrap items-center gap-2">
+          <Badge
+            v-for="tag in recurringTransaction.tags"
+            :key="tag.id"
+            variant="secondary"
+            class="gap-1 rounded px-2 py-0.5 text-xs"
+          >
             <TagIcon :size="10" />
-            {{ recurringTransaction.tag.name }}
+            {{ tag.name }}
           </Badge>
         </div>
       </div>

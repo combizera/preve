@@ -184,6 +184,9 @@ return [
         'category_id' => [
             'type_mismatch' => 'The selected category must be of type :type.',
         ],
+        'forecast' => [
+            'series_already_exists' => 'This category already has a forecast. Edit the existing one or resume it if paused.',
+        ],
     ],
 
     /*

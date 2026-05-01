@@ -11,12 +11,11 @@ export interface IDailyBalance {
 
 export interface ITransaction {
     id?: string;
-    recurring_transaction_id?: number;
+    recurring_transaction_id?: string;
     recurring_transaction?: IRecurringTransaction;
     category_id?: number;
     category?: ICategory;
-    tag_id?: number;
-    tag?: ITag;
+    tags?: ITag[];
     amount: number;
     type: TransactionType;
     description: string;
@@ -24,4 +23,16 @@ export interface ITransaction {
     transaction_date: string;
     created_at?: string;
     updated_at?: string;
+}
+
+export interface ITransactionInput {
+    id?: string;
+    recurring_transaction_id?: string;
+    category_id: number;
+    tags: number[];
+    amount: number;
+    type: TransactionType;
+    description: string;
+    notes?: string;
+    transaction_date: string;
 }

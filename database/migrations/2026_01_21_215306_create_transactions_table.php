@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\Category;
-use App\Models\RecurringTransaction;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -21,7 +20,7 @@ return new class() extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table
-                ->foreignIdFor(RecurringTransaction::class, 'recurring_transaction_id')
+                ->foreignId('recurring_transaction_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();

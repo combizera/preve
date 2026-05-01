@@ -9,6 +9,7 @@ use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
@@ -25,7 +26,7 @@ final class TransactionController extends Controller
 
         $transactions = Auth::user()
             ->transactions()
-            ->with(['category', 'tag'])
+            ->with(['category', 'tags'])
             ->filter($transactionFilter)
             ->orderBy('transaction_date', 'desc')
             ->get();
@@ -44,8 +45,10 @@ final class TransactionController extends Controller
     public function store(TransactionRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
 
-        Auth::user()->transactions()->create($validated);
+        $transaction = Auth::user()->transactions()->create($validated);
+        $transaction->tags()->sync($tagIds);
 
         $this->toast::success(__('messages.transaction.created'));
 
@@ -57,7 +60,9 @@ final class TransactionController extends Controller
      */
     public function show(Transaction $transaction): Response
     {
-        $transaction->load(['category', 'tag']);
+        $this->authorize('view', $transaction);
+
+        $transaction->load(['category', 'tags']);
 
         return Inertia::render('transactions/TransactionShow', compact('transaction'));
     }
@@ -85,7 +90,11 @@ final class TransactionController extends Controller
     {
         $this->authorize('update', $transaction);
 
-        $transaction->update($request->all());
+        $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
+
+        $transaction->update($validated);
+        $transaction->tags()->sync($tagIds);
 
         $this->toast::success(__('messages.transaction.updated'));
 

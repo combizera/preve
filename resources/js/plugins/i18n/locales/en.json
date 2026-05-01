@@ -39,6 +39,7 @@
             "endDate": "End Date",
             "endDateOptional": "End Date (Optional)",
             "inactive": "Inactive",
+            "paused": "Paused",
             "actions": "Actions",
             "color": "Color",
             "icon": "Icon"
@@ -48,6 +49,7 @@
             "home": "Home",
             "transactions": "Transactions",
             "recurring": "Recurring",
+            "forecasts": "Forecasts",
             "category": "Category",
             "tags": "Tags",
             "profile": "Profile",
@@ -56,7 +58,8 @@
             "theme": "Theme",
             "systemTheme": "System theme",
             "lightTheme": "Light theme",
-            "darkTheme": "Dark theme"
+            "darkTheme": "Dark theme",
+            "bugReport": "Bug Report"
         },
         "placeholders": {
             "email": "email{'@'}example.com",
@@ -87,7 +90,9 @@
             "deleteTransaction": "This action cannot be undone. This will permanently delete the transaction \"{description}\".",
             "deleteRecurring": "This action cannot be undone. This will permanently delete the recurring transaction \"{description}\" and all its generated transactions from next month onwards. Transactions from the current month and past months will not be affected.",
             "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\".",
-            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\"."
+            "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\".",
+            "deleteForecast": "This action cannot be undone. This will permanently delete the forecast for \"{category}\" in {month}.",
+            "deleteForecastSeries": "This forecast is paused. Deleting it will permanently remove the budget for \"{category}\" and all of its monthly entries."
         }
     },
     "models": {
@@ -168,11 +173,12 @@
         "description": "Here you can get an overview of your financial activities and manage your transactions efficiently.",
         "lastTransactions": "Last Transactions",
         "availableBalance": "Available Balance",
-        "availableBalanceDescription": "Income minus paid expenses this month",
+        "availableBalanceDescription": "Paid income minus paid expenses to date",
         "forecast": "Forecast",
         "forecastDescription": "Balance after pending expenses",
         "forecastForMonth": "Forecast for {month} {year}",
         "calendar": {
+            "title": "Calendar",
             "year": "Year",
             "earliestYear": "You have reached the earliest available year.",
             "latestYear": "You have reached the latest available year.",
@@ -265,6 +271,50 @@
             "activePeriod": "Active Period"
         }
     },
+    "forecasts": {
+        "title": "Forecasts",
+        "description": "Set monthly budgets per category. They renew automatically each month — pause anytime.",
+        "newForecast": "New forecast",
+        "empty": {
+            "title": "No forecasts yet",
+            "description": "Create your first forecast and we'll keep it rolling every month.",
+            "currentMonthTitle": "No active forecasts this month",
+            "currentMonthDescription": "All your forecasts are paused or scheduled for other months."
+        },
+        "create": {
+            "title": "Create forecast",
+            "description": "Set a monthly budget for a category. It will renew automatically each month.",
+            "button": "Create forecast"
+        },
+        "edit": {
+            "title": "Edit forecast",
+            "description": "Update the budget for {category} in {month}."
+        },
+        "form": {
+            "month": "Month",
+            "amount": "Budget amount",
+            "notes": "Notes (optional)",
+            "applyToDefault": "Apply as new monthly default",
+            "applyToDefaultHelp": "Future months will be created with this amount on each rollover."
+        },
+        "card": {
+            "spent": "Spent",
+            "remaining": "Remaining",
+            "dailyAllowance": "Daily allowance",
+            "ofTotal": "of {total}",
+            "viewTransactions": "View transactions for this category and month",
+            "expectedByNow": "Expected by now: {percent}% of the month elapsed"
+        },
+        "summary": {
+            "title": "This month's budget",
+            "subtitle": "{count} active categories"
+        },
+        "pace": {
+            "over_pace": "Over pace",
+            "on_pace": "On pace",
+            "under_pace": "Under pace"
+        }
+    },
     "categories": {
         "title": "Categories",
         "description": "Manage your categories here.",
@@ -282,6 +332,24 @@
         "edit": {
             "title": "Edit Category",
             "description": "Make changes to {name}. Click save when you're done."
+        },
+        "actions": {
+            "setBudget": "Set budget",
+            "manageBudget": "Manage budget"
+        },
+        "table": {
+            "budget": "Budget",
+            "perMonthShort": "mo"
+        },
+        "sections": {
+            "details": "Details",
+            "appearance": "Appearance",
+            "budget": "Budget"
+        },
+        "budget": {
+            "notSet": "Not set",
+            "remove": "Remove",
+            "removeConfirm": "This permanently removes the budget for \"{name}\" along with all its monthly history. This cannot be undone."
         }
     },
     "settings": {
@@ -328,7 +396,7 @@
             "currency": {
                 "title": "Currency",
                 "description": "Choose the currency for displaying your financial data",
-                "comingSoon": "Coming soon"
+                "placeholder": "Select a currency"
             }
         },
         "deleteAccount": {
@@ -377,6 +445,9 @@
                 "confirm": "Confirm"
             }
         }
+    },
+    "validation": {
+        "amountRequired": "Please enter an amount greater than zero."
     },
     "tags": {
         "title": "Tags",

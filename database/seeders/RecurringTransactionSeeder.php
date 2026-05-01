@@ -37,7 +37,6 @@ final class RecurringTransactionSeeder extends Seeder
                 RecurringTransaction::factory()->create([
                     'user_id'     => $user->id,
                     'category_id' => $category->id,
-                    'tag_id'      => null,
                     'start_date'  => now()->subMonths(3)->format('Y-m-d'),
                     'end_date'    => null,
                     ...$transaction,

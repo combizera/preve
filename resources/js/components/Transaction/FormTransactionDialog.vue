@@ -24,7 +24,8 @@ import {
 import { update, store } from '@/routes/transactions';
 import type { ICategory } from '@/types/models/category';
 import type { ITag } from '@/types/models/tag';
-import { ITransaction } from '@/types/models/transaction';
+import type { ITransaction, ITransactionInput } from '@/types/models/transaction';
+import { validateAmount } from '@/utils/validateAmount';
 
 const open = defineModel<boolean>('open', { required: true });
 
@@ -41,9 +42,9 @@ const tags = inject<ITag[]>('tags', []);
 
 const rawAmount = ref('');
 
-const form = useForm<ITransaction>({
+const form = useForm<ITransactionInput>({
   category_id: 0,
-  tag_id: undefined,
+  tags: [],
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
@@ -59,7 +60,7 @@ watch(
       // Initialize rawAmount with the transaction amount
       rawAmount.value = amount > 0 ? amount.toString() : '';
       form.category_id = transaction.category_id ?? 0;
-      form.tag_id = transaction.tag_id;
+      form.tags = transaction.tags?.map((tag) => tag.id) ?? [];
       form.amount = amount;
       form.type = transaction.type ?? TRANSACTION_TYPE.EXPENSE;
       form.description = transaction.description ?? '';
@@ -82,6 +83,8 @@ const displayAmount = computed({
 });
 
 const createTransaction = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       open.value = false;
@@ -97,6 +100,8 @@ const updateTransaction = () => {
   if (!transactionId) {
     return;
   }
+
+  if (!validateAmount(form, t)) return;
 
   form.submit(update(transactionId), {
     onSuccess: () => {

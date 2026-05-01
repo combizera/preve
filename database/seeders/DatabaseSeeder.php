@@ -14,6 +14,7 @@ final class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TransactionSeeder::class,
             RecurringTransactionSeeder::class,
+            ForecastSeeder::class,
         ]);
     }
 }

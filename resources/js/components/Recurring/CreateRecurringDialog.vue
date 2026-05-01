@@ -25,8 +25,9 @@ import {
 import { store } from '@/routes/recurring';
 import { useRecurringStore } from '@/stores/recurring.store';
 import { type ICategory } from '@/types/models/category';
-import { IRecurringTransaction } from '@/types/models/recurring-transaction';
+import type { IRecurringTransactionInput } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
+import { validateAmount } from '@/utils/validateAmount';
 
 interface Props {
   categories: ICategory[];
@@ -41,9 +42,9 @@ const { showFormDialog, recurringType } = storeToRefs(recurringStore);
 
 const rawAmount = ref('');
 
-const form = useForm<IRecurringTransaction>({
+const form = useForm<IRecurringTransactionInput>({
   category_id: 0,
-  tag_id: undefined,
+  tags: [],
   amount: 0,
   frequency: FREQUENCY_TYPE.MONTHLY,
   type: recurringType.value,
@@ -64,6 +65,8 @@ const displayAmount = computed({
 });
 
 const createRecurring = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       recurringStore.closeCreateDialog();

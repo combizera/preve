@@ -1,3 +1,4 @@
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
@@ -9,6 +10,13 @@ export default defineConfig({
             input: ['resources/js/app.ts'],
             ssr: 'resources/js/ssr.ts',
             refresh: true,
+        }),
+        wayfinder({
+            // Generate .form() helpers used by Inertia v2 <Form> components.
+            formVariants: true,
+            // The Docker node-build stage has no PHP — routes are generated
+            // upstream in the PHP build stage. Skip the regen step there.
+            command: process.env.WAYFINDER_NO_GENERATE === '1' ? 'true' : undefined,
         }),
         tailwindcss(),
         vue({

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 
 const props = withDefaults(
@@ -33,7 +33,7 @@ const items = computed(() => {
       if (!itemConfig) return null;
       const numValue = typeof value === 'number' ? value : 0;
       const isNegative = numValue < 0;
-      const formatted = `R$ ${formatCentsToDisplay(Math.abs(numValue))}`;
+      const formatted = `${getCurrencySymbol()} ${formatCentsToDisplay(Math.abs(numValue))}`;
       const display = isNegative ? `-${formatted}` : formatted;
       const dotColor = isNegative ? 'var(--destructive)' : 'var(--positive)';
       return { key, display, label: itemConfig.label, dotColor };

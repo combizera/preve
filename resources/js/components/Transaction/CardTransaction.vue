@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Repeat } from 'lucide-vue-next';
+import { ArrowDownLeft, ArrowUpRight, RefreshCw } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -14,10 +14,12 @@ import ShareButton from '@/components/ui/button/ShareButton.vue';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { ITransaction } from '@/types/models/transaction';
+import { isPastDate } from '@/utils/isPastDate';
 
 const { t } = useI18n();
 
@@ -38,7 +40,7 @@ const amountClass = computed(() =>
     'text-sm font-medium',
     props.transaction.type === 'expense'
       ? "text-foreground/70 before:content-['-']"
-      : 'text-positive',
+      : "text-positive before:content-['+']",
   ),
 );
 
@@ -47,7 +49,10 @@ const showEditDialog = ref(false);
 const selectedTransaction = ref<ITransaction | null>(null);
 const editMode = ref<'edit' | 'duplicate'>('edit');
 
-const openEditDialog = (transaction: ITransaction, mode: 'edit' | 'duplicate' = 'edit') => {
+const openEditDialog = (
+  transaction: ITransaction,
+  mode: 'edit' | 'duplicate' = 'edit',
+) => {
   selectedTransaction.value = transaction;
   editMode.value = mode;
   showEditDialog.value = true;
@@ -57,41 +62,71 @@ const openDeleteDialog = (transaction: ITransaction) => {
   selectedTransaction.value = transaction;
   showDeleteDialog.value = true;
 };
+
+const transactionIsPast = computed(() =>
+  isPastDate(props.transaction.transaction_date),
+);
+const isExpense = computed(
+  () => props.transaction.type === TRANSACTION_TYPE.EXPENSE,
+);
 </script>
 
 <template>
   <Card
-    class="flex flex-row items-center justify-between gap-2 rounded-md bg-sidebar p-4"
+    :data-past="transactionIsPast"
+    class="flex flex-row items-center justify-between gap-2 rounded-md bg-sidebar p-4 data-[past=true]:border-dashed"
   >
     <div class="flex items-center gap-4">
-      <Checkbox id="transaction" class="size-5 bg-background cursor-pointer" />
+      <Checkbox
+        :id="transaction.id"
+        class="size-5 bg-background disabled:cursor-default disabled:opacity-80"
+        v-model="transactionIsPast"
+        :disabled="true"
+      />
       <div class="space-y-1">
         <Label
           for="transaction"
-          class="text-sm leading-none font-medium text-foreground"
+          :class="
+            cn(
+              'text-sm leading-none font-medium text-foreground',
+              transactionIsPast && 'text-muted-foreground line-through',
+            )
+          "
         >
           {{ transaction.description }}
         </Label>
         <span
           class="flex items-center gap-1 text-xs leading-none font-medium text-muted-foreground"
         >
-          <component :is="categoryIcon" :size="14" />
-          {{ transaction.category?.name }} •
-          {{ capitalizeFirstLetter(transaction.type) }}
-          <span v-if="transaction.recurring_transaction_id" class="flex items-center gap-1">
-            • <Repeat :size="12" /> {{ t('transactions.recurring') }}
+          <span class="flex items-center gap-1">
+            <component :is="categoryIcon" :size="14" />
+            {{ transaction.category?.name }}
+          </span>
+          <span class="flex items-center gap-0.5">
+            •
+            <ArrowUpRight v-if="isExpense" :size="16" />
+            <ArrowDownLeft v-else :size="16" />
+            {{ capitalizeFirstLetter(transaction.type) }}
+          </span>
+          <span
+            v-if="transaction.recurring_transaction_id"
+            class="flex items-center gap-1"
+          >
+            • <RefreshCw :size="12" /> {{ t('transactions.recurring') }}
           </span>
         </span>
       </div>
     </div>
 
     <div class="flex items-center gap-2">
-      <span :class="amountClass"> R$ {{ formattedAmount }} </span>
+      <span :class="amountClass">
+        {{ getCurrencySymbol() }} {{ formattedAmount }}
+      </span>
       <ActionGroup>
         <InfoButton :transactionId="transaction.id" />
-        
+
         <ShareButton :transactionId="transaction.id" />
-        
+
         <DuplicateButton @click="openEditDialog(transaction, 'duplicate')" />
 
         <EditButton @click="openEditDialog(transaction, 'edit')" />
