@@ -21,6 +21,27 @@ All entities are **user-scoped** (multi-tenant at user level).
 
 ---
 
+## Local Environment
+
+The project runs inside Docker (`docker-compose.local.yml`). PHP, the database, and Node all live in containers — running `php artisan test` directly on the host fails because the host has no `pgsql` driver / no DB.
+
+**Always use the Makefile for runtime commands:**
+
+| Task | Command |
+| --- | --- |
+| Run tests | `make test` (filters: `make test ARGS="--filter=Name"` — or `docker compose -f docker-compose.local.yml exec app php artisan test --compact --filter=Name`) |
+| Migrations | `make migrate` / `make migrate-fresh` / `make seed` |
+| Wayfinder regen | `make wayfinder` |
+| Vite build/dev | `make npm-build` / `make npm-dev` |
+| Shell into container | `make bash-app` (PHP) / `make bash-node` (Node) |
+| Bring stack up/down | `make up` / `make down` / `make restart` |
+
+**Pint and other static-only commands** (no DB, no Vite) can run on the host: `vendor/bin/pint --dirty --format agent`.
+
+**Never** run `php artisan test`, `php artisan migrate`, or any DB-touching artisan command on the host — route them through `make` or `docker compose ... exec app ...`.
+
+---
+
 ## Backend Patterns
 
 ### File Structure
