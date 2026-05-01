@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @method static Builder<Category> availableForForecast()
@@ -61,11 +62,14 @@ final class Category extends Model
     }
 
     /**
-     * @return HasMany<ForecastSeries, $this>
+     * The unique constraint on `(user_id, category_id)` in `forecast_series`
+     * guarantees a category has at most one series.
+     *
+     * @return HasOne<ForecastSeries, $this>
      */
-    public function forecastSeries(): HasMany
+    public function forecastSeries(): HasOne
     {
-        return $this->hasMany(ForecastSeries::class);
+        return $this->hasOne(ForecastSeries::class);
     }
 
     /**
