@@ -110,23 +110,11 @@ final class ForecastController extends Controller
         return to_route('forecasts.index');
     }
 
-    /**
-     * @throws Throwable
-     */
     public function destroy(Forecast $forecast): RedirectResponse
     {
         $this->authorize('delete', $forecast);
 
-        DB::transaction(function () use ($forecast): void {
-            // Pause + delete = full removal of the series and all its instances.
-            if (!$forecast->series->is_active) {
-                $forecast->series->delete();
-
-                return;
-            }
-
-            $forecast->delete();
-        });
+        $forecast->delete();
 
         $this->toast::success(__('messages.forecast.deleted'));
 

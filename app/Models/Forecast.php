@@ -64,6 +64,10 @@ final class Forecast extends Model
         'month' => 'date:Y-m-d',
     ];
 
+    private ?int $cachedSpentToDate = null;
+
+    private ?ForecastPaceStatus $cachedPaceStatus = null;
+
     /**
      * @return BelongsTo<ForecastSeries, $this>
      */
@@ -127,7 +131,7 @@ final class Forecast extends Model
      * that should have been used by $asOf, given a flat distribution across the
      * month. Past months clamp $asOf to month end; future months return ON_PACE.
      */
-    public function computePaceStatus(?CarbonInterface $asOf = null): ForecastPaceStatus
+    public function computePaceStatus(?CarbonInterface $asOf = null, ?int $spentToDate = null): ForecastPaceStatus
     {
         $asOf ??= Date::today();
 
@@ -148,7 +152,8 @@ final class Forecast extends Model
             return ForecastPaceStatus::ON_PACE;
         }
 
-        $ratio = $this->computeSpentToDate($effectiveAsOf) / $expectedByNow;
+        $spent = $spentToDate ?? $this->computeSpentToDate($effectiveAsOf);
+        $ratio = $spent / $expectedByNow;
 
         return match (true) {
             $ratio > 1.05 => ForecastPaceStatus::OVER_PACE,
@@ -169,16 +174,16 @@ final class Forecast extends Model
 
     protected function getSpentToDateAttribute(): int
     {
-        return $this->computeSpentToDate();
+        return $this->cachedSpentToDate ??= $this->computeSpentToDate();
     }
 
     protected function getRemainingAttribute(): int
     {
-        return $this->computeRemaining();
+        return $this->amount - $this->getSpentToDateAttribute();
     }
 
     protected function getPaceStatusAttribute(): string
     {
-        return $this->computePaceStatus()->value;
+        return ($this->cachedPaceStatus ??= $this->computePaceStatus(spentToDate: $this->getSpentToDateAttribute()))->value;
     }
 }

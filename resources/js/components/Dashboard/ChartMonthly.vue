@@ -103,8 +103,10 @@ const formatDay = (i: number) => {
         ]"
       />
 
+      <!-- CHART -->
       <ChartContainer :config="chartConfig" class="h-[300px] w-full border-t px-2 pt-4 pb-2" :cursor="true">
         <VisXYContainer :data="chartData" :padding="{ top: 20, bottom: 20 }">
+          <!-- ACTUAL -->
           <VisArea
             :x="x"
             :y="yActual"
@@ -120,6 +122,7 @@ const formatDay = (i: number) => {
             :line-width="2"
           />
 
+          <!-- FORECAST -->
           <VisArea
             :x="x"
             :y="yForecast"
@@ -136,6 +139,7 @@ const formatDay = (i: number) => {
             :line-dash-array="[6, 4]"
           />
 
+          <!-- AXES -->
           <VisAxis
             type="x"
             :x="x"
@@ -153,6 +157,7 @@ const formatDay = (i: number) => {
             :grid-line="true"
           />
 
+          <!-- TOOLTIP -->
           <ChartTooltip />
           <ChartCrosshair
             :color="chartConfig.balance.color"

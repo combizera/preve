@@ -196,10 +196,9 @@ it('does not allow updating another users forecast', function (): void {
     $response->assertForbidden();
 });
 
-it('deletes only the current instance when the series is active', function (): void {
+it('deletes only the current instance, leaving the series intact', function (): void {
     $series = ForecastSeries::factory()->create([
-        'user_id'   => auth()->id(),
-        'is_active' => true,
+        'user_id' => auth()->id(),
     ]);
 
     $forecast = Forecast::factory()->create([
@@ -215,8 +214,8 @@ it('deletes only the current instance when the series is active', function (): v
     $this->assertDatabaseHas('forecast_series', ['id' => $series->id]);
 });
 
-it('deletes the entire series when destroying a paused forecast', function (): void {
-    $series = ForecastSeries::factory()->paused()->create([
+it('deletes the entire series and all its instances via destroySeries', function (): void {
+    $series = ForecastSeries::factory()->create([
         'user_id' => auth()->id(),
     ]);
 
@@ -226,9 +225,9 @@ it('deletes the entire series when destroying a paused forecast', function (): v
         'forecast_series_id' => $series->id,
     ]);
 
-    $response = $this->delete(route('forecasts.destroy', $forecast->id));
+    $response = $this->delete(route('forecast-series.destroy', $series->id));
 
-    $response->assertRedirect(route('forecasts.index'));
+    $response->assertRedirect();
     $this->assertDatabaseMissing('forecasts', ['id' => $forecast->id]);
     $this->assertDatabaseMissing('forecast_series', ['id' => $series->id]);
 });
