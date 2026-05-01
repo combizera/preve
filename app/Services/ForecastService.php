@@ -19,8 +19,9 @@ final class ForecastService
             return $this->monthBalance($user, $selectedDate);
         }
 
+        $pendingIncome = $user->transactions()->inMonth($now)->pending($now)->income()->sum('amount');
         $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
-        $forecast = $availableBalance - $pendingExpenses;
+        $forecast = $availableBalance + $pendingIncome - $pendingExpenses;
         $forecast -= $this->forecastShortfall($user, $currentDate, $now);
 
         $cursor = $currentDate->copy()->addMonth();

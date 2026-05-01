@@ -173,7 +173,7 @@
         "description": "Aqui você pode ter uma visão geral das suas atividades financeiras e gerenciar suas transações de forma eficiente.",
         "lastTransactions": "Últimas Transações",
         "availableBalance": "Saldo Disponível",
-        "availableBalanceDescription": "Receitas menos despesas pagas neste mês",
+        "availableBalanceDescription": "Receitas menos despesas pagas até hoje",
         "forecast": "Previsão",
         "forecastDescription": "Saldo após despesas pendentes",
         "forecastForMonth": "Previsão para {month} {year}",

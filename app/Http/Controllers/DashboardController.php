@@ -24,9 +24,19 @@ final class DashboardController extends Controller
             ->orderBy('transaction_date', 'desc')
             ->get();
 
-        $totalIncome = $user->transactions()->inMonth($now)->paid($now)->income()->sum('amount');
-        $totalExpenses = $user->transactions()->inMonth($now)->paid($now)->expense()->sum('amount');
-        $availableBalance = $totalIncome - $totalExpenses;
+        $chartDate = $now->copy()
+            ->setYear($request->integer('forecast_year', $now->year))
+            ->setMonth($request->integer('forecast_month', $now->month))
+            ->startOfMonth();
+
+        $availableBalanceAsOf = $now->lessThan($chartDate->copy()->endOfMonth())
+            ? $now
+            : $chartDate->copy()->endOfMonth();
+
+        $availableBalance = (int) $user->transactions()
+            ->paid($availableBalanceAsOf)
+            ->netBalance()
+            ->value('net_balance');
 
         $forecast = $forecastService->calculate(
             $user,
@@ -35,11 +45,6 @@ final class DashboardController extends Controller
             $request->integer('forecast_month', $now->month),
             $request->integer('forecast_year', $now->year),
         );
-
-        $chartDate = $now->copy()
-            ->setYear($request->integer('forecast_year', $now->year))
-            ->setMonth($request->integer('forecast_month', $now->month))
-            ->startOfMonth();
 
         $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
         $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
