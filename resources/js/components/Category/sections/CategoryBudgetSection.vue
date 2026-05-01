@@ -55,7 +55,7 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const series = computed(() => props.category.forecast_series ?? null);
-const latestForecast = computed(() => series.value?.forecasts?.[0] ?? null);
+const latestForecast = computed(() => series.value?.latest_forecast ?? null);
 const hasSeries = computed(() => series.value !== null);
 const isPaused = computed(() => !!series.value && !series.value.is_active);
 

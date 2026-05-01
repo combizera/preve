@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $id
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read User $user
  * @property-read Category $category
  * @property-read Collection<int, Forecast> $forecasts
+ * @property-read Forecast|null $latestForecast
  */
 #[Fillable([
     'user_id',
@@ -66,5 +68,13 @@ final class ForecastSeries extends Model
     public function forecasts(): HasMany
     {
         return $this->hasMany(Forecast::class);
+    }
+
+    /**
+     * @return HasOne<Forecast, $this>
+     */
+    public function latestForecast(): HasOne
+    {
+        return $this->hasOne(Forecast::class)->latestOfMany('month');
     }
 }

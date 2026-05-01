@@ -21,7 +21,7 @@ final class CategoryController extends Controller
     public function index(): Response
     {
         $categories = Auth::user()->categories()
-            ->with('forecastSeries')
+            ->with('forecastSeries.latestForecast')
             ->get();
 
         [$expenseCategories, $incomeCategories] = $categories->partition(fn (Category $category): bool => $category->type === TransactionType::EXPENSE);
