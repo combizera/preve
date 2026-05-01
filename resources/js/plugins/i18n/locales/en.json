@@ -324,6 +324,10 @@
         "edit": {
             "title": "Edit Category",
             "description": "Make changes to {name}. Click save when you're done."
+        },
+        "actions": {
+            "setBudget": "Set budget",
+            "manageBudget": "Manage budget"
         }
     },
     "settings": {

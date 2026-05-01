@@ -2,6 +2,15 @@ import type { ICategory } from '@/types/models/category';
 
 export type ForecastPaceStatus = 'over_pace' | 'on_pace' | 'under_pace';
 
+export interface IForecastSeries {
+    id: string;
+    user_id: number;
+    category_id: number;
+    default_amount: number;
+    default_notes?: string | null;
+    is_active: boolean;
+}
+
 export interface IForecast {
     id?: string;
     forecast_series_id?: string;
