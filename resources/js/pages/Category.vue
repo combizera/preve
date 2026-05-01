@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 
 import ContainerCategory from '@/components/Category/ContainerCategory.vue';
 import CreateCategory from '@/components/Category/CreateCategory.vue';
-import CreateForecastDialog from '@/components/Forecast/CreateForecastDialog.vue';
 import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
@@ -18,7 +17,7 @@ interface Props {
   expenseCategories: ICategory[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const { t } = useI18n();
 
@@ -32,10 +31,6 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     href: categoryRoutes.index().url,
   },
 ]);
-
-const availableForecastCategories = computed<ICategory[]>(() =>
-  props.expenseCategories.filter((category) => !category.forecast_series),
-);
 </script>
 
 <template>
@@ -50,7 +45,5 @@ const availableForecastCategories = computed<ICategory[]>(() =>
 
     <!-- CONTAINER -->
     <ContainerCategory :incomeCategories :expenseCategories />
-
-    <CreateForecastDialog :categories="availableForecastCategories" />
   </AppLayout>
 </template>

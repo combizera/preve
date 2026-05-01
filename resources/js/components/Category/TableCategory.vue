@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteCategoryDialog from '@/components/Category/DeleteCategoryDialog.vue';
-import EditCategoryDialog from '@/components/Category/EditCategoryDialog.vue';
+import EditCategoryDialog, {
+  type CategorySection,
+} from '@/components/Category/EditCategoryDialog.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import { Badge } from '@/components/ui/badge';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
@@ -22,18 +23,16 @@ import {
 import { getColorClass } from '@/lib/category-colors';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
-import forecastRoutes from '@/routes/forecasts';
-import { useForecastStore } from '@/stores/forecast.store';
 import { ICategory } from '@/types/models/category';
 
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
 const selectedCategory = ref<ICategory | null>(null);
-
-const forecastStore = useForecastStore();
+const editingDefaultSection = ref<CategorySection>('details');
 
 const openEditDialog = (category: ICategory) => {
   selectedCategory.value = category;
+  editingDefaultSection.value = 'details';
   showEditDialog.value = true;
 };
 
@@ -43,12 +42,9 @@ const openDeleteDialog = (category: ICategory) => {
 };
 
 const onBudgetAction = (category: ICategory) => {
-  if (category.forecast_series) {
-    router.visit(forecastRoutes.index({ query: { manage: category.forecast_series.id } }).url);
-    return;
-  }
-
-  forecastStore.openCreateDialog(category.id);
+  selectedCategory.value = category;
+  editingDefaultSection.value = 'budget';
+  showEditDialog.value = true;
 };
 
 const { t } = useI18n();
@@ -147,6 +143,7 @@ const isExpense = computed(() => props.type === 'expense');
         v-if="showEditDialog && selectedCategory"
         v-model:open="showEditDialog"
         :category="selectedCategory"
+        :default-section="editingDefaultSection"
       />
 
       <DeleteCategoryDialog
