@@ -328,6 +328,10 @@
         "actions": {
             "setBudget": "Set budget",
             "manageBudget": "Manage budget"
+        },
+        "table": {
+            "budget": "Budget",
+            "perMonthShort": "mo"
         }
     },
     "settings": {

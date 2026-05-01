@@ -328,6 +328,10 @@
         "actions": {
             "setBudget": "Definir orçamento",
             "manageBudget": "Gerenciar orçamento"
+        },
+        "table": {
+            "budget": "Orçamento",
+            "perMonthShort": "mês"
         }
     },
     "settings": {
