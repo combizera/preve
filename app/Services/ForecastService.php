@@ -31,6 +31,33 @@ final class ForecastService
         return $forecast;
     }
 
+    public function dailyForecastedSpend(User $user, CarbonInterface $chartDate, CarbonInterface $now): int
+    {
+        $isCurrentMonth = $chartDate->isSameMonth($now);
+        $isFutureMonth = $chartDate->greaterThan($now->copy()->startOfMonth()) && !$isCurrentMonth;
+
+        if (!$isCurrentMonth && !$isFutureMonth) {
+            return 0;
+        }
+
+        $daysInMonth = $chartDate->copy()->endOfMonth()->day;
+        $daysRemaining = $isCurrentMonth
+            ? max(0, $daysInMonth - $now->day)
+            : $daysInMonth;
+
+        if ($daysRemaining === 0) {
+            return 0;
+        }
+
+        $forecasts = $user->forecasts()
+            ->whereYear('month', $chartDate->year)
+            ->whereMonth('month', $chartDate->month)
+            ->whereHas('series', fn ($query) => $query->where('is_active', true))
+            ->get();
+
+        return (int) $forecasts->sum(fn ($forecast): int => intdiv($forecast->remaining, $daysRemaining));
+    }
+
     private function monthBalance(User $user, CarbonInterface $date): int
     {
         return (int) $user

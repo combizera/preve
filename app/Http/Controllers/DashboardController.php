@@ -55,6 +55,8 @@ final class DashboardController extends Controller
             'amount' => (int) ($dailyNet[$day] ?? 0),
         ])->all();
 
+        $dailyForecastedSpend = $forecastService->dailyForecastedSpend($user, $chartDate, $now);
+
         $categories = $user->categories()->get();
         $tags = $user->tags()->get();
 
@@ -65,6 +67,7 @@ final class DashboardController extends Controller
             'monthlyIncome',
             'monthlyExpenses',
             'dailyBalances',
+            'dailyForecastedSpend',
             'carryOver',
             'categories',
             'tags',
