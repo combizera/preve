@@ -30,13 +30,24 @@ export function getProgressPercent(spent: number, total: number): number {
     return Math.min(100, Math.round((spent / total) * 100));
 }
 
-export function getMonthProgressPercent(month: string, now: Date = new Date()): number {
+export function getMonthProgressPercent(
+    month: string,
+    now: Date = new Date(),
+): number {
     const [year, monthNumber] = month.split('-').map(Number);
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
 
-    if (currentYear > year || (currentYear === year && currentMonth > monthNumber)) return 100;
-    if (currentYear < year || (currentYear === year && currentMonth < monthNumber)) return 0;
+    if (
+        currentYear > year ||
+        (currentYear === year && currentMonth > monthNumber)
+    )
+        return 100;
+    if (
+        currentYear < year ||
+        (currentYear === year && currentMonth < monthNumber)
+    )
+        return 0;
 
     const daysInMonth = new Date(year, monthNumber, 0).getDate();
     return Math.round((now.getDate() / daysInMonth) * 100);
@@ -65,7 +76,8 @@ export function summarizeForecasts(
     now: Date = new Date(),
 ): ForecastTotals {
     const monthForecasts = forecasts.filter(
-        (forecast) => forecast.is_active && isInMonth(forecast.month, monthString),
+        (forecast) =>
+            forecast.is_active && isInMonth(forecast.month, monthString),
     );
 
     const totals = monthForecasts.reduce(
@@ -121,7 +133,10 @@ export function buildForecastTransactionsUrl(forecast: IForecast): string {
     const params = new URLSearchParams();
     params.append('categories[]', String(forecast.category_id));
     params.append('date_start', `${year}-${month}-01`);
-    params.append('date_end', `${year}-${month}-${String(lastDay).padStart(2, '0')}`);
+    params.append(
+        'date_end',
+        `${year}-${month}-${String(lastDay).padStart(2, '0')}`,
+    );
 
     return `${transactionRoutes.index().url}?${params.toString()}`;
 }

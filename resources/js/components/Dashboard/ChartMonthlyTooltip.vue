@@ -46,7 +46,7 @@ const items = computed(() => {
   <div
     :class="
       cn(
-        'border-border/50 bg-background grid min-w-[10rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+        'grid min-w-[10rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
       )
     "
   >
@@ -63,11 +63,13 @@ const items = computed(() => {
           class="size-2.5 shrink-0 rounded-[2px]"
           :style="{ backgroundColor: item!.dotColor }"
         />
-        <div class="flex flex-1 items-center justify-between gap-4 leading-none">
+        <div
+          class="flex flex-1 items-center justify-between gap-4 leading-none"
+        >
           <span class="text-muted-foreground">
             {{ item!.label }}
           </span>
-          <span class="text-foreground font-mono font-medium tabular-nums">
+          <span class="font-mono font-medium text-foreground tabular-nums">
             {{ item!.display }}
           </span>
         </div>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {
   Calendar,
+  CalendarSync,
   ChevronDown,
   RefreshCw,
-  CalendarSync,
   Tag as TagIcon,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -200,9 +200,7 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
               "
             >
               <CalendarSync :size="14" />
-              <span>
-                {{ getCurrencySymbol() }} {{ annualAmount }}
-              </span>
+              <span> {{ getCurrencySymbol() }} {{ annualAmount }} </span>
             </div>
           </div>
 
@@ -228,7 +226,10 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
         </div>
 
         <!-- Tags -->
-        <div v-if="recurringTransaction.tags?.length" class="flex flex-wrap items-center gap-2">
+        <div
+          v-if="recurringTransaction.tags?.length"
+          class="flex flex-wrap items-center gap-2"
+        >
           <Badge
             v-for="tag in recurringTransaction.tags"
             :key="tag.id"

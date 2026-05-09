@@ -17,11 +17,16 @@ const { t } = useI18n();
 
 const currentMonth = computed(() => getCurrentMonthString());
 const monthLabel = computed(() => formatMonth(currentMonth.value));
-const totals = computed(() => summarizeForecasts(props.forecasts, currentMonth.value));
+const totals = computed(() =>
+  summarizeForecasts(props.forecasts, currentMonth.value),
+);
 </script>
 
 <template>
-  <Card v-if="totals.activeCount > 0" class="gap-4 rounded-md border-2 bg-sidebar p-5">
+  <Card
+    v-if="totals.activeCount > 0"
+    class="gap-4 rounded-md border-2 bg-sidebar p-5"
+  >
     <div class="flex items-baseline justify-between gap-3">
       <div>
         <h2 class="text-base font-semibold text-foreground">
@@ -31,7 +36,9 @@ const totals = computed(() => summarizeForecasts(props.forecasts, currentMonth.v
           {{ t('forecasts.summary.subtitle', { count: totals.activeCount }) }}
         </p>
       </div>
-      <span class="text-xs font-medium text-muted-foreground">{{ monthLabel }}</span>
+      <span class="text-xs font-medium text-muted-foreground">{{
+        monthLabel
+      }}</span>
     </div>
 
     <ForecastProgressBar

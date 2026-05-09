@@ -42,11 +42,17 @@ const deleteTransaction = () => {
       <AlertDialogHeader>
         <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          {{ t('generic.confirm.deleteTransaction', { description: transaction?.description }) }}
+          {{
+            t('generic.confirm.deleteTransaction', {
+              description: transaction?.description,
+            })
+          }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel> {{ t('generic.actions.cancel') }} </AlertDialogCancel>
+        <AlertDialogCancel>
+          {{ t('generic.actions.cancel') }}
+        </AlertDialogCancel>
         <AlertDialogAction
           variant="destructive"
           @click="deleteTransaction"

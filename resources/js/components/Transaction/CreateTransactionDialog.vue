@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { today, getLocalTimeZone } from '@internationalized/date';
+import { getLocalTimeZone, today } from '@internationalized/date';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -95,7 +95,9 @@ const createTransaction = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
+            <Button variant="outline">
+              {{ t('generic.actions.cancel') }}
+            </Button>
           </DialogClose>
           <Button
             type="button"

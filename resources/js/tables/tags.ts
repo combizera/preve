@@ -4,7 +4,9 @@ import { h } from 'vue';
 import TagActions from '@/components/Tag/TagActions.vue';
 import { ITag } from '@/types/models/tag';
 
-export const createColumns = (t: (key: string) => string): ColumnDef<ITag>[] => [
+export const createColumns = (
+    t: (key: string) => string,
+): ColumnDef<ITag>[] => [
     {
         accessorKey: 'name',
         header: t('generic.labels.name'),
@@ -26,7 +28,8 @@ export const createColumns = (t: (key: string) => string): ColumnDef<ITag>[] => 
     },
     {
         accessorKey: 'actions',
-        header: () => h('div', { class: 'text-right' }, t('generic.labels.actions')),
+        header: () =>
+            h('div', { class: 'text-right' }, t('generic.labels.actions')),
         cell: ({ row }) => {
             const tag = row.original;
 

@@ -27,7 +27,7 @@ const { t } = useI18n();
 <template>
   <Collapsible v-model:open="open" class="rounded-md border">
     <CollapsibleTrigger
-      class="flex w-full items-center justify-between gap-2 px-4 py-3 text-sm font-medium hover:bg-muted/50 cursor-pointer"
+      class="flex w-full cursor-pointer items-center justify-between gap-2 px-4 py-3 text-sm font-medium hover:bg-muted/50"
     >
       <span>{{ t('categories.sections.appearance') }}</span>
       <ChevronDown

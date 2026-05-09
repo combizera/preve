@@ -40,9 +40,10 @@ const emitMonth = (month: number, year: number) => {
 
 const changeYear = (newYear: number, month: number): boolean => {
   if (newYear < MIN_YEAR || newYear > MAX_YEAR) {
-    toast.error(newYear < MIN_YEAR
-      ? t('dashboard.calendar.earliestYear')
-      : t('dashboard.calendar.latestYear'),
+    toast.error(
+      newYear < MIN_YEAR
+        ? t('dashboard.calendar.earliestYear')
+        : t('dashboard.calendar.latestYear'),
     );
     return false;
   }
@@ -160,9 +161,7 @@ watch(
           <ChevronLeft />
         </Button>
 
-        <div
-          class="h-full w-full overflow-x-auto scroll-smooth py-1"
-        >
+        <div class="h-full w-full overflow-x-auto scroll-smooth py-1">
           <div
             class="mx-auto flex h-full w-max items-center justify-start gap-0"
           >

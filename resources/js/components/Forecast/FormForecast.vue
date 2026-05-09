@@ -35,7 +35,9 @@ const { t } = useI18n();
         <Label for="category">{{ t('models.category.name') }}</Label>
         <Select v-model="form.category_id" :disabled="editMode || lockCategory">
           <SelectTrigger class="w-full">
-            <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+            <SelectValue
+              :placeholder="t('generic.placeholders.selectCategory')"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

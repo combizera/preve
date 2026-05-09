@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useTransactionStore } from '@/stores/transaction.store';
 
 const { t } = useI18n();
-const transactionStore = useTransactionStore()
+const transactionStore = useTransactionStore();
 </script>
 
 <template>

@@ -59,7 +59,11 @@ const description = computed(() => {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>{{ t('generic.actions.cancel') }}</AlertDialogCancel>
-        <AlertDialogAction variant="destructive" @click="deleteForecast" :disabled="form.processing">
+        <AlertDialogAction
+          variant="destructive"
+          @click="deleteForecast"
+          :disabled="form.processing"
+        >
           {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>

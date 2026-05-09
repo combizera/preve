@@ -36,7 +36,7 @@ onUnmounted(
       default:
         toast[flash.type](flash.message);
     }
-  })
+  }),
 );
 </script>
 

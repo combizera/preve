@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ArrowRightLeft, Bug, Github, Home, RefreshCw, Tags, Wallet } from 'lucide-vue-next';
+import {
+  ArrowRightLeft,
+  Bug,
+  Github,
+  Home,
+  RefreshCw,
+  Tags,
+  Wallet,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -56,7 +64,7 @@ const mainNavItems = computed<NavItem[]>(() => [
     title: t('generic.sidebar.tags'),
     href: tags.index(),
     icon: Tags,
-  }
+  },
 ]);
 
 const footerNavItems = computed<NavItem[]>(() => [

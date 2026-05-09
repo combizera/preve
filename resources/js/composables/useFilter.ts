@@ -4,7 +4,7 @@ import { ref, watch } from 'vue';
 export function useFilter<T extends Record<string, any>>(
     url: string,
     initialFilters: T,
-    defaultFilters: T
+    defaultFilters: T,
 ) {
     const form = useForm(initialFilters);
     const activeCount = ref(0);
@@ -19,13 +19,18 @@ export function useFilter<T extends Record<string, any>>(
 
                 if (Array.isArray(value) && value.length > 0) {
                     count++;
-                } else if (value && value !== '' && value !== null && value !== 'all') {
+                } else if (
+                    value &&
+                    value !== '' &&
+                    value !== null &&
+                    value !== 'all'
+                ) {
                     count++;
                 }
             }
             activeCount.value = count;
         },
-        { immediate: true, deep: true }
+        { immediate: true, deep: true },
     );
 
     const apply = () => {
