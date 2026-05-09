@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'description',
     'color',
     'icon',
+    'order',
 ])]
 final class Category extends Model
 {
@@ -70,6 +71,26 @@ final class Category extends Model
     public function forecastSeries(): HasOne
     {
         return $this->hasOne(ForecastSeries::class);
+    }
+
+    protected static function booted(): void
+    {
+        self::creating(function (Category $category): void {
+            if ($category->order !== null) {
+                return;
+            }
+
+            $type = $category->type instanceof TransactionType
+                ? $category->type->value
+                : $category->type;
+
+            $maxOrder = self::query()
+                ->where('user_id', $category->user_id)
+                ->where('type', $type)
+                ->max('order');
+
+            $category->order = ($maxOrder ?? 0) + 1;
+        });
     }
 
     /**

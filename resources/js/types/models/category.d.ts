@@ -1,4 +1,4 @@
-import type { CategoryColor } from '@/lib/category-colors'
+import type { CategoryColor } from '@/lib/category-colors';
 import { CategoryIcon } from '@/lib/category-icons';
 import type { IForecastSeries } from '@/types/models/forecast';
 import type { TransactionType } from '@/types/models/transaction';
@@ -11,6 +11,7 @@ export interface ICategory {
     description?: string;
     color: CategoryColor;
     icon: CategoryIcon;
+    order: number;
     forecast_series?: IForecastSeries | null;
     created_at: string;
     updated_at: string;

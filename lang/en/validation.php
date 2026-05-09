@@ -181,6 +181,9 @@ return [
     */
 
     'custom' => [
+        'categories' => [
+            'reorder_full_set' => 'You must include every category of this type when reordering.',
+        ],
         'category_id' => [
             'type_mismatch' => 'The selected category must be of type :type.',
         ],
