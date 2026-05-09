@@ -108,7 +108,9 @@ const filteredCategories = computed(() => {
       <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+          <SelectValue
+            :placeholder="t('generic.placeholders.selectCategory')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -127,7 +129,9 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
+      <Label for="tag" class="text-muted-foreground">
+        {{ t('models.tag.optional') }}
+      </Label>
       <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
       <InputError :message="form.errors.tags" />
     </div>
@@ -140,18 +144,30 @@ const filteredCategories = computed(() => {
       {{ t('recurring.form.recurrenceSettings') }}
     </Label>
 
-    <div :class="form.frequency === FREQUENCY_TYPE.MONTHLY ? 'grid grid-cols-2 gap-4' : 'grid gap-4'">
+    <div
+      :class="
+        form.frequency === FREQUENCY_TYPE.MONTHLY
+          ? 'grid grid-cols-2 gap-4'
+          : 'grid gap-4'
+      "
+    >
       <div class="grid gap-3">
         <Label for="frequency"> {{ t('recurring.form.frequency') }} </Label>
         <Select v-model="form.frequency">
           <SelectTrigger class="w-full">
-            <SelectValue :placeholder="t('generic.placeholders.selectFrequency')" />
+            <SelectValue
+              :placeholder="t('generic.placeholders.selectFrequency')"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{{ t('recurring.form.frequency') }}</SelectLabel>
-              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{ t('recurring.form.monthly') }}</SelectItem>
-              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{ t('recurring.form.yearly') }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{
+                t('recurring.form.monthly')
+              }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{
+                t('recurring.form.yearly')
+              }}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

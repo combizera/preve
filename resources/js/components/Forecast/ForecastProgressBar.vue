@@ -43,7 +43,9 @@ const spentLabel = computed(
       </span>
       <span class="text-muted-foreground">{{ percent }}%</span>
     </div>
-    <div class="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
+    <div
+      class="relative h-1.5 w-full overflow-hidden rounded-full bg-foreground/10"
+    >
       <div
         :class="cn('h-full transition-all', barClass)"
         :style="{ width: `${percent}%` }"

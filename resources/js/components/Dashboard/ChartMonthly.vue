@@ -37,19 +37,25 @@ const currentDay = computed(() => {
   if (!selectedMonth) return now.getDate();
 
   const isCurrentMonth =
-    selectedMonth.month === now.getMonth() + 1 && selectedMonth.year === now.getFullYear();
+    selectedMonth.month === now.getMonth() + 1 &&
+    selectedMonth.year === now.getFullYear();
   if (isCurrentMonth) return now.getDate();
 
   const isPastMonth =
     selectedMonth.year < now.getFullYear() ||
-    (selectedMonth.year === now.getFullYear() && selectedMonth.month < now.getMonth() + 1);
+    (selectedMonth.year === now.getFullYear() &&
+      selectedMonth.month < now.getMonth() + 1);
 
   return isPastMonth ? 32 : 0;
 });
 
-const selectedMonthIndex = computed(() => (props.selectedMonth?.month ?? now.getMonth() + 1) - 1);
+const selectedMonthIndex = computed(
+  () => (props.selectedMonth?.month ?? now.getMonth() + 1) - 1,
+);
 
-const monthName = computed(() => t(`dashboard.calendar.months.${MONTH_KEYS[selectedMonthIndex.value]}`));
+const monthName = computed(() =>
+  t(`dashboard.calendar.months.${MONTH_KEYS[selectedMonthIndex.value]}`),
+);
 
 const displayMonth = computed(() => {
   const year = props.selectedMonth?.year ?? now.getFullYear();
@@ -81,9 +87,11 @@ const chartConfig = computed<ChartConfig>(() => ({
 
 const x = (_d: ChartPoint, i: number) => i;
 
-const yActual = (d: ChartPoint) => (d.day <= currentDay.value ? d.balance : undefined);
+const yActual = (d: ChartPoint) =>
+  d.day <= currentDay.value ? d.balance : undefined;
 
-const yForecast = (d: ChartPoint) => (d.day >= currentDay.value ? d.balance : undefined);
+const yForecast = (d: ChartPoint) =>
+  d.day >= currentDay.value ? d.balance : undefined;
 
 const formatDay = (i: number) => {
   const point = chartData.value[i];
@@ -93,18 +101,30 @@ const formatDay = (i: number) => {
 
 <template>
   <section class="double-border">
-    <div class="flex flex-col border rounded-lg overflow-hidden">
+    <div class="flex flex-col overflow-hidden rounded-lg border">
       <ChartHeader
         :title="t('dashboard.chart.dailyBalance')"
         :description="displayMonth"
         :items="[
-          { label: t('dashboard.chart.income'), value: props.monthlyIncome, variant: 'positive' },
-          { label: t('dashboard.chart.expenses'), value: props.monthlyExpenses, variant: 'destructive' },
+          {
+            label: t('dashboard.chart.income'),
+            value: props.monthlyIncome,
+            variant: 'positive',
+          },
+          {
+            label: t('dashboard.chart.expenses'),
+            value: props.monthlyExpenses,
+            variant: 'destructive',
+          },
         ]"
       />
 
       <!-- CHART -->
-      <ChartContainer :config="chartConfig" class="h-[300px] w-full border-t px-2 pt-4 pb-2" :cursor="true">
+      <ChartContainer
+        :config="chartConfig"
+        class="h-[300px] w-full border-t px-2 pt-4 pb-2"
+        :cursor="true"
+      >
         <VisXYContainer :data="chartData" :padding="{ top: 20, bottom: 20 }">
           <!-- ACTUAL -->
           <VisArea

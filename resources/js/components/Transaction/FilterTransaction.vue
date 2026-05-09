@@ -101,9 +101,15 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                     <SelectValue :placeholder="t('generic.labels.allTypes')" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">{{ t('generic.labels.allTypes') }}</SelectItem>
-                    <SelectItem value="income">{{ t('models.transaction.income') }}</SelectItem>
-                    <SelectItem value="expense">{{ t('models.transaction.expense') }}</SelectItem>
+                    <SelectItem value="all">{{
+                      t('generic.labels.allTypes')
+                    }}</SelectItem>
+                    <SelectItem value="income">{{
+                      t('models.transaction.income')
+                    }}</SelectItem>
+                    <SelectItem value="expense">{{
+                      t('models.transaction.expense')
+                    }}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -112,10 +118,14 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                 <Label for="category">{{ t('models.category.name') }}</Label>
                 <Select v-model="form.categories" multiple>
                   <SelectTrigger id="category" class="w-full">
-                    <SelectValue :placeholder="t('generic.placeholders.selectCategories')" />
+                    <SelectValue
+                      :placeholder="t('generic.placeholders.selectCategories')"
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">{{ t('generic.labels.allCategories') }}</SelectItem>
+                    <SelectItem value="all">{{
+                      t('generic.labels.allCategories')
+                    }}</SelectItem>
                     <SelectItem
                       v-for="category in categories"
                       :key="category.id"
@@ -131,10 +141,14 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
                 <Label for="tag">{{ t('models.tag.name') }}</Label>
                 <Select v-model="form.tags" multiple>
                   <SelectTrigger id="tag" class="w-full">
-                    <SelectValue :placeholder="t('generic.placeholders.selectTags')" />
+                    <SelectValue
+                      :placeholder="t('generic.placeholders.selectTags')"
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">{{ t('generic.labels.allTags') }}</SelectItem>
+                    <SelectItem value="all">{{
+                      t('generic.labels.allTags')
+                    }}</SelectItem>
                     <SelectItem
                       v-for="tag in tags"
                       :key="tag.id"
@@ -151,25 +165,23 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
           <section data-name="date-range-filter">
             <div class="space-y-4">
               <div class="flex items-center gap-4">
-                <p class="text-sm font-medium text-foreground text-nowrap">
+                <p class="text-sm font-medium text-nowrap text-foreground">
                   {{ t('transactions.filter.dateRange') }}
                 </p>
-                <div class="h-px bg-border w-full" />
+                <div class="h-px w-full bg-border" />
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <Label for="date_start">{{ t('generic.labels.startDate') }}</Label>
-                  <DatePicker
-                    id="date_start"
-                    v-model="form.date_start"
-                  />
+                  <Label for="date_start">{{
+                    t('generic.labels.startDate')
+                  }}</Label>
+                  <DatePicker id="date_start" v-model="form.date_start" />
                 </div>
                 <div class="space-y-2">
-                  <Label for="date_end">{{ t('generic.labels.endDate') }}</Label>
-                  <DatePicker
-                    id="date_end"
-                    v-model="form.date_end"
-                  />
+                  <Label for="date_end">{{
+                    t('generic.labels.endDate')
+                  }}</Label>
+                  <DatePicker id="date_end" v-model="form.date_end" />
                 </div>
               </div>
             </div>
@@ -186,7 +198,9 @@ const { form, activeCount, apply, clear } = useFilter<ITransactionFilters>(
 
         <SheetClose as-child>
           <Button type="submit" @click="apply" :disabled="form.processing">
-            <span v-if="form.processing">{{ t('generic.actions.filtering') }}</span>
+            <span v-if="form.processing">{{
+              t('generic.actions.filtering')
+            }}</span>
             <span v-else>{{ t('generic.actions.applyFilters') }}</span>
           </Button>
         </SheetClose>

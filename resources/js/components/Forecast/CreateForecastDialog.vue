@@ -73,7 +73,9 @@ const dialogCategories = computed<ICategory[]>(() => {
     <DialogContent class="sm:max-w-137.5">
       <DialogHeader>
         <DialogTitle>{{ t('forecasts.create.title') }}</DialogTitle>
-        <DialogDescription>{{ t('forecasts.create.description') }}</DialogDescription>
+        <DialogDescription>{{
+          t('forecasts.create.description')
+        }}</DialogDescription>
       </DialogHeader>
 
       <FormForecast
@@ -86,7 +88,11 @@ const dialogCategories = computed<ICategory[]>(() => {
         <DialogClose as-child>
           <Button variant="outline">{{ t('generic.actions.cancel') }}</Button>
         </DialogClose>
-        <Button type="button" @click="createForecast" :disabled="form.processing">
+        <Button
+          type="button"
+          @click="createForecast"
+          :disabled="form.processing"
+        >
           {{ t('forecasts.create.button') }}
         </Button>
       </DialogFooter>

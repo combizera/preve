@@ -17,7 +17,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { update as updateCategoryRoute } from '@/routes/categories';
-import { store as storeForecast, update as updateForecast } from '@/routes/forecasts';
+import {
+  store as storeForecast,
+  update as updateForecast,
+} from '@/routes/forecasts';
 import type { ICategory, ICategoryForm } from '@/types/models/category';
 import type { IForecastInput } from '@/types/models/forecast';
 import { validateAmount } from '@/utils/validateAmount';
@@ -122,7 +125,10 @@ const isProcessing = computed(
 
       <div class="grid gap-3">
         <CategoryDetailsSection :form="categoryForm">
-          <CategoryAppearanceSection v-model:open="appearanceOpen" :form="categoryForm" />
+          <CategoryAppearanceSection
+            v-model:open="appearanceOpen"
+            :form="categoryForm"
+          />
           <CategoryBudgetSection
             v-if="isExpense"
             v-model:open="budgetOpen"

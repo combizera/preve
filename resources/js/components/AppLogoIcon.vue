@@ -7,11 +7,7 @@ const detailGradientId = `preve-logo-detail-${uid}`;
 </script>
 
 <template>
-  <svg
-    viewBox="0 0 658 530"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg viewBox="0 0 658 530" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M619.763 0H37.8934C25.2627 0 15.0234 10.2392 15.0234 22.87V423.41C15.0234 436.041 25.2627 446.28 37.8934 446.28H619.763C632.394 446.28 642.633 436.041 642.633 423.41V22.87C642.633 10.2392 632.394 0 619.763 0Z"
       fill="#2865EB"

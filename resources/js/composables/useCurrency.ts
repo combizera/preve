@@ -1,7 +1,10 @@
-import { usePage, router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
-import { type SupportedCurrency, SUPPORTED_CURRENCIES } from '@/config/currency';
+import {
+    type SupportedCurrency,
+    SUPPORTED_CURRENCIES,
+} from '@/config/currency';
 import { currency as currencyRoute } from '@/routes/profile';
 
 export function useCurrency() {

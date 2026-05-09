@@ -64,15 +64,9 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     </Heading>
 
     <!-- TRANSACTIONS -->
-    <ContainerTransactions
-      :transactions="transactions"
-      :filters="filters"
-    />
+    <ContainerTransactions :transactions="transactions" :filters="filters" />
 
     <!-- CREATE -->
-    <CreateTransactionDialog
-      :categories="categories"
-      :tags="tags"
-    />
+    <CreateTransactionDialog :categories="categories" :tags="tags" />
   </AppLayout>
 </template>

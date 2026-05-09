@@ -32,7 +32,9 @@ const forecastVariant = computed(() => {
 const forecastDescription = computed(() => {
   if (!props.selectedMonth) return t('dashboard.forecastDescription');
   return t('dashboard.forecastForMonth', {
-    month: t(`dashboard.calendar.months.${MONTH_KEYS[props.selectedMonth.month - 1]}`),
+    month: t(
+      `dashboard.calendar.months.${MONTH_KEYS[props.selectedMonth.month - 1]}`,
+    ),
     year: props.selectedMonth.year,
   });
 });

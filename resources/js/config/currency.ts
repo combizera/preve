@@ -22,7 +22,9 @@ export const CURRENCIES: Record<SupportedCurrency, CurrencyConfig> = {
     },
 };
 
-export const SUPPORTED_CURRENCIES = Object.entries(CURRENCIES).map(([value, config]) => ({
-    value: value as SupportedCurrency,
-    label: config.label,
-}));
+export const SUPPORTED_CURRENCIES = Object.entries(CURRENCIES).map(
+    ([value, config]) => ({
+        value: value as SupportedCurrency,
+        label: config.label,
+    }),
+);

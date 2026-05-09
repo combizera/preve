@@ -24,12 +24,21 @@ function formattedAmount(transaction: ITransaction) {
 }
 
 const transactionDetails = [
-  { label: 'Date:', value: formatTransactionDate(props.transaction.transaction_date) },
+  {
+    label: 'Date:',
+    value: formatTransactionDate(props.transaction.transaction_date),
+  },
   { label: 'Category:', value: props.transaction.category?.name },
-  { label: 'Tags:', value: props.transaction.tags?.map((tag) => tag.name).join(', ') || undefined },
-  { label: 'Created At:', value: formatTransactionDate(props.transaction.created_at) },
+  {
+    label: 'Tags:',
+    value:
+      props.transaction.tags?.map((tag) => tag.name).join(', ') || undefined,
+  },
+  {
+    label: 'Created At:',
+    value: formatTransactionDate(props.transaction.created_at),
+  },
 ];
-
 </script>
 
 <template>
@@ -49,27 +58,32 @@ const transactionDetails = [
             />
           </ul>
 
-          <div
-            class="h-px w-full border-b border-muted-foreground/40"
-          />
+          <div class="h-px w-full border-b border-muted-foreground/40" />
 
           <ul class="space-y-2">
             <DetailItem
               label="Amount:"
               :value="`${getCurrencySymbol()} ${formattedAmount(transaction)}`"
-              :className="clsx(
-                'text-md text-lg font-medium',
-                transaction.type === 'expense' && 'text-destructive before:content-[\'-\']',
-                transaction.type === 'income' && 'text-positive'
-              )"
+              :className="
+                clsx(
+                  'text-md text-lg font-medium',
+                  transaction.type === 'expense' &&
+                    'text-destructive before:content-[\'-\']',
+                  transaction.type === 'income' && 'text-positive',
+                )
+              "
             />
           </ul>
         </div>
       </CardContent>
 
       <CardFooter v-if="transaction.notes" class="mt-4 py-0">
-        <div class="notes-block relative w-full overflow-hidden rounded-md bg-muted/50 px-4 py-3">
-          <div class="mb-1 flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+        <div
+          class="notes-block relative w-full overflow-hidden rounded-md bg-muted/50 px-4 py-3"
+        >
+          <div
+            class="mb-1 flex items-center gap-1.5 text-sm font-medium text-muted-foreground"
+          >
             <StickyNote :size="14" />
             Notes
           </div>

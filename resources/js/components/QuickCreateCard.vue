@@ -17,7 +17,7 @@ defineProps<Props>();
       </div>
     </div>
 
-    <div class="p-4 border rounded-lg bg-background">
+    <div class="rounded-lg border bg-background p-4">
       <slot />
     </div>
   </div>

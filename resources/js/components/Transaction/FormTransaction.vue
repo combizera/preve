@@ -106,7 +106,9 @@ const filteredCategories = computed(() => {
       <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+          <SelectValue
+            :placeholder="t('generic.placeholders.selectCategory')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -125,7 +127,9 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
+      <Label for="tag" class="text-muted-foreground">
+        {{ t('models.tag.optional') }}
+      </Label>
       <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
       <InputError :message="form.errors.tags" />
     </div>
@@ -144,8 +148,14 @@ const filteredCategories = computed(() => {
 
   <!-- Notes -->
   <div class="grid gap-3">
-    <Label for="notes" class="text-muted-foreground"> {{ t('generic.labels.notesOptional') }} </Label>
-    <Input id="notes" :placeholder="t('generic.placeholders.additionalNotes')" v-model="form.notes" />
+    <Label for="notes" class="text-muted-foreground">
+      {{ t('generic.labels.notesOptional') }}
+    </Label>
+    <Input
+      id="notes"
+      :placeholder="t('generic.placeholders.additionalNotes')"
+      v-model="form.notes"
+    />
     <InputError :message="form.errors.notes" />
   </div>
 </template>

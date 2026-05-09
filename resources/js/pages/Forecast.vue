@@ -12,10 +12,7 @@ import Heading from '@/components/Heading.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
-import {
-  getCurrentMonthString,
-  groupCurrentMonthByPace,
-} from '@/lib/forecast';
+import { getCurrentMonthString, groupCurrentMonthByPace } from '@/lib/forecast';
 import { dashboard } from '@/routes';
 import forecastRoutes from '@/routes/forecasts';
 import { useForecastStore } from '@/stores/forecast.store';
@@ -46,7 +43,11 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 
 const canCreate = computed(() => props.categories.length > 0);
 
-const paceSections: ForecastPaceStatus[] = ['over_pace', 'on_pace', 'under_pace'];
+const paceSections: ForecastPaceStatus[] = [
+  'over_pace',
+  'on_pace',
+  'under_pace',
+];
 
 const grouped = computed(() =>
   groupCurrentMonthByPace(props.forecasts, getCurrentMonthString()),

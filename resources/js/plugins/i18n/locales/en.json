@@ -42,7 +42,8 @@
             "paused": "Paused",
             "actions": "Actions",
             "color": "Color",
-            "icon": "Icon"
+            "icon": "Icon",
+            "reorder": "Reorder"
         },
         "sidebar": {
             "platform": "Platform",

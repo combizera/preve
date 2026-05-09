@@ -20,6 +20,7 @@ Route::middleware('signed')
 Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
+    Route::patch('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::resource('categories', CategoryController::class)->except('create', 'edit', 'show');
     Route::resource('tags', TagController::class)->except('create', 'edit', 'show');
     Route::resource('transactions', TransactionController::class)->except('create', 'edit');

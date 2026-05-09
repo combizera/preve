@@ -54,7 +54,9 @@ const balanceValue = computed<number>(() => {
 /**
  * Formatted balance for display
  */
-const balance = computed<string>(() => formatCentsToDisplay(balanceValue.value));
+const balance = computed<string>(() =>
+  formatCentsToDisplay(balanceValue.value),
+);
 
 /**
  * Color based on balance: positive (green), negative (red), or default

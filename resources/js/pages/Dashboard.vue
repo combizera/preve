@@ -15,7 +15,10 @@ import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
 import { type ITag } from '@/types/models/tag';
-import { type IDailyBalance, type ITransaction } from '@/types/models/transaction';
+import {
+  type IDailyBalance,
+  type ITransaction,
+} from '@/types/models/transaction';
 
 const { t } = useI18n();
 
@@ -52,7 +55,15 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
 
   router.reload({
     data: { forecast_month: payload.month, forecast_year: payload.year },
-    only: ['availableBalance', 'forecast', 'monthlyIncome', 'monthlyExpenses', 'dailyBalances', 'dailyForecastedSpend', 'carryOver'],
+    only: [
+      'availableBalance',
+      'forecast',
+      'monthlyIncome',
+      'monthlyExpenses',
+      'dailyBalances',
+      'dailyForecastedSpend',
+      'carryOver',
+    ],
   });
 };
 </script>
@@ -75,7 +86,11 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <HorizontalCalendarStrip @update:month="handleMonthUpdate" />
 
       <!-- CARDS -->
-      <BalanceCards :availableBalance :forecast :selectedMonth="selectedMonth" />
+      <BalanceCards
+        :availableBalance
+        :forecast
+        :selectedMonth="selectedMonth"
+      />
 
       <!-- CHART -->
       <ChartMonthly

@@ -51,8 +51,12 @@ const categoryIcon = computed(() =>
   getIconComponent(props.forecast.category?.icon ?? null),
 );
 const monthLabel = computed(() => formatMonth(props.forecast.month));
-const transactionsUrl = computed(() => buildForecastTransactionsUrl(props.forecast));
-const paceBadgeClass = computed(() => getPaceClasses(props.forecast.pace_status).badge);
+const transactionsUrl = computed(() =>
+  buildForecastTransactionsUrl(props.forecast),
+);
+const paceBadgeClass = computed(
+  () => getPaceClasses(props.forecast.pace_status).badge,
+);
 </script>
 
 <template>
@@ -77,7 +81,9 @@ const paceBadgeClass = computed(() => getPaceClasses(props.forecast.pace_status)
               :size="16"
               class="shrink-0 text-muted-foreground"
             />
-            <h3 class="truncate text-sm leading-tight font-semibold text-foreground hover:underline">
+            <h3
+              class="truncate text-sm leading-tight font-semibold text-foreground hover:underline"
+            >
               {{ forecast.category?.name }}
             </h3>
           </Link>
@@ -91,7 +97,12 @@ const paceBadgeClass = computed(() => getPaceClasses(props.forecast.pace_status)
           <Badge
             v-else
             variant="secondary"
-            :class="cn('rounded-md border px-2 py-0.5 text-[11px] font-medium', paceBadgeClass)"
+            :class="
+              cn(
+                'rounded-md border px-2 py-0.5 text-[11px] font-medium',
+                paceBadgeClass,
+              )
+            "
           >
             {{ t(`forecasts.pace.${forecast.pace_status}`) }}
           </Badge>

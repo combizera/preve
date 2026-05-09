@@ -52,7 +52,11 @@ const headerSummary = computed(() => {
 
 const togglePause = () => {
   if (!latestForecast.value?.id) return;
-  router.patch(toggleForecast(latestForecast.value.id).url, {}, { preserveScroll: true });
+  router.patch(
+    toggleForecast(latestForecast.value.id).url,
+    {},
+    { preserveScroll: true },
+  );
 };
 
 const showRemoveDialog = ref(false);
@@ -67,7 +71,7 @@ const removeBudget = () => {
 <template>
   <Collapsible v-model:open="open" class="rounded-md border">
     <CollapsibleTrigger
-      class="flex w-full items-center justify-between gap-2 px-4 py-3 text-sm font-medium hover:bg-muted/50 cursor-pointer"
+      class="flex w-full cursor-pointer items-center justify-between gap-2 px-4 py-3 text-sm font-medium hover:bg-muted/50"
     >
       <div class="flex min-w-0 items-center gap-2">
         <span>{{ t('categories.sections.budget') }}</span>
@@ -75,11 +79,7 @@ const removeBudget = () => {
         <span class="truncate text-xs font-normal text-muted-foreground">
           {{ headerSummary }}
         </span>
-        <Badge
-          v-if="isPaused"
-          variant="secondary"
-          class="px-1.5 py-0 text-xs"
-        >
+        <Badge v-if="isPaused" variant="secondary" class="px-1.5 py-0 text-xs">
           {{ t('generic.labels.paused') }}
         </Badge>
       </div>
@@ -101,25 +101,38 @@ const removeBudget = () => {
         >
           <Pause v-if="!isPaused" :size="14" />
           <Play v-else :size="14" />
-          {{ isPaused ? t('generic.actions.resume') : t('generic.actions.pause') }}
+          {{
+            isPaused ? t('generic.actions.resume') : t('generic.actions.pause')
+          }}
         </Button>
 
         <AlertDialog v-model:open="showRemoveDialog">
           <AlertDialogTrigger as-child>
-            <Button type="button" variant="ghost" size="sm" class="gap-1 text-xs text-destructive hover:text-destructive">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              class="gap-1 text-xs text-destructive hover:text-destructive"
+            >
               <Trash2 :size="14" />
               {{ t('categories.budget.remove') }}
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
+              <AlertDialogTitle>{{
+                t('generic.confirm.title')
+              }}</AlertDialogTitle>
               <AlertDialogDescription>
-                {{ t('categories.budget.removeConfirm', { name: category.name }) }}
+                {{
+                  t('categories.budget.removeConfirm', { name: category.name })
+                }}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>{{ t('generic.actions.cancel') }}</AlertDialogCancel>
+              <AlertDialogCancel>{{
+                t('generic.actions.cancel')
+              }}</AlertDialogCancel>
               <AlertDialogAction variant="destructive" @click="removeBudget">
                 {{ t('generic.actions.confirm') }}
               </AlertDialogAction>

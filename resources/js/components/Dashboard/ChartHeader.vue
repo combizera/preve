@@ -23,7 +23,7 @@ const variantClass: Record<ChartHeaderItem['variant'], string> = {
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row bg-sidebar">
+  <div class="flex flex-col bg-sidebar sm:flex-row">
     <div class="flex flex-1 flex-col justify-center gap-1 px-6 py-4">
       <h3 class="text-lg font-medium text-foreground">{{ title }}</h3>
       <p class="text-sm text-muted-foreground">{{ description }}</p>
@@ -32,11 +32,16 @@ const variantClass: Record<ChartHeaderItem['variant'], string> = {
       <div
         v-for="(item, index) in items"
         :key="item.label"
-        class="flex flex-col justify-center gap-1 min-w-44 border-t sm:border-t-0 sm:border-l px-6 py-4"
+        class="flex min-w-44 flex-col justify-center gap-1 border-t px-6 py-4 sm:border-t-0 sm:border-l"
         :class="{ 'border-l': index > 0 }"
       >
-        <span class="text-sm font-medium text-muted-foreground">{{ item.label }}</span>
-        <span class="text-lg font-bold font-mono" :class="variantClass[item.variant]">
+        <span class="text-sm font-medium text-muted-foreground">{{
+          item.label
+        }}</span>
+        <span
+          class="font-mono text-lg font-bold"
+          :class="variantClass[item.variant]"
+        >
           {{ getCurrencySymbol() }} {{ formatCentsToDisplay(item.value) }}
         </span>
       </div>

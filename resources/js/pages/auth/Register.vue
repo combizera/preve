@@ -12,7 +12,6 @@ import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
-
 const { t } = useI18n();
 </script>
 
@@ -76,7 +75,9 @@ const { t } = useI18n();
         </div>
 
         <div class="grid gap-2">
-          <Label for="password_confirmation">{{ t('generic.labels.confirmPassword') }}</Label>
+          <Label for="password_confirmation">{{
+            t('generic.labels.confirmPassword')
+          }}</Label>
           <Input
             id="password_confirmation"
             type="password"
@@ -107,7 +108,7 @@ const { t } = useI18n();
           :href="login()"
           class="underline underline-offset-4"
           :tabindex="6"
-        >{{ t('generic.actions.login') }}</TextLink
+          >{{ t('generic.actions.login') }}</TextLink
         >
       </div>
     </Form>

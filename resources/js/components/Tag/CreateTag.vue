@@ -25,21 +25,42 @@ const createTag = () => {
 
 <template>
   <QuickCreateCard :title="t('tags.newTag')">
-    <form class="w-full flex flex-col md:flex-row flex-wrap items-start gap-3" @submit.prevent="createTag">
-      <div class="flex flex-col gap-2 justify-start max-md:w-full md:min-w-1/4">
+    <form
+      class="flex w-full flex-col flex-wrap items-start gap-3 md:flex-row"
+      @submit.prevent="createTag"
+    >
+      <div class="flex flex-col justify-start gap-2 max-md:w-full md:min-w-1/4">
         <Label for="name">{{ t('generic.labels.name') }}</Label>
-        <Input id="name" name="name" :placeholder="t('generic.labels.name')" v-model="form.name" />
+        <Input
+          id="name"
+          name="name"
+          :placeholder="t('generic.labels.name')"
+          v-model="form.name"
+        />
         <InputError :message="form.errors.name" />
       </div>
 
-      <div class="flex flex-col gap-2 flex-1 justify-start max-md:w-full md:min-w-1/4">
-        <Label for="description">{{ t('models.transaction.description') }}</Label>
-        <Input id="description" name="description" :placeholder="t('generic.placeholders.describeTag')" v-model="form.description" />
+      <div
+        class="flex flex-1 flex-col justify-start gap-2 max-md:w-full md:min-w-1/4"
+      >
+        <Label for="description">{{
+          t('models.transaction.description')
+        }}</Label>
+        <Input
+          id="description"
+          name="description"
+          :placeholder="t('generic.placeholders.describeTag')"
+          v-model="form.description"
+        />
         <InputError :message="form.errors.description" />
       </div>
 
-      <div class="max-lg:w-full h-full flex items-start pt-2 lg:pt-5.5">
-        <Button type="submit" :disabled="form.processing" class="h-9 w-full lg:w-auto">
+      <div class="flex h-full items-start pt-2 max-lg:w-full lg:pt-5.5">
+        <Button
+          type="submit"
+          :disabled="form.processing"
+          class="h-9 w-full lg:w-auto"
+        >
           {{ t('generic.actions.create') }}
         </Button>
       </div>

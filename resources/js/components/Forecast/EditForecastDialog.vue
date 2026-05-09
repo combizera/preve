@@ -80,7 +80,11 @@ const editCategories = computed<ICategory[]>(() => {
         <DialogClose as-child>
           <Button variant="outline">{{ t('generic.actions.cancel') }}</Button>
         </DialogClose>
-        <Button type="button" @click="updateForecast" :disabled="form.processing">
+        <Button
+          type="button"
+          @click="updateForecast"
+          :disabled="form.processing"
+        >
           {{ t('generic.actions.saveChanges') }}
         </Button>
       </DialogFooter>

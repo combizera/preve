@@ -10,13 +10,13 @@ import type { ComposerTranslation } from 'vue-i18n';
  * @returns true if valid, false otherwise
  */
 export function validateAmount(
-  form: InertiaForm<{ amount: number }>,
-  t: ComposerTranslation,
+    form: InertiaForm<{ amount: number }>,
+    t: ComposerTranslation,
 ): boolean {
-  if (form.amount <= 0) {
-    form.setError('amount', t('validation.amountRequired'));
-    return false;
-  }
+    if (form.amount <= 0) {
+        form.setError('amount', t('validation.amountRequired'));
+        return false;
+    }
 
-  return true;
+    return true;
 }

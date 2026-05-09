@@ -21,7 +21,10 @@ import {
 } from '@/lib/currency';
 import { update } from '@/routes/recurring';
 import { type ICategory } from '@/types/models/category';
-import type { IRecurringTransaction, IRecurringTransactionInput } from '@/types/models/recurring-transaction';
+import type {
+  IRecurringTransaction,
+  IRecurringTransactionInput,
+} from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
 import { formatTransactionDate } from '@/utils/formatDate';
 import { validateAmount } from '@/utils/validateAmount';
@@ -80,7 +83,11 @@ const updateRecurring = () => {
         <DialogHeader>
           <DialogTitle>{{ t('recurring.edit.title') }}</DialogTitle>
           <DialogDescription>
-            {{ t('recurring.edit.description', { description: recurringTransaction.description }) }}
+            {{
+              t('recurring.edit.description', {
+                description: recurringTransaction.description,
+              })
+            }}
           </DialogDescription>
         </DialogHeader>
 
@@ -93,7 +100,9 @@ const updateRecurring = () => {
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
+            <Button variant="outline">
+              {{ t('generic.actions.cancel') }}
+            </Button>
           </DialogClose>
           <Button
             type="button"
