@@ -58,13 +58,14 @@ final class ForecastService
             ->whereHas('series', fn ($query) => $query->where('is_active', true))
             ->get();
 
-        return (int) $forecasts->sum(fn ($forecast): int => intdiv($forecast->remaining, $daysRemaining));
+        return (int) $forecasts->sum(fn ($forecast): int => intdiv($forecast->computeUnrecordedSpend($now), $daysRemaining));
     }
 
     /**
-     * Sum of expected forecast spend not yet captured in transactions for the
-     * given month. Current month uses `remaining` (budget minus already-paid);
-     * future months use the full `amount`. Past months return 0.
+     * Sum of expected forecast spend not yet captured by any transaction (paid or
+     * pending) in the budgeted category for the given month. Counting pending
+     * transactions here prevents double-counting them against the dashboard
+     * forecast — they are already reflected in pendingExpenses / monthBalance.
      */
     private function forecastShortfall(User $user, CarbonInterface $monthDate, CarbonInterface $now): int
     {
@@ -80,7 +81,7 @@ final class ForecastService
             ->whereMonth('month', $monthDate->month)
             ->whereHas('series', fn ($query) => $query->where('is_active', true))
             ->get()
-            ->sum(fn ($forecast): int => $isCurrentMonth ? $forecast->remaining : $forecast->amount);
+            ->sum(fn ($forecast): int => $forecast->computeUnrecordedSpend($now));
     }
 
     private function monthBalance(User $user, CarbonInterface $date): int
