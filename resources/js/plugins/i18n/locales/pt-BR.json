@@ -53,6 +53,7 @@
             "forecasts": "Orçamentos",
             "category": "Categorias",
             "tags": "Tags",
+            "savings": "Caixinhas",
             "profile": "Perfil",
             "settings": "Configurações",
             "logout": "Sair",
@@ -77,6 +78,7 @@
             "selectType": "Selecione um tipo",
             "selectColor": "Selecione uma cor",
             "selectIcon": "Selecione um ícone",
+            "savingsBucketName": "ex: Reserva de emergência",
             "categoryName": "Nome da Categoria",
             "categoryDescription": "Esta é uma categoria para...",
             "tagName": "Nome da Tag",
@@ -93,7 +95,8 @@
             "deleteCategory": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a categoria \"{name}\".",
             "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\".",
             "deleteForecast": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o orçamento de \"{category}\" em {month}.",
-            "deleteForecastSeries": "Este orçamento está pausado. Excluí-lo removerá permanentemente o orçamento de \"{category}\" e todos os meses associados."
+            "deleteForecastSeries": "Este orçamento está pausado. Excluí-lo removerá permanentemente o orçamento de \"{category}\" e todos os meses associados.",
+            "deleteSavingsBucket": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a caixinha \"{name}\"."
         }
     },
     "models": {
@@ -204,6 +207,11 @@
             "expenses": "Despesas",
             "balance": "Saldo",
             "forecast": "Previsão"
+        },
+        "savingsRate": {
+            "title": "Guardado neste mês",
+            "noIncome": "Sem receitas registradas neste mês ainda.",
+            "detail": "{deposits} de {income} recebidos este mês."
         }
     },
     "transactions": {
@@ -235,6 +243,12 @@
         "share": {
             "success": "Link copiado para a área de transferência!",
             "error": "Erro ao gerar o link de compartilhamento."
+        },
+        "fields": {
+            "savingsBucketOptional": "Caixinha (opcional)",
+            "savingsBucketPlaceholder": "Escolha uma caixinha ou deixe em branco",
+            "savingsBucketExpenseHint": "Despesa + caixinha = aporte. O dinheiro sai do saldo e é guardado na caixinha.",
+            "savingsBucketIncomeHint": "Receita + caixinha = saque. O dinheiro volta pro saldo e é debitado da caixinha."
         }
     },
     "recurring": {
@@ -461,6 +475,28 @@
         "edit": {
             "title": "Editar Tag",
             "description": "Faça alterações em {name}. Clique em salvar quando terminar."
+        }
+    },
+    "savings": {
+        "title": "Caixinhas",
+        "description": "Separe dinheiro pra metas. Aportes debitam do saldo e acumulam em cada caixinha.",
+        "newBucket": "Nova caixinha",
+        "fields": {
+            "name": "Nome da meta",
+            "target": "Valor da meta",
+            "current": "Acumulado"
+        },
+        "table": {
+            "progress": "Progresso",
+            "balance": "Saldo"
+        },
+        "empty": {
+            "title": "Nenhuma caixinha ainda",
+            "description": "Crie sua primeira caixinha pra começar a juntar pra uma meta."
+        },
+        "edit": {
+            "title": "Editar caixinha",
+            "description": "Atualize a meta de {name}."
         }
     },
     "errors": {
