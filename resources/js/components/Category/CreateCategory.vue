@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { availableColors, getColorClass } from '@/lib/category-colors';
+import { availableColors, getColorClass } from '@/lib/accent-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { store } from '@/routes/categories';

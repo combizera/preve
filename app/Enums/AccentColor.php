@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum CategoryColor: string
+enum AccentColor: string
 {
     case RED = 'red';
     case ORANGE = 'orange';

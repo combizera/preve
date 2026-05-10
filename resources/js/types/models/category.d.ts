@@ -1,4 +1,4 @@
-import type { CategoryColor } from '@/lib/category-colors';
+import type { AccentColor } from '@/lib/accent-colors';
 import { CategoryIcon } from '@/lib/category-icons';
 import type { IForecastSeries } from '@/types/models/forecast';
 import type { TransactionType } from '@/types/models/transaction';
@@ -9,7 +9,7 @@ export interface ICategory {
     slug: string;
     type: TransactionType;
     description?: string;
-    color: CategoryColor;
+    color: AccentColor;
     icon: CategoryIcon;
     order: number;
     forecast_series?: IForecastSeries | null;
@@ -18,6 +18,6 @@ export interface ICategory {
 }
 
 export type ICategoryForm = Pick<ICategory, 'name', 'description', 'type'> & {
-    color?: CategoryColor;
+    color?: AccentColor;
     icon?: CategoryIcon;
 };

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\CategoryColor;
+use App\Enums\AccentColor;
 use App\Enums\CategoryIcon;
 use App\Enums\TransactionType;
 use Database\Factories\CategoryFactory;
@@ -34,7 +34,7 @@ final class Category extends Model
 
     protected $casts = [
         'type'  => TransactionType::class,
-        'color' => CategoryColor::class,
+        'color' => AccentColor::class,
         'icon'  => CategoryIcon::class,
     ];
 

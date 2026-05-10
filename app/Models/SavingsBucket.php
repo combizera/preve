@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\CategoryColor;
+use App\Enums\AccentColor;
 use App\Enums\SavingsBucketIcon;
 use Database\Factories\SavingsBucketFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -28,7 +28,7 @@ final class SavingsBucket extends Model
     protected $casts = [
         'target_amount'  => 'integer',
         'current_amount' => 'integer',
-        'color'          => CategoryColor::class,
+        'color'          => AccentColor::class,
         'icon'           => SavingsBucketIcon::class,
     ];
 

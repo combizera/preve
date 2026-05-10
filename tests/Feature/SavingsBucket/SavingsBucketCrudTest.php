@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\CategoryColor;
+use App\Enums\AccentColor;
 use App\Enums\SavingsBucketIcon;
 use App\Enums\TransactionType;
 use App\Models\Category;
@@ -23,7 +23,7 @@ it('creates a savings bucket', function (): void {
     $response = $this->post(route('savings.store'), [
         'name'          => 'Reserva de emergência',
         'target_amount' => 600000,
-        'color'         => CategoryColor::EMERALD->value,
+        'color'         => AccentColor::EMERALD->value,
         'icon'          => SavingsBucketIcon::PIGGY_BANK->value,
     ]);
 
@@ -40,7 +40,7 @@ it('rejects creating with invalid target_amount', function (int $amount): void {
     $this->post(route('savings.store'), [
         'name'          => 'X',
         'target_amount' => $amount,
-        'color'         => CategoryColor::BLUE->value,
+        'color'         => AccentColor::BLUE->value,
         'icon'          => SavingsBucketIcon::PIGGY_BANK->value,
     ])->assertSessionHasErrors('target_amount');
 })->with([
@@ -54,7 +54,7 @@ it('updates own bucket', function (): void {
     $this->put(route('savings.update', $bucket), [
         'name'          => 'Updated',
         'target_amount' => 999999,
-        'color'         => CategoryColor::AMBER->value,
+        'color'         => AccentColor::AMBER->value,
         'icon'          => SavingsBucketIcon::PIGGY_BANK->value,
     ])->assertRedirect(route('savings.index'));
 
@@ -71,7 +71,7 @@ it("forbids updating someone else's bucket", function (): void {
     $this->put(route('savings.update', $bucket), [
         'name'          => 'X',
         'target_amount' => 1,
-        'color'         => CategoryColor::AMBER->value,
+        'color'         => AccentColor::AMBER->value,
         'icon'          => SavingsBucketIcon::PIGGY_BANK->value,
     ])->assertForbidden();
 });

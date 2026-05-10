@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Enums\CategoryColor;
+use App\Enums\AccentColor;
 use App\Enums\SavingsBucketIcon;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +25,7 @@ final class UpdateSavingsBucketRequest extends FormRequest
         return [
             'name'          => ['required', 'string', 'max:255'],
             'target_amount' => ['required', 'integer', 'min:1'],
-            'color'         => ['required', 'string', Rule::enum(CategoryColor::class)],
+            'color'         => ['required', 'string', Rule::enum(AccentColor::class)],
             'icon'          => ['required', 'string', Rule::enum(SavingsBucketIcon::class)],
         ];
     }
