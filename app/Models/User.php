@@ -84,6 +84,14 @@ final class User extends Authenticatable
     }
 
     /**
+     * @return HasMany<SavingsBucket, $this>
+     */
+    public function savingsBuckets(): HasMany
+    {
+        return $this->hasMany(SavingsBucket::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
