@@ -15,6 +15,7 @@ export interface ISavingsBucket {
 export type ISavingsBucketForm = {
     name: string;
     target_amount: number;
+    initial_amount?: number;
     color?: AccentColor;
     icon?: SavingsBucketIcon;
 };

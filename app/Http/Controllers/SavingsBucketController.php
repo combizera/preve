@@ -18,13 +18,18 @@ final class SavingsBucketController extends Controller
     public function index(): Response
     {
         $savingsBuckets = Auth::user()->savingsBuckets()->orderBy('id')->get();
+        $categories = Auth::user()->categories()->get();
 
-        return Inertia::render('SavingsBucket', compact('savingsBuckets'));
+        return Inertia::render('SavingsBucket', compact('savingsBuckets', 'categories'));
     }
 
     public function store(CreateSavingsBucketRequest $request): RedirectResponse
     {
-        Auth::user()->savingsBuckets()->create($request->validated());
+        $data = $request->validated();
+        $data['current_amount'] = (int) ($data['initial_amount'] ?? 0);
+        unset($data['initial_amount']);
+
+        Auth::user()->savingsBuckets()->create($data);
 
         $this->toast::success(__('messages.savings_bucket.created'));
 

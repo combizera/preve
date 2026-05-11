@@ -484,6 +484,8 @@
         "fields": {
             "name": "Goal name",
             "target": "Goal amount",
+            "initial": "Already saved",
+            "initialHint": "Use if you already have money set aside. Does not debit your balance.",
             "current": "Saved"
         },
         "table": {
@@ -497,6 +499,19 @@
         "edit": {
             "title": "Edit bucket",
             "description": "Update the goal for {name}."
+        },
+        "saveOrWithdraw": {
+            "trigger": "Save or withdraw",
+            "deposit": "Save",
+            "withdraw": "Withdraw",
+            "dialog": {
+                "title": "Move bucket money",
+                "description": "Record a deposit into or a withdrawal from a savings bucket."
+            },
+            "bucket": "Bucket",
+            "bucketPlaceholder": "Pick a bucket",
+            "depositHint": "Creates an expense that leaves your balance and accumulates in the bucket.",
+            "withdrawHint": "Creates an income that returns to your balance and debits the bucket."
         }
     },
     "errors": {

@@ -23,10 +23,11 @@ final class CreateSavingsBucketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['required', 'string', 'max:255'],
-            'target_amount' => ['required', 'integer', 'min:1'],
-            'color'         => ['required', 'string', Rule::enum(AccentColor::class)],
-            'icon'          => ['required', 'string', Rule::enum(SavingsBucketIcon::class)],
+            'name'           => ['required', 'string', 'max:255'],
+            'target_amount'  => ['required', 'integer', 'min:1'],
+            'initial_amount' => ['nullable', 'integer', 'min:0'],
+            'color'          => ['required', 'string', Rule::enum(AccentColor::class)],
+            'icon'           => ['required', 'string', Rule::enum(SavingsBucketIcon::class)],
         ];
     }
 }

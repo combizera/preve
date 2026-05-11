@@ -36,6 +36,24 @@ it('creates a savings bucket', function (): void {
     ]);
 });
 
+it('creates a savings bucket with an initial amount without registering a transaction', function (): void {
+    $this->post(route('savings.store'), [
+        'name'           => 'Reserva',
+        'target_amount'  => 600000,
+        'initial_amount' => 1000000,
+        'color'          => AccentColor::EMERALD->value,
+        'icon'           => SavingsBucketIcon::PIGGY_BANK->value,
+    ])->assertRedirect(route('savings.index'));
+
+    $this->assertDatabaseHas('savings_buckets', [
+        'user_id'        => auth()->id(),
+        'name'           => 'Reserva',
+        'current_amount' => 1000000,
+    ]);
+
+    expect(Transaction::query()->count())->toBe(0);
+});
+
 it('rejects creating with invalid target_amount', function (int $amount): void {
     $this->post(route('savings.store'), [
         'name'          => 'X',

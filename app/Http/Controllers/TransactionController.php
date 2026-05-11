@@ -33,11 +33,10 @@ final class TransactionController extends Controller
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
-        $savingsBuckets = Auth::user()->savingsBuckets()->orderBy('id')->get();
 
         $filters = $request->validated();
 
-        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'savingsBuckets', 'filters'));
+        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'filters'));
     }
 
     /**

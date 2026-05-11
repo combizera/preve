@@ -484,6 +484,8 @@
         "fields": {
             "name": "Nome da meta",
             "target": "Valor da meta",
+            "initial": "Já guardado",
+            "initialHint": "Use se você já tem algum valor separado. Não desconta do seu saldo.",
             "current": "Acumulado"
         },
         "table": {
@@ -497,6 +499,19 @@
         "edit": {
             "title": "Editar caixinha",
             "description": "Atualize a meta de {name}."
+        },
+        "saveOrWithdraw": {
+            "trigger": "Poupar ou sacar",
+            "deposit": "Poupar",
+            "withdraw": "Sacar",
+            "dialog": {
+                "title": "Movimentar caixinha",
+                "description": "Registre um aporte ou um saque de uma caixinha."
+            },
+            "bucket": "Caixinha",
+            "bucketPlaceholder": "Escolha uma caixinha",
+            "depositHint": "Cria uma despesa que sai do saldo e acumula na caixinha.",
+            "withdrawHint": "Cria uma receita que volta pro saldo e debita da caixinha."
         }
     },
     "errors": {
