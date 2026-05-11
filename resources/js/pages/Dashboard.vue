@@ -14,6 +14,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
+import { type ISavingsBucket } from '@/types/models/savings-bucket';
 import { type ITag } from '@/types/models/tag';
 import {
   type IDailyBalance,
@@ -40,6 +41,8 @@ interface Props {
   carryOver: number;
   categories: ICategory[];
   tags: ITag[];
+  savingsBuckets: ISavingsBucket[];
+  savingsRate: { deposits: number; income: number; rate: number | null };
 }
 
 defineProps<Props>();
@@ -90,6 +93,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
         :availableBalance
         :forecast
         :selectedMonth="selectedMonth"
+        :savingsRate="savingsBuckets.length > 0 ? savingsRate : null"
       />
 
       <!-- CHART -->

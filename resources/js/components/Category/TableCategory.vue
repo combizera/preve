@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getColorClass } from '@/lib/category-colors';
+import { getColorClass } from '@/lib/accent-colors';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { reorder as reorderRoute } from '@/routes/categories';

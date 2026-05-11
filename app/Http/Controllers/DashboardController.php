@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\ForecastService;
+use App\Services\SavingsRateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -12,7 +13,7 @@ use Inertia\Response;
 
 final class DashboardController extends Controller
 {
-    public function __invoke(Request $request, ForecastService $forecastService): Response
+    public function __invoke(Request $request, ForecastService $forecastService, SavingsRateService $savingsRateService): Response
     {
         $user = Auth::user();
         $now = now();
@@ -64,6 +65,8 @@ final class DashboardController extends Controller
 
         $categories = $user->categories()->get();
         $tags = $user->tags()->get();
+        $savingsBuckets = $user->savingsBuckets()->orderBy('id')->get();
+        $savingsRate = $savingsRateService->forMonth($user, $now);
 
         return Inertia::render('Dashboard', compact(
             'latestTransactions',
@@ -76,6 +79,8 @@ final class DashboardController extends Controller
             'carryOver',
             'categories',
             'tags',
+            'savingsBuckets',
+            'savingsRate',
         ));
     }
 }

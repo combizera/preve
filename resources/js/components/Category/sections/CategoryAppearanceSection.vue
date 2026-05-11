@@ -10,7 +10,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
-import { availableColors, getColorClass } from '@/lib/category-colors';
+import { availableColors, getColorClass } from '@/lib/accent-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { cn } from '@/lib/utils';
 import type { ICategoryForm } from '@/types/models/category';

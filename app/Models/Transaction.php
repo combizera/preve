@@ -6,8 +6,10 @@ namespace App\Models;
 
 use App\Enums\TransactionType;
 use App\Filters\QueryFilter;
+use App\Observers\TransactionObserver;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -15,12 +17,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property string $id
+ * @property int $user_id
+ * @property string|null $recurring_transaction_id
+ * @property int|null $category_id
+ * @property int|null $savings_bucket_id
+ * @property int $amount
+ * @property TransactionType $type
+ * @property string $description
+ * @property string|null $notes
+ * @property Carbon $transaction_date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
+#[ObservedBy([TransactionObserver::class])]
 #[Fillable([
     'user_id',
     'recurring_transaction_id',
     'category_id',
+    'savings_bucket_id',
     'amount',
     'type',
     'description',
@@ -65,6 +84,14 @@ final class Transaction extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * @return BelongsTo<SavingsBucket, $this>
+     */
+    public function savingsBucket(): BelongsTo
+    {
+        return $this->belongsTo(SavingsBucket::class);
     }
 
     /**

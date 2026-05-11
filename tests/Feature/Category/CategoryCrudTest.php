@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\CategoryColor;
+use App\Enums\AccentColor;
 use App\Enums\CategoryIcon;
 use App\Enums\TransactionType;
 use App\Models\Category;
@@ -17,7 +17,7 @@ beforeEach(function (): void {
 it('should be able to create category', function (): void {
     $response = $this->post(route('categories.store'), [
         'name'  => 'New Category',
-        'color' => CategoryColor::BLUE->value,
+        'color' => AccentColor::BLUE->value,
         'icon'  => CategoryIcon::BOOK->value,
         'type'  => TransactionType::EXPENSE->value,
     ]);
@@ -26,7 +26,7 @@ it('should be able to create category', function (): void {
 
     $this->assertDatabaseHas('categories', [
         'name'  => 'New Category',
-        'color' => CategoryColor::BLUE->value,
+        'color' => AccentColor::BLUE->value,
         'icon'  => CategoryIcon::BOOK->value,
         'type'  => TransactionType::EXPENSE->value,
     ]);
@@ -44,7 +44,7 @@ it('should be able to edit category', function (): void {
     $category = Category::factory()->create([
         'user_id' => auth()->id(),
         'name'    => 'New Category',
-        'color'   => CategoryColor::RED->value,
+        'color'   => AccentColor::RED->value,
         'icon'    => CategoryIcon::CAR->value,
         'type'    => TransactionType::INCOME->value,
     ]);
@@ -58,7 +58,7 @@ it('should be able to edit category', function (): void {
 
     $this->assertDatabaseHas('categories', [
         'name'  => 'Updated Category',
-        'color' => CategoryColor::RED->value,
+        'color' => AccentColor::RED->value,
         'icon'  => CategoryIcon::CAR->value,
         'type'  => TransactionType::INCOME->value,
     ]);

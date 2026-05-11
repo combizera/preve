@@ -40,6 +40,13 @@ return [
         'paused'    => 'Forecast paused.',
     ],
 
+    'savings_bucket' => [
+        'created'   => 'Savings bucket created successfully.',
+        'updated'   => 'Savings bucket updated successfully.',
+        'deleted'   => 'Savings bucket deleted successfully.',
+        'not_empty' => 'You must withdraw the full balance before deleting this bucket.',
+    ],
+
     'profile' => [
         'updated' => 'Profile updated successfully.',
     ],

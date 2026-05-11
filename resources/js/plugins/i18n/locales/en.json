@@ -53,6 +53,7 @@
             "forecasts": "Forecasts",
             "category": "Category",
             "tags": "Tags",
+            "savings": "Savings",
             "profile": "Profile",
             "settings": "Settings",
             "logout": "Logout",
@@ -77,6 +78,7 @@
             "selectType": "Select a type",
             "selectColor": "Select a color",
             "selectIcon": "Select an icon",
+            "savingsBucketName": "e.g. Emergency fund",
             "categoryName": "Category Name",
             "categoryDescription": "This is a category for...",
             "tagName": "Tag Name",
@@ -93,7 +95,8 @@
             "deleteCategory": "This action cannot be undone. This will permanently delete the category \"{name}\".",
             "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\".",
             "deleteForecast": "This action cannot be undone. This will permanently delete the forecast for \"{category}\" in {month}.",
-            "deleteForecastSeries": "This forecast is paused. Deleting it will permanently remove the budget for \"{category}\" and all of its monthly entries."
+            "deleteForecastSeries": "This forecast is paused. Deleting it will permanently remove the budget for \"{category}\" and all of its monthly entries.",
+            "deleteSavingsBucket": "This action cannot be undone. This will permanently delete the savings bucket \"{name}\"."
         }
     },
     "models": {
@@ -204,6 +207,11 @@
             "expenses": "Expenses",
             "balance": "Balance",
             "forecast": "Forecast"
+        },
+        "savingsRate": {
+            "title": "Saved this month",
+            "noIncome": "No income recorded this month yet.",
+            "detail": "{deposits} of {income} earned this month."
         }
     },
     "transactions": {
@@ -235,6 +243,12 @@
         "share": {
             "success": "Link copied to clipboard!",
             "error": "Error generating share link."
+        },
+        "fields": {
+            "savingsBucketOptional": "Savings bucket (optional)",
+            "savingsBucketPlaceholder": "Pick a bucket or leave empty",
+            "savingsBucketExpenseHint": "Expense + bucket = deposit. Money is debited from your balance and added to the bucket.",
+            "savingsBucketIncomeHint": "Income + bucket = withdraw. Money returns to your balance and is removed from the bucket."
         }
     },
     "recurring": {
@@ -461,6 +475,43 @@
         "edit": {
             "title": "Edit Tag",
             "description": "Make changes to {name}. Click save when you're done."
+        }
+    },
+    "savings": {
+        "title": "Savings",
+        "description": "Set aside money for goals. Deposits debit your balance and accumulate in each bucket.",
+        "newBucket": "New bucket",
+        "fields": {
+            "name": "Goal name",
+            "target": "Goal amount",
+            "initial": "Already saved",
+            "initialHint": "Use if you already have money set aside. Does not debit your balance.",
+            "current": "Saved"
+        },
+        "table": {
+            "progress": "Progress",
+            "balance": "Balance"
+        },
+        "empty": {
+            "title": "No savings buckets yet",
+            "description": "Create your first bucket to start saving toward a goal."
+        },
+        "edit": {
+            "title": "Edit bucket",
+            "description": "Update the goal for {name}."
+        },
+        "saveOrWithdraw": {
+            "trigger": "Save or withdraw",
+            "deposit": "Save",
+            "withdraw": "Withdraw",
+            "dialog": {
+                "title": "Move bucket money",
+                "description": "Record a deposit into or a withdrawal from a savings bucket."
+            },
+            "bucket": "Bucket",
+            "bucketPlaceholder": "Pick a bucket",
+            "depositHint": "Creates an expense that leaves your balance and accumulates in the bucket.",
+            "withdrawHint": "Creates an income that returns to your balance and debits the bucket."
         }
     },
     "errors": {

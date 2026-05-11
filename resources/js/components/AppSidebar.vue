@@ -4,6 +4,7 @@ import {
   Bug,
   Github,
   Home,
+  PiggyBank,
   RefreshCw,
   Tags,
   Wallet,
@@ -28,6 +29,7 @@ import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
 import forecasts from '@/routes/forecasts';
 import recurring from '@/routes/recurring';
+import savings from '@/routes/savings';
 import tags from '@/routes/tags';
 import transactions from '@/routes/transactions';
 import { type NavItem } from '@/types';
@@ -54,6 +56,11 @@ const mainNavItems = computed<NavItem[]>(() => [
     title: t('generic.sidebar.forecasts'),
     href: forecasts.index(),
     icon: Wallet,
+  },
+  {
+    title: t('generic.sidebar.savings'),
+    href: savings.index(),
+    icon: PiggyBank,
   },
   {
     title: t('generic.sidebar.category'),
