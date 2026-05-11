@@ -22,7 +22,7 @@ export interface ITransaction {
     amount: number;
     type: TransactionType;
     description: string;
-    notes?: string;
+    notes: string | null;
     transaction_date: string;
     created_at?: string;
     updated_at?: string;
@@ -37,6 +37,6 @@ export interface ITransactionInput {
     amount: number;
     type: TransactionType;
     description: string;
-    notes?: string;
+    notes: string | null;
     transaction_date: string;
 }

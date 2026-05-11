@@ -7,7 +7,6 @@ namespace App\Services;
 use App\Enums\TransactionType;
 use App\Models\SavingsBucket;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Pure domain rules for how a Transaction moves money in/out of a SavingsBucket:
@@ -110,6 +109,6 @@ final class SavingsBucketBalanceService
 
         SavingsBucket::query()
             ->whereKey($bucketId)
-            ->update(['current_amount' => DB::raw('current_amount + ' . $delta)]);
+            ->increment('current_amount', $delta);
     }
 }

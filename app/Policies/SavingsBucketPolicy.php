@@ -11,7 +11,7 @@ final class SavingsBucketPolicy
 {
     public function viewAny(): bool
     {
-        return false;
+        return true;
     }
 
     public function view(User $user, SavingsBucket $savingsBucket): bool

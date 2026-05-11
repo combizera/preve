@@ -67,7 +67,7 @@ const form = useForm<ITransactionInput>({
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
-  notes: undefined,
+  notes: null,
   transaction_date: today(getLocalTimeZone()).toString(),
 });
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Deferred, Head } from '@inertiajs/vue3';
 import { ArrowLeftRight } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -18,7 +18,7 @@ import type { ISavingsBucket } from '@/types/models/savings-bucket';
 
 interface Props {
   savingsBuckets: ISavingsBucket[];
-  categories: ICategory[];
+  categories?: ICategory[];
 }
 
 defineProps<Props>();
@@ -58,10 +58,13 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 
     <ContainerSavingsBucket :savings-buckets="savingsBuckets" />
 
-    <SaveOrWithdrawDialog
-      v-model:open="showSaveOrWithdrawDialog"
-      :savings-buckets="savingsBuckets"
-      :categories="categories"
-    />
+    <Deferred data="categories">
+      <template #fallback><span /></template>
+      <SaveOrWithdrawDialog
+        v-model:open="showSaveOrWithdrawDialog"
+        :savings-buckets="savingsBuckets"
+        :categories="categories ?? []"
+      />
+    </Deferred>
   </AppLayout>
 </template>

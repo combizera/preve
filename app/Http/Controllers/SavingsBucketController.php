@@ -17,15 +17,22 @@ final class SavingsBucketController extends Controller
 {
     public function index(): Response
     {
-        $savingsBuckets = Auth::user()->savingsBuckets()->orderBy('id')->get();
-        $categories = Auth::user()->categories()->get();
+        $this->authorize('viewAny', SavingsBucket::class);
 
-        return Inertia::render('SavingsBucket', compact('savingsBuckets', 'categories'));
+        $savingsBuckets = Auth::user()->savingsBuckets()->orderBy('id')->get();
+
+        return Inertia::render('SavingsBucket', [
+            'savingsBuckets' => $savingsBuckets,
+            'categories'     => Inertia::defer(fn () => Auth::user()->categories()->get()),
+        ]);
     }
 
     public function store(CreateSavingsBucketRequest $request): RedirectResponse
     {
+        $this->authorize('create', SavingsBucket::class);
+
         $data = $request->validated();
+        // initial_amount = pre-existing balance from outside the system, so no transaction is recorded.
         $data['current_amount'] = (int) ($data['initial_amount'] ?? 0);
         unset($data['initial_amount']);
 
