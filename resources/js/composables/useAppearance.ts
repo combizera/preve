@@ -22,7 +22,7 @@ export function updateTheme(value: Appearance) {
         } else {
             document.documentElement.classList.toggle('dark', value === 'dark');
         }
-    }
+    };
 
     if (!document.startViewTransition) setTheme();
 

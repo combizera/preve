@@ -28,7 +28,7 @@ defineProps<Props>();
 
 const { t } = useI18n();
 const recurringStore = useRecurringStore();
-const { showFormDialog } = storeToRefs(recurringStore)
+const { showFormDialog } = storeToRefs(recurringStore);
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {

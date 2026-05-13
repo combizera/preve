@@ -8,7 +8,6 @@ use App\Enums\FrequencyType;
 use App\Enums\TransactionType;
 use App\Models\Category;
 use App\Models\RecurringTransaction;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -109,7 +108,6 @@ final class RecurringTransactionFactory extends Factory
         return [
             'user_id'      => User::factory(),
             'category_id'  => Category::factory(),
-            'tag_id'       => Tag::factory(),
             'amount'       => $this->faker->numberBetween(1000, 999999),
             'frequency'    => $this->faker->randomElement(FrequencyType::cases())->value,
             'type'         => $this->faker->randomElement(TransactionType::cases())->value,
@@ -119,5 +117,17 @@ final class RecurringTransactionFactory extends Factory
             'start_date'   => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
             'end_date'     => $this->faker->optional()->dateTimeBetween('now', '+1 year'),
         ];
+    }
+
+    /**
+     * Attach the given tag IDs after the recurring transaction is created.
+     *
+     * @param  array<int>  $tagIds
+     */
+    public function withTags(array $tagIds): self
+    {
+        return $this->afterCreating(function (RecurringTransaction $recurringTransaction) use ($tagIds): void {
+            $recurringTransaction->tags()->sync($tagIds);
+        });
     }
 }

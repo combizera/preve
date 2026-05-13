@@ -6,7 +6,9 @@ defineProps<{
 
 <template>
   <div class="flex items-center gap-2">
-    <span class="text-sm font-semibold text-muted-foreground uppercase whitespace-nowrap">
+    <span
+      class="text-sm font-semibold whitespace-nowrap text-muted-foreground uppercase"
+    >
       {{ title }}
     </span>
     <div class="h-px flex-1 bg-border" />

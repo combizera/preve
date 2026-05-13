@@ -28,9 +28,7 @@ const deleteRecurring = () => {
   const recurringTransaction = props.recurringTransaction;
   if (!recurringTransaction?.id) return;
 
-  const id = Number(recurringTransaction.id);
-
-  form.submit(destroy(id), {
+  form.submit(destroy(recurringTransaction.id), {
     onSuccess: () => {
       open.value = false;
     },
@@ -44,12 +42,22 @@ const deleteRecurring = () => {
       <AlertDialogHeader>
         <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
-          {{ t('generic.confirm.deleteRecurring', { description: recurringTransaction?.description }) }}
+          {{
+            t('generic.confirm.deleteRecurring', {
+              description: recurringTransaction?.description,
+            })
+          }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel> {{ t('generic.actions.cancel') }} </AlertDialogCancel>
-        <AlertDialogAction variant="destructive" @click="deleteRecurring" :disabled="form.processing">
+        <AlertDialogCancel>
+          {{ t('generic.actions.cancel') }}
+        </AlertDialogCancel>
+        <AlertDialogAction
+          variant="destructive"
+          @click="deleteRecurring"
+          :disabled="form.processing"
+        >
           {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>

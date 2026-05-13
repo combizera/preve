@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
+import TagsMultiSelect from '@/components/Tag/TagsMultiSelect.vue';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import {
@@ -26,13 +27,14 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { FREQUENCY_TYPE } from '@/enums/frequency-type';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
-import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
+import type { IRecurringTransactionInput } from '@/types/models/recurring-transaction';
 import type { ITag } from '@/types/models/tag';
 import { filterNumericInput } from '@/utils/numericInput';
 
 interface Props {
-  form: InertiaForm<IRecurringTransaction>;
+  form: InertiaForm<IRecurringTransactionInput>;
   categories: ICategory[];
   tags: ITag[];
 }
@@ -42,6 +44,7 @@ const props = defineProps<Props>();
 const { t } = useI18n();
 
 const displayAmount = defineModel<string>('displayAmount', { required: true });
+const currencySymbol = getCurrencySymbol();
 
 const filteredCategories = computed(() => {
   return props.categories.filter(
@@ -84,7 +87,7 @@ const filteredCategories = computed(() => {
       <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
-          <InputGroupText>R$</InputGroupText>
+          <InputGroupText>{{ currencySymbol }}</InputGroupText>
         </InputGroupAddon>
         <InputGroupInput
           id="amount"
@@ -105,7 +108,9 @@ const filteredCategories = computed(() => {
       <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+          <SelectValue
+            :placeholder="t('generic.placeholders.selectCategory')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -124,22 +129,11 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
-      <Select v-model="form.tag_id">
-        <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
-            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
-            <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
-              {{ tag.name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <InputError :message="form.errors.tag_id" />
+      <Label for="tag" class="text-muted-foreground">
+        {{ t('models.tag.optional') }}
+      </Label>
+      <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
+      <InputError :message="form.errors.tags" />
     </div>
   </div>
 
@@ -150,25 +144,37 @@ const filteredCategories = computed(() => {
       {{ t('recurring.form.recurrenceSettings') }}
     </Label>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div
+      :class="
+        form.frequency === FREQUENCY_TYPE.MONTHLY
+          ? 'grid grid-cols-2 gap-4'
+          : 'grid gap-4'
+      "
+    >
       <div class="grid gap-3">
         <Label for="frequency"> {{ t('recurring.form.frequency') }} </Label>
         <Select v-model="form.frequency">
           <SelectTrigger class="w-full">
-            <SelectValue :placeholder="t('generic.placeholders.selectFrequency')" />
+            <SelectValue
+              :placeholder="t('generic.placeholders.selectFrequency')"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{{ t('recurring.form.frequency') }}</SelectLabel>
-              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{ t('recurring.form.monthly') }}</SelectItem>
-              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{ t('recurring.form.yearly') }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{
+                t('recurring.form.monthly')
+              }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{
+                t('recurring.form.yearly')
+              }}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
         <InputError :message="form.errors.frequency" />
       </div>
 
-      <div class="grid gap-3">
+      <div v-if="form.frequency === FREQUENCY_TYPE.MONTHLY" class="grid gap-3">
         <Label for="day_of_month"> {{ t('recurring.form.dayOfMonth') }} </Label>
         <Input
           id="day_of_month"

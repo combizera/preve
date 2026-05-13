@@ -16,4 +16,15 @@ enum FrequencyType: string
             FrequencyType::YEARLY  => 'Yearly',
         };
     }
+
+    /**
+     * CarbonPeriod step method name for this frequency (e.g. "months", "years").
+     */
+    public function periodUnit(): string
+    {
+        return match ($this) {
+            FrequencyType::MONTHLY => 'months',
+            FrequencyType::YEARLY  => 'years',
+        };
+    }
 }

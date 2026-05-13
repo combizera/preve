@@ -20,9 +20,9 @@ final class CategoryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(): bool
+    public function view(User $user, Category $category): bool
     {
-        return true;
+        return $user->id === $category->user_id;
     }
 
     /**

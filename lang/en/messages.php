@@ -32,8 +32,27 @@ return [
         'deleted'     => 'Recurring transaction deleted successfully.',
     ],
 
+    'forecast' => [
+        'created'   => 'Forecast created successfully.',
+        'updated'   => 'Forecast updated successfully.',
+        'deleted'   => 'Forecast deleted successfully.',
+        'activated' => 'Forecast resumed.',
+        'paused'    => 'Forecast paused.',
+    ],
+
+    'savings_bucket' => [
+        'created' => 'Savings bucket created successfully.',
+        'updated' => 'Savings bucket updated successfully.',
+        'deleted' => 'Savings bucket deleted successfully.',
+    ],
+
     'profile' => [
         'updated' => 'Profile updated successfully.',
+    ],
+
+    'preferences' => [
+        'locale_updated'   => 'Language updated successfully.',
+        'currency_updated' => 'Currency updated successfully.',
     ],
 
     'password' => [

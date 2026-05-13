@@ -31,6 +31,20 @@
         </style>
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="Predictable finances. Peaceful days.">
+
+        {{-- Open Graph --}}
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{{ config('app.name') }}">
+        <meta property="og:description" content="Predictable finances. Peaceful days.">
+        <meta property="og:url" content="{{ config('app.url') }}">
+        <meta property="og:image" content="{{ config('app.url') }}/og-image.png">
+
+        {{-- Twitter --}}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ config('app.name') }}">
+        <meta name="twitter:description" content="Predictable finances. Peaceful days.">
+        <meta name="twitter:image" content="{{ config('app.url') }}/og-image.png">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

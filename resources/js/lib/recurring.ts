@@ -2,7 +2,6 @@ import type { FrequencyType } from '@/types/models/recurring-transaction';
 
 import { capitalizeFirstLetter } from './utils';
 
-
 /**
  * Formats the frequency text with the day of month
  * @param frequency - The frequency type (monthly or yearly)
@@ -10,11 +9,11 @@ import { capitalizeFirstLetter } from './utils';
  * @returns Formatted frequency text (e.g., "Monthly on day 15")
  */
 export function formatFrequency(
-  frequency: FrequencyType,
-  dayOfMonth: number,
+    frequency: FrequencyType,
+    dayOfMonth: number,
 ): string {
-  const freq = capitalizeFirstLetter(frequency);
-  return `${freq} on day ${dayOfMonth}`;
+    const freq = capitalizeFirstLetter(frequency);
+    return `${freq} on day ${dayOfMonth}`;
 }
 
 /**
@@ -24,25 +23,33 @@ export function formatFrequency(
  * @returns Formatted next occurrence date in en format
  */
 export function calculateNextOccurrence(
-  frequency: FrequencyType,
-  dayOfMonth: number,
+    frequency: FrequencyType,
+    dayOfMonth: number,
 ): string {
-  const today = new Date();
-  let nextDate = new Date(today.getFullYear(), today.getMonth(), dayOfMonth);
+    const today = new Date();
+    let nextDate = new Date(today.getFullYear(), today.getMonth(), dayOfMonth);
 
-  if (nextDate < today) {
-    if (frequency === 'monthly') {
-      nextDate = new Date(today.getFullYear(), today.getMonth() + 1, dayOfMonth);
-    } else {
-      nextDate = new Date(today.getFullYear() + 1, today.getMonth(), dayOfMonth);
+    if (nextDate < today) {
+        if (frequency === 'monthly') {
+            nextDate = new Date(
+                today.getFullYear(),
+                today.getMonth() + 1,
+                dayOfMonth,
+            );
+        } else {
+            nextDate = new Date(
+                today.getFullYear() + 1,
+                today.getMonth(),
+                dayOfMonth,
+            );
+        }
     }
-  }
 
-  return nextDate.toLocaleDateString('en', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
+    return nextDate.toLocaleDateString('en', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
 }
 
 /**
@@ -52,27 +59,27 @@ export function calculateNextOccurrence(
  * @returns Formatted period text (e.g., "15 de jan de 2026 - 15 de dez de 2026" or "Since 15 de jan de 2026")
  */
 export function formatActivePeriod(
-  startDate: string,
-  endDate?: string | null,
+    startDate: string,
+    endDate?: string | null,
 ): string {
-  const start = new Date(startDate);
-  const formattedStart = start.toLocaleDateString('en', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-
-  if (endDate) {
-    const end = new Date(endDate);
-    const formattedEnd = end.toLocaleDateString('en', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+    const start = new Date(startDate);
+    const formattedStart = start.toLocaleDateString('en', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
     });
-    return `${formattedStart} - ${formattedEnd}`;
-  }
 
-  return `Since ${formattedStart}`;
+    if (endDate) {
+        const end = new Date(endDate);
+        const formattedEnd = end.toLocaleDateString('en', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        });
+        return `${formattedStart} - ${formattedEnd}`;
+    }
+
+    return `Since ${formattedStart}`;
 }
 
 /**
@@ -82,10 +89,10 @@ export function formatActivePeriod(
  * @returns Annual amount in cents
  */
 export function calculateAnnualAmount(
-  frequency: FrequencyType,
-  amount: number,
+    frequency: FrequencyType,
+    amount: number,
 ): number {
-  return frequency === 'monthly' ? amount * 12 : amount;
+    return frequency === 'monthly' ? amount * 12 : amount;
 }
 
 /**
@@ -95,10 +102,10 @@ export function calculateAnnualAmount(
  * @returns Monthly amount in cents
  */
 export function calculateMonthlyAmount(
-  frequency: FrequencyType,
-  amount: number,
+    frequency: FrequencyType,
+    amount: number,
 ): number {
-  return frequency === 'monthly' ? amount : Math.round(amount / 12);
+    return frequency === 'monthly' ? amount : Math.round(amount / 12);
 }
 
 /**
@@ -111,19 +118,19 @@ export function calculateMonthlyAmount(
  * // Returns sum of all monthly amounts in cents for active transactions only
  */
 export function calculateTotalMonthly(
-  transactions: Array<{
-    frequency: FrequencyType;
-    amount: number;
-    is_active: boolean;
-  }>,
+    transactions: Array<{
+        frequency: FrequencyType;
+        amount: number;
+        is_active: boolean;
+    }>,
 ): number {
-  return transactions
-    .filter((transaction) => transaction.is_active)
-    .reduce((accumulator: number, transaction) => {
-      const monthlyAmount = calculateMonthlyAmount(
-        transaction.frequency,
-        transaction.amount,
-      );
-      return accumulator + monthlyAmount;
-    }, 0);
+    return transactions
+        .filter((transaction) => transaction.is_active)
+        .reduce((accumulator: number, transaction) => {
+            const monthlyAmount = calculateMonthlyAmount(
+                transaction.frequency,
+                transaction.amount,
+            );
+            return accumulator + monthlyAmount;
+        }, 0);
 }

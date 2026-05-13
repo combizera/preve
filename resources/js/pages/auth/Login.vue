@@ -14,7 +14,6 @@ import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
-
 const { t } = useI18n();
 
 defineProps<{
@@ -107,12 +106,11 @@ defineProps<{
         </Button>
       </div>
 
-      <div
-        class="text-center text-sm text-muted-foreground"
-        v-if="canRegister"
-      >
+      <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
         {{ t('auth.login.noAccount') }}
-        <TextLink :href="register()" :tabindex="5">{{ t('generic.actions.register') }}</TextLink>
+        <TextLink :href="register()" :tabindex="5">{{
+          t('generic.actions.register')
+        }}</TextLink>
       </div>
     </Form>
   </AuthBase>

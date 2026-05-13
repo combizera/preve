@@ -29,7 +29,7 @@ const formatter = useDateFormatter(props.locale ?? "en")
 const yearRange = computed(() => {
   return props.yearRange ?? createYearRange({
     start: props?.minValue ?? (toRaw(props.placeholder) ?? props.defaultPlaceholder ?? today(getLocalTimeZone()))
-      .cycle("year", -100),
+      .cycle("year", -5),
 
     end: props?.maxValue ?? (toRaw(props.placeholder) ?? props.defaultPlaceholder ?? today(getLocalTimeZone()))
       .cycle("year", 10),

@@ -14,44 +14,44 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <AuthLayout
-        :title="t('auth.confirmPassword.title')"
-        :description="t('auth.confirmPassword.description')"
+  <AuthLayout
+    :title="t('auth.confirmPassword.title')"
+    :description="t('auth.confirmPassword.description')"
+  >
+    <Head :title="t('auth.confirmPassword.title')" />
+
+    <Form
+      v-bind="store.form()"
+      reset-on-success
+      v-slot="{ errors, processing }"
     >
-        <Head :title="t('auth.confirmPassword.title')" />
+      <div class="space-y-6">
+        <div class="grid gap-2">
+          <Label htmlFor="password">{{ t('generic.labels.password') }}</Label>
+          <Input
+            id="password"
+            type="password"
+            name="password"
+            class="mt-1 block w-full"
+            required
+            autocomplete="current-password"
+            autofocus
+          />
 
-        <Form
-            v-bind="store.form()"
-            reset-on-success
-            v-slot="{ errors, processing }"
-        >
-            <div class="space-y-6">
-                <div class="grid gap-2">
-                    <Label htmlFor="password">{{ t('generic.labels.password') }}</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        name="password"
-                        class="mt-1 block w-full"
-                        required
-                        autocomplete="current-password"
-                        autofocus
-                    />
+          <InputError :message="errors.password" />
+        </div>
 
-                    <InputError :message="errors.password" />
-                </div>
-
-                <div class="flex items-center">
-                    <Button
-                        class="w-full"
-                        :disabled="processing"
-                        data-test="confirm-password-button"
-                    >
-                        <Spinner v-if="processing" />
-                        {{ t('auth.confirmPassword.button') }}
-                    </Button>
-                </div>
-            </div>
-        </Form>
-    </AuthLayout>
+        <div class="flex items-center">
+          <Button
+            class="w-full"
+            :disabled="processing"
+            data-test="confirm-password-button"
+          >
+            <Spinner v-if="processing" />
+            {{ t('auth.confirmPassword.button') }}
+          </Button>
+        </div>
+      </div>
+    </Form>
+  </AuthLayout>
 </template>

@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps<{
   defaultValue?: string;
@@ -39,7 +40,9 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 
 const defaultPlaceholder = today(getLocalTimeZone());
 
-const df = new DateFormatter('en-US', {
+const { locale } = useLocale();
+
+const df = new DateFormatter(locale.value, {
   dateStyle: 'long',
 });
 

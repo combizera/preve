@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 
 const props = withDefaults(
@@ -33,7 +33,7 @@ const items = computed(() => {
       if (!itemConfig) return null;
       const numValue = typeof value === 'number' ? value : 0;
       const isNegative = numValue < 0;
-      const formatted = `R$ ${formatCentsToDisplay(Math.abs(numValue))}`;
+      const formatted = `${getCurrencySymbol()} ${formatCentsToDisplay(Math.abs(numValue))}`;
       const display = isNegative ? `-${formatted}` : formatted;
       const dotColor = isNegative ? 'var(--destructive)' : 'var(--positive)';
       return { key, display, label: itemConfig.label, dotColor };
@@ -46,7 +46,7 @@ const items = computed(() => {
   <div
     :class="
       cn(
-        'border-border/50 bg-background grid min-w-[10rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+        'grid min-w-[10rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
       )
     "
   >
@@ -63,11 +63,13 @@ const items = computed(() => {
           class="size-2.5 shrink-0 rounded-[2px]"
           :style="{ backgroundColor: item!.dotColor }"
         />
-        <div class="flex flex-1 items-center justify-between gap-4 leading-none">
+        <div
+          class="flex flex-1 items-center justify-between gap-4 leading-none"
+        >
           <span class="text-muted-foreground">
             {{ item!.label }}
           </span>
-          <span class="text-foreground font-mono font-medium tabular-nums">
+          <span class="font-mono font-medium text-foreground tabular-nums">
             {{ item!.display }}
           </span>
         </div>

@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCurrencySymbol } from '@/lib/currency';
 
 type Variant = 'positive' | 'neutral' | 'destructive';
 
@@ -30,16 +31,18 @@ const amountClass = computed(() => {
 <template>
   <Card class="gap-0">
     <CardHeader>
-      <CardTitle class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+      <CardTitle
+        class="flex items-center gap-2 text-sm font-medium text-muted-foreground"
+      >
         <slot name="icon" />
         {{ title }}
       </CardTitle>
     </CardHeader>
     <CardContent>
-      <p class="text-2xl font-bold font-mono" :class="amountClass">
-        R$ {{ amount }}
+      <p class="font-mono text-2xl font-bold" :class="amountClass">
+        {{ getCurrencySymbol() }} {{ amount }}
       </p>
-      <p class="text-xs text-muted-foreground mt-1">
+      <p class="mt-1 text-xs text-muted-foreground">
         {{ description }}
       </p>
     </CardContent>

@@ -32,8 +32,27 @@ return [
         'deleted'     => 'Transação recorrente excluída com sucesso.',
     ],
 
+    'forecast' => [
+        'created'   => 'Orçamento criado com sucesso.',
+        'updated'   => 'Orçamento atualizado com sucesso.',
+        'deleted'   => 'Orçamento excluído com sucesso.',
+        'activated' => 'Orçamento retomado.',
+        'paused'    => 'Orçamento pausado.',
+    ],
+
+    'savings_bucket' => [
+        'created' => 'Caixinha criada com sucesso.',
+        'updated' => 'Caixinha atualizada com sucesso.',
+        'deleted' => 'Caixinha excluída com sucesso.',
+    ],
+
     'profile' => [
         'updated' => 'Perfil atualizado com sucesso.',
+    ],
+
+    'preferences' => [
+        'locale_updated'   => 'Idioma atualizado com sucesso.',
+        'currency_updated' => 'Moeda atualizada com sucesso.',
     ],
 
     'password' => [

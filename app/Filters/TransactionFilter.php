@@ -32,7 +32,7 @@ final class TransactionFilter extends QueryFilter
 
     public function tags(array $tagIds): void
     {
-        $this->builder->whereHas('tag', function ($query) use ($tagIds): void {
+        $this->builder->whereHas('tags', function ($query) use ($tagIds): void {
             $query->whereIn('tags.id', $tagIds);
         });
     }

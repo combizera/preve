@@ -32,14 +32,22 @@ WORKDIR /var/www/html
 COPY . .
 COPY --from=vendor /var/www/html/vendor /var/www/html/vendor
 
-RUN chown -R www-data:www-data /var/www/html \
-    && mkdir -p storage/framework/views \
+RUN mkdir -p storage/framework/views \
     && mkdir -p storage/framework/cache \
     && mkdir -p storage/framework/sessions \
     && mkdir -p storage/logs \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 storage bootstrap/cache
 
 USER www-data
+
+# Generate Wayfinder TypeScript route helpers (resources/js/{routes,actions}).
+# These dirs are gitignored, so they don't exist in a fresh checkout — Vite
+# build downstream depends on them.
+RUN cp .env.example .env \
+    && php artisan key:generate --force \
+    && php artisan wayfinder:generate --with-form \
+    && rm .env
 
 ############################################
 # PHP - Development Image with FPM and NGINX
@@ -71,7 +79,7 @@ EXPOSE 8080 8443
 STOPSIGNAL SIGQUIT
 CMD ["/init"]
 
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 --start-period=30s \
     CMD ["sh", "-c", "curl --insecure --silent --location --show-error --fail http://localhost:8080$HEALTHCHECK_PATH || exit 1"]
 
 ############################################
@@ -119,33 +127,18 @@ FROM ${NODE_IMAGE} AS node-build
 WORKDIR /usr/src/app/
 
 COPY --chown=node:node . /usr/src/app/
+# Pull the Wayfinder-generated TS files from the PHP build stage (gitignored,
+# so not present in the host context).
+COPY --chown=node:node --from=build /var/www/html/resources/js/routes /usr/src/app/resources/js/routes
+COPY --chown=node:node --from=build /var/www/html/resources/js/actions /usr/src/app/resources/js/actions
+COPY --chown=node:node --from=build /var/www/html/resources/js/wayfinder /usr/src/app/resources/js/wayfinder
+
+# This stage has no PHP, so tell the Wayfinder Vite plugin to skip the regen
+# step (already done upstream in the build stage).
+ENV WAYFINDER_NO_GENERATE=1
 
 RUN npm ci
 RUN npm run build
-
-# ############################################
-# App - Production Image
-# ############################################
-FROM ${FULL_IMAGE} AS production
-
-WORKDIR /var/www/html
-
-COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
-COPY --chown=www-data:www-data --from=node-build /usr/src/app/public/build /var/www/html/public/build
-COPY --chmod=755 .docker/entrypoint.d/ /etc/entrypoint.d/
-
-# Default to running the Laravel Automations with serversideup/php
-ENV AUTORUN_ENABLED="false"
-
-USER www-data
-
-EXPOSE 8080 8443
-
-STOPSIGNAL SIGQUIT
-CMD ["/init"]
-
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
-    CMD ["sh", "-c", "curl --insecure --silent --location --show-error --fail http://localhost:8080$HEALTHCHECK_PATH || exit 1"]
 
 # ############################################
 # PHP - CLI image for Workers and Schedulers
@@ -165,3 +158,27 @@ RUN mkdir -p storage/framework/views \
     && chmod -R 755 storage bootstrap/cache
 
 USER www-data
+
+# ############################################
+# App - Production Image (MUST be the last stage so default builds pick this target)
+# ############################################
+FROM ${FULL_IMAGE} AS production
+
+WORKDIR /var/www/html
+
+COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
+COPY --chown=www-data:www-data --from=node-build /usr/src/app/public/build /var/www/html/public/build
+COPY --chmod=755 .docker/entrypoint.d/ /etc/entrypoint.d/
+
+# Default to running the Laravel Automations with serversideup/php
+ENV AUTORUN_ENABLED="false"
+
+USER www-data
+
+EXPOSE 8080 8443
+
+STOPSIGNAL SIGQUIT
+CMD ["/init"]
+
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 --start-period=30s \
+    CMD ["sh", "-c", "curl --insecure --silent --location --show-error --fail http://localhost:8080$HEALTHCHECK_PATH || exit 1"]

@@ -63,7 +63,7 @@ it('should be able to delete their account', function (): void {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('home'));
+        ->assertRedirect('/');
 
     $this->assertGuest();
     expect($user->fresh())->toBeNull();
