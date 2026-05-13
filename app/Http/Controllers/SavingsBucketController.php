@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateSavingsBucketRequest;
 use App\Models\SavingsBucket;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -57,12 +56,6 @@ final class SavingsBucketController extends Controller
     public function destroy(SavingsBucket $savings): RedirectResponse
     {
         $this->authorize('delete', $savings);
-
-        if ($savings->current_amount > 0) {
-            throw ValidationException::withMessages([
-                'savings_bucket' => __('messages.savings_bucket.not_empty'),
-            ]);
-        }
 
         $savings->delete();
 
