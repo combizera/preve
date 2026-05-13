@@ -104,14 +104,26 @@ it('deletes an empty bucket', function (): void {
     $this->assertDatabaseMissing('savings_buckets', ['id' => $bucket->id]);
 });
 
-it('blocks deleting a bucket with balance', function (): void {
+it('deletes a bucket with balance and detaches its transactions', function (): void {
     $bucket = SavingsBucket::factory()->create([
         'user_id'        => auth()->id(),
         'current_amount' => 5000,
     ]);
+    $category = Category::factory()->create(['user_id' => auth()->id()]);
+    $transaction = Transaction::factory()->create([
+        'user_id'           => auth()->id(),
+        'category_id'       => $category->id,
+        'savings_bucket_id' => $bucket->id,
+        'type'              => TransactionType::INCOME,
+    ]);
 
-    $this->delete(route('savings.destroy', $bucket))->assertSessionHasErrors('savings_bucket');
-    $this->assertDatabaseHas('savings_buckets', ['id' => $bucket->id]);
+    $this->delete(route('savings.destroy', $bucket))->assertRedirect(route('savings.index'));
+
+    $this->assertDatabaseMissing('savings_buckets', ['id' => $bucket->id]);
+    $this->assertDatabaseHas('transactions', [
+        'id'                => $transaction->id,
+        'savings_bucket_id' => null,
+    ]);
 });
 
 it("forbids deleting someone else's bucket", function (): void {

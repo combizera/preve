@@ -21,7 +21,9 @@
             "pause": "Pausar",
             "resume": "Retomar",
             "saveChanges": "Salvar alterações",
-            "share": "Compartilhar"
+            "share": "Compartilhar",
+            "copy": "Copiar",
+            "copied": "Copiado!"
         },
         "labels": {
             "email": "Email",
@@ -512,6 +514,9 @@
             "bucketPlaceholder": "Escolha uma caixinha",
             "depositHint": "Cria uma despesa que sai do saldo e acumula na caixinha.",
             "withdrawHint": "Cria uma receita que volta pro saldo e debita da caixinha."
+        },
+        "deleteConfirm": {
+            "label": "Pra confirmar, digite o nome da caixinha: {name}"
         }
     },
     "errors": {

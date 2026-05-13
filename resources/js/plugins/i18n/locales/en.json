@@ -21,7 +21,9 @@
             "pause": "Pause",
             "resume": "Resume",
             "saveChanges": "Save changes",
-            "share": "Share"
+            "share": "Share",
+            "copy": "Copy",
+            "copied": "Copied!"
         },
         "labels": {
             "email": "Email",
@@ -512,6 +514,9 @@
             "bucketPlaceholder": "Pick a bucket",
             "depositHint": "Creates an expense that leaves your balance and accumulates in the bucket.",
             "withdrawHint": "Creates an income that returns to your balance and debits the bucket."
+        },
+        "deleteConfirm": {
+            "label": "To confirm, type the name of the bucket: {name}"
         }
     },
     "errors": {

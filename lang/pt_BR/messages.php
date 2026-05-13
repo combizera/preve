@@ -41,10 +41,9 @@ return [
     ],
 
     'savings_bucket' => [
-        'created'   => 'Caixinha criada com sucesso.',
-        'updated'   => 'Caixinha atualizada com sucesso.',
-        'deleted'   => 'Caixinha excluída com sucesso.',
-        'not_empty' => 'Você precisa sacar todo o saldo antes de excluir esta caixinha.',
+        'created' => 'Caixinha criada com sucesso.',
+        'updated' => 'Caixinha atualizada com sucesso.',
+        'deleted' => 'Caixinha excluída com sucesso.',
     ],
 
     'profile' => [
