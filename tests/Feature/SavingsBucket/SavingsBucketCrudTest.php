@@ -16,7 +16,21 @@ beforeEach(function (): void {
 });
 
 it('renders the savings index', function (): void {
-    $this->get(route('savings.index'))->assertOk();
+    $this->get(route('savings.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('SavingsBucket')
+            ->has('availableYears')
+            ->has('selectedYear')
+        );
+});
+
+it('falls back to the current year when an unknown year is requested', function (): void {
+    $this->get(route('savings.index', ['year' => 1999]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('selectedYear', (int) now()->year)
+        );
 });
 
 it('creates a savings bucket', function (): void {
