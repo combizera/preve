@@ -189,3 +189,84 @@ it('computes remaining as amount minus spent to date', function (): void {
 
     expect($forecast->computeRemaining(Date::parse('2026-04-15')))->toBe(65000);
 });
+
+it('computeUnrecordedSpend subtracts paid AND pending transactions in the same month', function (): void {
+    $forecast = Forecast::factory()->create([
+        'user_id'     => $this->user->id,
+        'category_id' => $this->category->id,
+        'amount'      => 100000,
+        'month'       => '2026-04-01',
+    ]);
+
+    Transaction::factory()->create([
+        'user_id'          => $this->user->id,
+        'category_id'      => $this->category->id,
+        'type'             => TransactionType::EXPENSE->value,
+        'amount'           => 30000,
+        'transaction_date' => '2026-04-05',
+    ]);
+
+    Transaction::factory()->create([
+        'user_id'          => $this->user->id,
+        'category_id'      => $this->category->id,
+        'type'             => TransactionType::EXPENSE->value,
+        'amount'           => 20000,
+        'transaction_date' => '2026-04-25',
+    ]);
+
+    expect($forecast->computeUnrecordedSpend(Date::parse('2026-04-15')))->toBe(50000);
+});
+
+it('computeUnrecordedSpend clamps at zero when transactions exceed the budget', function (): void {
+    $forecast = Forecast::factory()->create([
+        'user_id'     => $this->user->id,
+        'category_id' => $this->category->id,
+        'amount'      => 50000,
+        'month'       => '2026-04-01',
+    ]);
+
+    Transaction::factory()->create([
+        'user_id'          => $this->user->id,
+        'category_id'      => $this->category->id,
+        'type'             => TransactionType::EXPENSE->value,
+        'amount'           => 80000,
+        'transaction_date' => '2026-04-05',
+    ]);
+
+    expect($forecast->computeUnrecordedSpend(Date::parse('2026-04-15')))->toBe(0);
+});
+
+it('computeUnrecordedSpend returns zero for past months', function (): void {
+    $forecast = Forecast::factory()->create([
+        'user_id'     => $this->user->id,
+        'category_id' => $this->category->id,
+        'amount'      => 100000,
+        'month'       => '2026-01-01',
+    ]);
+
+    expect($forecast->computeUnrecordedSpend(Date::parse('2026-04-15')))->toBe(0);
+});
+
+it('computeUnrecordedSpend ignores transactions in other categories', function (): void {
+    $forecast = Forecast::factory()->create([
+        'user_id'     => $this->user->id,
+        'category_id' => $this->category->id,
+        'amount'      => 100000,
+        'month'       => '2026-04-01',
+    ]);
+
+    $otherCategory = Category::factory()->create([
+        'user_id' => $this->user->id,
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    Transaction::factory()->create([
+        'user_id'          => $this->user->id,
+        'category_id'      => $otherCategory->id,
+        'type'             => TransactionType::EXPENSE->value,
+        'amount'           => 99999,
+        'transaction_date' => '2026-04-10',
+    ]);
+
+    expect($forecast->computeUnrecordedSpend(Date::parse('2026-04-15')))->toBe(100000);
+});

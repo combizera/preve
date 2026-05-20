@@ -127,6 +127,34 @@ final class Forecast extends Model
     }
 
     /**
+     * Budget portion that is not yet captured by any transaction in this category
+     * for this month. Counts both paid and pending (future-dated) transactions, so
+     * dashboard projections do not double-count scheduled spend that is already
+     * present in the transaction stream. Past months always return 0.
+     */
+    public function computeUnrecordedSpend(?CarbonInterface $asOf = null): int
+    {
+        $asOf ??= Date::today();
+        $monthEnd = $this->month->copy()->endOfMonth();
+
+        if ($asOf->isAfter($monthEnd)) {
+            return 0;
+        }
+
+        $totalRecorded = (int) Transaction::query()
+            ->where('user_id', $this->user_id)
+            ->where('category_id', $this->category_id)
+            ->where('type', TransactionType::EXPENSE)
+            ->whereBetween('transaction_date', [
+                $this->month->copy()->startOfMonth()->toDateString(),
+                $monthEnd->toDateString(),
+            ])
+            ->sum('amount');
+
+        return max(0, $this->amount - $totalRecorded);
+    }
+
+    /**
      * Linear pace check. Compares actual spent against the share of the budget
      * that should have been used by $asOf, given a flat distribution across the
      * month. Past months clamp $asOf to month end; future months return ON_PACE.
