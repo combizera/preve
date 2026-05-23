@@ -38,7 +38,7 @@ final readonly class SavingsHistoryService
         $events = [];
         foreach ($buckets as $bucket) {
             $initial = (int) $bucket->current_amount - ($signedSumPerBucket[$bucket->id] ?? 0);
-            if ($initial !== 0 && $bucket->created_at !== null) {
+            if ($initial !== 0) {
                 $events[] = [
                     'date'  => CarbonImmutable::instance($bucket->created_at),
                     'delta' => $initial,
