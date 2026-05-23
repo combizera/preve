@@ -64,24 +64,23 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 
     <ContainerSavingsBucket :savings-buckets="savingsBuckets" />
 
-    <Deferred v-if="props.savingsBuckets.length > 0" data="chartData">
-      <template #fallback>
-        <Skeleton class="h-[320px] w-full" />
-      </template>
-      <SavingsYearChart
-        :chart-data="chartData ?? []"
-        :available-years="availableYears"
-        :selected-year="selectedYear"
-      />
-    </Deferred>
+    <div v-if="props.savingsBuckets.length > 0" class="mt-6">
+      <Deferred data="chartData">
+        <template #fallback>
+          <Skeleton class="h-[320px] w-full" />
+        </template>
+        <SavingsYearChart
+          :chart-data="chartData ?? []"
+          :available-years="availableYears"
+          :selected-year="selectedYear"
+        />
+      </Deferred>
+    </div>
 
-    <Deferred data="categories">
-      <template #fallback><span /></template>
-      <SaveOrWithdrawDialog
-        v-model:open="showSaveOrWithdrawDialog"
-        :savings-buckets="savingsBuckets"
-        :categories="categories ?? []"
-      />
-    </Deferred>
+    <SaveOrWithdrawDialog
+      v-model:open="showSaveOrWithdrawDialog"
+      :savings-buckets="savingsBuckets"
+      :categories="categories ?? []"
+    />
   </AppLayout>
 </template>

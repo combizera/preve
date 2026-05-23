@@ -48,7 +48,8 @@ final class DashboardController extends Controller
         );
 
         $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
-        $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
+        $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->whereNull('savings_bucket_id')->sum('amount');
+        $monthlyInvested = (int) $user->transactions()->inMonth($chartDate)->expense()->whereNotNull('savings_bucket_id')->sum('amount');
 
         $daysInMonth = $chartDate->endOfMonth()->day;
 
@@ -74,6 +75,7 @@ final class DashboardController extends Controller
             'forecast',
             'monthlyIncome',
             'monthlyExpenses',
+            'monthlyInvested',
             'dailyBalances',
             'dailyForecastedSpend',
             'carryOver',

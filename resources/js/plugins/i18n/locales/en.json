@@ -207,6 +207,7 @@
             "dailyBalance": "Daily Balance",
             "income": "Income",
             "expenses": "Expenses",
+            "invested": "Invested in buckets",
             "balance": "Balance",
             "forecast": "Forecast"
         },

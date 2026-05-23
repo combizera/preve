@@ -22,6 +22,7 @@ const { t } = useI18n();
 interface Props {
   monthlyIncome: number;
   monthlyExpenses: number;
+  monthlyInvested: number;
   dailyBalances: IDailyBalance[];
   dailyForecastedSpend: number;
   carryOver: number;
@@ -97,6 +98,35 @@ const formatDay = (i: number) => {
   const point = chartData.value[i];
   return point ? String(point.day) : '';
 };
+
+const headerItems = computed(() => {
+  const items: {
+    label: string;
+    value: number;
+    variant: 'positive' | 'destructive' | 'neutral';
+  }[] = [
+    {
+      label: t('dashboard.chart.income'),
+      value: props.monthlyIncome,
+      variant: 'positive',
+    },
+    {
+      label: t('dashboard.chart.expenses'),
+      value: props.monthlyExpenses,
+      variant: 'destructive',
+    },
+  ];
+
+  if (props.monthlyInvested > 0) {
+    items.push({
+      label: t('dashboard.chart.invested'),
+      value: props.monthlyInvested,
+      variant: 'neutral',
+    });
+  }
+
+  return items;
+});
 </script>
 
 <template>
@@ -105,18 +135,7 @@ const formatDay = (i: number) => {
       <ChartHeader
         :title="t('dashboard.chart.dailyBalance')"
         :description="displayMonth"
-        :items="[
-          {
-            label: t('dashboard.chart.income'),
-            value: props.monthlyIncome,
-            variant: 'positive',
-          },
-          {
-            label: t('dashboard.chart.expenses'),
-            value: props.monthlyExpenses,
-            variant: 'destructive',
-          },
-        ]"
+        :items="headerItems"
       />
 
       <!-- CHART -->
