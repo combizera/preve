@@ -226,6 +226,15 @@
             "button": "Create Transaction"
         },
         "recurring": "Recurring",
+        "view": {
+            "list": "List",
+            "table": "Table"
+        },
+        "table": {
+            "totalIncome": "Total income",
+            "totalExpense": "Total expenses",
+            "empty": "No transactions match the current filters."
+        },
         "create": {
             "title": "Create Transaction",
             "description": "Fill in the details below to create a new transaction."

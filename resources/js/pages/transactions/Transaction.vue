@@ -8,6 +8,9 @@ import ContainerTransactions from '@/components/Transaction/ContainerTransaction
 import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import FilterTransaction from '@/components/Transaction/FilterTransaction.vue';
+import TableTransactions from '@/components/Transaction/TableTransactions.vue';
+import TransactionViewToggle from '@/components/Transaction/TransactionViewToggle.vue';
+import { useTransactionView } from '@/composables/useTransactionView';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import transactionRoutes from '@/routes/transactions';
@@ -30,6 +33,7 @@ provide('categories', props.categories);
 provide('tags', props.tags);
 
 const { t } = useI18n();
+const { view } = useTransactionView();
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
@@ -54,6 +58,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
       :hasActions="true"
     >
       <div class="flex items-center gap-2">
+        <TransactionViewToggle />
         <FilterTransaction
           :filters="filters"
           :categories="categories"
@@ -64,7 +69,16 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     </Heading>
 
     <!-- TRANSACTIONS -->
-    <ContainerTransactions :transactions="transactions" :filters="filters" />
+    <TableTransactions
+      v-if="view === 'table'"
+      :transactions="transactions"
+      :filters="filters"
+    />
+    <ContainerTransactions
+      v-else
+      :transactions="transactions"
+      :filters="filters"
+    />
 
     <!-- CREATE -->
     <CreateTransactionDialog :categories="categories" :tags="tags" />
