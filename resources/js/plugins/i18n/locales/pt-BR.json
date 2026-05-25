@@ -226,6 +226,15 @@
             "button": "Criar Transação"
         },
         "recurring": "Recorrente",
+        "view": {
+            "list": "Lista",
+            "table": "Tabela"
+        },
+        "table": {
+            "totalIncome": "Total de receitas",
+            "totalExpense": "Total de despesas",
+            "empty": "Nenhuma transação encontrada com os filtros atuais."
+        },
         "create": {
             "title": "Criar Transação",
             "description": "Preencha os detalhes abaixo para criar uma nova transação."
