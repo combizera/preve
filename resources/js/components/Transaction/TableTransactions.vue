@@ -3,7 +3,15 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import ActionGroup from '@/components/ActionGroup.vue';
+import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
+import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
 import { Badge } from '@/components/ui/badge';
+import DeleteButton from '@/components/ui/button/DeleteButton.vue';
+import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
+import EditButton from '@/components/ui/button/EditButton.vue';
+import InfoButton from '@/components/ui/button/InfoButton.vue';
+import ShareButton from '@/components/ui/button/ShareButton.vue';
 import {
   Table,
   TableBody,
@@ -90,6 +98,25 @@ const totals = computed(() => {
   }
   return { income, expense };
 });
+
+const showDeleteDialog = ref(false);
+const showEditDialog = ref(false);
+const selectedTransaction = ref<ITransaction | null>(null);
+const editMode = ref<'edit' | 'duplicate'>('edit');
+
+const openEditDialog = (
+  transaction: ITransaction,
+  mode: 'edit' | 'duplicate' = 'edit',
+) => {
+  selectedTransaction.value = transaction;
+  editMode.value = mode;
+  showEditDialog.value = true;
+};
+
+const openDeleteDialog = (transaction: ITransaction) => {
+  selectedTransaction.value = transaction;
+  showDeleteDialog.value = true;
+};
 
 const formatDate = (value?: string | null): string => {
   if (!value) return '';
@@ -181,12 +208,15 @@ const sortButtonClass =
             <ArrowUpDown v-else :size="14" class="opacity-50" />
           </button>
         </TableHead>
+        <TableHead class="text-right">
+          {{ t('generic.labels.actions') }}
+        </TableHead>
       </TableRow>
     </TableHeader>
 
     <TableBody>
       <TableRow v-if="rows.length === 0">
-        <TableCell colspan="5" class="text-center text-muted-foreground">
+        <TableCell colspan="6" class="text-center text-muted-foreground">
           {{ t('transactions.table.empty') }}
         </TableCell>
       </TableRow>
@@ -232,12 +262,22 @@ const sortButtonClass =
           <span>{{ tx.type === TRANSACTION_TYPE.INCOME ? '+' : '−' }}</span>
           {{ getCurrencySymbol() }} {{ formatCentsToDisplay(tx.amount) }}
         </TableCell>
+        <TableCell class="text-right">
+          <ActionGroup>
+            <InfoButton :transactionId="tx.id" />
+            <ShareButton :transactionId="tx.id" />
+            <DuplicateButton @click="openEditDialog(tx, 'duplicate')" />
+            <EditButton @click="openEditDialog(tx, 'edit')" />
+            <DeleteButton @click="openDeleteDialog(tx)" />
+          </ActionGroup>
+        </TableCell>
       </TableRow>
     </TableBody>
 
     <TableFooter v-if="rows.length > 0">
       <TableRow v-if="totals.income > 0">
-        <TableCell colspan="4" class="text-right text-muted-foreground">
+        <TableCell colspan="4" />
+        <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalIncome') }}
         </TableCell>
         <TableCell class="text-right font-mono whitespace-nowrap text-positive">
@@ -245,7 +285,8 @@ const sortButtonClass =
         </TableCell>
       </TableRow>
       <TableRow v-if="totals.expense > 0">
-        <TableCell colspan="4" class="text-right text-muted-foreground">
+        <TableCell colspan="4" />
+        <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalExpense') }}
         </TableCell>
         <TableCell
@@ -256,4 +297,17 @@ const sortButtonClass =
       </TableRow>
     </TableFooter>
   </Table>
+
+  <FormTransactionDialog
+    v-if="showEditDialog && selectedTransaction"
+    v-model:open="showEditDialog"
+    :transaction="selectedTransaction"
+    :type="editMode"
+  />
+
+  <DeleteTransactionDialog
+    v-if="showDeleteDialog && selectedTransaction"
+    v-model:open="showDeleteDialog"
+    :transaction="selectedTransaction"
+  />
 </template>
