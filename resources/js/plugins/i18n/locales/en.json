@@ -207,6 +207,7 @@
             "dailyBalance": "Daily Balance",
             "income": "Income",
             "expenses": "Expenses",
+            "invested": "Invested in buckets",
             "balance": "Balance",
             "forecast": "Forecast"
         },
@@ -483,6 +484,12 @@
         "title": "Savings",
         "description": "Set aside money for goals. Deposits debit your balance and accumulate in each bucket.",
         "newBucket": "New bucket",
+        "chart": {
+            "title": "Yearly evolution",
+            "balance": "Balance",
+            "deposits": "Deposits",
+            "withdrawals": "Withdrawals"
+        },
         "fields": {
             "name": "Goal name",
             "target": "Goal amount",

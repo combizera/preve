@@ -207,6 +207,7 @@
             "dailyBalance": "Saldo Diário",
             "income": "Receitas",
             "expenses": "Despesas",
+            "invested": "Investido em caixinhas",
             "balance": "Saldo",
             "forecast": "Previsão"
         },
@@ -483,6 +484,12 @@
         "title": "Caixinhas",
         "description": "Separe dinheiro pra metas. Aportes debitam do saldo e acumulam em cada caixinha.",
         "newBucket": "Nova caixinha",
+        "chart": {
+            "title": "Evolução do ano",
+            "balance": "Saldo",
+            "deposits": "Depósitos",
+            "withdrawals": "Saques"
+        },
         "fields": {
             "name": "Nome da meta",
             "target": "Valor da meta",

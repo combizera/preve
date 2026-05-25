@@ -36,6 +36,7 @@ interface Props {
   forecast: number;
   monthlyIncome: number;
   monthlyExpenses: number;
+  monthlyInvested: number;
   dailyBalances: IDailyBalance[];
   dailyForecastedSpend: number;
   carryOver: number;
@@ -63,6 +64,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       'forecast',
       'monthlyIncome',
       'monthlyExpenses',
+      'monthlyInvested',
       'dailyBalances',
       'dailyForecastedSpend',
       'carryOver',
@@ -100,6 +102,7 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
       <ChartMonthly
         :monthlyIncome
         :monthlyExpenses
+        :monthlyInvested
         :dailyBalances
         :dailyForecastedSpend
         :carryOver
