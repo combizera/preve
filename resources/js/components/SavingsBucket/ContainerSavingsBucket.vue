@@ -38,7 +38,7 @@ function progressPercent(bucket: ISavingsBucket): number {
 </script>
 
 <template>
-  <div class="mt-4">
+  <div class="mt-6">
     <EmptyState
       v-if="savingsBuckets.length === 0"
       :title="t('savings.empty.title')"
