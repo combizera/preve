@@ -74,6 +74,19 @@ final class ForecastSeries extends Model
         return $this->hasMany(Forecast::class);
     }
 
+    public function ensureForecastFor(string $month): Forecast
+    {
+        return $this->forecasts()->firstOrCreate(
+            ['month' => $month],
+            [
+                'user_id'     => $this->user_id,
+                'category_id' => $this->category_id,
+                'amount'      => $this->default_amount,
+                'notes'       => $this->default_notes,
+            ],
+        );
+    }
+
     protected function latestForecast(): Attribute
     {
         return Attribute::make(

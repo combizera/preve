@@ -9,6 +9,7 @@ use App\Http\Requests\CreateForecastRequest;
 use App\Http\Requests\UpdateForecastRequest;
 use App\Models\Forecast;
 use App\Models\ForecastSeries;
+use App\Services\ForecastService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -19,8 +20,10 @@ use Throwable;
 
 final class ForecastController extends Controller
 {
-    public function index(): Response
+    public function index(ForecastService $forecastService): Response
     {
+        $forecastService->ensureCurrentMonth(Auth::user());
+
         $forecasts = Auth::user()
             ->forecasts()
             ->with(['category', 'series'])

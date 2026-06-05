@@ -34,15 +34,7 @@ final class RolloverForecasts extends Command
             ->chunkById(200, function (Collection $seriesChunk) use ($currentMonth, &$created, &$failed): void {
                 foreach ($seriesChunk as $series) {
                     try {
-                        $forecast = $series->forecasts()->firstOrCreate(
-                            ['month' => $currentMonth],
-                            [
-                                'user_id'     => $series->user_id,
-                                'category_id' => $series->category_id,
-                                'amount'      => $series->default_amount,
-                                'notes'       => $series->default_notes,
-                            ],
-                        );
+                        $forecast = $series->ensureForecastFor($currentMonth);
 
                         if ($forecast->wasRecentlyCreated) {
                             $created++;

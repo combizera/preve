@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Forecast;
 use App\Models\ForecastSeries;
 use App\Models\User;
+use Illuminate\Support\Facades\Date;
 
 beforeEach(function (): void {
     $user = User::factory()->create();
@@ -125,6 +126,64 @@ it('renders forecasts index successfully', function (): void {
     $response = $this->get(route('forecasts.index'));
 
     $response->assertSuccessful();
+});
+
+it('carries active series into the current month when the index is opened', function (): void {
+    Date::setTestNow(Date::create(2026, 6, 5));
+
+    $series = ForecastSeries::factory()->create([
+        'user_id'        => auth()->id(),
+        'default_amount' => 80000,
+        'default_notes'  => 'monthly groceries',
+        'is_active'      => true,
+    ]);
+
+    $this->get(route('forecasts.index'))->assertSuccessful();
+
+    $this->assertDatabaseHas('forecasts', [
+        'forecast_series_id' => $series->id,
+        'user_id'            => auth()->id(),
+        'category_id'        => $series->category_id,
+        'amount'             => 80000,
+        'notes'              => 'monthly groceries',
+        'month'              => '2026-06-01',
+    ]);
+
+    Date::setTestNow();
+});
+
+it('does not carry paused series into the current month on index', function (): void {
+    Date::setTestNow(Date::create(2026, 6, 5));
+
+    $series = ForecastSeries::factory()->paused()->create([
+        'user_id' => auth()->id(),
+    ]);
+
+    $this->get(route('forecasts.index'))->assertSuccessful();
+
+    $this->assertDatabaseMissing('forecasts', [
+        'forecast_series_id' => $series->id,
+        'month'              => '2026-06-01',
+    ]);
+
+    Date::setTestNow();
+});
+
+it('does not duplicate the current month forecast on repeated index visits', function (): void {
+    Date::setTestNow(Date::create(2026, 6, 5));
+
+    $series = ForecastSeries::factory()->create([
+        'user_id'        => auth()->id(),
+        'default_amount' => 50000,
+    ]);
+
+    $this->get(route('forecasts.index'))->assertSuccessful();
+    $this->get(route('forecasts.index'))->assertSuccessful();
+
+    expect(Forecast::query()->where('forecast_series_id', $series->id)->where('month', '2026-06-01')->count())
+        ->toBe(1);
+
+    Date::setTestNow();
 });
 
 it('updates only the instance amount when apply_to_default is unset', function (): void {
