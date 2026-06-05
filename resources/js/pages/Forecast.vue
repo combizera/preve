@@ -7,12 +7,13 @@ import { useI18n } from 'vue-i18n';
 import EmptyState from '@/components/EmptyState.vue';
 import CardForecast from '@/components/Forecast/CardForecast.vue';
 import CreateForecastDialog from '@/components/Forecast/CreateForecastDialog.vue';
+import ForecastMonthNavigator from '@/components/Forecast/ForecastMonthNavigator.vue';
 import ForecastSummaryCard from '@/components/Forecast/ForecastSummaryCard.vue';
 import Heading from '@/components/Heading.vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { getCurrentMonthString, groupCurrentMonthByPace } from '@/lib/forecast';
+import { groupCurrentMonthByPace } from '@/lib/forecast';
 import { dashboard } from '@/routes';
 import forecastRoutes from '@/routes/forecasts';
 import { useForecastStore } from '@/stores/forecast.store';
@@ -23,6 +24,8 @@ import type { ForecastPaceStatus, IForecast } from '@/types/models/forecast';
 interface Props {
   forecasts: IForecast[];
   categories: ICategory[];
+  hasForecasts: boolean;
+  month: string;
 }
 
 const props = defineProps<Props>();
@@ -50,7 +53,7 @@ const paceSections: ForecastPaceStatus[] = [
 ];
 
 const grouped = computed(() =>
-  groupCurrentMonthByPace(props.forecasts, getCurrentMonthString()),
+  groupCurrentMonthByPace(props.forecasts, props.month),
 );
 
 const hasCurrentMonthForecasts = computed(() =>
@@ -81,19 +84,18 @@ onMounted(() => {
         :title="t('forecasts.title')"
         :description="t('forecasts.description')"
       />
-      <Button
-        v-if="forecasts.length > 0 && canCreate"
-        size="sm"
-        @click="openCreate"
-      >
-        <Plus :size="16" />
-        {{ t('forecasts.newForecast') }}
-      </Button>
+      <div v-if="hasForecasts" class="flex items-center gap-2">
+        <ForecastMonthNavigator :month="month" />
+        <Button v-if="canCreate" size="sm" @click="openCreate">
+          <Plus :size="16" />
+          {{ t('forecasts.newForecast') }}
+        </Button>
+      </div>
     </div>
 
     <div class="mt-4">
       <EmptyState
-        v-if="forecasts.length === 0"
+        v-if="!hasForecasts"
         :title="t('forecasts.empty.title')"
         :description="t('forecasts.empty.description')"
         :button-text="t('forecasts.newForecast')"
@@ -106,7 +108,11 @@ onMounted(() => {
       </EmptyState>
 
       <template v-else>
-        <ForecastSummaryCard :forecasts="forecasts" class="mb-3" />
+        <ForecastSummaryCard
+          :forecasts="forecasts"
+          :month="month"
+          class="mb-3"
+        />
 
         <EmptyState
           v-if="!hasCurrentMonthForecasts"

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
 use App\Http\Requests\CreateForecastRequest;
+use App\Http\Requests\IndexForecastRequest;
 use App\Http\Requests\UpdateForecastRequest;
 use App\Models\Forecast;
 use App\Models\ForecastSeries;
@@ -20,12 +21,16 @@ use Throwable;
 
 final class ForecastController extends Controller
 {
-    public function index(ForecastService $forecastService): Response
+    public function index(IndexForecastRequest $request, ForecastService $forecastService): Response
     {
         $forecastService->ensureCurrentMonth(Auth::user());
 
+        $month = Date::createFromFormat('Y-m', $request->validated('month'))->startOfMonth();
+
         $forecasts = Auth::user()
             ->forecasts()
+            ->whereYear('month', $month->year)
+            ->whereMonth('month', $month->month)
             ->with(['category', 'series'])
             ->orderBy('month', 'desc')
             ->get();
@@ -35,7 +40,14 @@ final class ForecastController extends Controller
             ->availableForForecast()
             ->get();
 
-        return Inertia::render('Forecast', compact('forecasts', 'categories'));
+        $hasForecasts = Auth::user()->forecastSeries()->exists();
+
+        return Inertia::render('Forecast', [
+            'forecasts'    => $forecasts,
+            'categories'   => $categories,
+            'hasForecasts' => $hasForecasts,
+            'month'        => $month->format('Y-m'),
+        ]);
     }
 
     /**

@@ -340,6 +340,10 @@
             "over_pace": "Over pace",
             "on_pace": "On pace",
             "under_pace": "Under pace"
+        },
+        "navigator": {
+            "previous": "Previous month",
+            "next": "Next month"
         }
     },
     "categories": {

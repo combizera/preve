@@ -5,21 +5,19 @@ import { useI18n } from 'vue-i18n';
 import ForecastProgressBar from '@/components/Forecast/ForecastProgressBar.vue';
 import ForecastStatsGrid from '@/components/Forecast/ForecastStatsGrid.vue';
 import { Card } from '@/components/ui/card';
-import { getCurrentMonthString, summarizeForecasts } from '@/lib/forecast';
+import { summarizeForecasts } from '@/lib/forecast';
 import type { IForecast } from '@/types/models/forecast';
 import { formatMonth } from '@/utils/formatDate';
 
 const props = defineProps<{
   forecasts: IForecast[];
+  month: string;
 }>();
 
 const { t } = useI18n();
 
-const currentMonth = computed(() => getCurrentMonthString());
-const monthLabel = computed(() => formatMonth(currentMonth.value));
-const totals = computed(() =>
-  summarizeForecasts(props.forecasts, currentMonth.value),
-);
+const monthLabel = computed(() => formatMonth(props.month));
+const totals = computed(() => summarizeForecasts(props.forecasts, props.month));
 </script>
 
 <template>
@@ -44,7 +42,7 @@ const totals = computed(() =>
     <ForecastProgressBar
       :spent="totals.spent"
       :amount="totals.amount"
-      :month="currentMonth"
+      :month="month"
       :pace-status="totals.paceStatus"
     />
 

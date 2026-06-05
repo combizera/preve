@@ -57,6 +57,27 @@ export function getCurrentMonthString(now: Date = new Date()): string {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
+/**
+ * Returns the "YYYY-MM" string `delta` months away from the given month.
+ * @example getAdjacentMonth("2026-01", -1) // "2025-12"
+ */
+export function getAdjacentMonth(monthString: string, delta: number): string {
+    const [year, month] = monthString.split('-').map(Number);
+    return getCurrentMonthString(new Date(year, month - 1 + delta, 1));
+}
+
+/**
+ * Formats a "YYYY-MM" string as a localized long month label.
+ * @example formatMonthLabel("2026-06", "pt-BR") // "junho de 2026"
+ */
+export function formatMonthLabel(monthString: string, locale: string): string {
+    const [year, month] = monthString.split('-').map(Number);
+    return new Date(year, month - 1, 1).toLocaleDateString(locale, {
+        month: 'long',
+        year: 'numeric',
+    });
+}
+
 export function isInMonth(forecastMonth: string, monthString: string): boolean {
     return forecastMonth.slice(0, 7) === monthString;
 }
