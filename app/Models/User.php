@@ -92,6 +92,14 @@ final class User extends Authenticatable
     }
 
     /**
+     * @return HasMany<CreditCard, $this>
+     */
+    public function creditCards(): HasMany
+    {
+        return $this->hasMany(CreditCard::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
