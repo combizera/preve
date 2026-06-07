@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n';
 
 import BalanceCards from '@/components/Dashboard/BalanceCards.vue';
 import ChartMonthly from '@/components/Dashboard/ChartMonthly.vue';
+import DashboardCreditCards from '@/components/Dashboard/DashboardCreditCards.vue';
 import HorizontalCalendarStrip from '@/components/Dashboard/HorizontalCalendarStrip.vue';
 import LastTransactionsTable from '@/components/Dashboard/LastTransactionsTable.vue';
 import Heading from '@/components/Heading.vue';
@@ -14,6 +15,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
+import { type ICreditCard } from '@/types/models/credit-card';
 import { type ISavingsBucket } from '@/types/models/savings-bucket';
 import { type ITag } from '@/types/models/tag';
 import {
@@ -44,6 +46,7 @@ interface Props {
   tags: ITag[];
   savingsBuckets: ISavingsBucket[];
   savingsRate: { deposits: number; income: number; rate: number | null };
+  creditCards: ICreditCard[];
 }
 
 defineProps<Props>();
@@ -109,8 +112,11 @@ const handleMonthUpdate = (payload: { month: number; year: number }) => {
         :selectedMonth
       />
 
-      <!-- LAST TRANSACTIONS -->
-      <LastTransactionsTable :latestTransactions />
+      <!-- LAST TRANSACTIONS & CREDIT CARDS -->
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <LastTransactionsTable :latestTransactions />
+        <DashboardCreditCards :creditCards="creditCards" />
+      </div>
     </section>
 
     <CreateTransactionDialog :categories="categories" :tags="tags" />
