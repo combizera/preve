@@ -195,6 +195,7 @@ return [
         ],
         'credit_card' => [
             'savings_bucket_conflict' => 'A transaction cannot belong to both a credit card and a savings bucket.',
+            'income_not_allowed'      => 'Only expenses can be assigned to a credit card.',
         ],
     ],
 

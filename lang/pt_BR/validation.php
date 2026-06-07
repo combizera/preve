@@ -195,6 +195,7 @@ return [
         ],
         'credit_card' => [
             'savings_bucket_conflict' => 'Uma transação não pode pertencer a um cartão de crédito e a uma caixinha ao mesmo tempo.',
+            'income_not_allowed'      => 'Apenas despesas podem ser vinculadas a um cartão de crédito.',
         ],
     ],
 
