@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Filters\TransactionFilter;
+use App\Http\Requests\BulkDeleteTransactionRequest;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
@@ -116,6 +117,23 @@ final class TransactionController extends Controller
         $transaction->delete();
 
         $this->toast::success(__('messages.transaction.deleted'));
+
+        return back();
+    }
+
+    /**
+     * Delete several of the user's own transactions at once. Deleted through the
+     * model so the savings-bucket balance observer still runs per transaction.
+     */
+    public function bulkDestroy(BulkDeleteTransactionRequest $request): RedirectResponse
+    {
+        Auth::user()->transactions()
+            ->whereIn('id', $request->validated('ids'))
+            ->get()
+            ->each
+            ->delete();
+
+        $this->toast::success(__('messages.transaction.bulk_deleted'));
 
         return back();
     }

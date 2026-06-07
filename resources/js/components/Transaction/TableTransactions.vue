@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { ArrowDown, ArrowUp, ArrowUpDown, Trash } from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { bulkDestroy } from '@/actions/App/Http/Controllers/TransactionController';
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
 import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import InfoButton from '@/components/ui/button/InfoButton.vue';
 import ShareButton from '@/components/ui/button/ShareButton.vue';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableBody,
@@ -129,12 +143,85 @@ const formatDate = (value?: string | null): string => {
 
 const sortButtonClass =
   '-mx-2 inline-flex items-center gap-1 rounded px-2 py-1 transition-colors hover:bg-muted hover:text-foreground';
+
+const selectedIds = ref<string[]>([]);
+
+const selectableIds = computed(() =>
+  rows.value.map((tx) => tx.id).filter((id): id is string => Boolean(id)),
+);
+
+watch(rows, () => {
+  const visible = new Set(selectableIds.value);
+  selectedIds.value = selectedIds.value.filter((id) => visible.has(id));
+});
+
+const allSelected = computed(
+  () =>
+    selectableIds.value.length > 0 &&
+    selectableIds.value.every((id) => selectedIds.value.includes(id)),
+);
+
+const headerState = computed<boolean | 'indeterminate'>(() => {
+  if (allSelected.value) return true;
+  return selectedIds.value.length > 0 ? 'indeterminate' : false;
+});
+
+const toggleAll = (checked: boolean | 'indeterminate') => {
+  selectedIds.value = checked === true ? [...selectableIds.value] : [];
+};
+
+const toggleRow = (id: string, checked: boolean | 'indeterminate') => {
+  if (checked === true) {
+    if (!selectedIds.value.includes(id)) selectedIds.value.push(id);
+  } else {
+    selectedIds.value = selectedIds.value.filter((value) => value !== id);
+  }
+};
+
+const showBulkDeleteDialog = ref(false);
+const bulkForm = useForm<{ ids: string[] }>({ ids: [] });
+
+const confirmBulkDelete = () => {
+  bulkForm.ids = [...selectedIds.value];
+
+  bulkForm.delete(bulkDestroy().url, {
+    preserveScroll: true,
+    onSuccess: () => {
+      selectedIds.value = [];
+      showBulkDeleteDialog.value = false;
+    },
+  });
+};
 </script>
 
 <template>
+  <div
+    v-if="selectedIds.length > 0"
+    class="mb-3 flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2"
+  >
+    <span class="text-sm text-muted-foreground">
+      {{ t('transactions.bulk.selected', { count: selectedIds.length }) }}
+    </span>
+    <Button
+      variant="destructive"
+      size="sm"
+      @click="showBulkDeleteDialog = true"
+    >
+      <Trash :size="14" />
+      {{ t('transactions.bulk.delete') }}
+    </Button>
+  </div>
+
   <Table>
     <TableHeader>
       <TableRow>
+        <TableHead class="w-10">
+          <Checkbox
+            :model-value="headerState"
+            :aria-label="t('transactions.bulk.delete')"
+            @update:model-value="toggleAll"
+          />
+        </TableHead>
         <TableHead class="w-32">
           <button
             type="button"
@@ -216,11 +303,24 @@ const sortButtonClass =
 
     <TableBody>
       <TableRow v-if="rows.length === 0">
-        <TableCell colspan="6" class="text-center text-muted-foreground">
+        <TableCell colspan="7" class="text-center text-muted-foreground">
           {{ t('transactions.table.empty') }}
         </TableCell>
       </TableRow>
-      <TableRow v-for="tx in rows" :key="tx.id">
+      <TableRow
+        v-for="tx in rows"
+        :key="tx.id"
+        :data-state="
+          tx.id && selectedIds.includes(tx.id) ? 'selected' : undefined
+        "
+      >
+        <TableCell class="w-10">
+          <Checkbox
+            v-if="tx.id"
+            :model-value="selectedIds.includes(tx.id)"
+            @update:model-value="(checked) => toggleRow(tx.id!, checked)"
+          />
+        </TableCell>
         <TableCell class="whitespace-nowrap text-muted-foreground">
           {{ formatDate(tx.transaction_date) }}
         </TableCell>
@@ -276,7 +376,7 @@ const sortButtonClass =
 
     <TableFooter v-if="rows.length > 0">
       <TableRow v-if="totals.income > 0">
-        <TableCell colspan="4" />
+        <TableCell colspan="5" />
         <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalIncome') }}
         </TableCell>
@@ -285,7 +385,7 @@ const sortButtonClass =
         </TableCell>
       </TableRow>
       <TableRow v-if="totals.expense > 0">
-        <TableCell colspan="4" />
+        <TableCell colspan="5" />
         <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalExpense') }}
         </TableCell>
@@ -310,4 +410,27 @@ const sortButtonClass =
     v-model:open="showDeleteDialog"
     :transaction="selectedTransaction"
   />
+
+  <AlertDialog v-model:open="showBulkDeleteDialog">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
+        <AlertDialogDescription>
+          {{ t('transactions.bulk.confirm', { count: selectedIds.length }) }}
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>
+          {{ t('generic.actions.cancel') }}
+        </AlertDialogCancel>
+        <AlertDialogAction
+          variant="destructive"
+          :disabled="bulkForm.processing"
+          @click="confirmBulkDelete"
+        >
+          {{ t('generic.actions.confirm') }}
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>

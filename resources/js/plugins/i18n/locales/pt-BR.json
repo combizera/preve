@@ -278,6 +278,12 @@
             "creditCardHint": "Compras no cartão são lançadas na data de vencimento da fatura.",
             "splits": "Parcelas",
             "splitsHint": "Divide em N cobranças mensais, uma por fatura."
+        },
+        "bulk": {
+            "selected": "{count} selecionada(s)",
+            "delete": "Excluir selecionadas",
+            "clear": "Limpar seleção",
+            "confirm": "Isso excluirá permanentemente {count} transação(ões) selecionada(s). Esta ação não pode ser desfeita."
         }
     },
     "recurring": {

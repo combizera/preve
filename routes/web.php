@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::patch('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::resource('categories', CategoryController::class)->except('create', 'edit', 'show');
     Route::resource('tags', TagController::class)->except('create', 'edit', 'show');
+    Route::delete('transactions/bulk', [TransactionController::class, 'bulkDestroy'])
+        ->name('transactions.bulk-destroy');
     Route::resource('transactions', TransactionController::class)->except('create', 'edit');
     Route::post('/transactions/{transaction}/share', [TransactionController::class, 'share'])
         ->name('transactions.share');

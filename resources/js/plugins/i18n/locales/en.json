@@ -278,6 +278,12 @@
             "creditCardHint": "Card purchases are billed on the invoice due date.",
             "splits": "Installments",
             "splitsHint": "Split into N monthly charges, one per invoice."
+        },
+        "bulk": {
+            "selected": "{count} selected",
+            "delete": "Delete selected",
+            "clear": "Clear selection",
+            "confirm": "This will permanently delete {count} selected transaction(s). This cannot be undone."
         }
     },
     "recurring": {
