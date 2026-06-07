@@ -8,12 +8,14 @@ use App\Filters\TransactionFilter;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
+use App\Services\TransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 final class TransactionController extends Controller
 {
@@ -26,29 +28,32 @@ final class TransactionController extends Controller
 
         $transactions = Auth::user()
             ->transactions()
-            ->with(['category', 'tags'])
+            ->with(['category', 'tags', 'creditCard'])
             ->filter($transactionFilter)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
+        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
 
         $filters = $request->validated();
 
-        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'filters'));
+        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'creditCards', 'filters'));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @throws Throwable
      */
-    public function store(TransactionRequest $request): RedirectResponse
+    public function store(TransactionRequest $request, TransactionService $transactions): RedirectResponse
     {
         $validated = $request->validated();
         $tagIds = Arr::pull($validated, 'tags', []);
+        $splits = (int) (Arr::pull($validated, 'splits') ?? 1);
 
-        $transaction = Auth::user()->transactions()->create($validated);
-        $transaction->tags()->sync($tagIds);
+        $transactions->create(Auth::user(), $validated, $splits, $tagIds);
 
         $this->toast::success(__('messages.transaction.created'));
 
@@ -86,15 +91,15 @@ final class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
+    public function update(TransactionRequest $request, Transaction $transaction, TransactionService $transactions): RedirectResponse
     {
         $this->authorize('update', $transaction);
 
         $validated = $request->validated();
         $tagIds = Arr::pull($validated, 'tags', []);
+        Arr::forget($validated, 'splits');
 
-        $transaction->update($validated);
-        $transaction->tags()->sync($tagIds);
+        $transactions->update(Auth::user(), $transaction, $validated, $tagIds);
 
         $this->toast::success(__('messages.transaction.updated'));
 
