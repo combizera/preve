@@ -35,8 +35,9 @@ final class RecurringTransactionController extends Controller
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
+        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
 
-        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags'));
+        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags', 'creditCards'));
     }
 
     /**

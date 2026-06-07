@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\TransactionType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Date;
@@ -61,6 +62,15 @@ final class RecurringTransactionRequest extends FormRequest
                     $validator->errors()->add(
                         'category_id',
                         __('validation.custom.category_id.type_mismatch', ['type' => $this->type]),
+                    );
+
+                    return;
+                }
+
+                if ($this->filled('credit_card_id') && $this->type !== TransactionType::EXPENSE->value) {
+                    $validator->errors()->add(
+                        'credit_card_id',
+                        __('validation.custom.credit_card.income_not_allowed'),
                     );
                 }
             },

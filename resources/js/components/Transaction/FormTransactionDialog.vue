@@ -23,6 +23,7 @@ import {
 } from '@/lib/currency';
 import { store, update } from '@/routes/transactions';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITag } from '@/types/models/tag';
 import type {
   ITransaction,
@@ -42,12 +43,15 @@ const props = defineProps<Props>();
 const { t } = useI18n();
 const categories = inject<ICategory[]>('categories', []);
 const tags = inject<ITag[]>('tags', []);
+const creditCards = inject<ICreditCard[]>('creditCards', []);
 
 const rawAmount = ref('');
 
 const form = useForm<ITransactionInput>({
   category_id: 0,
   tags: [],
+  credit_card_id: null,
+  splits: null,
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
@@ -64,12 +68,17 @@ watch(
       rawAmount.value = amount > 0 ? amount.toString() : '';
       form.category_id = transaction.category_id ?? 0;
       form.tags = transaction.tags?.map((tag) => tag.id) ?? [];
+      form.credit_card_id = transaction.credit_card_id ?? null;
+      form.splits = transaction.credit_card_id ? 1 : null;
       form.amount = amount;
       form.type = transaction.type ?? TRANSACTION_TYPE.EXPENSE;
       form.description = transaction.description ?? '';
       form.notes = transaction.notes ?? '';
-      form.transaction_date = transaction.transaction_date
-        ? transaction.transaction_date.split('T')[0]
+      const editableDate = transaction.credit_card_id
+        ? transaction.purchase_date
+        : transaction.transaction_date;
+      form.transaction_date = editableDate
+        ? editableDate.split('T')[0]
         : today(getLocalTimeZone()).toString();
     }
   },
@@ -156,6 +165,7 @@ const submitButtonText = computed(() => {
           v-model:displayAmount="displayAmount"
           :categories="categories"
           :tags="tags"
+          :credit-cards="creditCards"
         />
 
         <DialogFooter>

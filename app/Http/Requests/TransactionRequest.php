@@ -66,6 +66,15 @@ final class TransactionRequest extends FormRequest
                     return;
                 }
 
+                if ($this->filled('credit_card_id') && $this->type !== TransactionType::EXPENSE->value) {
+                    $validator->errors()->add(
+                        'credit_card_id',
+                        __('validation.custom.credit_card.income_not_allowed'),
+                    );
+
+                    return;
+                }
+
                 if ($this->filled('credit_card_id') && $this->filled('savings_bucket_id')) {
                     $validator->errors()->add(
                         'credit_card_id',
