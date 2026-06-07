@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CreditCardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\RecurringTransactionController;
@@ -37,6 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
     Route::resource('savings', SavingsBucketController::class)
         ->parameters(['savings' => 'savings'])
+        ->except('create', 'edit', 'show');
+
+    Route::resource('credit-cards', CreditCardController::class)
+        ->parameters(['credit-cards' => 'creditCard'])
         ->except('create', 'edit', 'show');
 });
 
