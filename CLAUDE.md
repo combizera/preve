@@ -418,7 +418,10 @@ export function formatCentsToDisplay(cents: number | string): string {
 - Use `compact()` for passing data
 - Use `Auth::user()` for current user
 - Use `to_route()` for redirects
-- Extract domain calculations / projections to a Service (e.g. `ForecastService`); controllers stay thin (orchestration + render). Anything that's a pure function of `(user, date, ...)` returning a number/array belongs in a Service, not in a private controller method.
+- **Keep controllers thin — this is enforced, not aspirational.** A controller action is only: `authorize` → delegate to a Service → `render`/`redirect`. Aim for ~1–5 lines per action. If an action declares intermediate `$variables`, runs more than one query, builds an array/`compact()` payload, or computes a number, that logic belongs in a Service.
+  - **`index`/list/page actions count too** — the most common slip. When a screen needs several aggregates (totals, summaries, chart series), expose ONE Service method that returns the whole page payload (e.g. `CreditCardService::overview(User, CarbonInterface): array`) and do `return Inertia::render('Page', $service->overview(...))`. Do NOT inline the queries in the action.
+  - **Never put a private helper method on a controller for domain/projection logic.** If you're tempted to write `private function fooProjection(...)` in a controller, that's the signal it belongs in a Service. Reuse the same Service method across controllers (e.g. dashboard + index) instead of duplicating queries.
+  - Anything that's a pure function of `(user, date, ...)` returning a number/array/collection is Service territory — not the controller, not a controller private method. Models hold relationships and per-record accessors, not cross-table aggregate queries scoped to a user.
 
 **Frontend:**
 - Use `useForm()` composable for ALL forms
