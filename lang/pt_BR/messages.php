@@ -46,6 +46,12 @@ return [
         'deleted' => 'Caixinha excluída com sucesso.',
     ],
 
+    'credit_card' => [
+        'created' => 'Cartão de crédito criado com sucesso.',
+        'updated' => 'Cartão de crédito atualizado com sucesso.',
+        'deleted' => 'Cartão de crédito excluído com sucesso.',
+    ],
+
     'profile' => [
         'updated' => 'Perfil atualizado com sucesso.',
     ],

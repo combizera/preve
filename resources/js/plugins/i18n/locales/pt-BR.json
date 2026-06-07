@@ -63,7 +63,8 @@
             "systemTheme": "Tema do sistema",
             "lightTheme": "Tema claro",
             "darkTheme": "Tema escuro",
-            "bugReport": "Reportar Bug"
+            "bugReport": "Reportar Bug",
+            "creditCards": "Cartões"
         },
         "placeholders": {
             "email": "email{'@'}exemplo.com",
@@ -98,7 +99,8 @@
             "deleteTag": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a tag \"{name}\".",
             "deleteForecast": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o orçamento de \"{category}\" em {month}.",
             "deleteForecastSeries": "Este orçamento está pausado. Excluí-lo removerá permanentemente o orçamento de \"{category}\" e todos os meses associados.",
-            "deleteSavingsBucket": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a caixinha \"{name}\"."
+            "deleteSavingsBucket": "Esta ação não pode ser desfeita. Isso excluirá permanentemente a caixinha \"{name}\".",
+            "deleteCreditCard": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o cartão \"{name}\". As transações dele são mantidas, mas desvinculadas."
         }
     },
     "models": {
@@ -260,7 +262,12 @@
             "savingsBucketOptional": "Caixinha (opcional)",
             "savingsBucketPlaceholder": "Escolha uma caixinha ou deixe em branco",
             "savingsBucketExpenseHint": "Despesa + caixinha = aporte. O dinheiro sai do saldo e é guardado na caixinha.",
-            "savingsBucketIncomeHint": "Receita + caixinha = saque. O dinheiro volta pro saldo e é debitado da caixinha."
+            "savingsBucketIncomeHint": "Receita + caixinha = saque. O dinheiro volta pro saldo e é debitado da caixinha.",
+            "creditCardOptional": "Cartão de crédito (opcional)",
+            "creditCardPlaceholder": "Pague à vista ou escolha um cartão",
+            "creditCardHint": "Compras no cartão são lançadas na data de vencimento da fatura.",
+            "splits": "Parcelas",
+            "splitsHint": "Divide em N cobranças mensais, uma por fatura."
         }
     },
     "recurring": {
@@ -546,5 +553,35 @@
             "description": "O link que tentou acessar não é mais válido. Ele pode ter expirado ou a assinatura de segurança está incorreta.",
             "backToHome": "Voltar para o Início"
         }
+    },
+    "creditCards": {
+        "title": "Cartões de Crédito",
+        "description": "Gerencie seus cartões. Compras no cartão são lançadas na data de vencimento da fatura e entram na sua previsibilidade.",
+        "newCard": "Novo cartão",
+        "fields": {
+            "name": "Nome do cartão",
+            "lastFour": "Últimos 4 dígitos",
+            "closingDay": "Dia de fechamento",
+            "dueDay": "Dia de vencimento",
+            "color": "Cor",
+            "creditLimit": "Limite",
+            "creditLimitOptional": "Limite (opcional)"
+        },
+        "table": {
+            "cycle": "Fechamento / Vencimento",
+            "limit": "Limite"
+        },
+        "empty": {
+            "title": "Nenhum cartão ainda",
+            "description": "Adicione seu primeiro cartão para acompanhar compras e parcelas."
+        },
+        "edit": {
+            "title": "Editar cartão",
+            "description": "Atualize os dados de {name}."
+        },
+        "deleteConfirm": {
+            "label": "Para confirmar, digite o nome do cartão: {name}"
+        },
+        "cycleSummary": "Fecha no dia {closing}, vence no dia {due}"
     }
 }

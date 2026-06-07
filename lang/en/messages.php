@@ -46,6 +46,12 @@ return [
         'deleted' => 'Savings bucket deleted successfully.',
     ],
 
+    'credit_card' => [
+        'created' => 'Credit card created successfully.',
+        'updated' => 'Credit card updated successfully.',
+        'deleted' => 'Credit card deleted successfully.',
+    ],
+
     'profile' => [
         'updated' => 'Profile updated successfully.',
     ],
