@@ -1,4 +1,5 @@
 import { ICategory } from '@/types/models/category';
+import { ICreditCard } from '@/types/models/credit-card';
 import { ITag } from '@/types/models/tag';
 import type { TransactionType } from '@/types/models/transaction';
 
@@ -8,6 +9,8 @@ export interface IRecurringTransaction {
     id?: string;
     category_id: number;
     category?: ICategory;
+    credit_card_id?: number | null;
+    credit_card?: ICreditCard | null;
     tags?: ITag[];
     amount: number;
     frequency: FrequencyType;
@@ -24,6 +27,7 @@ export interface IRecurringTransaction {
 export interface IRecurringTransactionInput {
     id?: string;
     category_id: number;
+    credit_card_id?: number | null;
     tags: number[];
     amount: number;
     frequency: FrequencyType;
