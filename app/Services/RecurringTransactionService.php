@@ -8,6 +8,7 @@ use App\Models\RecurringTransaction;
 use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +28,23 @@ final class RecurringTransactionService
             ->each(fn (CarbonInterface $date) => $this->createTransactionIfNotExists($recurringTransaction, $date));
     }
 
+    /**
+     * Drop the generated transactions from next month onward and rebuild them
+     * from the (just-edited) template, so changes — including switching to or
+     * from a card — propagate to the future. The current month and past stay
+     * untouched.
+     */
+    public function regenerateFutureTransactions(RecurringTransaction $recurringTransaction, int $monthsAhead = 3): void
+    {
+        $nextMonth = Date::now()->startOfMonth()->addMonth();
+
+        $recurringTransaction->transactions()
+            ->where(fn (Builder $query) => $this->scopeCompetenceFrom($query, $nextMonth))
+            ->delete();
+
+        $this->generateFutureTransactions($recurringTransaction, $monthsAhead);
+    }
+
     private function defineGenerationPeriod(RecurringTransaction $recurringTransaction, int $monthsAhead): CarbonPeriod
     {
         $startMonth = $recurringTransaction->start_date->isFuture()
@@ -43,11 +61,9 @@ final class RecurringTransactionService
     private function createTransactionIfNotExists(RecurringTransaction $recurringTransaction, CarbonInterface $transactionDate): void
     {
         $card = $recurringTransaction->creditCard;
-        $dedupeColumn = $card ? 'purchase_date' : 'transaction_date';
 
         $exists = $recurringTransaction->transactions()
-            ->whereYear($dedupeColumn, $transactionDate->year)
-            ->whereMonth($dedupeColumn, $transactionDate->month)
+            ->where(fn (Builder $query) => $this->scopeCompetenceInMonth($query, $transactionDate))
             ->exists();
 
         if ($exists) {
@@ -80,5 +96,37 @@ final class RecurringTransactionService
                 'error'        => $exception->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Match transactions whose competence month is the given month, regardless of
+     * being a card purchase (competence = purchase_date) or cash (competence =
+     * transaction_date). Keeps dedup correct when a recurring switches card on/off.
+     */
+    private function scopeCompetenceInMonth(Builder $query, CarbonInterface $month): void
+    {
+        $query
+            ->where(fn (Builder $cardScope) => $cardScope
+                ->whereNotNull('purchase_date')
+                ->whereYear('purchase_date', $month->year)
+                ->whereMonth('purchase_date', $month->month))
+            ->orWhere(fn (Builder $cashScope) => $cashScope
+                ->whereNull('purchase_date')
+                ->whereYear('transaction_date', $month->year)
+                ->whereMonth('transaction_date', $month->month));
+    }
+
+    /**
+     * Match transactions whose competence date is on or after the given date.
+     */
+    private function scopeCompetenceFrom(Builder $query, CarbonInterface $date): void
+    {
+        $query
+            ->where(fn (Builder $cardScope) => $cardScope
+                ->whereNotNull('purchase_date')
+                ->where('purchase_date', '>=', $date->toDateString()))
+            ->orWhere(fn (Builder $cashScope) => $cashScope
+                ->whereNull('purchase_date')
+                ->where('transaction_date', '>=', $date->toDateString()));
     }
 }

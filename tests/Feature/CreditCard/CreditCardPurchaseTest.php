@@ -184,6 +184,118 @@ it('stores a recurring transaction tied to a card via the form', function (): vo
     Date::setTestNow();
 });
 
+it('regenerates future recurring transactions with the new amount, keeping the current month', function (): void {
+    Date::setTestNow('2026-06-15');
+
+    $this->post(route('recurring.store'), [
+        'category_id'  => $this->category->id,
+        'amount'       => 5000,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::MONTHLY->value,
+        'description'  => 'Gym',
+        'is_active'    => true,
+        'day_of_month' => 10,
+        'start_date'   => '2026-06-01',
+    ])->assertRedirect();
+
+    $recurring = RecurringTransaction::query()->firstOrFail();
+    $total = $recurring->transactions()->count();
+
+    $this->put(route('recurring.update', $recurring->id), [
+        'category_id'  => $this->category->id,
+        'amount'       => 7000,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::MONTHLY->value,
+        'description'  => 'Gym',
+        'is_active'    => true,
+        'day_of_month' => 10,
+        'start_date'   => '2026-06-01',
+    ])->assertRedirect();
+
+    expect($recurring->transactions()->count())->toBe($total)
+        ->and($recurring->transactions()->where('amount', 5000)->count())->toBe(1)
+        ->and($recurring->transactions()->where('amount', 7000)->count())->toBe($total - 1);
+
+    Date::setTestNow();
+});
+
+it('moves future recurring transactions onto a card when edited, without duplicating', function (): void {
+    Date::setTestNow('2026-06-15');
+
+    $this->post(route('recurring.store'), [
+        'category_id'  => $this->category->id,
+        'amount'       => 5000,
+        'type'         => TransactionType::EXPENSE->value,
+        'frequency'    => FrequencyType::MONTHLY->value,
+        'description'  => 'Gym',
+        'is_active'    => true,
+        'day_of_month' => 10,
+        'start_date'   => '2026-06-01',
+    ])->assertRedirect();
+
+    $recurring = RecurringTransaction::query()->firstOrFail();
+    $total = $recurring->transactions()->count();
+
+    expect($recurring->transactions()->whereNull('credit_card_id')->count())->toBe($total);
+
+    $this->put(route('recurring.update', $recurring->id), [
+        'category_id'    => $this->category->id,
+        'credit_card_id' => $this->card->id,
+        'amount'         => 5000,
+        'type'           => TransactionType::EXPENSE->value,
+        'frequency'      => FrequencyType::MONTHLY->value,
+        'description'    => 'Gym',
+        'is_active'      => true,
+        'day_of_month'   => 10,
+        'start_date'     => '2026-06-01',
+    ])->assertRedirect();
+
+    expect($recurring->transactions()->count())->toBe($total)
+        ->and($recurring->transactions()->whereNull('credit_card_id')->count())->toBe(1)
+        ->and($recurring->transactions()->whereNotNull('credit_card_id')->count())->toBe($total - 1);
+
+    Date::setTestNow();
+});
+
+it('moves future recurring transactions off a card when the card is removed, without duplicating', function (): void {
+    Date::setTestNow('2026-06-15');
+
+    $this->post(route('recurring.store'), [
+        'category_id'    => $this->category->id,
+        'credit_card_id' => $this->card->id,
+        'amount'         => 5000,
+        'type'           => TransactionType::EXPENSE->value,
+        'frequency'      => FrequencyType::MONTHLY->value,
+        'description'    => 'Gym',
+        'is_active'      => true,
+        'day_of_month'   => 10,
+        'start_date'     => '2026-06-01',
+    ])->assertRedirect();
+
+    $recurring = RecurringTransaction::query()->firstOrFail();
+    $total = $recurring->transactions()->count();
+
+    expect($recurring->transactions()->whereNotNull('credit_card_id')->count())->toBe($total);
+
+    $this->put(route('recurring.update', $recurring->id), [
+        'category_id'    => $this->category->id,
+        'credit_card_id' => null,
+        'amount'         => 5000,
+        'type'           => TransactionType::EXPENSE->value,
+        'frequency'      => FrequencyType::MONTHLY->value,
+        'description'    => 'Gym',
+        'is_active'      => true,
+        'day_of_month'   => 10,
+        'start_date'     => '2026-06-01',
+    ])->assertRedirect();
+
+    expect($recurring->transactions()->count())->toBe($total)
+        ->and($recurring->transactions()->whereNotNull('credit_card_id')->count())->toBe(1)
+        ->and($recurring->transactions()->whereNull('credit_card_id')->count())->toBe($total - 1);
+
+    Date::setTestNow();
+});
+
 it('generates recurring card charges on the invoice due date', function (): void {
     $recurring = RecurringTransaction::factory()->create([
         'user_id'        => $this->user->id,

@@ -60,7 +60,7 @@ final class RecurringTransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring): RedirectResponse
+    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring, RecurringTransactionService $service): RedirectResponse
     {
         $this->authorize('update', $recurring);
 
@@ -69,6 +69,8 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($validated);
         $recurring->tags()->sync($tagIds);
+
+        $service->regenerateFutureTransactions($recurring, 3);
 
         $this->toast::success(__('messages.recurring.updated'));
 

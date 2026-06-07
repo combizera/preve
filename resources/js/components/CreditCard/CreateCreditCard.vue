@@ -75,56 +75,60 @@ const createCard = () => {
       />
 
       <form class="grid flex-1 gap-4" @submit.prevent="createCard">
-        <div class="grid gap-2">
-          <Label for="card_name">{{ t('creditCards.fields.name') }}</Label>
-          <Input id="card_name" name="name" v-model="form.name" />
-          <InputError :message="form.errors.name" />
-        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-2 grid gap-2">
+            <Label for="card_name">{{ t('creditCards.fields.name') }}</Label>
+            <Input id="card_name" name="name" v-model="form.name" />
+            <InputError :message="form.errors.name" />
+          </div>
 
-        <div class="grid gap-2">
-          <Label for="card_color">{{ t('generic.labels.color') }}</Label>
-          <Select v-model="form.color">
-            <SelectTrigger class="w-full">
-              <SelectValue :placeholder="t('generic.placeholders.selectColor')">
-                <div v-if="form.color" class="flex items-center gap-2">
-                  <div
-                    :class="
-                      cn(
-                        'h-4 w-4 rounded',
-                        getCreditCardColorClass(form.color, 'picker'),
-                      )
-                    "
-                  />
-                  <span>{{ capitalizeFirstLetter(form.color) }}</span>
-                </div>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent
-              class="w-auto min-w-0 [&_[data-reka-select-viewport]]:w-auto! [&_[data-reka-select-viewport]]:min-w-0!"
-            >
-              <SelectGroup>
-                <SelectLabel>{{ t('generic.labels.color') }}</SelectLabel>
-                <div class="grid grid-cols-6 gap-1.5 p-1">
-                  <SelectItem
-                    v-for="color in availableCreditCardColors"
-                    :value="color"
-                    :key="color"
-                    class="size-7 cursor-pointer rounded-md bg-transparent! p-0! hover:brightness-90 [&>span]:hidden"
-                  >
+          <div class="grid gap-2">
+            <Label for="card_color">{{ t('generic.labels.color') }}</Label>
+            <Select v-model="form.color">
+              <SelectTrigger class="w-full">
+                <SelectValue
+                  :placeholder="t('generic.placeholders.selectColor')"
+                >
+                  <div v-if="form.color" class="flex items-center gap-2">
                     <div
                       :class="
                         cn(
-                          'size-7 rounded',
-                          getCreditCardColorClass(color, 'picker'),
+                          'h-4 w-4 rounded',
+                          getCreditCardColorClass(form.color, 'picker'),
                         )
                       "
                     />
-                  </SelectItem>
-                </div>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <InputError :message="form.errors.color" />
+                    <span>{{ capitalizeFirstLetter(form.color) }}</span>
+                  </div>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent
+                class="w-auto min-w-0 [&_[data-reka-select-viewport]]:w-auto! [&_[data-reka-select-viewport]]:min-w-0!"
+              >
+                <SelectGroup>
+                  <SelectLabel>{{ t('generic.labels.color') }}</SelectLabel>
+                  <div class="grid grid-cols-6 gap-1.5 p-1">
+                    <SelectItem
+                      v-for="color in availableCreditCardColors"
+                      :value="color"
+                      :key="color"
+                      class="size-7 cursor-pointer rounded-md bg-transparent! p-0! hover:brightness-90 [&>span]:hidden"
+                    >
+                      <div
+                        :class="
+                          cn(
+                            'size-7 rounded',
+                            getCreditCardColorClass(color, 'picker'),
+                          )
+                        "
+                      />
+                    </SelectItem>
+                  </div>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <InputError :message="form.errors.color" />
+          </div>
         </div>
 
         <div class="grid grid-cols-3 gap-3">
@@ -170,27 +174,27 @@ const createCard = () => {
           </div>
         </div>
 
-        <div class="grid gap-2">
-          <Label for="card_limit" class="text-muted-foreground">
-            {{ t('creditCards.fields.creditLimitOptional') }}
-          </Label>
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>{{ getCurrencySymbol() }}</InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput
-              id="card_limit"
-              type="text"
-              inputmode="numeric"
-              placeholder="0,00"
-              v-model="displayLimit"
-              @keydown="filterNumericInput"
-            />
-          </InputGroup>
-          <InputError :message="form.errors.credit_limit" />
-        </div>
+        <div class="flex items-end gap-3">
+          <div class="grid flex-1 gap-2">
+            <Label for="card_limit" class="text-muted-foreground">
+              {{ t('creditCards.fields.creditLimitOptional') }}
+            </Label>
+            <InputGroup>
+              <InputGroupAddon>
+                <InputGroupText>{{ getCurrencySymbol() }}</InputGroupText>
+              </InputGroupAddon>
+              <InputGroupInput
+                id="card_limit"
+                type="text"
+                inputmode="numeric"
+                placeholder="0,00"
+                v-model="displayLimit"
+                @keydown="filterNumericInput"
+              />
+            </InputGroup>
+            <InputError :message="form.errors.credit_limit" />
+          </div>
 
-        <div class="flex justify-end">
           <Button type="submit" :disabled="form.processing">
             {{ t('generic.actions.create') }}
           </Button>
