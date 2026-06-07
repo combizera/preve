@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ChevronLeft, ChevronRight, Share2 } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -10,6 +10,7 @@ import {
   shareInvoice,
 } from '@/actions/App/Http/Controllers/CreditCardController';
 import CreditCardPreview from '@/components/CreditCard/CreditCardPreview.vue';
+import ToastProvider from '@/components/ToastProvider.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { MONTH_KEYS } from '@/lib/calendar';
@@ -30,7 +31,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const { t } = useI18n();
-const page = usePage();
 
 const monthString = (year: number, month: number) =>
   `${year}-${String(month).padStart(2, '0')}`;
@@ -59,8 +59,8 @@ const shareLink = () => {
     {
       preserveScroll: true,
       preserveState: true,
-      onSuccess: () => {
-        const url = page.props.creditCardInvoiceShareUrl as string | undefined;
+      onSuccess: (visit) => {
+        const url = visit.props.creditCardInvoiceShareUrl as string | undefined;
         if (url) {
           navigator.clipboard.writeText(url);
           toast.success(t('creditCards.invoice.shareSuccess'));
@@ -79,6 +79,8 @@ const amountClass = (transaction: ITransaction) =>
 
 <template>
   <Head :title="`${t('creditCards.invoice.title')} · ${card.name}`" />
+
+  <ToastProvider v-if="!shared" />
 
   <div class="mx-auto w-full max-w-xl px-4 py-10">
     <CreditCardPreview
