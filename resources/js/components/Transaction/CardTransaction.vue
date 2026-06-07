@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { ArrowDownLeft, ArrowUpRight, RefreshCw } from 'lucide-vue-next';
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  CreditCard,
+  RefreshCw,
+} from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -113,6 +118,14 @@ const isExpense = computed(
             class="flex items-center gap-1"
           >
             • <RefreshCw :size="12" /> {{ t('transactions.recurring') }}
+          </span>
+          <span v-if="transaction.credit_card" class="flex items-center gap-1">
+            • <CreditCard :size="12" /> {{ transaction.credit_card.name
+            }}<template v-if="transaction.split_total">
+              {{ transaction.split_number }}/{{
+                transaction.split_total
+              }}</template
+            >
           </span>
         </span>
       </div>

@@ -17,6 +17,7 @@ import transactionRoutes from '@/routes/transactions';
 import type { BreadcrumbItem } from '@/types';
 import { ITransactionFilters } from '@/types/filters';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
 
@@ -24,6 +25,7 @@ interface Props {
   transactions: ITransaction[];
   categories: ICategory[];
   tags: ITag[];
+  creditCards: ICreditCard[];
   filters: ITransactionFilters;
 }
 
@@ -31,6 +33,7 @@ const props = defineProps<Props>();
 
 provide('categories', props.categories);
 provide('tags', props.tags);
+provide('creditCards', props.creditCards);
 
 const { t } = useI18n();
 const { view } = useTransactionView();
@@ -81,6 +84,10 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     />
 
     <!-- CREATE -->
-    <CreateTransactionDialog :categories="categories" :tags="tags" />
+    <CreateTransactionDialog
+      :categories="categories"
+      :tags="tags"
+      :credit-cards="creditCards"
+    />
   </AppLayout>
 </template>

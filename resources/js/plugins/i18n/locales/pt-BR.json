@@ -217,6 +217,16 @@
             "title": "Guardado neste mês",
             "noIncome": "Sem receitas registradas neste mês ainda.",
             "detail": "{deposits} de {income} recebidos este mês."
+        },
+        "creditCards": {
+            "title": "Cartões de Crédito",
+            "invoice": "Fatura do mês",
+            "cycle": "Fecha dia {closing} · vence dia {due}",
+            "empty": {
+                "title": "Nenhum cartão ainda",
+                "description": "Adicione um cartão para acompanhar faturas e parcelas.",
+                "button": "Adicionar cartão"
+            }
         }
     },
     "transactions": {
@@ -569,7 +579,8 @@
         },
         "table": {
             "cycle": "Fechamento / Vencimento",
-            "limit": "Limite"
+            "limit": "Limite",
+            "usage": "Uso"
         },
         "empty": {
             "title": "Nenhum cartão ainda",
@@ -582,6 +593,42 @@
         "deleteConfirm": {
             "label": "Para confirmar, digite o nome do cartão: {name}"
         },
-        "cycleSummary": "Fecha no dia {closing}, vence no dia {due}"
+        "cycleSummary": "Fecha no dia {closing}, vence no dia {due}",
+        "preview": {
+            "type": "Crédito",
+            "placeholder": "Nome do cartão"
+        },
+        "summary": {
+            "title": "Resumo",
+            "committed": "Comprometido",
+            "committedHint": "Gastos no cartão ainda não debitados",
+            "available": "Limite disponível",
+            "availableHint": "Limite total menos o comprometido",
+            "invoice": "Fatura do mês",
+            "invoiceHint": "A pagar somando todos os cartões este mês"
+        },
+        "chart": {
+            "title": "Próximas faturas",
+            "empty": "Sem gastos futuros no cartão."
+        },
+        "usage": {
+            "noLimit": "Sem limite definido",
+            "committed": "comprometido"
+        },
+        "actions": {
+            "viewInvoice": "Ver fatura"
+        },
+        "invoice": {
+            "title": "Fatura",
+            "total": "Total da fatura",
+            "empty": "Sem lançamentos nesta fatura.",
+            "share": "Compartilhar fatura",
+            "shareSuccess": "Link da fatura copiado!",
+            "shareError": "Não foi possível gerar o link.",
+            "purchasedOn": "Compra em {date}",
+            "installment": "Parcela {n}/{total}",
+            "prev": "Mês anterior",
+            "next": "Próximo mês"
+        }
     }
 }

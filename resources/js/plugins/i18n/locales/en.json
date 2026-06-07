@@ -217,6 +217,16 @@
             "title": "Saved this month",
             "noIncome": "No income recorded this month yet.",
             "detail": "{deposits} of {income} earned this month."
+        },
+        "creditCards": {
+            "title": "Credit Cards",
+            "invoice": "This month's invoice",
+            "cycle": "Closes {closing} · due {due}",
+            "empty": {
+                "title": "No credit cards yet",
+                "description": "Add a card to track invoices and installments.",
+                "button": "Add card"
+            }
         }
     },
     "transactions": {
@@ -569,7 +579,8 @@
         },
         "table": {
             "cycle": "Closing / Due",
-            "limit": "Limit"
+            "limit": "Limit",
+            "usage": "Usage"
         },
         "empty": {
             "title": "No credit cards yet",
@@ -582,6 +593,42 @@
         "deleteConfirm": {
             "label": "To confirm, type the name of the card: {name}"
         },
-        "cycleSummary": "Closes on day {closing}, due on day {due}"
+        "cycleSummary": "Closes on day {closing}, due on day {due}",
+        "preview": {
+            "type": "Credit",
+            "placeholder": "Card name"
+        },
+        "summary": {
+            "title": "Overview",
+            "committed": "Committed",
+            "committedHint": "Card spending not yet debited",
+            "available": "Available limit",
+            "availableHint": "Total limit minus committed",
+            "invoice": "This month's invoice",
+            "invoiceHint": "Due across all cards this month"
+        },
+        "chart": {
+            "title": "Upcoming invoices",
+            "empty": "No upcoming card spending."
+        },
+        "usage": {
+            "noLimit": "No limit set",
+            "committed": "committed"
+        },
+        "actions": {
+            "viewInvoice": "View invoice"
+        },
+        "invoice": {
+            "title": "Invoice",
+            "total": "Invoice total",
+            "empty": "No charges in this invoice.",
+            "share": "Share invoice",
+            "shareSuccess": "Invoice link copied!",
+            "shareError": "Couldn't generate the link.",
+            "purchasedOn": "Purchased {date}",
+            "installment": "Installment {n}/{total}",
+            "prev": "Previous month",
+            "next": "Next month"
+        }
     }
 }
