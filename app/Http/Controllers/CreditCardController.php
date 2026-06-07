@@ -7,20 +7,54 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCreditCardRequest;
 use App\Http\Requests\UpdateCreditCardRequest;
 use App\Models\CreditCard;
+use App\Services\CreditCardService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
 final class CreditCardController extends Controller
 {
-    public function index(): Response
+    public function index(CreditCardService $service): Response
     {
         $this->authorize('viewAny', CreditCard::class);
 
-        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
+        return Inertia::render('CreditCard', $service->overview(Auth::user(), Date::now()));
+    }
 
-        return Inertia::render('CreditCard', compact('creditCards'));
+    public function invoice(Request $request, CreditCard $creditCard, CreditCardService $service): Response
+    {
+        $this->authorize('view', $creditCard);
+
+        $month = $service->resolveMonth($request->query('month'));
+        $invoice = $service->invoiceFor($creditCard, $month);
+
+        return Inertia::render('CreditCardInvoice', [
+            'card'         => $creditCard,
+            'year'         => $month->year,
+            'month'        => $month->month,
+            'transactions' => $invoice['transactions'],
+            'total'        => $invoice['total'],
+            'shared'       => false,
+        ]);
+    }
+
+    public function shareInvoice(Request $request, CreditCard $creditCard, CreditCardService $service): RedirectResponse
+    {
+        $this->authorize('view', $creditCard);
+
+        $month = $service->resolveMonth($request->input('month'));
+
+        $url = URL::temporarySignedRoute(
+            'credit-cards.invoice.receipt',
+            Date::now()->addDays(7),
+            ['creditCard' => $creditCard->id, 'month' => $month->format('Y-m')],
+        );
+
+        return back()->with('credit_card_invoice_share_url', $url);
     }
 
     public function store(CreateCreditCardRequest $request): RedirectResponse

@@ -37,3 +37,9 @@ it('clamps the due day to the last day of a short month', function (): void {
 
     expect($date->toDateString())->toBe('2026-02-28');
 });
+
+it('treats a closing day longer than the month as end of month', function (): void {
+    $date = card(31, 10)->effectivePaymentDate(Date::parse('2026-04-30'));
+
+    expect($date->toDateString())->toBe('2026-05-10');
+});

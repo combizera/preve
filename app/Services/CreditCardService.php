@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\TransactionType;
 use App\Models\CreditCard;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -72,6 +75,170 @@ final class CreditCardService
         $data['transaction_date'] = $card->effectivePaymentDate($purchaseDate);
 
         return $data;
+    }
+
+    /**
+     * Everything the credit cards screen needs: each card with its committed and
+     * current-invoice totals, the aggregate summary, and the upcoming invoices
+     * broken down by card.
+     *
+     * @return array{
+     *     creditCards: Collection<int, CreditCard>,
+     *     summary: array{committed: int, limit: int, available: int, invoice: int},
+     *     upcomingInvoices: list<array{year: int, month: int, totals: array<int, int>}>
+     * }
+     */
+    public function overview(User $user, CarbonInterface $now): array
+    {
+        $creditCards = $user->creditCards()->orderBy('name')->get();
+        $committedByCard = $this->committedTotals($user, $now);
+        $invoiceByCard = $this->invoiceTotals($user, $now);
+
+        $creditCards->each(function (CreditCard $card) use ($committedByCard, $invoiceByCard): void {
+            $card->setAttribute('committed', (int) ($committedByCard[$card->id] ?? 0));
+            $card->setAttribute('current_invoice', (int) ($invoiceByCard[$card->id] ?? 0));
+        });
+
+        $totalCommitted = (int) $committedByCard->sum();
+        $totalLimit = (int) $creditCards->whereNotNull('credit_limit')->sum('credit_limit');
+
+        return [
+            'creditCards' => $creditCards,
+            'summary'     => [
+                'committed' => $totalCommitted,
+                'limit'     => $totalLimit,
+                'available' => max(0, $totalLimit - $totalCommitted),
+                'invoice'   => (int) $invoiceByCard->sum(),
+            ],
+            'upcomingInvoices' => $this->upcomingInvoices($user, $now, $creditCards),
+        ];
+    }
+
+    /**
+     * The user's cards, each with the total of its invoice due in the given month.
+     *
+     * @return Collection<int, CreditCard>
+     */
+    public function withMonthlyInvoice(User $user, CarbonInterface $month): Collection
+    {
+        $invoiceByCard = $this->invoiceTotals($user, $month);
+
+        return $user->creditCards()
+            ->orderBy('name')
+            ->get()
+            ->each(fn (CreditCard $card) => $card->setAttribute('current_invoice', (int) ($invoiceByCard[$card->id] ?? 0)));
+    }
+
+    /**
+     * Resolve a 'YYYY-MM' string into the first day of that month, falling back
+     * to the current month when the input is missing or malformed.
+     */
+    public function resolveMonth(?string $month): CarbonInterface
+    {
+        if (is_string($month)) {
+            try {
+                return Date::createFromFormat('Y-m', $month)->startOfMonth();
+            } catch (Throwable) {
+                // fall through to the current month
+            }
+        }
+
+        return Date::now()->startOfMonth();
+    }
+
+    /**
+     * The transactions composing a card's invoice for the given month (by due
+     * date) and the invoice total (charges minus refunds).
+     *
+     * @return array{transactions: Collection<int, Transaction>, total: int}
+     */
+    public function invoiceFor(CreditCard $card, CarbonInterface $month): array
+    {
+        $transactions = $card->transactions()
+            ->with('category')
+            ->whereYear('transaction_date', $month->year)
+            ->whereMonth('transaction_date', $month->month)
+            ->oldest('transaction_date')
+            ->oldest('purchase_date')
+            ->get();
+
+        $total = (int) $transactions->reduce(
+            fn (int $carry, Transaction $transaction): int => $carry + ($transaction->type === TransactionType::EXPENSE ? $transaction->amount : -$transaction->amount),
+            0,
+        );
+
+        return ['transactions' => $transactions, 'total' => $total];
+    }
+
+    /**
+     * Card spend not yet debited (due today or later), summed per card.
+     *
+     * @return SupportCollection<int, int>
+     */
+    private function committedTotals(User $user, CarbonInterface $now): SupportCollection
+    {
+        return $user->transactions()
+            ->whereNotNull('credit_card_id')
+            ->expense()
+            ->where('transaction_date', '>=', $now->copy()->startOfDay()->toDateString())
+            ->selectRaw('credit_card_id, SUM(amount) as total')
+            ->groupBy('credit_card_id')
+            ->pluck('total', 'credit_card_id');
+    }
+
+    /**
+     * Card spend due within the given month, summed per card.
+     *
+     * @return SupportCollection<int, int>
+     */
+    private function invoiceTotals(User $user, CarbonInterface $month): SupportCollection
+    {
+        return $user->transactions()
+            ->whereNotNull('credit_card_id')
+            ->expense()
+            ->inMonth($month)
+            ->selectRaw('credit_card_id, SUM(amount) as total')
+            ->groupBy('credit_card_id')
+            ->pluck('total', 'credit_card_id');
+    }
+
+    /**
+     * Total card spend per upcoming invoice month, broken down by card, for the
+     * current month and the following five. Keyed by card id so the chart can
+     * stack one series per card.
+     *
+     * @param  Collection<int, CreditCard>  $creditCards
+     * @return list<array{year: int, month: int, totals: array<int, int>}>
+     */
+    private function upcomingInvoices(User $user, CarbonInterface $now, Collection $creditCards): array
+    {
+        $start = $now->copy()->startOfMonth();
+        $end = $start->copy()->addMonths(5)->endOfMonth();
+
+        $rows = $user->transactions()
+            ->whereNotNull('credit_card_id')
+            ->expense()
+            ->whereBetween('transaction_date', [$start->toDateString(), $end->toDateString()])
+            ->selectRaw('credit_card_id, EXTRACT(YEAR FROM transaction_date)::int as y, EXTRACT(MONTH FROM transaction_date)::int as m, SUM(amount) as total')
+            ->groupBy('credit_card_id', 'y', 'm')
+            ->get();
+
+        return collect(range(0, 5))
+            ->map(function (int $offset) use ($start, $rows, $creditCards): array {
+                $month = $start->copy()->addMonths($offset);
+
+                $totals = [];
+                foreach ($creditCards as $card) {
+                    $totals[$card->id] = (int) $rows
+                        ->where('credit_card_id', $card->id)
+                        ->where('y', $month->year)
+                        ->where('m', $month->month)
+                        ->sum('total');
+                }
+
+                return ['year' => $month->year, 'month' => $month->month, 'totals' => $totals];
+            })
+            ->all();
     }
 
     private function installmentDueDate(CarbonInterface $firstDueDate, int $offsetMonths, int $dueDay): CarbonInterface

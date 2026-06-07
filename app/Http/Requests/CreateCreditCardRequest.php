@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Enums\AccentColor;
+use App\Enums\CreditCardColor;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -26,7 +26,7 @@ final class CreateCreditCardRequest extends FormRequest
             'last_four'    => ['nullable', 'string', 'digits:4'],
             'closing_day'  => ['required', 'integer', 'min:1', 'max:31'],
             'due_day'      => ['required', 'integer', 'min:1', 'max:31'],
-            'color'        => ['required', 'string', Rule::enum(AccentColor::class)],
+            'color'        => ['required', 'string', Rule::enum(CreditCardColor::class)],
             'credit_limit' => ['nullable', 'integer', 'min:0'],
         ];
     }

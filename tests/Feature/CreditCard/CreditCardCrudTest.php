@@ -17,6 +17,8 @@ it('renders the credit card index', function (): void {
         ->assertInertia(fn ($page) => $page
             ->component('CreditCard')
             ->has('creditCards')
+            ->has('summary')
+            ->has('upcomingInvoices')
         );
 });
 

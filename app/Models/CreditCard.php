@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\AccentColor;
+use App\Enums\CreditCardColor;
 use Carbon\CarbonInterface;
 use Database\Factories\CreditCardFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $last_four
  * @property int $closing_day
  * @property int $due_day
- * @property AccentColor $color
+ * @property CreditCardColor $color
  * @property int|null $credit_limit
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -43,7 +43,7 @@ final class CreditCard extends Model
         'closing_day'  => 'integer',
         'due_day'      => 'integer',
         'credit_limit' => 'integer',
-        'color'        => AccentColor::class,
+        'color'        => CreditCardColor::class,
     ];
 
     /**

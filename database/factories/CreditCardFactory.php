@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\AccentColor;
+use App\Enums\CreditCardColor;
 use App\Models\CreditCard;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,7 +27,7 @@ final class CreditCardFactory extends Factory
             'last_four'    => (string) $this->faker->numberBetween(1000, 9999),
             'closing_day'  => $this->faker->numberBetween(1, 28),
             'due_day'      => $this->faker->numberBetween(1, 28),
-            'color'        => $this->faker->randomElement(AccentColor::cases())->value,
+            'color'        => $this->faker->randomElement(CreditCardColor::cases())->value,
             'credit_limit' => $this->faker->numberBetween(100000, 5000000),
         ];
     }

@@ -100,6 +100,21 @@ it('rejects a transaction tied to both a card and a savings bucket', function ()
     expect(Transaction::query()->count())->toBe(0);
 });
 
+it('rejects an income transaction tied to a card', function (): void {
+    $incomeCategory = Category::factory()->create([
+        'user_id' => $this->user->id,
+        'type'    => TransactionType::INCOME->value,
+    ]);
+
+    storePurchase([
+        'category_id' => $incomeCategory->id,
+        'type'        => TransactionType::INCOME->value,
+        'splits'      => 1,
+    ])->assertSessionHasErrors('credit_card_id');
+
+    expect(Transaction::query()->count())->toBe(0);
+});
+
 it('recomputes the effective date when updating a card transaction', function (): void {
     $transaction = Transaction::factory()->create([
         'user_id'     => $this->user->id,
@@ -120,6 +135,53 @@ it('recomputes the effective date when updating a card transaction', function ()
 
     expect($transaction->transaction_date->toDateString())->toBe('2026-05-01')
         ->and($transaction->purchase_date->toDateString())->toBe('2026-03-25');
+});
+
+it('reports the committed amount and upcoming invoices on the index', function (): void {
+    Transaction::factory()->create([
+        'user_id'          => $this->user->id,
+        'category_id'      => $this->category->id,
+        'credit_card_id'   => $this->card->id,
+        'type'             => TransactionType::EXPENSE->value,
+        'amount'           => 30000,
+        'transaction_date' => now()->addMonth()->startOfMonth(),
+    ]);
+
+    $this->get(route('credit-cards.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('summary.committed', 30000)
+            ->where('creditCards.0.committed', 30000)
+            ->has('upcomingInvoices', 6)
+        );
+});
+
+it('stores a recurring transaction tied to a card via the form', function (): void {
+    Date::setTestNow('2026-01-05');
+
+    $this->post(route('recurring.store'), [
+        'category_id'    => $this->category->id,
+        'credit_card_id' => $this->card->id,
+        'amount'         => 8000,
+        'type'           => TransactionType::EXPENSE->value,
+        'frequency'      => FrequencyType::MONTHLY->value,
+        'description'    => 'Streaming on card',
+        'is_active'      => true,
+        'day_of_month'   => 10,
+        'start_date'     => '2026-01-01',
+    ])->assertRedirect(route('recurring.index'));
+
+    $recurring = RecurringTransaction::query()->firstOrFail();
+
+    expect($recurring->credit_card_id)->toBe($this->card->id);
+
+    $generated = $recurring->transactions()->first();
+
+    expect($generated->credit_card_id)->toBe($this->card->id)
+        ->and($generated->purchase_date->day)->toBe(10)
+        ->and($generated->transaction_date->day)->toBe(1);
+
+    Date::setTestNow();
 });
 
 it('generates recurring card charges on the invoice due date', function (): void {
