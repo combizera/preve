@@ -14,6 +14,37 @@ beforeEach(function (): void {
     $this->actingAs($user);
 });
 
+it('lists paused recurring transactions last', function (): void {
+    $category = Category::factory()->create([
+        'user_id' => auth()->id(),
+        'type'    => TransactionType::EXPENSE->value,
+    ]);
+
+    $paused = RecurringTransaction::factory()->create([
+        'user_id'      => auth()->id(),
+        'category_id'  => $category->id,
+        'type'         => TransactionType::EXPENSE->value,
+        'is_active'    => false,
+        'day_of_month' => 1,
+        'description'  => 'Paused one',
+    ]);
+    $active = RecurringTransaction::factory()->create([
+        'user_id'      => auth()->id(),
+        'category_id'  => $category->id,
+        'type'         => TransactionType::EXPENSE->value,
+        'is_active'    => true,
+        'day_of_month' => 20,
+        'description'  => 'Active one',
+    ]);
+
+    $this->get(route('recurring.index'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('expenseRecurring.0.id', $active->id)
+            ->where('expenseRecurring.1.id', $paused->id)
+        );
+});
+
 // CREATE
 it('should be able to create recurring transaction', function (): void {
     $category = Category::factory()->create([

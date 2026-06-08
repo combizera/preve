@@ -25,6 +25,7 @@ final class RecurringTransactionController extends Controller
         $recurring = Auth::user()
             ->recurringTransactions()
             ->with(['transactions', 'category', 'tags', 'creditCard'])
+            ->orderByDesc('is_active')
             ->orderBy('day_of_month', 'asc')
             ->get();
 
