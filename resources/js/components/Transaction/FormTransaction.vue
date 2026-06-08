@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
+import TagsMultiSelect from '@/components/Tag/TagsMultiSelect.vue';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import {
@@ -25,28 +26,64 @@ import {
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITag } from '@/types/models/tag';
-import type { ITransaction } from '@/types/models/transaction';
+import type { ITransactionInput } from '@/types/models/transaction';
 import { filterNumericInput } from '@/utils/numericInput';
 
 interface Props {
-  form: InertiaForm<ITransaction>;
+  form: InertiaForm<ITransactionInput>;
   categories: ICategory[];
   tags: ITag[];
+  creditCards?: ICreditCard[];
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  creditCards: () => [],
+});
 
 const { t } = useI18n();
 
 const displayAmount = defineModel<string>('displayAmount', { required: true });
+const currencySymbol = getCurrencySymbol();
 
 const filteredCategories = computed(() => {
   return props.categories.filter(
     (category) => category.type === props.form.type,
   );
 });
+
+const NO_CARD = 0;
+
+const cardModel = computed<number>({
+  get: () => props.form.credit_card_id ?? NO_CARD,
+  set: (value) => {
+    props.form.credit_card_id = value === NO_CARD ? null : value;
+    props.form.splits = props.form.credit_card_id
+      ? (props.form.splits ?? 1)
+      : null;
+  },
+});
+
+const hasCard = computed(() => !!props.form.credit_card_id);
+
+const showCardField = computed(
+  () =>
+    props.creditCards.length > 0 &&
+    props.form.type === TRANSACTION_TYPE.EXPENSE,
+);
+
+watch(
+  () => props.form.type,
+  (type) => {
+    if (type !== TRANSACTION_TYPE.EXPENSE) {
+      props.form.credit_card_id = null;
+      props.form.splits = null;
+    }
+  },
+);
 </script>
 
 <template>
@@ -72,7 +109,7 @@ const filteredCategories = computed(() => {
       <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
-          <InputGroupText>R$</InputGroupText>
+          <InputGroupText>{{ currencySymbol }}</InputGroupText>
         </InputGroupAddon>
         <InputGroupInput
           id="amount"
@@ -103,7 +140,9 @@ const filteredCategories = computed(() => {
       <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+          <SelectValue
+            :placeholder="t('generic.placeholders.selectCategory')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -122,22 +161,54 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
-      <Select v-model="form.tag_id">
+      <Label for="tag" class="text-muted-foreground">
+        {{ t('models.tag.optional') }}
+      </Label>
+      <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
+      <InputError :message="form.errors.tags" />
+    </div>
+  </div>
+
+  <!-- Credit card & Installments -->
+  <div
+    v-if="showCardField"
+    :class="hasCard ? 'grid grid-cols-2 gap-4' : 'grid gap-4'"
+  >
+    <div class="grid gap-3">
+      <Label for="credit_card" class="text-muted-foreground">
+        {{ t('transactions.fields.creditCardOptional') }}
+      </Label>
+      <Select v-model="cardModel">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
+          <SelectValue
+            :placeholder="t('transactions.fields.creditCardPlaceholder')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
-            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
-            <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
-              {{ tag.name }}
+            <SelectItem :value="NO_CARD">
+              {{ t('generic.labels.none') }}
+            </SelectItem>
+            <SelectItem
+              v-for="card in creditCards"
+              :value="card.id"
+              :key="card.id"
+            >
+              {{ card.name }}
             </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
-      <InputError :message="form.errors.tag_id" />
+      <InputError :message="form.errors.credit_card_id" />
+    </div>
+
+    <div v-if="hasCard" class="grid gap-3">
+      <Label for="splits"> {{ t('transactions.fields.splits') }} </Label>
+      <Input id="splits" type="number" min="1" max="48" v-model="form.splits" />
+      <p class="text-xs text-muted-foreground">
+        {{ t('transactions.fields.splitsHint') }}
+      </p>
+      <InputError :message="form.errors.splits" />
     </div>
   </div>
 
@@ -154,8 +225,14 @@ const filteredCategories = computed(() => {
 
   <!-- Notes -->
   <div class="grid gap-3">
-    <Label for="notes" class="text-muted-foreground"> {{ t('generic.labels.notesOptional') }} </Label>
-    <Input id="notes" :placeholder="t('generic.placeholders.additionalNotes')" v-model="form.notes" />
+    <Label for="notes" class="text-muted-foreground">
+      {{ t('generic.labels.notesOptional') }}
+    </Label>
+    <Input
+      id="notes"
+      :placeholder="t('generic.placeholders.additionalNotes')"
+      v-model="form.notes"
+    />
     <InputError :message="form.errors.notes" />
   </div>
 </template>

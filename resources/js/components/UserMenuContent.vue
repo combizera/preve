@@ -37,7 +37,9 @@ defineProps<Props>();
   <DropdownMenuSeparator />
   <DropdownMenuGroup>
     <div class="flex w-full items-center justify-between">
-      <span class="text-sm px-1 text-muted-foreground">{{ t('generic.sidebar.theme') }}</span>
+      <span class="px-1 text-sm text-muted-foreground">{{
+        t('generic.sidebar.theme')
+      }}</span>
       <ThemeSwitch />
     </div>
   </DropdownMenuGroup>

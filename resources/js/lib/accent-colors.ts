@@ -1,7 +1,7 @@
 /**
  * Enum of category colors
  */
-export enum CategoryColor {
+export enum AccentColor {
     Red = 'red',
     Orange = 'orange',
     Amber = 'amber',
@@ -143,10 +143,10 @@ const colorClassMap: Record<string, Record<ColorUtility, string>> = {
  * @param utility - Type of utility (ex: 'bg', 'text', 'border', 'ring')
  */
 export const getColorClass = (
-    color: CategoryColor,
+    color: AccentColor,
     utility: ColorUtility = 'bg',
 ): string => {
     return colorClassMap[color][utility];
 };
 
-export const availableColors = Object.values(CategoryColor);
+export const availableColors = Object.values(AccentColor);

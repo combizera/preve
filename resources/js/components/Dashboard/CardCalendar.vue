@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -16,29 +17,38 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <button
-    type="button"
-    :disabled="isSelected"
+  <Button
+    :variant="isSelected ? 'default' : 'ghost'"
+    :class="
+      cn(
+        'group relative flex h-full flex-col gap-0 disabled:opacity-100',
+        !isSelected && 'border border-transparent',
+      )
+    "
     @click="emit('select')"
-    :class="cn(
-      'relative flex flex-col items-center h-full min-w-25 rounded transition-all duration-150',
-      isSelected
-        ? 'from-primary to-primary/85 text-primary-foreground border border-zinc-950/25 bg-gradient-to-t shadow-sm shadow-zinc-950/20 cursor-default active:brightness-90 dark:border-white/20'
-        : 'cursor-pointer hover:bg-muted-foreground/10 border border-transparent hover:shadow-sm hover:shadow-zinc-950/20 transition-[filter] duration-200 hover:brightness-110',
-    )"
+    :disabled="isSelected"
   >
-    <p class="pt-2 text-md font-medium">
+    <p class="font-medium">
       {{ month }}
     </p>
-    <span :class="cn('text-[10px] leading-[1]', isSelected ? 'text-primary-foreground/70' : 'text-muted-foreground')">
+    <span
+      :class="
+        cn(
+          'text-[12px] leading-none text-muted-foreground',
+          isSelected && 'text-primary-foreground',
+        )
+      "
+    >
       {{ year }}
     </span>
     <span
       v-if="isCurrent"
-      :class="cn(
-        'absolute bottom-1 size-1.5 rounded-[2px] transition-colors',
-        isSelected ? 'bg-primary-foreground' : 'bg-primary'
-      )"
+      :class="
+        cn(
+          'absolute top-1 size-1.5 rounded-full',
+          isSelected ? 'bg-primary-foreground' : 'bg-primary',
+        )
+      "
     />
-  </button>
+  </Button>
 </template>

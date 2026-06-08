@@ -14,14 +14,30 @@ const onUpdate = (value: string | number) => {
 </script>
 
 <template>
-  <ToggleGroup :model-value="appearance" class="h-7 p-0.5" @update:model-value="onUpdate">
-    <ToggleGroupItem value="system" class="h-full px-2" :aria-label="t('generic.sidebar.systemTheme')">
+  <ToggleGroup
+    :model-value="appearance"
+    class="h-7 p-0.5"
+    @update:model-value="onUpdate"
+  >
+    <ToggleGroupItem
+      value="system"
+      class="h-full px-2"
+      :aria-label="t('generic.sidebar.systemTheme')"
+    >
       <Monitor :size="14" :stroke-width="2" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="light" class="h-full px-2" :aria-label="t('generic.sidebar.lightTheme')">
+    <ToggleGroupItem
+      value="light"
+      class="h-full px-2"
+      :aria-label="t('generic.sidebar.lightTheme')"
+    >
       <Sun :size="14" :stroke-width="2" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="dark" class="h-full px-2" :aria-label="t('generic.sidebar.darkTheme')">
+    <ToggleGroupItem
+      value="dark"
+      class="h-full px-2"
+      :aria-label="t('generic.sidebar.darkTheme')"
+    >
       <Moon :size="14" :stroke-width="2" />
     </ToggleGroupItem>
   </ToggleGroup>

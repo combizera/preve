@@ -1,8 +1,11 @@
-import { usePage, router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 
 import { type SupportedLocale, SUPPORTED_LOCALES } from '@/plugins/i18n';
-import { BACKEND_TO_FRONTEND_LOCALE, FRONTEND_TO_BACKEND_LOCALE } from '@/plugins/i18n/locale-map';
+import {
+    BACKEND_TO_FRONTEND_LOCALE,
+    FRONTEND_TO_BACKEND_LOCALE,
+} from '@/plugins/i18n/locale-map';
 import { locale as localeRoute } from '@/routes/profile';
 
 export function useLocale() {
@@ -11,7 +14,9 @@ export function useLocale() {
 
     const user = (page.props.auth as { user: { locale?: string } })?.user;
     const backendLocale = user?.locale;
-    locale.value = backendLocale ? (BACKEND_TO_FRONTEND_LOCALE[backendLocale] ?? 'en') : 'en';
+    locale.value = backendLocale
+        ? (BACKEND_TO_FRONTEND_LOCALE[backendLocale] ?? 'en')
+        : 'en';
 
     function updateLocale(value: SupportedLocale) {
         locale.value = value;

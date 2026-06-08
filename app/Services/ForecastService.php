@@ -4,12 +4,28 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Forecast;
+use App\Models\ForecastSeries;
 use App\Models\User;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\Date;
 
 final class ForecastService
 {
+    /**
+     * Carries each active series forward into the current month, snapshotting the
+     * series defaults. Idempotent: a month already present is left untouched, so a
+     * user never has to re-enter a forecast that simply repeats last month.
+     */
+    public function ensureCurrentMonth(User $user, ?CarbonInterface $now = null): void
+    {
+        $month = ($now ?? Date::now())->startOfMonth()->toDateString();
+
+        $user->forecastSeries()
+            ->where('is_active', true)
+            ->each(fn (ForecastSeries $series): Forecast => $series->ensureForecastFor($month));
+    }
+
     public function calculate(User $user, CarbonInterface $now, int $availableBalance, int $forecastMonth, int $forecastYear): int
     {
         $currentDate = Date::create($now->year, $now->month, 1);
@@ -19,16 +35,69 @@ final class ForecastService
             return $this->monthBalance($user, $selectedDate);
         }
 
+        $pendingIncome = $user->transactions()->inMonth($now)->pending($now)->income()->sum('amount');
         $pendingExpenses = $user->transactions()->inMonth($now)->pending($now)->expense()->sum('amount');
-        $forecast = $availableBalance - $pendingExpenses;
+        $forecast = $availableBalance + $pendingIncome - $pendingExpenses;
+        $forecast -= $this->forecastShortfall($user, $currentDate, $now);
 
         $cursor = $currentDate->copy()->addMonth();
         while ($cursor->lessThanOrEqualTo($selectedDate)) {
             $forecast += $this->monthBalance($user, $cursor);
+            $forecast -= $this->forecastShortfall($user, $cursor, $now);
             $cursor = $cursor->addMonth();
         }
 
         return $forecast;
+    }
+
+    public function dailyForecastedSpend(User $user, CarbonInterface $chartDate, CarbonInterface $now): int
+    {
+        $isCurrentMonth = $chartDate->isSameMonth($now);
+        $isFutureMonth = $chartDate->greaterThan($now->copy()->startOfMonth()) && !$isCurrentMonth;
+
+        if (!$isCurrentMonth && !$isFutureMonth) {
+            return 0;
+        }
+
+        $daysInMonth = $chartDate->copy()->endOfMonth()->day;
+        $daysRemaining = $isCurrentMonth
+            ? max(0, $daysInMonth - $now->day)
+            : $daysInMonth;
+
+        if ($daysRemaining === 0) {
+            return 0;
+        }
+
+        $forecasts = $user->forecasts()
+            ->whereYear('month', $chartDate->year)
+            ->whereMonth('month', $chartDate->month)
+            ->whereHas('series', fn ($query) => $query->where('is_active', true))
+            ->get();
+
+        return (int) $forecasts->sum(fn ($forecast): int => intdiv($forecast->computeUnrecordedSpend($now), $daysRemaining));
+    }
+
+    /**
+     * Sum of expected forecast spend not yet captured by any transaction (paid or
+     * pending) in the budgeted category for the given month. Counting pending
+     * transactions here prevents double-counting them against the dashboard
+     * forecast — they are already reflected in pendingExpenses / monthBalance.
+     */
+    private function forecastShortfall(User $user, CarbonInterface $monthDate, CarbonInterface $now): int
+    {
+        $isCurrentMonth = $monthDate->isSameMonth($now);
+        $isFutureMonth = $monthDate->greaterThan($now->copy()->startOfMonth()) && !$isCurrentMonth;
+
+        if (!$isCurrentMonth && !$isFutureMonth) {
+            return 0;
+        }
+
+        return (int) $user->forecasts()
+            ->whereYear('month', $monthDate->year)
+            ->whereMonth('month', $monthDate->month)
+            ->whereHas('series', fn ($query) => $query->where('is_active', true))
+            ->get()
+            ->sum(fn ($forecast): int => $forecast->computeUnrecordedSpend($now));
     }
 
     private function monthBalance(User $user, CarbonInterface $date): int

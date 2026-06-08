@@ -9,6 +9,7 @@ use App\Http\Requests\RecurringTransactionRequest;
 use App\Models\RecurringTransaction;
 use App\Services\RecurringTransactionService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Inertia\Inertia;
@@ -23,7 +24,8 @@ final class RecurringTransactionController extends Controller
     {
         $recurring = Auth::user()
             ->recurringTransactions()
-            ->with(['transactions', 'category', 'tag'])
+            ->with(['transactions', 'category', 'tags', 'creditCard'])
+            ->orderByDesc('is_active')
             ->orderBy('day_of_month', 'asc')
             ->get();
 
@@ -34,8 +36,9 @@ final class RecurringTransactionController extends Controller
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
+        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
 
-        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags'));
+        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags', 'creditCards'));
     }
 
     /**
@@ -44,8 +47,10 @@ final class RecurringTransactionController extends Controller
     public function store(RecurringTransactionRequest $request, RecurringTransactionService $service): RedirectResponse
     {
         $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
 
         $recurringTransaction = Auth::user()->recurringTransactions()->create($validated);
+        $recurringTransaction->tags()->sync($tagIds);
 
         $service->generateFutureTransactions($recurringTransaction, 3);
         $this->toast::success(__('messages.recurring.created'));
@@ -56,11 +61,17 @@ final class RecurringTransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring): RedirectResponse
+    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring, RecurringTransactionService $service): RedirectResponse
     {
         $this->authorize('update', $recurring);
 
-        $recurring->update($request->all());
+        $validated = $request->validated();
+        $tagIds = Arr::pull($validated, 'tags', []);
+
+        $recurring->update($validated);
+        $recurring->tags()->sync($tagIds);
+
+        $service->regenerateFutureTransactions($recurring, 3);
 
         $this->toast::success(__('messages.recurring.updated'));
 

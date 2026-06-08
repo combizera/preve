@@ -6,35 +6,66 @@ namespace App\Models;
 
 use App\Enums\TransactionType;
 use App\Filters\QueryFilter;
+use App\Observers\TransactionObserver;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property string $id
+ * @property int $user_id
+ * @property string|null $recurring_transaction_id
+ * @property int|null $category_id
+ * @property int|null $savings_bucket_id
+ * @property int|null $credit_card_id
+ * @property string|null $parent_transaction_id
+ * @property int|null $split_number
+ * @property int|null $split_total
+ * @property int $amount
+ * @property TransactionType $type
+ * @property string $description
+ * @property string|null $notes
+ * @property Carbon $transaction_date
+ * @property Carbon|null $purchase_date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
+#[ObservedBy([TransactionObserver::class])]
+#[Fillable([
+    'user_id',
+    'recurring_transaction_id',
+    'category_id',
+    'savings_bucket_id',
+    'credit_card_id',
+    'parent_transaction_id',
+    'split_number',
+    'split_total',
+    'amount',
+    'type',
+    'description',
+    'notes',
+    'transaction_date',
+    'purchase_date',
+])]
 final class Transaction extends Model
 {
     use HasFactory;
     use HasUuids;
 
-    protected $fillable = [
-        'user_id',
-        'recurring_transaction_id',
-        'category_id',
-        'tag_id',
-        'amount',
-        'type',
-        'description',
-        'notes',
-        'transaction_date',
-    ];
-
     protected $casts = [
         'uuid'             => 'string',
         'transaction_date' => 'datetime',
+        'purchase_date'    => 'datetime',
         'type'             => TransactionType::class,
     ];
 
@@ -68,11 +99,43 @@ final class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<Tag, $this>
+     * @return BelongsTo<SavingsBucket, $this>
      */
-    public function tag(): BelongsTo
+    public function savingsBucket(): BelongsTo
     {
-        return $this->belongsTo(Tag::class);
+        return $this->belongsTo(SavingsBucket::class);
+    }
+
+    /**
+     * @return BelongsTo<CreditCard, $this>
+     */
+    public function creditCard(): BelongsTo
+    {
+        return $this->belongsTo(CreditCard::class);
+    }
+
+    /**
+     * @return BelongsTo<Transaction, $this>
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_transaction_id');
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function installments(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_transaction_id');
+    }
+
+    /**
+     * @return MorphToMany<Tag, $this>
+     */
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     #[Scope]

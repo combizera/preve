@@ -85,7 +85,9 @@ function handleOpenUpdate(open: boolean) {
           </div>
 
           <div class="grid gap-3">
-            <Label for="description">{{ t('models.transaction.description') }}</Label>
+            <Label for="description">{{
+              t('models.transaction.description')
+            }}</Label>
             <Input
               id="description"
               name="description"

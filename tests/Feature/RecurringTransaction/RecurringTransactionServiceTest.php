@@ -19,6 +19,7 @@ it('should be able to generate future transactions and avoid duplicates', functi
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
@@ -42,11 +43,31 @@ it('should not be able to generate transactions for inactive templates', functio
     expect($recurring->transactions()->count())->toBe(0);
 });
 
+it('should generate only one transaction per year for yearly frequency', function (): void {
+    Date::setTestNow('2026-03-01');
+
+    $recurring = RecurringTransaction::factory()->create([
+        'user_id'      => $this->user->id,
+        'frequency'    => 'yearly',
+        'start_date'   => Date::parse('2026-03-15'),
+        'day_of_month' => 15,
+        'is_active'    => true,
+        'end_date'     => null,
+    ]);
+
+    $this->service->generateFutureTransactions($recurring, 3);
+
+    expect($recurring->transactions()->count())->toBe(1)
+        ->and($recurring->transactions()->first()->transaction_date->toDateString())
+        ->toBe('2026-03-15');
+});
+
 it('should not be able to generate transactions beyond the end_date limit', function (): void {
     Date::setTestNow('2026-03-01');
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'end_date'     => Date::parse('2026-04-30'),
         'day_of_month' => 15,
@@ -66,6 +87,7 @@ it('should log a success message when a transaction is generated', function (): 
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,
@@ -86,6 +108,7 @@ it('should log an error message when transaction generation fails', function ():
 
     $recurring = RecurringTransaction::factory()->create([
         'user_id'      => $this->user->id,
+        'frequency'    => 'monthly',
         'start_date'   => Date::parse('2026-03-01'),
         'day_of_month' => 10,
         'is_active'    => true,

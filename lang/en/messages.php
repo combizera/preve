@@ -17,11 +17,13 @@ return [
     ],
 
     'transaction' => [
-        'created'     => 'Transaction created successfully.',
-        'updated'     => 'Transaction updated successfully.',
-        'deleted'     => 'Transaction deleted successfully.',
-        'shared'      => 'Link copied to clipboard!',
-        'share_error' => 'Error generating share link.',
+        'created'            => 'Transaction created successfully.',
+        'updated'            => 'Transaction updated successfully.',
+        'deleted'            => 'Transaction deleted successfully.',
+        'bulk_deleted'       => 'Selected transactions deleted successfully.',
+        'bulk_card_assigned' => 'Selected transactions moved to the card.',
+        'shared'             => 'Link copied to clipboard!',
+        'share_error'        => 'Error generating share link.',
     ],
 
     'recurring' => [
@@ -32,8 +34,33 @@ return [
         'deleted'     => 'Recurring transaction deleted successfully.',
     ],
 
+    'forecast' => [
+        'created'   => 'Forecast created successfully.',
+        'updated'   => 'Forecast updated successfully.',
+        'deleted'   => 'Forecast deleted successfully.',
+        'activated' => 'Forecast resumed.',
+        'paused'    => 'Forecast paused.',
+    ],
+
+    'savings_bucket' => [
+        'created' => 'Savings bucket created successfully.',
+        'updated' => 'Savings bucket updated successfully.',
+        'deleted' => 'Savings bucket deleted successfully.',
+    ],
+
+    'credit_card' => [
+        'created' => 'Credit card created successfully.',
+        'updated' => 'Credit card updated successfully.',
+        'deleted' => 'Credit card deleted successfully.',
+    ],
+
     'profile' => [
         'updated' => 'Profile updated successfully.',
+    ],
+
+    'preferences' => [
+        'locale_updated'   => 'Language updated successfully.',
+        'currency_updated' => 'Currency updated successfully.',
     ],
 
     'password' => [

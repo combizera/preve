@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
 use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\ReorderCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,7 +22,10 @@ final class CategoryController extends Controller
      */
     public function index(): Response
     {
-        $categories = Auth::user()->categories()->get();
+        $categories = Auth::user()->categories()
+            ->with(['forecastSeries.forecasts' => fn ($query) => $query->latest('month')->limit(1)])
+            ->orderBy('order')
+            ->get();
 
         [$expenseCategories, $incomeCategories] = $categories->partition(fn (Category $category): bool => $category->type === TransactionType::EXPENSE);
 
@@ -51,9 +56,42 @@ final class CategoryController extends Controller
     {
         $this->authorize('update', $category);
 
-        $category->update($request->all());
+        $category->update($request->validated());
 
         $this->toast::success(__('messages.category.updated'));
+
+        return to_route('categories.index');
+    }
+
+    /**
+     * Persist a new ordering for the authenticated user's categories of a given type.
+     *
+     * Two-pass update inside a transaction: rows are first set to a guaranteed-unique
+     * negative value (-id) before being assigned their final positive order, so the
+     * (user_id, type, order) unique constraint never sees a duplicate during the swap.
+     */
+    public function reorder(ReorderCategoryRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $type = $validated['type'];
+        $ids = $validated['ids'];
+        $userId = Auth::id();
+
+        DB::transaction(function () use ($ids, $type, $userId): void {
+            Category::query()
+                ->whereIn('id', $ids)
+                ->where('user_id', $userId)
+                ->where('type', $type)
+                ->update(['order' => DB::raw('-id')]);
+
+            foreach ($ids as $index => $id) {
+                Category::query()
+                    ->where('id', $id)
+                    ->where('user_id', $userId)
+                    ->where('type', $type)
+                    ->update(['order' => $index + 1]);
+            }
+        });
 
         return to_route('categories.index');
     }

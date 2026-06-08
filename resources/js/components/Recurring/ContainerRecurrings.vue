@@ -23,12 +23,16 @@ const recurringStore = useRecurringStore();
 const props = defineProps<Props>();
 
 const typeLabel = computed(() =>
-  props.type === 'income' ? t('models.transaction.income') : t('models.transaction.expense'),
+  props.type === 'income'
+    ? t('models.transaction.income')
+    : t('models.transaction.expense'),
 );
 
 const emptyStateConfig = computed(() => ({
   title: t('recurring.empty.title', { type: typeLabel.value.toLowerCase() }),
-  description: t('recurring.empty.description', { type: typeLabel.value.toLowerCase() }),
+  description: t('recurring.empty.description', {
+    type: typeLabel.value.toLowerCase(),
+  }),
   buttonText: t('recurring.empty.button', { type: typeLabel.value }),
 }));
 </script>

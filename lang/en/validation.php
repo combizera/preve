@@ -181,8 +181,21 @@ return [
     */
 
     'custom' => [
+        'categories' => [
+            'reorder_full_set' => 'You must include every category of this type when reordering.',
+        ],
         'category_id' => [
             'type_mismatch' => 'The selected category must be of type :type.',
+        ],
+        'forecast' => [
+            'series_already_exists' => 'This category already has a forecast. Edit the existing one or resume it if paused.',
+        ],
+        'savings_bucket' => [
+            'overdraw' => "You can't withdraw more than the bucket's current balance.",
+        ],
+        'credit_card' => [
+            'savings_bucket_conflict' => 'A transaction cannot belong to both a credit card and a savings bucket.',
+            'income_not_allowed'      => 'Only expenses can be assigned to a credit card.',
         ],
     ],
 

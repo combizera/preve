@@ -74,3 +74,15 @@ npm-dev:
 
 npm-build:
 	$(DOCKER_COMPOSE) exec node npm run build
+
+# -------------------------------------------------------------------
+# Lint / Format
+# -------------------------------------------------------------------
+pint:
+	$(DOCKER_COMPOSE) exec app vendor/bin/pint --dirty --format agent
+
+lint-js:
+	$(DOCKER_COMPOSE) exec node npm run lint
+	$(DOCKER_COMPOSE) exec node npm run format
+
+lint: pint lint-js

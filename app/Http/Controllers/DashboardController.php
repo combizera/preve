@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Services\CreditCardService;
 use App\Services\ForecastService;
+use App\Services\SavingsRateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -12,7 +14,7 @@ use Inertia\Response;
 
 final class DashboardController extends Controller
 {
-    public function __invoke(Request $request, ForecastService $forecastService): Response
+    public function __invoke(Request $request, ForecastService $forecastService, SavingsRateService $savingsRateService, CreditCardService $creditCardService): Response
     {
         $user = Auth::user();
         $now = now();
@@ -24,9 +26,19 @@ final class DashboardController extends Controller
             ->orderBy('transaction_date', 'desc')
             ->get();
 
-        $totalIncome = $user->transactions()->inMonth($now)->paid($now)->income()->sum('amount');
-        $totalExpenses = $user->transactions()->inMonth($now)->paid($now)->expense()->sum('amount');
-        $availableBalance = $totalIncome - $totalExpenses;
+        $chartDate = $now->copy()
+            ->setYear($request->integer('forecast_year', $now->year))
+            ->setMonth($request->integer('forecast_month', $now->month))
+            ->startOfMonth();
+
+        $availableBalanceAsOf = $now->lessThan($chartDate->copy()->endOfMonth())
+            ? $now
+            : $chartDate->copy()->endOfMonth();
+
+        $availableBalance = (int) $user->transactions()
+            ->paid($availableBalanceAsOf)
+            ->netBalance()
+            ->value('net_balance');
 
         $forecast = $forecastService->calculate(
             $user,
@@ -36,13 +48,9 @@ final class DashboardController extends Controller
             $request->integer('forecast_year', $now->year),
         );
 
-        $chartDate = $now->copy()
-            ->setYear($request->integer('forecast_year', $now->year))
-            ->setMonth($request->integer('forecast_month', $now->month))
-            ->startOfMonth();
-
         $monthlyIncome = (int) $user->transactions()->inMonth($chartDate)->income()->sum('amount');
-        $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->sum('amount');
+        $monthlyExpenses = (int) $user->transactions()->inMonth($chartDate)->expense()->whereNull('savings_bucket_id')->sum('amount');
+        $monthlyInvested = (int) $user->transactions()->inMonth($chartDate)->expense()->whereNotNull('savings_bucket_id')->sum('amount');
 
         $daysInMonth = $chartDate->endOfMonth()->day;
 
@@ -55,8 +63,14 @@ final class DashboardController extends Controller
             'amount' => (int) ($dailyNet[$day] ?? 0),
         ])->all();
 
+        $dailyForecastedSpend = $forecastService->dailyForecastedSpend($user, $chartDate, $now);
+
         $categories = $user->categories()->get();
         $tags = $user->tags()->get();
+        $savingsBuckets = $user->savingsBuckets()->orderBy('id')->get();
+        $savingsRate = $savingsRateService->forMonth($user, $now);
+
+        $creditCards = $creditCardService->withMonthlyInvoice($user, $chartDate);
 
         return Inertia::render('Dashboard', compact(
             'latestTransactions',
@@ -64,10 +78,15 @@ final class DashboardController extends Controller
             'forecast',
             'monthlyIncome',
             'monthlyExpenses',
+            'monthlyInvested',
             'dailyBalances',
+            'dailyForecastedSpend',
             'carryOver',
             'categories',
             'tags',
+            'savingsBuckets',
+            'savingsRate',
+            'creditCards',
         ));
     }
 }

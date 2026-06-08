@@ -16,108 +16,104 @@ import { disable, enable, show } from '@/routes/two-factor';
 import { BreadcrumbItem } from '@/types';
 
 interface Props {
-    requiresConfirmation?: boolean;
-    twoFactorEnabled?: boolean;
+  requiresConfirmation?: boolean;
+  twoFactorEnabled?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
-    requiresConfirmation: false,
-    twoFactorEnabled: false,
+  requiresConfirmation: false,
+  twoFactorEnabled: false,
 });
 
 const { t } = useI18n();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: t('settings.twoFactor.title'),
-        href: show.url(),
-    },
+  {
+    title: t('settings.twoFactor.title'),
+    href: show.url(),
+  },
 ];
 
 const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth();
 const showSetupModal = ref<boolean>(false);
 
 onUnmounted(() => {
-    clearTwoFactorAuthData();
+  clearTwoFactorAuthData();
 });
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbs">
-        <Head :title="t('settings.twoFactor.title')" />
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <Head :title="t('settings.twoFactor.title')" />
 
-        <h1 class="sr-only">{{ t('settings.twoFactor.title') }}</h1>
+    <h1 class="sr-only">{{ t('settings.twoFactor.title') }}</h1>
 
-        <SettingsLayout>
-            <div class="space-y-6">
-                <Heading
-                    variant="small"
-                    :title="t('settings.twoFactor.title')"
-                    :description="t('settings.twoFactor.description')"
-                />
+    <SettingsLayout>
+      <div class="space-y-6">
+        <Heading
+          variant="small"
+          :title="t('settings.twoFactor.title')"
+          :description="t('settings.twoFactor.description')"
+        />
 
-                <div
-                    v-if="!twoFactorEnabled"
-                    class="flex flex-col items-start justify-start space-y-4"
-                >
-                    <Badge variant="destructive">{{ t('settings.twoFactor.disabled') }}</Badge>
+        <div
+          v-if="!twoFactorEnabled"
+          class="flex flex-col items-start justify-start space-y-4"
+        >
+          <Badge variant="destructive">{{
+            t('settings.twoFactor.disabled')
+          }}</Badge>
 
-                    <p class="text-muted-foreground">
-                        {{ t('settings.twoFactor.disabledDescription') }}
-                    </p>
+          <p class="text-muted-foreground">
+            {{ t('settings.twoFactor.disabledDescription') }}
+          </p>
 
-                    <div>
-                        <Button
-                            v-if="hasSetupData"
-                            @click="showSetupModal = true"
-                        >
-                            <ShieldCheck />{{ t('settings.twoFactor.continueSetup') }}
-                        </Button>
-                        <Form
-                            v-else
-                            v-bind="enable.form()"
-                            @success="showSetupModal = true"
-                            #default="{ processing }"
-                        >
-                            <Button type="submit" :disabled="processing">
-                                <ShieldCheck />{{ t('settings.twoFactor.enable') }}</Button
-                            ></Form
-                        >
-                    </div>
-                </div>
+          <div>
+            <Button v-if="hasSetupData" @click="showSetupModal = true">
+              <ShieldCheck />{{ t('settings.twoFactor.continueSetup') }}
+            </Button>
+            <Form
+              v-else
+              v-bind="enable.form()"
+              @success="showSetupModal = true"
+              #default="{ processing }"
+            >
+              <Button type="submit" :disabled="processing">
+                <ShieldCheck />{{ t('settings.twoFactor.enable') }}</Button
+              ></Form
+            >
+          </div>
+        </div>
 
-                <div
-                    v-else
-                    class="flex flex-col items-start justify-start space-y-4"
-                >
-                    <Badge variant="default">{{ t('settings.twoFactor.enabled') }}</Badge>
+        <div v-else class="flex flex-col items-start justify-start space-y-4">
+          <Badge variant="default">{{ t('settings.twoFactor.enabled') }}</Badge>
 
-                    <p class="text-muted-foreground">
-                        {{ t('settings.twoFactor.enabledDescription') }}
-                    </p>
+          <p class="text-muted-foreground">
+            {{ t('settings.twoFactor.enabledDescription') }}
+          </p>
 
-                    <TwoFactorRecoveryCodes />
+          <TwoFactorRecoveryCodes />
 
-                    <div class="relative inline">
-                        <Form v-bind="disable.form()" #default="{ processing }">
-                            <Button
-                                variant="destructive"
-                                type="submit"
-                                :disabled="processing"
-                            >
-                                <ShieldBan />
-                                {{ t('settings.twoFactor.disable') }}
-                            </Button>
-                        </Form>
-                    </div>
-                </div>
+          <div class="relative inline">
+            <Form v-bind="disable.form()" #default="{ processing }">
+              <Button
+                variant="destructive"
+                type="submit"
+                :disabled="processing"
+              >
+                <ShieldBan />
+                {{ t('settings.twoFactor.disable') }}
+              </Button>
+            </Form>
+          </div>
+        </div>
 
-                <TwoFactorSetupModal
-                    v-model:isOpen="showSetupModal"
-                    :requiresConfirmation="requiresConfirmation"
-                    :twoFactorEnabled="twoFactorEnabled"
-                />
-            </div>
-        </SettingsLayout>
-    </AppLayout>
+        <TwoFactorSetupModal
+          v-model:isOpen="showSetupModal"
+          :requiresConfirmation="requiresConfirmation"
+          :twoFactorEnabled="twoFactorEnabled"
+        />
+      </div>
+    </SettingsLayout>
+  </AppLayout>
 </template>

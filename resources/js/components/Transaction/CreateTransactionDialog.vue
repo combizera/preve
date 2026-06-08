@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { today, getLocalTimeZone } from '@internationalized/date';
+import { getLocalTimeZone, today } from '@internationalized/date';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -25,15 +25,20 @@ import {
 import { store } from '@/routes/transactions';
 import { useTransactionStore } from '@/stores/transaction.store';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITag } from '@/types/models/tag';
-import { ITransaction } from '@/types/models/transaction';
+import type { ITransactionInput } from '@/types/models/transaction';
+import { validateAmount } from '@/utils/validateAmount';
 
 interface Props {
   categories: ICategory[];
   tags: ITag[];
+  creditCards?: ICreditCard[];
 }
 
-defineProps<Props>();
+withDefaults(defineProps<Props>(), {
+  creditCards: () => [],
+});
 
 const { t } = useI18n();
 const transactionStore = useTransactionStore();
@@ -42,13 +47,15 @@ const { showFormDialog } = storeToRefs(transactionStore);
 
 const rawAmount = ref('');
 
-const form = useForm<ITransaction>({
+const form = useForm<ITransactionInput>({
   category_id: 0,
-  tag_id: undefined,
+  tags: [],
+  credit_card_id: null,
+  splits: null,
   amount: 0,
   type: TRANSACTION_TYPE.EXPENSE,
   description: '',
-  notes: undefined,
+  notes: null,
   transaction_date: today(getLocalTimeZone()).toString(),
 });
 
@@ -62,6 +69,8 @@ const displayAmount = computed({
 });
 
 const createTransaction = () => {
+  if (!validateAmount(form, t)) return;
+
   form.submit(store(), {
     onSuccess: () => {
       transactionStore.closeCreateDialog();
@@ -88,11 +97,14 @@ const createTransaction = () => {
           v-model:displayAmount="displayAmount"
           :categories="categories"
           :tags="tags"
+          :credit-cards="creditCards"
         />
 
         <DialogFooter>
           <DialogClose as-child>
-            <Button variant="outline"> {{ t('generic.actions.cancel') }} </Button>
+            <Button variant="outline">
+              {{ t('generic.actions.cancel') }}
+            </Button>
           </DialogClose>
           <Button
             type="button"

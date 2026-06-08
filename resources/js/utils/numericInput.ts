@@ -1,5 +1,11 @@
 export function filterNumericInput(event: KeyboardEvent) {
-    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+    const allowedKeys = [
+        'Backspace',
+        'Tab',
+        'ArrowLeft',
+        'ArrowRight',
+        'Delete',
+    ];
 
     if (allowedKeys.includes(event.key)) {
         return;

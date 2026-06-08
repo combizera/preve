@@ -47,7 +47,7 @@ final class TagController extends Controller
     {
         $this->authorize('update', $tag);
 
-        $tag->update($request->all());
+        $tag->update($request->validated());
 
         $this->toast::success(__('messages.tag.updated'));
 

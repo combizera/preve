@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
+import TagsMultiSelect from '@/components/Tag/TagsMultiSelect.vue';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import {
@@ -26,13 +27,15 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { FREQUENCY_TYPE } from '@/enums/frequency-type';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
+import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
-import type { IRecurringTransaction } from '@/types/models/recurring-transaction';
+import type { ICreditCard } from '@/types/models/credit-card';
+import type { IRecurringTransactionInput } from '@/types/models/recurring-transaction';
 import type { ITag } from '@/types/models/tag';
 import { filterNumericInput } from '@/utils/numericInput';
 
 interface Props {
-  form: InertiaForm<IRecurringTransaction>;
+  form: InertiaForm<IRecurringTransactionInput>;
   categories: ICategory[];
   tags: ITag[];
 }
@@ -41,13 +44,38 @@ const props = defineProps<Props>();
 
 const { t } = useI18n();
 
+const creditCards = inject<ICreditCard[]>('creditCards', []);
+
 const displayAmount = defineModel<string>('displayAmount', { required: true });
+const currencySymbol = getCurrencySymbol();
 
 const filteredCategories = computed(() => {
   return props.categories.filter(
     (category) => category.type === props.form.type,
   );
 });
+
+const NO_CARD = 0;
+
+const cardModel = computed<number>({
+  get: () => props.form.credit_card_id ?? NO_CARD,
+  set: (value) => {
+    props.form.credit_card_id = value === NO_CARD ? null : value;
+  },
+});
+
+const showCardField = computed(
+  () => creditCards.length > 0 && props.form.type === TRANSACTION_TYPE.EXPENSE,
+);
+
+watch(
+  () => props.form.type,
+  (type) => {
+    if (type !== TRANSACTION_TYPE.EXPENSE) {
+      props.form.credit_card_id = null;
+    }
+  },
+);
 </script>
 
 <template>
@@ -84,7 +112,7 @@ const filteredCategories = computed(() => {
       <Label for="amount"> {{ t('models.transaction.amount') }} </Label>
       <InputGroup>
         <InputGroupAddon>
-          <InputGroupText>R$</InputGroupText>
+          <InputGroupText>{{ currencySymbol }}</InputGroupText>
         </InputGroupAddon>
         <InputGroupInput
           id="amount"
@@ -105,7 +133,9 @@ const filteredCategories = computed(() => {
       <Label for="category"> {{ t('models.category.name') }} </Label>
       <Select v-model="form.category_id">
         <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectCategory')" />
+          <SelectValue
+            :placeholder="t('generic.placeholders.selectCategory')"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -124,23 +154,44 @@ const filteredCategories = computed(() => {
     </div>
 
     <div class="grid gap-3">
-      <Label for="tag" class="text-muted-foreground"> {{ t('models.tag.optional') }} </Label>
-      <Select v-model="form.tag_id">
-        <SelectTrigger class="w-full">
-          <SelectValue :placeholder="t('generic.placeholders.selectTag')" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{{ t('models.tag.name') }}</SelectLabel>
-            <SelectItem :value="null">{{ t('generic.labels.none') }}</SelectItem>
-            <SelectItem v-for="tag in tags" :value="tag.id" :key="tag.id">
-              {{ tag.name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <InputError :message="form.errors.tag_id" />
+      <Label for="tag" class="text-muted-foreground">
+        {{ t('models.tag.optional') }}
+      </Label>
+      <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
+      <InputError :message="form.errors.tags" />
     </div>
+  </div>
+
+  <!-- Credit card -->
+  <div v-if="showCardField" class="grid gap-3">
+    <Label for="credit_card" class="text-muted-foreground">
+      {{ t('transactions.fields.creditCardOptional') }}
+    </Label>
+    <Select v-model="cardModel">
+      <SelectTrigger class="w-full">
+        <SelectValue
+          :placeholder="t('transactions.fields.creditCardPlaceholder')"
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem :value="NO_CARD">
+            {{ t('generic.labels.none') }}
+          </SelectItem>
+          <SelectItem
+            v-for="card in creditCards"
+            :value="card.id"
+            :key="card.id"
+          >
+            {{ card.name }}
+          </SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <p class="text-xs text-muted-foreground">
+      {{ t('transactions.fields.creditCardHint') }}
+    </p>
+    <InputError :message="form.errors.credit_card_id" />
   </div>
 
   <!-- Recurrence Settings -->
@@ -150,25 +201,37 @@ const filteredCategories = computed(() => {
       {{ t('recurring.form.recurrenceSettings') }}
     </Label>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div
+      :class="
+        form.frequency === FREQUENCY_TYPE.MONTHLY
+          ? 'grid grid-cols-2 gap-4'
+          : 'grid gap-4'
+      "
+    >
       <div class="grid gap-3">
         <Label for="frequency"> {{ t('recurring.form.frequency') }} </Label>
         <Select v-model="form.frequency">
           <SelectTrigger class="w-full">
-            <SelectValue :placeholder="t('generic.placeholders.selectFrequency')" />
+            <SelectValue
+              :placeholder="t('generic.placeholders.selectFrequency')"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{{ t('recurring.form.frequency') }}</SelectLabel>
-              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{ t('recurring.form.monthly') }}</SelectItem>
-              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{ t('recurring.form.yearly') }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.MONTHLY">{{
+                t('recurring.form.monthly')
+              }}</SelectItem>
+              <SelectItem :value="FREQUENCY_TYPE.YEARLY">{{
+                t('recurring.form.yearly')
+              }}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
         <InputError :message="form.errors.frequency" />
       </div>
 
-      <div class="grid gap-3">
+      <div v-if="form.frequency === FREQUENCY_TYPE.MONTHLY" class="grid gap-3">
         <Label for="day_of_month"> {{ t('recurring.form.dayOfMonth') }} </Label>
         <Input
           id="day_of_month"

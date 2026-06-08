@@ -12,6 +12,7 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::get('settings/preferences', [ProfileController::class, 'preferences'])->name('profile.preferences');
     Route::patch('settings/locale', [ProfileController::class, 'updateLocale'])->name('profile.locale');
+    Route::patch('settings/currency', [ProfileController::class, 'updateCurrency'])->name('profile.currency');
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
 });

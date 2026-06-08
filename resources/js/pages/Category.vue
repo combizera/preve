@@ -38,7 +38,10 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <!-- HEADING -->
-    <Heading :title="t('categories.title')" :description="t('categories.description')" />
+    <Heading
+      :title="t('categories.title')"
+      :description="t('categories.description')"
+    />
 
     <!-- CREATE -->
     <CreateCategory />

@@ -6,17 +6,17 @@ import { useTagStore } from '@/stores/tag.store';
 import { ITag } from '@/types/models/tag';
 
 interface Props {
-    tag: ITag;
+  tag: ITag;
 }
 
 defineProps<Props>();
 
-const tagStore = useTagStore()
+const tagStore = useTagStore();
 </script>
 
 <template>
-    <ActionGroup>
-        <EditButton @click="tagStore.openEditModal(tag)" />
-        <DeleteButton @click="tagStore.openDeleteModal(tag)" />
-    </ActionGroup>
+  <ActionGroup>
+    <EditButton @click="tagStore.openEditModal(tag)" />
+    <DeleteButton @click="tagStore.openDeleteModal(tag)" />
+  </ActionGroup>
 </template>

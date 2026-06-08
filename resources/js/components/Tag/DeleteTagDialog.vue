@@ -17,7 +17,7 @@ import { useTagStore } from '@/stores/tag.store';
 
 const { t } = useI18n();
 
-const tagStore = useTagStore()
+const tagStore = useTagStore();
 
 const form = useForm({});
 
@@ -26,10 +26,10 @@ function handleDeleteTag() {
 
   form.submit(destroy(tagStore.tag.id), {
     onSuccess: () => {
-      tagStore.closeDeleteModal()
-    }
+      tagStore.closeDeleteModal();
+    },
   });
-};
+}
 </script>
 
 <template>
@@ -45,7 +45,11 @@ function handleDeleteTag() {
         <AlertDialogCancel>
           {{ t('generic.actions.cancel') }}
         </AlertDialogCancel>
-        <AlertDialogAction variant="destructive" @click="handleDeleteTag" :disabled="form.processing">
+        <AlertDialogAction
+          variant="destructive"
+          @click="handleDeleteTag"
+          :disabled="form.processing"
+        >
           {{ t('generic.actions.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>

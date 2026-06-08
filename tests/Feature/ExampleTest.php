@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-it('should be able to return a successful response', function (): void {
-    $response = $this->get(route('home'));
+it('should redirect to login page', function (): void {
+    $response = $this->get('/');
 
-    $response->assertOk();
+    $response->assertRedirect('login');
 });

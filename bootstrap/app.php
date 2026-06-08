@@ -20,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
@@ -30,9 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (InvalidSignatureException $e, Request $request) {
-            return Inertia::render('errors/LinkExpired', [
-                'status' => 403,
-            ])->toResponse($request)->setStatusCode(403);
-        });
+        $exceptions->render(fn (InvalidSignatureException $e, Request $request) => Inertia::render('errors/LinkExpired', [
+            'status' => 403,
+        ])->toResponse($request)->setStatusCode(403));
     })->create();

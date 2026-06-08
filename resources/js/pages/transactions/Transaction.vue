@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
@@ -8,12 +8,16 @@ import ContainerTransactions from '@/components/Transaction/ContainerTransaction
 import CreateTransactionButton from '@/components/Transaction/CreateTransactionButton.vue';
 import CreateTransactionDialog from '@/components/Transaction/CreateTransactionDialog.vue';
 import FilterTransaction from '@/components/Transaction/FilterTransaction.vue';
+import TableTransactions from '@/components/Transaction/TableTransactions.vue';
+import TransactionViewToggle from '@/components/Transaction/TransactionViewToggle.vue';
+import { useTransactionView } from '@/composables/useTransactionView';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import transactionRoutes from '@/routes/transactions';
 import type { BreadcrumbItem } from '@/types';
 import { ITransactionFilters } from '@/types/filters';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITag } from '@/types/models/tag';
 import { ITransaction } from '@/types/models/transaction';
 
@@ -21,12 +25,18 @@ interface Props {
   transactions: ITransaction[];
   categories: ICategory[];
   tags: ITag[];
+  creditCards: ICreditCard[];
   filters: ITransactionFilters;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+provide('categories', props.categories);
+provide('tags', props.tags);
+provide('creditCards', props.creditCards);
 
 const { t } = useI18n();
+const { view } = useTransactionView();
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   {
@@ -51,6 +61,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
       :hasActions="true"
     >
       <div class="flex items-center gap-2">
+        <TransactionViewToggle />
         <FilterTransaction
           :filters="filters"
           :categories="categories"
@@ -61,7 +72,13 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     </Heading>
 
     <!-- TRANSACTIONS -->
+    <TableTransactions
+      v-if="view === 'table'"
+      :transactions="transactions"
+      :filters="filters"
+    />
     <ContainerTransactions
+      v-else
       :transactions="transactions"
       :filters="filters"
     />
@@ -70,6 +87,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     <CreateTransactionDialog
       :categories="categories"
       :tags="tags"
+      :credit-cards="creditCards"
     />
   </AppLayout>
 </template>

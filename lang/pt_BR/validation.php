@@ -181,8 +181,21 @@ return [
     */
 
     'custom' => [
+        'categories' => [
+            'reorder_full_set' => 'Você precisa incluir todas as categorias desse tipo ao reordenar.',
+        ],
         'category_id' => [
             'type_mismatch' => 'A categoria selecionada deve ser do tipo :type.',
+        ],
+        'forecast' => [
+            'series_already_exists' => 'Essa categoria já tem um orçamento. Edite o existente ou retome se estiver pausado.',
+        ],
+        'savings_bucket' => [
+            'overdraw' => 'Você não pode sacar mais do que o saldo atual da caixinha.',
+        ],
+        'credit_card' => [
+            'savings_bucket_conflict' => 'Uma transação não pode pertencer a um cartão de crédito e a uma caixinha ao mesmo tempo.',
+            'income_not_allowed'      => 'Apenas despesas podem ser vinculadas a um cartão de crédito.',
         ],
     ],
 

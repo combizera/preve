@@ -3,10 +3,18 @@ import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
-import { formatCentsToDisplay } from '@/lib/currency';
+import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import transactions from '@/routes/transactions';
 import type { ITransaction, TransactionType } from '@/types/models/transaction';
@@ -34,7 +42,9 @@ function getAmountClass(type: TransactionType) {
     <TableHeader>
       <TableRow>
         <TableHead>{{ t('dashboard.lastTransactions') }}</TableHead>
-        <TableHead class="text-right">{{ t('models.transaction.amount') }}</TableHead>
+        <TableHead class="text-right">{{
+          t('models.transaction.amount')
+        }}</TableHead>
       </TableRow>
     </TableHeader>
 
@@ -45,8 +55,13 @@ function getAmountClass(type: TransactionType) {
             {{ transaction.description }}
           </p>
 
-          <div class="flex items-center gap-1 text-xs leading-none font-medium text-muted-foreground">
-            <component :is="getIconComponent(transaction.category?.icon ?? null)" :size="14" />
+          <div
+            class="flex items-center gap-1 text-xs leading-none font-medium text-muted-foreground"
+          >
+            <component
+              :is="getIconComponent(transaction.category?.icon ?? null)"
+              :size="14"
+            />
             {{ transaction.category?.name }}
             •
             <span class="ml-1">
@@ -57,7 +72,8 @@ function getAmountClass(type: TransactionType) {
 
         <TableCell class="text-right">
           <p :class="getAmountClass(transaction.type)">
-            R$ {{ formatCentsToDisplay(transaction.amount) }}
+            {{ getCurrencySymbol() }}
+            {{ formatCentsToDisplay(transaction.amount) }}
           </p>
         </TableCell>
       </TableRow>
@@ -67,7 +83,12 @@ function getAmountClass(type: TransactionType) {
       <TableRow>
         <TableCell colspan="2">
           <div class="flex items-center justify-center">
-            <Button variant="link" size="sm" class="text-muted-foreground hover:bg-transparent hover:underline" as-child>
+            <Button
+              variant="link"
+              size="sm"
+              class="text-muted-foreground hover:bg-transparent hover:underline"
+              as-child
+            >
               <Link :href="transactions.index.url()">
                 {{ t('generic.actions.viewAll') }}
               </Link>

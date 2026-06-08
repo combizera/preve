@@ -20,9 +20,9 @@ final class TransactionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(): bool
+    public function view(User $user, Transaction $transaction): bool
     {
-        return true;
+        return $user->id === $transaction->user_id;
     }
 
     /**

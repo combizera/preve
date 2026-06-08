@@ -195,9 +195,9 @@ function handleErrorMessage(errors: Record<string, string>) {
 
             <div class="relative flex w-full items-center justify-center">
               <div class="absolute inset-0 top-1/2 h-px w-full bg-border" />
-              <span class="relative bg-card px-2 py-1"
-                >{{ t('settings.twoFactor.setup.orEnterManually') }}</span
-              >
+              <span class="relative bg-card px-2 py-1">{{
+                t('settings.twoFactor.setup.orEnterManually')
+              }}</span>
             </div>
 
             <div class="flex w-full items-center justify-center space-x-2">

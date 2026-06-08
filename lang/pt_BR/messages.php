@@ -17,11 +17,13 @@ return [
     ],
 
     'transaction' => [
-        'created'     => 'Transação criada com sucesso.',
-        'updated'     => 'Transação atualizada com sucesso.',
-        'deleted'     => 'Transação excluída com sucesso.',
-        'shared'      => 'Link copiado para a área de transferência!',
-        'share_error' => 'Erro ao gerar o link de compartilhamento.',
+        'created'            => 'Transação criada com sucesso.',
+        'updated'            => 'Transação atualizada com sucesso.',
+        'deleted'            => 'Transação excluída com sucesso.',
+        'bulk_deleted'       => 'Transações selecionadas excluídas com sucesso.',
+        'bulk_card_assigned' => 'Transações selecionadas movidas para o cartão.',
+        'shared'             => 'Link copiado para a área de transferência!',
+        'share_error'        => 'Erro ao gerar o link de compartilhamento.',
     ],
 
     'recurring' => [
@@ -32,8 +34,33 @@ return [
         'deleted'     => 'Transação recorrente excluída com sucesso.',
     ],
 
+    'forecast' => [
+        'created'   => 'Orçamento criado com sucesso.',
+        'updated'   => 'Orçamento atualizado com sucesso.',
+        'deleted'   => 'Orçamento excluído com sucesso.',
+        'activated' => 'Orçamento retomado.',
+        'paused'    => 'Orçamento pausado.',
+    ],
+
+    'savings_bucket' => [
+        'created' => 'Caixinha criada com sucesso.',
+        'updated' => 'Caixinha atualizada com sucesso.',
+        'deleted' => 'Caixinha excluída com sucesso.',
+    ],
+
+    'credit_card' => [
+        'created' => 'Cartão de crédito criado com sucesso.',
+        'updated' => 'Cartão de crédito atualizado com sucesso.',
+        'deleted' => 'Cartão de crédito excluído com sucesso.',
+    ],
+
     'profile' => [
         'updated' => 'Perfil atualizado com sucesso.',
+    ],
+
+    'preferences' => [
+        'locale_updated'   => 'Idioma atualizado com sucesso.',
+        'currency_updated' => 'Moeda atualizada com sucesso.',
     ],
 
     'password' => [

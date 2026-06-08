@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
-import { availableColors, getColorClass } from '@/lib/category-colors';
+import { availableColors, getColorClass } from '@/lib/accent-colors';
 import { availableIcons, getIconComponent } from '@/lib/category-icons';
 import { capitalizeFirstLetter, cn } from '@/lib/utils';
 import { store } from '@/routes/categories';
@@ -49,12 +49,19 @@ const createCategory = () => {
     >
       <div class="flex min-w-1/4 flex-col justify-start gap-2">
         <Label for="name">{{ t('generic.labels.name') }}</Label>
-        <Input id="name" name="name" :placeholder="t('generic.labels.name')" v-model="form.name" />
+        <Input
+          id="name"
+          name="name"
+          :placeholder="t('generic.labels.name')"
+          v-model="form.name"
+        />
         <InputError :message="form.errors.name" />
       </div>
 
       <div class="flex min-w-1/4 flex-1 flex-col justify-start gap-2">
-        <Label for="description">{{ t('models.transaction.description') }}</Label>
+        <Label for="description">{{
+          t('models.transaction.description')
+        }}</Label>
         <Input
           id="description"
           name="description"
