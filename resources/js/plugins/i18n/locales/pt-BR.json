@@ -536,7 +536,8 @@
         },
         "table": {
             "progress": "Progresso",
-            "balance": "Saldo"
+            "balance": "Saldo",
+            "totalInvested": "Total investido"
         },
         "empty": {
             "title": "Nenhuma caixinha ainda",

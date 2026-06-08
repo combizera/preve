@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PiggyBank } from 'lucide-vue-next';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
@@ -12,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -26,9 +28,19 @@ import type { ISavingsBucket } from '@/types/models/savings-bucket';
 const { t } = useI18n();
 const store = useSavingsBucketStore();
 
-defineProps<{
+const props = defineProps<{
   savingsBuckets: ISavingsBucket[];
 }>();
+
+const totals = computed(() =>
+  props.savingsBuckets.reduce(
+    (acc, bucket) => ({
+      invested: acc.invested + bucket.current_amount,
+      target: acc.target + bucket.target_amount,
+    }),
+    { invested: 0, target: 0 },
+  ),
+);
 
 function progressPercent(bucket: ISavingsBucket): number {
   if (bucket.target_amount <= 0) return 0;
@@ -120,6 +132,25 @@ function progressPercent(bucket: ISavingsBucket): number {
           </TableCell>
         </TableRow>
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell class="font-medium">
+            {{ t('savings.table.totalInvested') }}
+          </TableCell>
+          <TableCell class="text-sm whitespace-nowrap">
+            <span class="font-semibold text-foreground">
+              {{ getCurrencySymbol() }}
+              {{ formatCentsToDisplay(totals.invested) }}
+            </span>
+            <span class="text-muted-foreground">
+              /
+              {{ getCurrencySymbol() }}
+              {{ formatCentsToDisplay(totals.target) }}
+            </span>
+          </TableCell>
+          <TableCell colspan="2" />
+        </TableRow>
+      </TableFooter>
     </Table>
 
     <EditSavingsBucketDialog />

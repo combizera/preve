@@ -536,7 +536,8 @@
         },
         "table": {
             "progress": "Progress",
-            "balance": "Balance"
+            "balance": "Balance",
+            "totalInvested": "Total invested"
         },
         "empty": {
             "title": "No savings buckets yet",
