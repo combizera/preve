@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ArrowDown, ArrowUp, ArrowUpDown, Trash } from 'lucide-vue-next';
-import { computed, ref, watch } from 'vue';
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  CreditCard,
+  Trash,
+} from 'lucide-vue-next';
+import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { bulkDestroy } from '@/actions/App/Http/Controllers/TransactionController';
+import {
+  bulkAssignCreditCard,
+  bulkDestroy,
+} from '@/actions/App/Http/Controllers/TransactionController';
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
 import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
@@ -27,6 +36,14 @@ import InfoButton from '@/components/ui/button/InfoButton.vue';
 import ShareButton from '@/components/ui/button/ShareButton.vue';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   Table,
   TableBody,
   TableCell,
@@ -40,6 +57,7 @@ import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import type { ITransactionFilters } from '@/types/filters';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITransaction } from '@/types/models/transaction';
 
 const props = defineProps<{
@@ -192,24 +210,71 @@ const confirmBulkDelete = () => {
     },
   });
 };
+
+const creditCards = inject<ICreditCard[]>('creditCards', []);
+const cardSelectValue = ref<number | null>(null);
+const cardAssignForm = useForm<{
+  ids: string[];
+  credit_card_id: number | null;
+}>({ ids: [], credit_card_id: null });
+
+const assignToCard = (cardId: number) => {
+  cardAssignForm.ids = [...selectedIds.value];
+  cardAssignForm.credit_card_id = cardId;
+
+  cardAssignForm.patch(bulkAssignCreditCard().url, {
+    preserveScroll: true,
+    onSuccess: () => {
+      selectedIds.value = [];
+      cardSelectValue.value = null;
+    },
+  });
+};
+
+const onCardSelect = (value: unknown) => {
+  if (typeof value === 'number') assignToCard(value);
+};
 </script>
 
 <template>
   <div
     v-if="selectedIds.length > 0"
-    class="mb-3 flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2"
+    class="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-muted/40 px-3 py-2"
   >
     <span class="text-sm text-muted-foreground">
       {{ t('transactions.bulk.selected', { count: selectedIds.length }) }}
     </span>
-    <Button
-      variant="destructive"
-      size="sm"
-      @click="showBulkDeleteDialog = true"
-    >
-      <Trash :size="14" />
-      {{ t('transactions.bulk.delete') }}
-    </Button>
+    <div class="flex items-center gap-2">
+      <Select
+        v-if="creditCards.length > 0"
+        :model-value="cardSelectValue ?? undefined"
+        @update:model-value="onCardSelect"
+      >
+        <SelectTrigger size="sm" class="h-8 w-48">
+          <CreditCard :size="14" class="text-muted-foreground" />
+          <SelectValue :placeholder="t('transactions.bulk.assignCard')" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem
+              v-for="card in creditCards"
+              :key="card.id"
+              :value="card.id"
+            >
+              {{ card.name }}
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Button
+        variant="destructive"
+        size="sm"
+        @click="showBulkDeleteDialog = true"
+      >
+        <Trash :size="14" />
+        {{ t('transactions.bulk.delete') }}
+      </Button>
+    </div>
   </div>
 
   <Table>

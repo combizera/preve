@@ -283,7 +283,8 @@
             "selected": "{count} selecionada(s)",
             "delete": "Excluir selecionadas",
             "clear": "Limpar seleção",
-            "confirm": "Isso excluirá permanentemente {count} transação(ões) selecionada(s). Esta ação não pode ser desfeita."
+            "confirm": "Isso excluirá permanentemente {count} transação(ões) selecionada(s). Esta ação não pode ser desfeita.",
+            "assignCard": "Mover para cartão"
         }
     },
     "recurring": {

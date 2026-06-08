@@ -78,6 +78,39 @@ final class CreditCardService
     }
 
     /**
+     * Move existing transactions onto a card in bulk. Only the user's own expense
+     * transactions without a savings bucket are eligible; each keeps its current
+     * date as the purchase date and is rebilled on the invoice due date. Returns
+     * how many were moved.
+     *
+     * @param  array<int, string>  $ids
+     *
+     * @throws Throwable
+     */
+    public function assignTransactionsToCard(User $user, CreditCard $card, array $ids): int
+    {
+        $transactions = $user->transactions()
+            ->whereIn('id', $ids)
+            ->where('type', TransactionType::EXPENSE)
+            ->whereNull('savings_bucket_id')
+            ->get();
+
+        return DB::transaction(function () use ($transactions, $card): int {
+            $transactions->each(function (Transaction $transaction) use ($card): void {
+                $purchaseDate = $transaction->transaction_date;
+
+                $transaction->update([
+                    'credit_card_id'   => $card->id,
+                    'purchase_date'    => $purchaseDate,
+                    'transaction_date' => $card->effectivePaymentDate($purchaseDate),
+                ]);
+            });
+
+            return $transactions->count();
+        });
+    }
+
+    /**
      * Everything the credit cards screen needs: each card with its committed and
      * current-invoice totals, the aggregate summary, and the upcoming invoices
      * broken down by card.

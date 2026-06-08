@@ -32,6 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('tags', TagController::class)->except('create', 'edit', 'show');
     Route::delete('transactions/bulk', [TransactionController::class, 'bulkDestroy'])
         ->name('transactions.bulk-destroy');
+    Route::patch('transactions/bulk/credit-card', [TransactionController::class, 'bulkAssignCreditCard'])
+        ->name('transactions.bulk-credit-card');
     Route::resource('transactions', TransactionController::class)->except('create', 'edit');
     Route::post('/transactions/{transaction}/share', [TransactionController::class, 'share'])
         ->name('transactions.share');

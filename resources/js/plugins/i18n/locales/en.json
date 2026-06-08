@@ -283,7 +283,8 @@
             "selected": "{count} selected",
             "delete": "Delete selected",
             "clear": "Clear selection",
-            "confirm": "This will permanently delete {count} selected transaction(s). This cannot be undone."
+            "confirm": "This will permanently delete {count} selected transaction(s). This cannot be undone.",
+            "assignCard": "Move to card"
         }
     },
     "recurring": {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Filters\TransactionFilter;
+use App\Http\Requests\BulkAssignCreditCardRequest;
 use App\Http\Requests\BulkDeleteTransactionRequest;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
+use App\Services\CreditCardService;
 use App\Services\TransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
@@ -134,6 +136,22 @@ final class TransactionController extends Controller
             ->delete();
 
         $this->toast::success(__('messages.transaction.bulk_deleted'));
+
+        return back();
+    }
+
+    /**
+     * Move several of the user's own transactions onto a credit card at once.
+     *
+     * @throws Throwable
+     */
+    public function bulkAssignCreditCard(BulkAssignCreditCardRequest $request, CreditCardService $creditCards): RedirectResponse
+    {
+        $card = Auth::user()->creditCards()->findOrFail($request->validated('credit_card_id'));
+
+        $creditCards->assignTransactionsToCard(Auth::user(), $card, $request->validated('ids'));
+
+        $this->toast::success(__('messages.transaction.bulk_card_assigned'));
 
         return back();
     }
