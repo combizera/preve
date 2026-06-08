@@ -17,11 +17,13 @@ return [
     ],
 
     'transaction' => [
-        'created'     => 'Transação criada com sucesso.',
-        'updated'     => 'Transação atualizada com sucesso.',
-        'deleted'     => 'Transação excluída com sucesso.',
-        'shared'      => 'Link copiado para a área de transferência!',
-        'share_error' => 'Erro ao gerar o link de compartilhamento.',
+        'created'            => 'Transação criada com sucesso.',
+        'updated'            => 'Transação atualizada com sucesso.',
+        'deleted'            => 'Transação excluída com sucesso.',
+        'bulk_deleted'       => 'Transações selecionadas excluídas com sucesso.',
+        'bulk_card_assigned' => 'Transações selecionadas movidas para o cartão.',
+        'shared'             => 'Link copiado para a área de transferência!',
+        'share_error'        => 'Erro ao gerar o link de compartilhamento.',
     ],
 
     'recurring' => [
@@ -44,6 +46,12 @@ return [
         'created' => 'Caixinha criada com sucesso.',
         'updated' => 'Caixinha atualizada com sucesso.',
         'deleted' => 'Caixinha excluída com sucesso.',
+    ],
+
+    'credit_card' => [
+        'created' => 'Cartão de crédito criado com sucesso.',
+        'updated' => 'Cartão de crédito atualizado com sucesso.',
+        'deleted' => 'Cartão de crédito excluído com sucesso.',
     ],
 
     'profile' => [

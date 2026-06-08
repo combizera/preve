@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3';
 import { ArrowDownLeft, ArrowUpRight } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, inject, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import InputError from '@/components/InputError.vue';
@@ -29,6 +29,7 @@ import { FREQUENCY_TYPE } from '@/enums/frequency-type';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getCurrencySymbol } from '@/lib/currency';
 import type { ICategory } from '@/types/models/category';
+import type { ICreditCard } from '@/types/models/credit-card';
 import type { IRecurringTransactionInput } from '@/types/models/recurring-transaction';
 import type { ITag } from '@/types/models/tag';
 import { filterNumericInput } from '@/utils/numericInput';
@@ -43,6 +44,8 @@ const props = defineProps<Props>();
 
 const { t } = useI18n();
 
+const creditCards = inject<ICreditCard[]>('creditCards', []);
+
 const displayAmount = defineModel<string>('displayAmount', { required: true });
 const currencySymbol = getCurrencySymbol();
 
@@ -51,6 +54,28 @@ const filteredCategories = computed(() => {
     (category) => category.type === props.form.type,
   );
 });
+
+const NO_CARD = 0;
+
+const cardModel = computed<number>({
+  get: () => props.form.credit_card_id ?? NO_CARD,
+  set: (value) => {
+    props.form.credit_card_id = value === NO_CARD ? null : value;
+  },
+});
+
+const showCardField = computed(
+  () => creditCards.length > 0 && props.form.type === TRANSACTION_TYPE.EXPENSE,
+);
+
+watch(
+  () => props.form.type,
+  (type) => {
+    if (type !== TRANSACTION_TYPE.EXPENSE) {
+      props.form.credit_card_id = null;
+    }
+  },
+);
 </script>
 
 <template>
@@ -135,6 +160,38 @@ const filteredCategories = computed(() => {
       <TagsMultiSelect id="tag" v-model="form.tags" :tags="tags" />
       <InputError :message="form.errors.tags" />
     </div>
+  </div>
+
+  <!-- Credit card -->
+  <div v-if="showCardField" class="grid gap-3">
+    <Label for="credit_card" class="text-muted-foreground">
+      {{ t('transactions.fields.creditCardOptional') }}
+    </Label>
+    <Select v-model="cardModel">
+      <SelectTrigger class="w-full">
+        <SelectValue
+          :placeholder="t('transactions.fields.creditCardPlaceholder')"
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem :value="NO_CARD">
+            {{ t('generic.labels.none') }}
+          </SelectItem>
+          <SelectItem
+            v-for="card in creditCards"
+            :value="card.id"
+            :key="card.id"
+          >
+            {{ card.name }}
+          </SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+    <p class="text-xs text-muted-foreground">
+      {{ t('transactions.fields.creditCardHint') }}
+    </p>
+    <InputError :message="form.errors.credit_card_id" />
   </div>
 
   <!-- Recurrence Settings -->

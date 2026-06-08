@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Heading from '@/components/Heading.vue';
@@ -14,6 +14,7 @@ import { dashboard } from '@/routes';
 import { useRecurringStore } from '@/stores/recurring.store';
 import { type BreadcrumbItem } from '@/types';
 import { type ICategory } from '@/types/models/category';
+import { type ICreditCard } from '@/types/models/credit-card';
 import { type IRecurringTransaction } from '@/types/models/recurring-transaction';
 import { type ITag } from '@/types/models/tag';
 
@@ -22,9 +23,12 @@ interface Props {
   incomeRecurring: IRecurringTransaction[];
   categories: ICategory[];
   tags: ITag[];
+  creditCards: ICreditCard[];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+provide('creditCards', props.creditCards);
 
 const { t } = useI18n();
 const recurringStore = useRecurringStore();

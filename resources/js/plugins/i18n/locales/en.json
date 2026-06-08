@@ -63,7 +63,8 @@
             "systemTheme": "System theme",
             "lightTheme": "Light theme",
             "darkTheme": "Dark theme",
-            "bugReport": "Bug Report"
+            "bugReport": "Bug Report",
+            "creditCards": "Credit Cards"
         },
         "placeholders": {
             "email": "email{'@'}example.com",
@@ -98,7 +99,8 @@
             "deleteTag": "This action cannot be undone. This will permanently delete the tag \"{name}\".",
             "deleteForecast": "This action cannot be undone. This will permanently delete the forecast for \"{category}\" in {month}.",
             "deleteForecastSeries": "This forecast is paused. Deleting it will permanently remove the budget for \"{category}\" and all of its monthly entries.",
-            "deleteSavingsBucket": "This action cannot be undone. This will permanently delete the savings bucket \"{name}\"."
+            "deleteSavingsBucket": "This action cannot be undone. This will permanently delete the savings bucket \"{name}\".",
+            "deleteCreditCard": "This action cannot be undone. This will permanently delete the credit card \"{name}\". Its transactions are kept but unlinked."
         }
     },
     "models": {
@@ -215,6 +217,16 @@
             "title": "Saved this month",
             "noIncome": "No income recorded this month yet.",
             "detail": "{deposits} of {income} earned this month."
+        },
+        "creditCards": {
+            "title": "Credit Cards",
+            "invoice": "This month's invoice",
+            "cycle": "Closes {closing} · due {due}",
+            "empty": {
+                "title": "No credit cards yet",
+                "description": "Add a card to track invoices and installments.",
+                "button": "Add card"
+            }
         }
     },
     "transactions": {
@@ -260,7 +272,19 @@
             "savingsBucketOptional": "Savings bucket (optional)",
             "savingsBucketPlaceholder": "Pick a bucket or leave empty",
             "savingsBucketExpenseHint": "Expense + bucket = deposit. Money is debited from your balance and added to the bucket.",
-            "savingsBucketIncomeHint": "Income + bucket = withdraw. Money returns to your balance and is removed from the bucket."
+            "savingsBucketIncomeHint": "Income + bucket = withdraw. Money returns to your balance and is removed from the bucket.",
+            "creditCardOptional": "Credit card (optional)",
+            "creditCardPlaceholder": "Pay with cash or pick a card",
+            "creditCardHint": "Card purchases are billed on the invoice due date.",
+            "splits": "Installments",
+            "splitsHint": "Split into N monthly charges, one per invoice."
+        },
+        "bulk": {
+            "selected": "{count} selected",
+            "delete": "Delete selected",
+            "clear": "Clear selection",
+            "confirm": "This will permanently delete {count} selected transaction(s). This cannot be undone.",
+            "assignCard": "Move to card"
         }
     },
     "recurring": {
@@ -545,6 +569,73 @@
             "subtitle": "Error {status}",
             "description": "The shared link you are trying to access is no longer valid. It may have expired or the security signature is incorrect.",
             "backToHome": "Return to Homepage"
+        }
+    },
+    "creditCards": {
+        "title": "Credit Cards",
+        "description": "Manage your credit cards. Card purchases are billed on the invoice due date and counted in your forecast.",
+        "newCard": "New card",
+        "fields": {
+            "name": "Card name",
+            "lastFour": "Last 4 digits",
+            "closingDay": "Closing day",
+            "dueDay": "Due day",
+            "color": "Color",
+            "creditLimit": "Credit limit",
+            "creditLimitOptional": "Credit limit (optional)"
+        },
+        "table": {
+            "cycle": "Closing / Due",
+            "limit": "Limit",
+            "usage": "Usage"
+        },
+        "empty": {
+            "title": "No credit cards yet",
+            "description": "Add your first card to track card purchases and installments."
+        },
+        "edit": {
+            "title": "Edit card",
+            "description": "Update the details for {name}."
+        },
+        "deleteConfirm": {
+            "label": "To confirm, type the name of the card: {name}"
+        },
+        "cycleSummary": "Closes on day {closing}, due on day {due}",
+        "preview": {
+            "type": "Credit",
+            "placeholder": "Card name"
+        },
+        "summary": {
+            "title": "Overview",
+            "committed": "Committed",
+            "committedHint": "Card spending not yet debited",
+            "available": "Available limit",
+            "availableHint": "Total limit minus committed",
+            "invoice": "This month's invoice",
+            "invoiceHint": "Due across all cards this month"
+        },
+        "chart": {
+            "title": "Upcoming invoices",
+            "empty": "No upcoming card spending."
+        },
+        "usage": {
+            "noLimit": "No limit set",
+            "committed": "committed"
+        },
+        "actions": {
+            "viewInvoice": "View invoice"
+        },
+        "invoice": {
+            "title": "Invoice",
+            "total": "Invoice total",
+            "empty": "No charges in this invoice.",
+            "share": "Share invoice",
+            "shareSuccess": "Invoice link copied!",
+            "shareError": "Couldn't generate the link.",
+            "purchasedOn": "Purchased {date}",
+            "installment": "Installment {n}/{total}",
+            "prev": "Previous month",
+            "next": "Next month"
         }
     }
 }

@@ -34,6 +34,8 @@ final class TransactionRequest extends FormRequest
             'tags'              => ['nullable', 'array'],
             'tags.*'            => ['integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
             'savings_bucket_id' => ['nullable', 'integer', Rule::exists('savings_buckets', 'id')->where('user_id', $this->user()->id)],
+            'credit_card_id'    => ['nullable', 'integer', Rule::exists('credit_cards', 'id')->where('user_id', $this->user()->id)],
+            'splits'            => ['nullable', 'integer', 'min:1', 'max:48'],
             'amount'            => ['required', 'numeric', 'min:1'],
             'type'              => ['required', 'in:income,expense'],
             'description'       => ['required', 'string', 'min:3'],
@@ -59,6 +61,24 @@ final class TransactionRequest extends FormRequest
                     $validator->errors()->add(
                         'category_id',
                         __('validation.custom.category_id.type_mismatch', ['type' => $this->type]),
+                    );
+
+                    return;
+                }
+
+                if ($this->filled('credit_card_id') && $this->type !== TransactionType::EXPENSE->value) {
+                    $validator->errors()->add(
+                        'credit_card_id',
+                        __('validation.custom.credit_card.income_not_allowed'),
+                    );
+
+                    return;
+                }
+
+                if ($this->filled('credit_card_id') && $this->filled('savings_bucket_id')) {
+                    $validator->errors()->add(
+                        'credit_card_id',
+                        __('validation.custom.credit_card.savings_bucket_conflict'),
                     );
 
                     return;

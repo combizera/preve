@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\TransactionType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Date;
@@ -24,22 +25,23 @@ final class RecurringTransactionRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'category_id'  => ['required', 'integer', Rule::exists('categories', 'id')->where('user_id', $this->user()->id)],
-            'tags'         => ['nullable', 'array'],
-            'tags.*'       => ['integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
-            'amount'       => ['required', 'numeric', 'min:1'],
-            'type'         => ['required', 'in:income,expense'],
-            'frequency'    => ['required', 'in:monthly,yearly'],
-            'description'  => ['required', 'string', 'min:3'],
-            'is_active'    => ['boolean'],
-            'day_of_month' => ['required_if:frequency,monthly', 'nullable', 'integer', 'min:1', 'max:31'],
-            'start_date'   => ['required', 'date'],
-            'end_date'     => ['nullable', 'date', 'after:start_date'],
+            'category_id'    => ['required', 'integer', Rule::exists('categories', 'id')->where('user_id', $this->user()->id)],
+            'credit_card_id' => ['nullable', 'integer', Rule::exists('credit_cards', 'id')->where('user_id', $this->user()->id)],
+            'tags'           => ['nullable', 'array'],
+            'tags.*'         => ['integer', Rule::exists('tags', 'id')->where('user_id', $this->user()->id)],
+            'amount'         => ['required', 'numeric', 'min:1'],
+            'type'           => ['required', 'in:income,expense'],
+            'frequency'      => ['required', 'in:monthly,yearly'],
+            'description'    => ['required', 'string', 'min:3'],
+            'is_active'      => ['boolean'],
+            'day_of_month'   => ['required_if:frequency,monthly', 'nullable', 'integer', 'min:1', 'max:31'],
+            'start_date'     => ['required', 'date'],
+            'end_date'       => ['nullable', 'date', 'after:start_date'],
         ];
     }
 
@@ -60,6 +62,15 @@ final class RecurringTransactionRequest extends FormRequest
                     $validator->errors()->add(
                         'category_id',
                         __('validation.custom.category_id.type_mismatch', ['type' => $this->type]),
+                    );
+
+                    return;
+                }
+
+                if ($this->filled('credit_card_id') && $this->type !== TransactionType::EXPENSE->value) {
+                    $validator->errors()->add(
+                        'credit_card_id',
+                        __('validation.custom.credit_card.income_not_allowed'),
                     );
                 }
             },

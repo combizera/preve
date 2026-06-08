@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
 import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
+import SortableHeader from '@/components/Transaction/SortableHeader.vue';
+import TableBulkActions from '@/components/Transaction/TableBulkActions.vue';
 import { Badge } from '@/components/ui/badge';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import InfoButton from '@/components/ui/button/InfoButton.vue';
 import ShareButton from '@/components/ui/button/ShareButton.vue';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableBody,
@@ -21,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useRowSelection } from '@/composables/useRowSelection';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
@@ -99,6 +102,9 @@ const totals = computed(() => {
   return { income, expense };
 });
 
+const { selectedIds, headerState, toggleAll, toggleRow, isSelected, clear } =
+  useRowSelection(rows, (tx) => tx.id);
+
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
 const selectedTransaction = ref<ITransaction | null>(null);
@@ -126,87 +132,65 @@ const formatDate = (value?: string | null): string => {
     year: 'numeric',
   });
 };
-
-const sortButtonClass =
-  '-mx-2 inline-flex items-center gap-1 rounded px-2 py-1 transition-colors hover:bg-muted hover:text-foreground';
 </script>
 
 <template>
+  <TableBulkActions
+    v-if="selectedIds.length > 0"
+    :selected-ids="selectedIds"
+    @cleared="clear"
+  />
+
   <Table>
     <TableHeader>
       <TableRow>
+        <TableHead class="w-10">
+          <Checkbox
+            :model-value="headerState"
+            @update:model-value="toggleAll"
+          />
+        </TableHead>
         <TableHead class="w-32">
-          <button
-            type="button"
-            @click="cycleSort('date')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="date"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.date') }}
-            <ArrowUp
-              v-if="sortKey === 'date' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'date' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>
-          <button
-            type="button"
-            @click="cycleSort('description')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="description"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.description') }}
-            <ArrowUp
-              v-if="sortKey === 'description' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'description' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>
-          <button
-            type="button"
-            @click="cycleSort('category')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="category"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.category.name') }}
-            <ArrowUp
-              v-if="sortKey === 'category' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'category' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>{{ t('tags.title') }}</TableHead>
         <TableHead class="text-right">
-          <button
-            type="button"
-            @click="cycleSort('amount')"
-            :class="cn(sortButtonClass, 'ml-auto')"
+          <SortableHeader
+            sort-key="amount"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            align="right"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.amount') }}
-            <ArrowUp
-              v-if="sortKey === 'amount' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'amount' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead class="text-right">
           {{ t('generic.labels.actions') }}
@@ -216,11 +200,22 @@ const sortButtonClass =
 
     <TableBody>
       <TableRow v-if="rows.length === 0">
-        <TableCell colspan="6" class="text-center text-muted-foreground">
+        <TableCell colspan="7" class="text-center text-muted-foreground">
           {{ t('transactions.table.empty') }}
         </TableCell>
       </TableRow>
-      <TableRow v-for="tx in rows" :key="tx.id">
+      <TableRow
+        v-for="tx in rows"
+        :key="tx.id"
+        :data-state="tx.id && isSelected(tx.id) ? 'selected' : undefined"
+      >
+        <TableCell class="w-10">
+          <Checkbox
+            v-if="tx.id"
+            :model-value="isSelected(tx.id)"
+            @update:model-value="(checked) => toggleRow(tx.id!, checked)"
+          />
+        </TableCell>
         <TableCell class="whitespace-nowrap text-muted-foreground">
           {{ formatDate(tx.transaction_date) }}
         </TableCell>
@@ -276,7 +271,7 @@ const sortButtonClass =
 
     <TableFooter v-if="rows.length > 0">
       <TableRow v-if="totals.income > 0">
-        <TableCell colspan="4" />
+        <TableCell colspan="5" />
         <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalIncome') }}
         </TableCell>
@@ -285,7 +280,7 @@ const sortButtonClass =
         </TableCell>
       </TableRow>
       <TableRow v-if="totals.expense > 0">
-        <TableCell colspan="4" />
+        <TableCell colspan="5" />
         <TableCell class="text-right text-muted-foreground">
           {{ t('transactions.table.totalExpense') }}
         </TableCell>

@@ -2,6 +2,7 @@
 import {
   ArrowRightLeft,
   Bug,
+  CreditCard,
   Github,
   Home,
   PiggyBank,
@@ -27,6 +28,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
+import creditCards from '@/routes/credit-cards';
 import forecasts from '@/routes/forecasts';
 import recurring from '@/routes/recurring';
 import savings from '@/routes/savings';
@@ -61,6 +63,11 @@ const mainNavItems = computed<NavItem[]>(() => [
     title: t('generic.sidebar.savings'),
     href: savings.index(),
     icon: PiggyBank,
+  },
+  {
+    title: t('generic.sidebar.creditCards'),
+    href: creditCards.index(),
+    icon: CreditCard,
   },
   {
     title: t('generic.sidebar.category'),

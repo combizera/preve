@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Services\CreditCardService;
 use App\Services\ForecastService;
 use App\Services\SavingsRateService;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ use Inertia\Response;
 
 final class DashboardController extends Controller
 {
-    public function __invoke(Request $request, ForecastService $forecastService, SavingsRateService $savingsRateService): Response
+    public function __invoke(Request $request, ForecastService $forecastService, SavingsRateService $savingsRateService, CreditCardService $creditCardService): Response
     {
         $user = Auth::user();
         $now = now();
@@ -69,6 +70,8 @@ final class DashboardController extends Controller
         $savingsBuckets = $user->savingsBuckets()->orderBy('id')->get();
         $savingsRate = $savingsRateService->forMonth($user, $now);
 
+        $creditCards = $creditCardService->withMonthlyInvoice($user, $chartDate);
+
         return Inertia::render('Dashboard', compact(
             'latestTransactions',
             'availableBalance',
@@ -83,6 +86,7 @@ final class DashboardController extends Controller
             'tags',
             'savingsBuckets',
             'savingsRate',
+            'creditCards',
         ));
     }
 }

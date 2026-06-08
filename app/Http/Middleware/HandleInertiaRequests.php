@@ -43,8 +43,9 @@ final class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'sidebarOpen'         => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'transactionShareUrl' => $request->session()->get('transaction_share_url'),
+            'sidebarOpen'               => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'transactionShareUrl'       => $request->session()->get('transaction_share_url'),
+            'creditCardInvoiceShareUrl' => $request->session()->get('credit_card_invoice_share_url'),
         ];
     }
 }

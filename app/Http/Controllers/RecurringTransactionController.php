@@ -35,8 +35,9 @@ final class RecurringTransactionController extends Controller
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
+        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
 
-        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags'));
+        return Inertia::render('RecurringTransaction', compact('expenseRecurring', 'incomeRecurring', 'categories', 'tags', 'creditCards'));
     }
 
     /**
@@ -59,7 +60,7 @@ final class RecurringTransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring): RedirectResponse
+    public function update(RecurringTransactionRequest $request, RecurringTransaction $recurring, RecurringTransactionService $service): RedirectResponse
     {
         $this->authorize('update', $recurring);
 
@@ -68,6 +69,8 @@ final class RecurringTransactionController extends Controller
 
         $recurring->update($validated);
         $recurring->tags()->sync($tagIds);
+
+        $service->regenerateFutureTransactions($recurring, 3);
 
         $this->toast::success(__('messages.recurring.updated'));
 

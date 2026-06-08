@@ -45,6 +45,7 @@ const rawAmount = ref(props.recurringTransaction.amount.toString());
 
 const form = useForm<IRecurringTransactionInput>({
   ...props.recurringTransaction,
+  credit_card_id: props.recurringTransaction.credit_card_id ?? null,
   tags: props.recurringTransaction.tags?.map((tag) => tag.id) ?? [],
   start_date: formatTransactionDate(props.recurringTransaction.start_date),
   end_date: formatTransactionDate(props.recurringTransaction.end_date),

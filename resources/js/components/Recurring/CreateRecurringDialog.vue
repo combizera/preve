@@ -44,6 +44,7 @@ const rawAmount = ref('');
 
 const form = useForm<IRecurringTransactionInput>({
   category_id: 0,
+  credit_card_id: null,
   tags: [],
   amount: 0,
   frequency: FREQUENCY_TYPE.MONTHLY,

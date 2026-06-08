@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Filters\TransactionFilter;
+use App\Http\Requests\BulkAssignCreditCardRequest;
+use App\Http\Requests\BulkDeleteTransactionRequest;
 use App\Http\Requests\IndexTransactionRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
+use App\Services\CreditCardService;
+use App\Services\TransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 final class TransactionController extends Controller
 {
@@ -26,29 +31,32 @@ final class TransactionController extends Controller
 
         $transactions = Auth::user()
             ->transactions()
-            ->with(['category', 'tags'])
+            ->with(['category', 'tags', 'creditCard'])
             ->filter($transactionFilter)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
         $categories = Auth::user()->categories()->get();
         $tags = Auth::user()->tags()->get();
+        $creditCards = Auth::user()->creditCards()->orderBy('name')->get();
 
         $filters = $request->validated();
 
-        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'filters'));
+        return Inertia::render('transactions/Transaction', compact('transactions', 'categories', 'tags', 'creditCards', 'filters'));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @throws Throwable
      */
-    public function store(TransactionRequest $request): RedirectResponse
+    public function store(TransactionRequest $request, TransactionService $transactions): RedirectResponse
     {
         $validated = $request->validated();
         $tagIds = Arr::pull($validated, 'tags', []);
+        $splits = (int) (Arr::pull($validated, 'splits') ?? 1);
 
-        $transaction = Auth::user()->transactions()->create($validated);
-        $transaction->tags()->sync($tagIds);
+        $transactions->create(Auth::user(), $validated, $splits, $tagIds);
 
         $this->toast::success(__('messages.transaction.created'));
 
@@ -86,15 +94,15 @@ final class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
+    public function update(TransactionRequest $request, Transaction $transaction, TransactionService $transactions): RedirectResponse
     {
         $this->authorize('update', $transaction);
 
         $validated = $request->validated();
         $tagIds = Arr::pull($validated, 'tags', []);
+        Arr::forget($validated, 'splits');
 
-        $transaction->update($validated);
-        $transaction->tags()->sync($tagIds);
+        $transactions->update(Auth::user(), $transaction, $validated, $tagIds);
 
         $this->toast::success(__('messages.transaction.updated'));
 
@@ -111,6 +119,39 @@ final class TransactionController extends Controller
         $transaction->delete();
 
         $this->toast::success(__('messages.transaction.deleted'));
+
+        return back();
+    }
+
+    /**
+     * Delete several of the user's own transactions at once. Deleted through the
+     * model so the savings-bucket balance observer still runs per transaction.
+     */
+    public function bulkDestroy(BulkDeleteTransactionRequest $request): RedirectResponse
+    {
+        Auth::user()->transactions()
+            ->whereIn('id', $request->validated('ids'))
+            ->get()
+            ->each
+            ->delete();
+
+        $this->toast::success(__('messages.transaction.bulk_deleted'));
+
+        return back();
+    }
+
+    /**
+     * Move several of the user's own transactions onto a credit card at once.
+     *
+     * @throws Throwable
+     */
+    public function bulkAssignCreditCard(BulkAssignCreditCardRequest $request, CreditCardService $creditCards): RedirectResponse
+    {
+        $card = Auth::user()->creditCards()->findOrFail($request->validated('credit_card_id'));
+
+        $creditCards->assignTransactionsToCard(Auth::user(), $card, $request->validated('ids'));
+
+        $this->toast::success(__('messages.transaction.bulk_card_assigned'));
 
         return back();
     }

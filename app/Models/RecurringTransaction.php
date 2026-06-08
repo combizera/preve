@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Date;
 #[Fillable([
     'user_id',
     'category_id',
+    'credit_card_id',
     'amount',
     'frequency',
     'type',
@@ -66,6 +67,14 @@ final class RecurringTransaction extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * @return BelongsTo<CreditCard, $this>
+     */
+    public function creditCard(): BelongsTo
+    {
+        return $this->belongsTo(CreditCard::class);
     }
 
     /**

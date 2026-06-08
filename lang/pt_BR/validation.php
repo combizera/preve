@@ -193,6 +193,10 @@ return [
         'savings_bucket' => [
             'overdraw' => 'Você não pode sacar mais do que o saldo atual da caixinha.',
         ],
+        'credit_card' => [
+            'savings_bucket_conflict' => 'Uma transação não pode pertencer a um cartão de crédito e a uma caixinha ao mesmo tempo.',
+            'income_not_allowed'      => 'Apenas despesas podem ser vinculadas a um cartão de crédito.',
+        ],
     ],
 
     /*
