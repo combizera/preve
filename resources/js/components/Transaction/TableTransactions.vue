@@ -1,48 +1,19 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  CreditCard,
-  Trash,
-} from 'lucide-vue-next';
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import {
-  bulkAssignCreditCard,
-  bulkDestroy,
-} from '@/actions/App/Http/Controllers/TransactionController';
 import ActionGroup from '@/components/ActionGroup.vue';
 import DeleteTransactionDialog from '@/components/Transaction/DeleteTransactionDialog.vue';
 import FormTransactionDialog from '@/components/Transaction/FormTransactionDialog.vue';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import SortableHeader from '@/components/Transaction/SortableHeader.vue';
+import TableBulkActions from '@/components/Transaction/TableBulkActions.vue';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import DeleteButton from '@/components/ui/button/DeleteButton.vue';
 import DuplicateButton from '@/components/ui/button/DuplicateButton.vue';
 import EditButton from '@/components/ui/button/EditButton.vue';
 import InfoButton from '@/components/ui/button/InfoButton.vue';
 import ShareButton from '@/components/ui/button/ShareButton.vue';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -52,12 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useRowSelection } from '@/composables/useRowSelection';
 import { TRANSACTION_TYPE } from '@/enums/transaction-type';
 import { getIconComponent } from '@/lib/category-icons';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import { cn } from '@/lib/utils';
 import type { ITransactionFilters } from '@/types/filters';
-import type { ICreditCard } from '@/types/models/credit-card';
 import type { ITransaction } from '@/types/models/transaction';
 
 const props = defineProps<{
@@ -131,6 +102,9 @@ const totals = computed(() => {
   return { income, expense };
 });
 
+const { selectedIds, headerState, toggleAll, toggleRow, isSelected, clear } =
+  useRowSelection(rows, (tx) => tx.id);
+
 const showDeleteDialog = ref(false);
 const showEditDialog = ref(false);
 const selectedTransaction = ref<ITransaction | null>(null);
@@ -158,124 +132,14 @@ const formatDate = (value?: string | null): string => {
     year: 'numeric',
   });
 };
-
-const sortButtonClass =
-  '-mx-2 inline-flex items-center gap-1 rounded px-2 py-1 transition-colors hover:bg-muted hover:text-foreground';
-
-const selectedIds = ref<string[]>([]);
-
-const selectableIds = computed(() =>
-  rows.value.map((tx) => tx.id).filter((id): id is string => Boolean(id)),
-);
-
-watch(rows, () => {
-  const visible = new Set(selectableIds.value);
-  selectedIds.value = selectedIds.value.filter((id) => visible.has(id));
-});
-
-const allSelected = computed(
-  () =>
-    selectableIds.value.length > 0 &&
-    selectableIds.value.every((id) => selectedIds.value.includes(id)),
-);
-
-const headerState = computed<boolean | 'indeterminate'>(() => {
-  if (allSelected.value) return true;
-  return selectedIds.value.length > 0 ? 'indeterminate' : false;
-});
-
-const toggleAll = (checked: boolean | 'indeterminate') => {
-  selectedIds.value = checked === true ? [...selectableIds.value] : [];
-};
-
-const toggleRow = (id: string, checked: boolean | 'indeterminate') => {
-  if (checked === true) {
-    if (!selectedIds.value.includes(id)) selectedIds.value.push(id);
-  } else {
-    selectedIds.value = selectedIds.value.filter((value) => value !== id);
-  }
-};
-
-const showBulkDeleteDialog = ref(false);
-const bulkForm = useForm<{ ids: string[] }>({ ids: [] });
-
-const confirmBulkDelete = () => {
-  bulkForm.ids = [...selectedIds.value];
-
-  bulkForm.delete(bulkDestroy().url, {
-    preserveScroll: true,
-    onSuccess: () => {
-      selectedIds.value = [];
-      showBulkDeleteDialog.value = false;
-    },
-  });
-};
-
-const creditCards = inject<ICreditCard[]>('creditCards', []);
-const cardSelectValue = ref<number | null>(null);
-const cardAssignForm = useForm<{
-  ids: string[];
-  credit_card_id: number | null;
-}>({ ids: [], credit_card_id: null });
-
-const assignToCard = (cardId: number) => {
-  cardAssignForm.ids = [...selectedIds.value];
-  cardAssignForm.credit_card_id = cardId;
-
-  cardAssignForm.patch(bulkAssignCreditCard().url, {
-    preserveScroll: true,
-    onSuccess: () => {
-      selectedIds.value = [];
-      cardSelectValue.value = null;
-    },
-  });
-};
-
-const onCardSelect = (value: unknown) => {
-  if (typeof value === 'number') assignToCard(value);
-};
 </script>
 
 <template>
-  <div
+  <TableBulkActions
     v-if="selectedIds.length > 0"
-    class="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-muted/40 px-3 py-2"
-  >
-    <span class="text-sm text-muted-foreground">
-      {{ t('transactions.bulk.selected', { count: selectedIds.length }) }}
-    </span>
-    <div class="flex items-center gap-2">
-      <Select
-        v-if="creditCards.length > 0"
-        :model-value="cardSelectValue ?? undefined"
-        @update:model-value="onCardSelect"
-      >
-        <SelectTrigger size="sm" class="h-8 w-48">
-          <CreditCard :size="14" class="text-muted-foreground" />
-          <SelectValue :placeholder="t('transactions.bulk.assignCard')" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem
-              v-for="card in creditCards"
-              :key="card.id"
-              :value="card.id"
-            >
-              {{ card.name }}
-            </SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <Button
-        variant="destructive"
-        size="sm"
-        @click="showBulkDeleteDialog = true"
-      >
-        <Trash :size="14" />
-        {{ t('transactions.bulk.delete') }}
-      </Button>
-    </div>
-  </div>
+    :selected-ids="selectedIds"
+    @cleared="clear"
+  />
 
   <Table>
     <TableHeader>
@@ -283,82 +147,50 @@ const onCardSelect = (value: unknown) => {
         <TableHead class="w-10">
           <Checkbox
             :model-value="headerState"
-            :aria-label="t('transactions.bulk.delete')"
             @update:model-value="toggleAll"
           />
         </TableHead>
         <TableHead class="w-32">
-          <button
-            type="button"
-            @click="cycleSort('date')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="date"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.date') }}
-            <ArrowUp
-              v-if="sortKey === 'date' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'date' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>
-          <button
-            type="button"
-            @click="cycleSort('description')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="description"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.description') }}
-            <ArrowUp
-              v-if="sortKey === 'description' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'description' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>
-          <button
-            type="button"
-            @click="cycleSort('category')"
-            :class="sortButtonClass"
+          <SortableHeader
+            sort-key="category"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            @sort="cycleSort"
           >
             {{ t('models.category.name') }}
-            <ArrowUp
-              v-if="sortKey === 'category' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'category' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead>{{ t('tags.title') }}</TableHead>
         <TableHead class="text-right">
-          <button
-            type="button"
-            @click="cycleSort('amount')"
-            :class="cn(sortButtonClass, 'ml-auto')"
+          <SortableHeader
+            sort-key="amount"
+            :active-key="sortKey"
+            :direction="sortDirection"
+            align="right"
+            @sort="cycleSort"
           >
             {{ t('models.transaction.amount') }}
-            <ArrowUp
-              v-if="sortKey === 'amount' && sortDirection === 'asc'"
-              :size="14"
-            />
-            <ArrowDown
-              v-else-if="sortKey === 'amount' && sortDirection === 'desc'"
-              :size="14"
-            />
-            <ArrowUpDown v-else :size="14" class="opacity-50" />
-          </button>
+          </SortableHeader>
         </TableHead>
         <TableHead class="text-right">
           {{ t('generic.labels.actions') }}
@@ -375,14 +207,12 @@ const onCardSelect = (value: unknown) => {
       <TableRow
         v-for="tx in rows"
         :key="tx.id"
-        :data-state="
-          tx.id && selectedIds.includes(tx.id) ? 'selected' : undefined
-        "
+        :data-state="tx.id && isSelected(tx.id) ? 'selected' : undefined"
       >
         <TableCell class="w-10">
           <Checkbox
             v-if="tx.id"
-            :model-value="selectedIds.includes(tx.id)"
+            :model-value="isSelected(tx.id)"
             @update:model-value="(checked) => toggleRow(tx.id!, checked)"
           />
         </TableCell>
@@ -475,27 +305,4 @@ const onCardSelect = (value: unknown) => {
     v-model:open="showDeleteDialog"
     :transaction="selectedTransaction"
   />
-
-  <AlertDialog v-model:open="showBulkDeleteDialog">
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>{{ t('generic.confirm.title') }}</AlertDialogTitle>
-        <AlertDialogDescription>
-          {{ t('transactions.bulk.confirm', { count: selectedIds.length }) }}
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>
-          {{ t('generic.actions.cancel') }}
-        </AlertDialogCancel>
-        <AlertDialogAction
-          variant="destructive"
-          :disabled="bulkForm.processing"
-          @click="confirmBulkDelete"
-        >
-          {{ t('generic.actions.confirm') }}
-        </AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
 </template>
