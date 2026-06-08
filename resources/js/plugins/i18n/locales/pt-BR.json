@@ -526,7 +526,8 @@
             "title": "Evolução do ano",
             "balance": "Saldo",
             "deposits": "Depósitos",
-            "withdrawals": "Saques"
+            "withdrawals": "Saques",
+            "projection": "Projeção"
         },
         "fields": {
             "name": "Nome da meta",

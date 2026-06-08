@@ -27,11 +27,12 @@ final class SavingsBucketController extends Controller
         $selectedYear = $this->resolveYear($request, $availableYears);
 
         return Inertia::render('SavingsBucket', [
-            'savingsBuckets' => $savingsBuckets,
-            'availableYears' => $availableYears,
-            'selectedYear'   => $selectedYear,
-            'chartData'      => Inertia::defer(fn (): array => $history->monthlyBalances($user, $selectedYear)),
-            'categories'     => Inertia::defer(fn () => $user->categories()->get()),
+            'savingsBuckets'      => $savingsBuckets,
+            'availableYears'      => $availableYears,
+            'selectedYear'        => $selectedYear,
+            'averageContribution' => $history->averageMonthlyContribution($user, 3),
+            'chartData'           => Inertia::defer(fn (): array => $history->monthlyBalances($user, $selectedYear)),
+            'categories'          => Inertia::defer(fn () => $user->categories()->get()),
         ]);
     }
 

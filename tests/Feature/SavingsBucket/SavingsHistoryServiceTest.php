@@ -24,6 +24,44 @@ beforeEach(function (): void {
     $this->service = new SavingsHistoryService(new SavingsBucketBalanceService());
 });
 
+it('averages the net monthly contribution over the last 3 months, including the current one', function (): void {
+    Date::setTestNow('2026-04-15');
+
+    $bucket = SavingsBucket::factory()->create([
+        'user_id'        => $this->user->id,
+        'current_amount' => 0,
+    ]);
+
+    $deposit = function (string $date, int $amount) use ($bucket): void {
+        Transaction::factory()->create([
+            'user_id'           => $this->user->id,
+            'category_id'       => $this->expenseCategory->id,
+            'savings_bucket_id' => $bucket->id,
+            'type'              => TransactionType::EXPENSE->value,
+            'amount'            => $amount,
+            'transaction_date'  => $date,
+        ]);
+    };
+
+    $deposit('2026-01-10', 99999); // outside the window
+    $deposit('2026-02-10', 60000);
+    $deposit('2026-03-10', 30000);
+    $deposit('2026-04-05', 30000); // current month, included
+
+    Transaction::factory()->create([
+        'user_id'           => $this->user->id,
+        'category_id'       => $this->incomeCategory->id,
+        'savings_bucket_id' => $bucket->id,
+        'type'              => TransactionType::INCOME->value,
+        'amount'            => 30000,
+        'transaction_date'  => '2026-03-20', // withdrawal lowers the net
+    ]);
+
+    expect($this->service->averageMonthlyContribution($this->user, 3))->toBe(30000);
+
+    Date::setTestNow();
+});
+
 it('returns 12 zeroed months when the user has no savings activity', function (): void {
     $result = $this->service->monthlyBalances($this->user, 2026);
 

@@ -526,7 +526,8 @@
             "title": "Yearly evolution",
             "balance": "Balance",
             "deposits": "Deposits",
-            "withdrawals": "Withdrawals"
+            "withdrawals": "Withdrawals",
+            "projection": "Projection"
         },
         "fields": {
             "name": "Goal name",

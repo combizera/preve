@@ -29,16 +29,41 @@ interface Props {
   chartData: ISavingsMonth[];
   availableYears: number[];
   selectedYear: number;
+  averageContribution: number;
 }
 
 const props = defineProps<Props>();
 
 const { t } = useI18n();
 
-type ChartPoint = ISavingsMonth & { index: number };
+type ChartPoint = ISavingsMonth & { index: number; projected?: number };
+
+const now = new Date();
+const currentMonthIndex = now.getMonth();
+
+const showProjection = computed(
+  () =>
+    props.selectedYear === now.getFullYear() &&
+    props.averageContribution > 0 &&
+    currentMonthIndex < 11,
+);
+
+const anchorBalance = computed(
+  () => props.chartData[currentMonthIndex]?.balance ?? 0,
+);
+
+const projectedAt = (index: number) =>
+  anchorBalance.value + props.averageContribution * (index - currentMonthIndex);
 
 const points = computed<ChartPoint[]>(() =>
-  props.chartData.map((row, index) => ({ ...row, index })),
+  props.chartData.map((row, index) => ({
+    ...row,
+    index,
+    projected:
+      showProjection.value && index > currentMonthIndex
+        ? projectedAt(index)
+        : undefined,
+  })),
 );
 
 const monthLabels = computed(() =>
@@ -58,10 +83,30 @@ const chartConfig = computed<ChartConfig>(() => ({
     label: t('savings.chart.withdrawals'),
     color: 'var(--destructive)',
   },
+  projected: {
+    label: t('savings.chart.projection'),
+    color: 'var(--primary)',
+  },
 }));
 
+const maxValue = computed(() => {
+  const balanceMax = Math.max(0, ...points.value.map((point) => point.balance));
+  const max = showProjection.value
+    ? Math.max(balanceMax, projectedAt(11))
+    : balanceMax;
+  return max > 0 ? max : 1;
+});
+
 const x = (_d: ChartPoint, i: number) => i;
-const yBalance = (d: ChartPoint) => d.balance;
+
+const yBalance = (d: ChartPoint): number | undefined =>
+  showProjection.value && d.index > currentMonthIndex ? undefined : d.balance;
+
+const yProjected = (d: ChartPoint): number | undefined =>
+  showProjection.value && d.index >= currentMonthIndex
+    ? projectedAt(d.index)
+    : undefined;
+
 const tickFormat = (i: number) => monthLabels.value[i]?.slice(0, 3) ?? '';
 
 const onYearChange = (next: string) => {
@@ -78,6 +123,15 @@ const onYearChange = (next: string) => {
     >
       <CardTitle class="text-sm font-medium text-muted-foreground">
         {{ t('savings.chart.title') }}
+        <span
+          v-if="showProjection"
+          class="ml-2 inline-flex items-center gap-1.5 text-xs font-normal text-muted-foreground"
+        >
+          <span
+            class="inline-block h-0 w-4 border-t-2 border-dashed border-primary"
+          />
+          {{ t('savings.chart.projection') }}
+        </span>
       </CardTitle>
       <Select
         :model-value="String(selectedYear)"
@@ -103,7 +157,11 @@ const onYearChange = (next: string) => {
         class="h-[260px] w-full"
         :cursor="true"
       >
-        <VisXYContainer :data="points" :padding="{ top: 20, bottom: 20 }">
+        <VisXYContainer
+          :data="points"
+          :y-domain="[0, maxValue]"
+          :padding="{ top: 20, bottom: 20 }"
+        >
           <VisArea
             :x="x"
             :y="yBalance"
@@ -117,6 +175,15 @@ const onYearChange = (next: string) => {
             :color="chartConfig.balance.color"
             :curve-type="CurveType.MonotoneX"
             :line-width="2"
+          />
+          <VisLine
+            v-if="showProjection"
+            :x="x"
+            :y="yProjected"
+            :color="chartConfig.balance.color"
+            :curve-type="CurveType.MonotoneX"
+            :line-width="2"
+            :line-dash-array="[6, 5]"
           />
           <VisAxis
             type="x"

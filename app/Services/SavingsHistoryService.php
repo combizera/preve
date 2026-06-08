@@ -88,6 +88,33 @@ final readonly class SavingsHistoryService
     }
 
     /**
+     * Average net contribution (deposits minus withdrawals) per month over the
+     * last $months months, including the current one, used to project future
+     * savings growth.
+     */
+    public function averageMonthlyContribution(User $user, int $months = 3): int
+    {
+        $now = CarbonImmutable::now();
+        $windowStart = $now->startOfMonth()->subMonths($months - 1);
+        $windowEnd = $now->endOfMonth();
+
+        $net = (int) $user
+            ->transactions()
+            ->whereNotNull('savings_bucket_id')
+            ->whereBetween('transaction_date', [
+                $windowStart->toDateString(),
+                $windowEnd->toDateString(),
+            ])
+            ->get(['amount', 'type'])
+            ->reduce(
+                fn (int $carry, $tx): int => $carry + $this->balances->bucketDelta((int) $tx->amount, $tx->type),
+                0,
+            );
+
+        return (int) round($net / $months);
+    }
+
+    /**
      * Years for which the user has any savings activity (bucket creation or
      * bucket-affecting transaction). Always includes the current year so the
      * selector is never empty.

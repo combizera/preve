@@ -30,10 +30,18 @@ type Row = {
   dotColor: string;
 };
 
+const isProjected = computed(
+  () => typeof props.payload?.projected === 'number',
+);
+
 const rows = computed<Row[]>(() => {
+  const keys = isProjected.value
+    ? ['projected']
+    : ['balance', 'deposits', 'withdrawals'];
+
   const out: Row[] = [];
 
-  for (const key of ['balance', 'deposits', 'withdrawals']) {
+  for (const key of keys) {
     const itemConfig = props.config[key];
     const raw = props.payload?.[key];
     if (!itemConfig || typeof raw !== 'number') continue;

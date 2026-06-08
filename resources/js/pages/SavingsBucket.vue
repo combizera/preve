@@ -23,6 +23,7 @@ interface Props {
   savingsBuckets: ISavingsBucket[];
   availableYears: number[];
   selectedYear: number;
+  averageContribution: number;
   chartData?: ISavingsMonth[];
   categories?: ICategory[];
 }
@@ -73,6 +74,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
           :chart-data="chartData ?? []"
           :available-years="availableYears"
           :selected-year="selectedYear"
+          :average-contribution="averageContribution"
         />
       </Deferred>
     </div>
