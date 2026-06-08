@@ -65,7 +65,7 @@ const createCard = () => {
 </script>
 
 <template>
-  <QuickCreateCard :title="t('creditCards.newCard')">
+  <QuickCreateCard :title="t('creditCards.newCard')" collapsible>
     <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
       <CreditCardPreview
         class="w-full shrink-0 lg:w-80"

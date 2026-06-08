@@ -71,7 +71,7 @@ const createBucket = () => {
 </script>
 
 <template>
-  <QuickCreateCard :title="t('savings.newBucket')">
+  <QuickCreateCard :title="t('savings.newBucket')" collapsible>
     <form
       class="flex w-full flex-col items-start gap-3 lg:flex-row lg:flex-nowrap"
       @submit.prevent="createBucket"
