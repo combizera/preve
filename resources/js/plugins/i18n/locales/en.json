@@ -319,7 +319,8 @@
         "details": {
             "annualAmount": "Annual Amount",
             "nextOccurrence": "Next Occurrence",
-            "activePeriod": "Active Period"
+            "activePeriod": "Active Period",
+            "dueDate": "Due date"
         }
     },
     "forecasts": {

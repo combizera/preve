@@ -319,7 +319,8 @@
         "details": {
             "annualAmount": "Valor Anual",
             "nextOccurrence": "Próxima Ocorrência",
-            "activePeriod": "Período Ativo"
+            "activePeriod": "Período Ativo",
+            "dueDate": "Vencimento"
         }
     },
     "forecasts": {

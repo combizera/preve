@@ -20,12 +20,12 @@ export function formatFrequency(
  * Calculates the next occurrence date for a recurring transaction
  * @param frequency - The frequency type (monthly or yearly)
  * @param dayOfMonth - The day of the month when it recurs
- * @returns Formatted next occurrence date in en format
+ * @returns The next occurrence as a Date
  */
-export function calculateNextOccurrence(
+export function nextOccurrenceDate(
     frequency: FrequencyType,
     dayOfMonth: number,
-): string {
+): Date {
     const today = new Date();
     let nextDate = new Date(today.getFullYear(), today.getMonth(), dayOfMonth);
 
@@ -45,11 +45,31 @@ export function calculateNextOccurrence(
         }
     }
 
-    return nextDate.toLocaleDateString('en', {
+    return nextDate;
+}
+
+/**
+ * Formats a date for the recurring cards (e.g., "15 Jan 2026").
+ */
+export function formatRecurringDate(date: Date): string {
+    return date.toLocaleDateString('en', {
         day: '2-digit',
         month: 'short',
         year: 'numeric',
     });
+}
+
+/**
+ * Calculates the next occurrence date for a recurring transaction
+ * @param frequency - The frequency type (monthly or yearly)
+ * @param dayOfMonth - The day of the month when it recurs
+ * @returns Formatted next occurrence date in en format
+ */
+export function calculateNextOccurrence(
+    frequency: FrequencyType,
+    dayOfMonth: number,
+): string {
+    return formatRecurringDate(nextOccurrenceDate(frequency, dayOfMonth));
 }
 
 /**

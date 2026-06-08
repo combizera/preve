@@ -3,6 +3,7 @@ import {
   Calendar,
   CalendarSync,
   ChevronDown,
+  CreditCard,
   RefreshCw,
   Tag as TagIcon,
 } from 'lucide-vue-next';
@@ -18,12 +19,14 @@ import EditButton from '@/components/ui/button/EditButton.vue';
 import ToggleActiveButton from '@/components/ui/button/ToggleActiveButton.vue';
 import { Card } from '@/components/ui/card';
 import { getIconComponent } from '@/lib/category-icons';
+import { effectivePaymentDate } from '@/lib/credit-card';
 import { formatCentsToDisplay, getCurrencySymbol } from '@/lib/currency';
 import {
   calculateAnnualAmount,
-  calculateNextOccurrence,
   formatActivePeriod,
   formatFrequency,
+  formatRecurringDate,
+  nextOccurrenceDate,
 } from '@/lib/recurring';
 import { cn } from '@/lib/utils';
 import { toggle as toggleRecurring } from '@/routes/recurring';
@@ -65,12 +68,20 @@ const frequencyText = computed(() =>
   ),
 );
 
-const nextOccurrence = computed(() =>
-  calculateNextOccurrence(
+const card = computed(() => props.recurringTransaction.credit_card ?? null);
+
+const nextOccurrence = computed(() => {
+  const base = nextOccurrenceDate(
     props.recurringTransaction.frequency,
     props.recurringTransaction.day_of_month,
-  ),
-);
+  );
+
+  const date = card.value
+    ? effectivePaymentDate(card.value.closing_day, card.value.due_day, base)
+    : base;
+
+  return formatRecurringDate(date);
+});
 
 const activePeriod = computed(() =>
   formatActivePeriod(
@@ -151,6 +162,15 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
               <RefreshCw :size="14" />
               <span class="font-medium">{{ frequencyText }}</span>
             </div>
+            <template v-if="card">
+              <span class="text-xs text-muted-foreground">•</span>
+              <div
+                class="flex min-w-0 items-center gap-1 text-xs text-muted-foreground"
+              >
+                <CreditCard :size="14" class="shrink-0" />
+                <span class="truncate font-medium">{{ card.name }}</span>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -206,7 +226,11 @@ const openDeleteDialog = (recurringTransaction: IRecurringTransaction) => {
 
           <div class="space-y-1">
             <div class="font-medium text-muted-foreground/70">
-              {{ t('recurring.details.nextOccurrence') }}
+              {{
+                card
+                  ? t('recurring.details.dueDate')
+                  : t('recurring.details.nextOccurrence')
+              }}
             </div>
             <div class="flex items-center gap-1.5 text-foreground">
               <Calendar :size="12" />
