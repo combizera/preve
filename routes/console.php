@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Console\Commands\GenerateRecurringTransactions;
+use App\Console\Commands\NotifyInactiveUsers;
 use App\Console\Commands\RolloverForecasts;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -14,3 +15,4 @@ Artisan::command('inspire', function (): void {
 
 Schedule::command(GenerateRecurringTransactions::class, ['--months=3'])->weekly();
 Schedule::command(RolloverForecasts::class)->monthlyOn(1, '00:30');
+Schedule::command(NotifyInactiveUsers::class)->weeklyOn(1, '09:00');

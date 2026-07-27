@@ -48,6 +48,22 @@ return [
         'deleted' => 'Savings bucket deleted successfully.',
     ],
 
+    'hiatus' => [
+        'created' => 'Hiatus registered successfully.',
+        'updated' => 'Hiatus updated successfully.',
+        'deleted' => 'Hiatus deleted successfully.',
+    ],
+
+    'reconciliation' => [
+        'recurring_reviewed'  => 'Recurring transactions reviewed.',
+        'buckets_adjusted'    => 'Savings buckets updated.',
+        'balance_adjusted'    => 'Balance updated.',
+        'completed'           => "You're all caught up. Welcome back! 🎉",
+        'adjustment_category' => 'Adjustments',
+        'bucket_adjustment'   => 'Savings adjustment: :bucket (back from hiatus)',
+        'balance_adjustment'  => 'Balance adjustment (back from hiatus)',
+    ],
+
     'credit_card' => [
         'created' => 'Credit card created successfully.',
         'updated' => 'Credit card updated successfully.',

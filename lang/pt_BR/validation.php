@@ -190,6 +190,9 @@ return [
         'forecast' => [
             'series_already_exists' => 'Essa categoria já tem um orçamento. Edite o existente ou retome se estiver pausado.',
         ],
+        'hiatus' => [
+            'overlaps' => 'Esse período se sobrepõe a outro hiato já registrado.',
+        ],
         'savings_bucket' => [
             'overdraw' => 'Você não pode sacar mais do que o saldo atual da caixinha.',
         ],

@@ -640,5 +640,78 @@
             "prev": "Previous month",
             "next": "Next month"
         }
+    },
+    "reengagement": {
+        "banner": {
+            "title": "It's been {days} days since your last entry",
+            "description": "Your balance and reports may be out of date. How about picking it back up?",
+            "cta": "Catch up now",
+            "registerHiatus": "I was away",
+            "dismiss": "Dismiss"
+        },
+        "hiatusDialog": {
+            "title": "Register a break",
+            "description": "Record the period you were away so your history stays meaningful. This doesn't change any transactions.",
+            "notePlaceholder": "Trip, busy season at work...",
+            "submit": "Register break"
+        }
+    },
+    "reconciliation": {
+        "title": "Welcome back",
+        "heading": "Welcome back! 👋",
+        "subheading": "Let's bring your finances up to date. First, confirm the period you were away.",
+        "subheadingWithHiatus": "Let's bring your finances up to date, one step at a time.",
+        "hiatusPeriod": "Away from {start} to {end}",
+        "today": "today",
+        "steps": {
+            "recurring": "Recurring",
+            "savings": "Savings",
+            "balance": "Balance",
+            "summary": "Done"
+        },
+        "skip": "Skip this step",
+        "confirmHiatus": {
+            "title": "Confirm your time away",
+            "description": "We suggested the period based on your last entry. Adjust it if needed — nothing is changed yet.",
+            "submit": "Confirm period"
+        },
+        "recurringStep": {
+            "title": "Review recurring charges",
+            "description": "These were generated automatically while you were away. Uncheck the ones that didn't actually happen — they will be deleted.",
+            "keep": "Keep",
+            "keepAll": "Keep all",
+            "removeAll": "Remove all",
+            "empty": "No recurring charges were generated during this period.",
+            "deactivateTitle": "Any subscription that ended for good?",
+            "deactivateDescription": "Check the ones to deactivate. Their upcoming charges (next month onward) will also be removed.",
+            "summary": "{remove} to remove · {deactivate} to deactivate",
+            "submit": "Confirm review"
+        },
+        "bucketStep": {
+            "title": "Update your savings buckets",
+            "description": "For each bucket, enter how much is really there today. Differences become adjustment transactions — nothing is overwritten silently.",
+            "current": "In the system",
+            "real": "Real amount",
+            "empty": "You don't have any savings buckets. Just continue.",
+            "summary": "{count} adjustment(s) to create",
+            "submit": "Confirm buckets"
+        },
+        "balanceStep": {
+            "title": "Update your balance",
+            "description": "Enter how much you actually have today. The difference becomes a single adjustment transaction in the \"Adjustments\" category.",
+            "currentLabel": "Balance in the system",
+            "realLabel": "Real balance",
+            "willAdjust": "An adjustment of {amount} will be created.",
+            "noAdjust": "Amounts match — no adjustment needed.",
+            "submit": "Confirm balance"
+        },
+        "summaryStep": {
+            "title": "All caught up!",
+            "description": "Your finances reflect reality again. Finishing marks this hiatus as reconciled.",
+            "itemRecurring": "Recurring charges reviewed",
+            "itemBuckets": "Savings buckets updated",
+            "itemBalance": "Balance updated",
+            "finish": "Finish"
+        }
     }
 }

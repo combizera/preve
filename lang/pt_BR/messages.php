@@ -48,6 +48,22 @@ return [
         'deleted' => 'Caixinha excluída com sucesso.',
     ],
 
+    'hiatus' => [
+        'created' => 'Hiato registrado com sucesso.',
+        'updated' => 'Hiato atualizado com sucesso.',
+        'deleted' => 'Hiato excluído com sucesso.',
+    ],
+
+    'reconciliation' => [
+        'recurring_reviewed'  => 'Lançamentos recorrentes revisados.',
+        'buckets_adjusted'    => 'Caixinhas atualizadas.',
+        'balance_adjusted'    => 'Saldo atualizado.',
+        'completed'           => 'Tudo em dia. Bem-vindo de volta! 🎉',
+        'adjustment_category' => 'Ajustes',
+        'bucket_adjustment'   => 'Ajuste de caixinha: :bucket (retorno de hiato)',
+        'balance_adjustment'  => 'Ajuste de saldo (retorno de hiato)',
+    ],
+
     'credit_card' => [
         'created' => 'Cartão de crédito criado com sucesso.',
         'updated' => 'Cartão de crédito atualizado com sucesso.',

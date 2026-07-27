@@ -640,5 +640,78 @@
             "prev": "Mês anterior",
             "next": "Próximo mês"
         }
+    },
+    "reengagement": {
+        "banner": {
+            "title": "Faz {days} dias que você não registra nada",
+            "description": "Seu saldo e relatórios podem estar desatualizados. Bora voltar?",
+            "cta": "Colocar em dia",
+            "registerHiatus": "Estive fora",
+            "dismiss": "Dispensar"
+        },
+        "hiatusDialog": {
+            "title": "Registrar hiato",
+            "description": "Registre o período em que você ficou fora pra manter seu histórico com sentido. Nenhuma transação é alterada.",
+            "notePlaceholder": "Viagem, correria no trabalho...",
+            "submit": "Registrar hiato"
+        }
+    },
+    "reconciliation": {
+        "title": "Bem-vindo de volta",
+        "heading": "Bem-vindo de volta! 👋",
+        "subheading": "Vamos colocar suas finanças em dia. Primeiro, confirme o período em que você ficou fora.",
+        "subheadingWithHiatus": "Vamos colocar suas finanças em dia, um passo de cada vez.",
+        "hiatusPeriod": "Fora de {start} até {end}",
+        "today": "hoje",
+        "steps": {
+            "recurring": "Recorrentes",
+            "savings": "Caixinhas",
+            "balance": "Saldo",
+            "summary": "Fim"
+        },
+        "skip": "Pular essa etapa",
+        "confirmHiatus": {
+            "title": "Confirme seu período fora",
+            "description": "Sugerimos o período com base no seu último lançamento. Ajuste se precisar — nada é alterado ainda.",
+            "submit": "Confirmar período"
+        },
+        "recurringStep": {
+            "title": "Revise os lançamentos recorrentes",
+            "description": "Esses foram gerados automaticamente enquanto você esteve fora. Desmarque os que não aconteceram de verdade — eles serão excluídos.",
+            "keep": "Manter",
+            "keepAll": "Manter todos",
+            "removeAll": "Remover todos",
+            "empty": "Nenhum lançamento recorrente foi gerado nesse período.",
+            "deactivateTitle": "Alguma assinatura acabou de vez?",
+            "deactivateDescription": "Marque as que devem ser desativadas. Os lançamentos futuros delas (do mês que vem em diante) também serão removidos.",
+            "summary": "{remove} a remover · {deactivate} a desativar",
+            "submit": "Confirmar revisão"
+        },
+        "bucketStep": {
+            "title": "Atualize suas caixinhas",
+            "description": "Pra cada caixinha, informe quanto realmente tem hoje. As diferenças viram transações de ajuste — nada é sobrescrito por baixo dos panos.",
+            "current": "No sistema",
+            "real": "Valor real",
+            "empty": "Você não tem caixinhas. Pode continuar.",
+            "summary": "{count} ajuste(s) a criar",
+            "submit": "Confirmar caixinhas"
+        },
+        "balanceStep": {
+            "title": "Atualize seu saldo",
+            "description": "Informe quanto você tem de verdade hoje. A diferença vira uma única transação de ajuste na categoria \"Ajustes\".",
+            "currentLabel": "Saldo no sistema",
+            "realLabel": "Saldo real",
+            "willAdjust": "Será criado um ajuste de {amount}.",
+            "noAdjust": "Valores batem — nenhum ajuste necessário.",
+            "submit": "Confirmar saldo"
+        },
+        "summaryStep": {
+            "title": "Tudo em dia!",
+            "description": "Suas finanças refletem a realidade de novo. Concluir marca esse hiato como reconciliado.",
+            "itemRecurring": "Recorrentes revisadas",
+            "itemBuckets": "Caixinhas atualizadas",
+            "itemBalance": "Saldo atualizado",
+            "finish": "Concluir"
+        }
     }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ReengagementBanner from '@/components/Reengagement/ReengagementBanner.vue';
 import ToastProvider from '@/components/ToastProvider.vue';
 import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
@@ -15,6 +16,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <AppLayout :breadcrumbs="breadcrumbs">
     <main class="mx-auto h-full w-full max-w-375 overflow-x-auto p-4">
+      <ReengagementBanner />
       <slot />
     </main>
   </AppLayout>

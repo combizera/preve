@@ -7,7 +7,10 @@ use App\Http\Controllers\CreditCardController;
 use App\Http\Controllers\CreditCardInvoiceReceiptController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\HiatusController;
+use App\Http\Controllers\ReconciliationController;
 use App\Http\Controllers\RecurringTransactionController;
+use App\Http\Controllers\ReengagementController;
 use App\Http\Controllers\SavingsBucketController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
@@ -44,6 +47,22 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::patch('forecasts/{forecast}/toggle', [ForecastController::class, 'toggle'])->name('forecasts.toggle');
     Route::resource('forecasts', ForecastController::class)->except('create', 'edit', 'show');
     Route::delete('forecast-series/{series}', [ForecastController::class, 'destroySeries'])->name('forecast-series.destroy');
+
+    Route::post('reengagement/dismiss', [ReengagementController::class, 'dismiss'])
+        ->name('reengagement.dismiss');
+    Route::get('welcome-back', [ReconciliationController::class, 'show'])
+        ->name('reconciliation.show');
+    Route::post('welcome-back/recurring', [ReconciliationController::class, 'reviewRecurring'])
+        ->name('reconciliation.recurring');
+    Route::post('welcome-back/buckets', [ReconciliationController::class, 'adjustBuckets'])
+        ->name('reconciliation.buckets');
+    Route::post('welcome-back/balance', [ReconciliationController::class, 'adjustBalance'])
+        ->name('reconciliation.balance');
+    Route::post('welcome-back/complete', [ReconciliationController::class, 'complete'])
+        ->name('reconciliation.complete');
+    Route::resource('hiatuses', HiatusController::class)
+        ->parameters(['hiatuses' => 'hiatus'])
+        ->only('store', 'update', 'destroy');
 
     Route::resource('savings', SavingsBucketController::class)
         ->parameters(['savings' => 'savings'])

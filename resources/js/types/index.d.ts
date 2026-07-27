@@ -19,12 +19,18 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface IReengagement {
+    inactive_days: number;
+    last_manual_activity: string;
+}
+
 export type AppPageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     name: string;
     auth: Auth;
     sidebarOpen: boolean;
+    reengagement: IReengagement | null;
     [key: string]: unknown;
 };
 

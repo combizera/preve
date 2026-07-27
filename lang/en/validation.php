@@ -190,6 +190,9 @@ return [
         'forecast' => [
             'series_already_exists' => 'This category already has a forecast. Edit the existing one or resume it if paused.',
         ],
+        'hiatus' => [
+            'overlaps' => 'This period overlaps another registered hiatus.',
+        ],
         'savings_bucket' => [
             'overdraw' => "You can't withdraw more than the bucket's current balance.",
         ],

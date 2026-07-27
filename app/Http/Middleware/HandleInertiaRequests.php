@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Services\InactivityService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -17,6 +18,8 @@ final class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    public function __construct(private readonly InactivityService $inactivity) {}
 
     /**
      * Determines the current asset version.
@@ -44,6 +47,7 @@ final class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen'               => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'reengagement'              => fn (): ?array => $request->user() ? $this->inactivity->bannerPayload($request->user()) : null,
             'transactionShareUrl'       => $request->session()->get('transaction_share_url'),
             'creditCardInvoiceShareUrl' => $request->session()->get('credit_card_invoice_share_url'),
         ];
